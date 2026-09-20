@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="148mm" height="105mm" viewBox="0 0 148 105"
+     role="img" aria-labelledby="etikett-tittel">
+  <title id="etikett-tittel">Nødboks – kasseetikett, 148 × 105 mm</title>
+
+  <!--
+    KASSEETIKETTEN
+    ==========================================================================
+    Format: 148 × 105 mm (A6, liggende). Én SVG-brukerenhet er 1 mm, så filen
+    kan sendes til trykk i faktisk størrelse uten omregning.
+
+    Flaten den skal på: Zarges Eurobox 40702, 600 × 400 × 330 mm (se ESKER i
+    assets/js/data/katalog.js). Etiketten går på lokket, 600 × 400 mm. Den
+    dekker da rundt en fjerdedel av bredden: bredt nok til å leses fra stående
+    høyde, smalt nok til at aluminiumet fortsatt er kassen.
+
+    FARGE: natt. Flaten er brand-tokenet #12211D, teksten brand-ink #E8EFE9
+    (14,2:1) og ettergløden #D9E6A0 (12,5:1) bærer nøyaktig ett felt. Mørk
+    modus er den primære identiteten (docs/farger.md), og etiketten leses i
+    praksis i en mørk bod med hodelykt.
+
+    AKSENTREGELEN: på hver flate utenfor nettsiden bærer nøyaktig ett felt
+    aksentfargen, og det er alltid det ene som er tidskritisk. Her: byttedatoen.
+    Alt annet står i tekstfarge. Aksenten er et signal, ikke en dekor.
+
+    VARIABLE FELT, fylt ved pakking. Id-ene under er kroken:
+      felt-eske           «ESKE 1 AV 2», utelates når husstanden får én kasse
+      felt-konfigurasjon  husstand, matnivå, omfang
+      felt-dato           måned og år for korteste holdbarhet i kassen
+
+    INGEN SERIENUMMER. Et løpenummer må komme fra et ekte ordre- eller
+    lagersystem. Før det finnes, ville et trykt nummer vært et oppdiktet
+    faktum, og et tomt felt er ærlig der et oppdiktet felt ikke er det.
+
+    FØR TRYKK: konverter tekst til kurver, eller oppgi fontene til trykkeriet.
+    Fontstakkene under er systemstakker og finnes ikke i et RIP-miljø. Se
+    docs/profil.md, avsnittet Anvendelse, for ett-farge-varianten.
+    ==========================================================================
+  -->
+
+  <style>
+    .grotesk { font-family: system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, "Noto Sans", sans-serif; }
+    .mono    { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo,
+               Consolas, monospace; }
+    .ink     { fill: #E8EFE9; }
+    .dempet  { fill: #9CB0AA; }
+    .glod    { fill: #D9E6A0; }
+  </style>
+
+  <!-- Flaten. Ingen hjørneradius: stanset kant, som resten av formspråket. -->
+  <rect width="148" height="105" fill="#12211D"/>
+
+  <!-- TOPPLINJE: merket, ordmerket, eske av eske. -->
+
+  <!-- Glødepunktet. Samme geometri som assets/img/merke.svg, skalert til mm:
+       ring Ø 9,6 mm, kjerne Ø 4,6 mm. -->
+  <circle cx="17.5" cy="17" r="4.8" fill="none" stroke="#E8EFE9" stroke-width="1.4"/>
+  <circle cx="17.5" cy="17" r="2.3" fill="#D9E6A0"/>
+
+  <!-- Ordmerket i versalplakett-form: grotesk, vekt 600, sperring 0,10 em.
+       Sperringen er ikke pynt. Uten den kolliderer Ø-ens utløpsstrek med
+       D-ens stamme, og NØDBOKS leser som et varselskilt. -->
+  <text class="grotesk ink" x="27.5" y="20"
+        font-size="8.2" font-weight="600" letter-spacing="0.82">NØDBOKS</text>
+
+  <text id="felt-eske" class="mono dempet" x="137" y="20" text-anchor="end"
+        font-size="3.6" letter-spacing="0.29">ESKE 1 AV 2</text>
+
+  <line x1="11" y1="27" x2="137" y2="27" stroke="#6E8880" stroke-width="0.35"/>
+
+  <!-- KONFIGURASJONEN. -->
+
+  <text id="felt-konfigurasjon" class="mono ink" x="11" y="34"
+        font-size="4.2" letter-spacing="0.5">4 PERSONER · VANLIG MAT · KOMPLETT</text>
+
+  <!-- HVA SOM LIGGER I KASSEN. Kategoriene er katalogens egne. -->
+
+  <text class="grotesk dempet" x="11" y="44"
+        font-size="3.2" font-weight="600" letter-spacing="0.45">I DENNE KASSEN</text>
+
+  <g class="grotesk ink" font-size="4.4" font-weight="450">
+    <text x="11" y="51">Mat</text>
+    <text x="11" y="57.4">Vann</text>
+    <text x="11" y="63.8">Matlaging</text>
+    <text x="11" y="70.2">Varme og lys</text>
+
+    <text x="78" y="51">Strøm og samband</text>
+    <text x="78" y="57.4">Helse og hygiene</text>
+    <text x="78" y="63.8">Verktøy og dokumenter</text>
+  </g>
+
+  <!-- BYTTEDATOEN: flatens eneste fargede felt. -->
+
+  <rect x="11" y="76" width="126" height="18" fill="none"
+        stroke="#D9E6A0" stroke-width="0.5"/>
+
+  <text class="grotesk glod" x="16.5" y="88.7"
+        font-size="3.6" font-weight="600" letter-spacing="0.5">PÅFYLL SENEST</text>
+
+  <text id="felt-dato" class="grotesk glod" x="131.5" y="88.7" text-anchor="end"
+        font-size="8" font-weight="600" letter-spacing="0.48">AUG 2028</text>
+
+  <!-- BUNNLINJE. -->
+
+  <text class="grotesk dempet" x="11" y="100" font-size="3.2">Full innholdsliste og menyplan ligger i permen øverst i kassen.</text>
+</svg>

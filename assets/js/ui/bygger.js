@@ -8,6 +8,7 @@
 
 import {
   byggPakke,
+  velgEske,
   MATGRUPPER,
   FRAVALG_TERSKEL,
   referanse,
@@ -16,6 +17,7 @@ import {
   MATNIVAER,
   MODUSER,
   PAFYLL,
+  ESKETYPER,
   KONFIG,
 } from '../konfigurator.js'
 import { kr, tall } from '../config.js'
@@ -49,6 +51,7 @@ export function startBygger(rot = document) {
       personer: klem(Number(slider.value)),
       matniva: $('input[name="matniva"]:checked', skjema)?.value,
       modus: $('input[name="modus"]:checked', skjema)?.value,
+      eskeType: $('input[name="eskeType"]:checked', skjema)?.value,
       utelatt: $$('input[name="harfraFor"]:checked', skjema).map((i) => i.value),
       abonnement: $('#abonnement', skjema)?.checked
         ? $('input[name="pafyll"]:checked', skjema)?.value ?? PAFYLL[0]?.id
@@ -62,7 +65,8 @@ export function startBygger(rot = document) {
     tegnHusstand(rot, pakke)
     tegnSvar(rot, pakke)
     tegnMatnivaer(rot, pakke)
-    tegnHarFraFor(rot, pakke)
+    tegnEskevalg(rot, pakke)
+  tegnHarFraFor(rot, pakke)
     tegnPris(rot, pakke)
     tegnListe(rot, pakke)
     tegnVarsler(rot, pakke)
@@ -146,6 +150,21 @@ function byggValg(skjema) {
     ).join('')
   }
 
+  const eskeRot = $('#eskevalg', skjema)
+  if (eskeRot && !eskeRot.children.length) {
+    eskeRot.innerHTML = ESKETYPER.map(
+      (e, i) => `
+      <label class="option">
+        <input type="radio" name="eskeType" value="${e.id}" ${i === 0 ? 'checked' : ''}
+               aria-describedby="eske-${e.id}-desc">
+        <span class="option__body">
+          <span class="option__title">${e.navn} <span class="tnum" id="eske-${e.id}-pris"></span></span>
+          <p class="option__desc" id="eske-${e.id}-desc">${e.beskrivelse}</p>
+        </span>
+      </label>`
+    ).join('')
+  }
+
   const pafyllRot = $('#pafyllsvalg', skjema)
   if (pafyllRot && !pafyllRot.children.length && PAFYLL.length) {
     pafyllRot.innerHTML = PAFYLL.map(
@@ -194,6 +213,18 @@ function tegnMatnivaer(rot, pakke) {
   for (const m of MATNIVAER) {
     const fyll = $(`[data-holdbarhet="${m.id}"] .holdbarhet__fyll`, rot)
     if (fyll) fyll.style.width = `${Math.max(4, (m.holdbarhetAr / maks) * 100)}%`
+  }
+}
+
+/** Viser hva hvert kassemateriale koster for den valgte husstanden. */
+function tegnEskevalg(rot, pakke) {
+  const steg = $('#eskevalg', rot)?.closest('.steg')
+  if (steg) steg.hidden = !pakke.modus.medEske
+  for (const type of ESKETYPER) {
+    const merke = $(`#eske-${type.id}-pris`, rot)
+    if (!merke) continue
+    const eske = velgEske(pakke.valg.personer, type.id)
+    merke.textContent = kr(eske.pris)
   }
 }
 

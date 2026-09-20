@@ -122,23 +122,37 @@ export const KONFIG = {
 // allerede eier, og den burde hatt sin egen avkrysning på linje med Trangiaen
 // og hodelykten. Det må rettes i konfiguratoren, ikke her.
 
+/**
+ * Kassevalg: plast eller aluminium.
+ *
+ * Aluminiumskassen er bare til utstyret. Mat og vann ligger i plast uansett,
+ * fordi en aluminiumskoffert ikke gjør noe for en boks makrell som en
+ * dokumentert plastkasse ikke gjør – og fordi tre Zarges-kasser til en familie
+ * på seks ville lagt tolv tusen kroner på emballasje alene.
+ *
+ * Til gjengjeld er Zarges-kassen noe man faktisk bruker: den tåler å stå ute,
+ * kan sitte på et biltak eller i en båt, og er selv et turobjekt. Det er det
+ * eneste argumentet som holder for merprisen, og det står i valgteksten.
+ */
+export const ESKETYPER = [
+  {
+    id: 'plast',
+    navn: 'Plastkasser',
+    beskrivelse:
+      'SmartStore Dry 45 fra Orthex: IP44, tåler −40 til +70 °C, næringsmiddelgodkjent, ti års garanti. Stablbar, tett mot støv og fukt.',
+  },
+  {
+    id: 'alu',
+    navn: 'Aluminiumskasse til utstyret',
+    beskrivelse:
+      'Zarges Eurobox i aluminium til utstyret, plastkasser til mat og vann. Kassen tåler å stå ute, på et biltak eller i en båt – den er selv noe du bruker, ikke bare noe innholdet ligger i.',
+  },
+]
+
 export const ESKER = [
-  /*
-   * Kassene.
-   *
-   * Premiumsourcingen anbefalte Zarges Eurobox i aluminium til 3 399 kr. Den er
-   * overprøvd, og begrunnelsen er premisset vårt eget: utstyret skal være noe
-   * kunden faktisk bruker. Ingen tar en aluminiumskoffert med på fjellet, og en
-   * koffert gjør ingenting for en boks makrell som en dokumentert plastkasse
-   * ikke gjør. Med tre kasser til en familie på seks ville det lagt over elleve
-   * tusen kroner på emballasje alene.
-   *
-   * SmartStore Dry 45 fra Orthex er det motsatte av en merkevarepremie: IP44,
-   * tåler −40 til +70 °C, næringsmiddelgodkjent, ti års garanti, stablbar.
-   * Den gjør jobben, og pengene går til utstyret inni.
-   */
   {
     sku: 'eske-liten',
+    type: 'plast',
     navn: 'Nødboks Liten – én kasse på 45 liter',
     beskrivelse:
       'Én stablebar SmartStore Dry 45 med tetningslist og klips, merket med innholdsliste og byttedato.',
@@ -149,15 +163,11 @@ export const ESKER = [
     pris: 299,
     innkjop: 179.4,
     vektKg: 2.4,
-    produkt: {
-      merke: 'Orthex',
-      modell: 'SmartStore Dry 45',
-      kilde: 'Europris 299 kr, observert 20.09.2026',
-      url: '',
-    },
+    produkt: { merke: 'Orthex', modell: 'SmartStore Dry 45', kilde: 'Europris 299 kr, observert 20.09.2026', url: '' },
   },
   {
     sku: 'eske-mellom',
+    type: 'plast',
     navn: 'Nødboks Mellom – to kasser på 45 liter',
     beskrivelse:
       'To stablebare kasser: én for mat, én for vann og utstyr. Stables i hverandre og merkes hver for seg.',
@@ -168,15 +178,11 @@ export const ESKER = [
     pris: 598,
     innkjop: 358.8,
     vektKg: 4.8,
-    produkt: {
-      merke: 'Orthex',
-      modell: 'SmartStore Dry 45 × 2',
-      kilde: 'Europris 299 kr per kasse, observert 20.09.2026',
-      url: '',
-    },
+    produkt: { merke: 'Orthex', modell: 'SmartStore Dry 45 × 2', kilde: 'Europris 299 kr per kasse', url: '' },
   },
   {
     sku: 'eske-stor',
+    type: 'plast',
     navn: 'Nødboks Stor – tre kasser på 45 liter',
     beskrivelse:
       'Tre stablebare kasser: mat, vann og utstyr hver for seg, merket med innhold og byttedato.',
@@ -187,14 +193,56 @@ export const ESKER = [
     pris: 897,
     innkjop: 538.2,
     vektKg: 7.2,
-    produkt: {
-      merke: 'Orthex',
-      modell: 'SmartStore Dry 45 × 3',
-      kilde: 'Europris 299 kr per kasse, observert 20.09.2026',
-      url: '',
-    },
+    produkt: { merke: 'Orthex', modell: 'SmartStore Dry 45 × 3', kilde: 'Europris 299 kr per kasse', url: '' },
+  },
+  {
+    sku: 'eske-alu-liten',
+    type: 'alu',
+    navn: 'Nødboks Liten i aluminium – én Zarges-kasse',
+    beskrivelse:
+      'Zarges Eurobox 40702 i aluminium, 60 liter, med tetningslist og to hengelåsbeslag.',
+    hvorfor:
+      'Kassen tåler å stå ute, på et biltak eller i en båt, og den er selv noe du bruker – ikke bare noe innholdet ligger i. Det er hele argumentet for merprisen.',
+    maksPersoner: 2,
+    liter: 60,
+    pris: 3999,
+    innkjop: 2399.4,
+    vektKg: 4.9,
+    produkt: { merke: 'Zarges', modell: 'Eurobox 40702', kilde: 'Capro 3 999 kr, observert 20.09.2026', url: '' },
+  },
+  {
+    sku: 'eske-alu-mellom',
+    type: 'alu',
+    navn: 'Nødboks Mellom i aluminium – Zarges og matkasse',
+    beskrivelse:
+      'Zarges Eurobox i aluminium til utstyret, én SmartStore Dry 45 til mat og vann.',
+    hvorfor:
+      'Utstyret ligger i aluminium fordi det er den kassen du tar med deg. Maten ligger i plast fordi en aluminiumskoffert ikke gjør noe for en boks makrell.',
+    maksPersoner: 5,
+    liter: 105,
+    pris: 4298,
+    innkjop: 2578.8,
+    vektKg: 7.3,
+    produkt: { merke: 'Zarges + Orthex', modell: 'Eurobox 40702 + SmartStore Dry 45', kilde: 'Capro 3 999 kr, Europris 299 kr', url: '' },
+  },
+  {
+    sku: 'eske-alu-stor',
+    type: 'alu',
+    navn: 'Nødboks Stor i aluminium – Zarges og to matkasser',
+    beskrivelse:
+      'Zarges Eurobox i aluminium til utstyret, to SmartStore Dry 45 til mat og vann.',
+    hvorfor:
+      'Over fem personer trengs to matkasser for at hver av dem skal kunne løftes. Utstyret blir i aluminiumskassen.',
+    maksPersoner: 8,
+    liter: 150,
+    pris: 4597,
+    innkjop: 2758.2,
+    vektKg: 9.7,
+    produkt: { merke: 'Zarges + Orthex', modell: 'Eurobox 40702 + SmartStore Dry 45 × 2', kilde: 'Capro 3 999 kr, Europris 299 kr', url: '' },
   },
 ]
+
+export const finnEsketype = (id) => ESKETYPER.find((e) => e.id === id) ?? ESKETYPER[0]
 
 // -----------------------------------------------------------------------------
 // Matnivåer

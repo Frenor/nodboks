@@ -16,6 +16,8 @@ import {
   MATNIVAER,
   MODUSER,
   PAFYLL,
+  ESKETYPER,
+  finnEsketype,
   finnMatniva,
   finnModus,
 } from './data/katalog.js'
@@ -89,10 +91,17 @@ function gjelder(vare, { modus, matniva }) {
   return true
 }
 
-/** Minste eske som tar husstanden. Faller tilbake til den største. */
-export function velgEske(personer) {
+/**
+ * Minste eske som tar husstanden, i valgt materiale.
+ *
+ * Faller tilbake til den største i samme materiale, og til plast hvis
+ * materialet ikke finnes – kassen er strukturell, så den skal aldri mangle.
+ */
+export function velgEske(personer, eskeType = 'plast') {
   const p = klem(personer)
-  return ESKER.find((e) => p <= e.maksPersoner) ?? ESKER[ESKER.length - 1]
+  const ivalgt = ESKER.filter((e) => e.type === eskeType)
+  const kandidater = ivalgt.length ? ivalgt : ESKER.filter((e) => e.type === 'plast')
+  return kandidater.find((e) => p <= e.maksPersoner) ?? kandidater[kandidater.length - 1]
 }
 
 /**
@@ -107,6 +116,7 @@ export function byggPakke(valg) {
   const modus = finnModus(valg.modus)
   const abonnementId = valg.abonnement ?? null
   const utelatt = new Set(valg.utelatt ?? [])
+  const eskeType = finnEsketype(valg.eskeType).id
 
   const kontekst = { personer, matniva: matniva.id, modus: modus.id }
 
@@ -136,7 +146,7 @@ export function byggPakke(valg) {
   }
 
   // Esken følger bare med i den komplette pakken; påfyll sendes i kartong.
-  const eske = velgEske(personer)
+  const eske = velgEske(personer, eskeType)
   if (modus.medEske) {
     linjer.unshift({
       sku: eske.sku,
@@ -222,6 +232,7 @@ export function byggPakke(valg) {
       matniva: matniva.id,
       modus: modus.id,
       abonnement: abonnementId,
+      eskeType,
       utelatt: [...utelatt],
     },
     matniva,
@@ -351,7 +362,7 @@ export function referanse(pakke) {
 export function pakkeId(pakke) {
   const v = pakke.valg
   const uten = v.utelatt?.length ? 'uten-' + [...v.utelatt].sort().join('_') : 'full'
-  return ['pakke', v.modus, v.personer, v.matniva, v.abonnement ?? 'engang', uten].join('-')
+  return ['pakke', v.modus, v.personer, v.matniva, v.eskeType, v.abonnement ?? 'engang', uten].join('-')
 }
 
 /** Gjør pakken om til en kurvpost. */
@@ -373,4 +384,4 @@ export function tilKurvpost(pakke) {
   }
 }
 
-export { MATNIVAER, MODUSER, PAFYLL, KONFIG, ESKER }
+export { MATNIVAER, MODUSER, PAFYLL, KONFIG, ESKER, ESKETYPER }
