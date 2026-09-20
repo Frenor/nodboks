@@ -573,7 +573,10 @@ details.forbehold li + li { margin-top: var(--sp-1); }
   position: sticky; bottom: 0; z-index: 40;
   background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   box-shadow: var(--shadow-lg); padding: var(--sp-4) var(--sp-5);
-  margin-inline: calc(-1 * max(0px, (100vw - var(--width-page)) / 2 + 1rem));
+  margin-inline: -1rem; /* bleder til skjermkanten, samme mengde som .wrap sin egen kant under 40rem */
+}
+@media (min-width: 40rem) {
+  .prisrail__kort { margin-inline: -1.5rem; }
 }
 @media (min-width: 64rem) {
   .prisrail__kort { position: sticky; top: 8.5rem; bottom: auto; border-radius: var(--radius-lg); margin-inline: 0; }

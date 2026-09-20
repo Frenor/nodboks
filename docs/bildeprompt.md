@@ -173,6 +173,59 @@ motsier det teksten det står ved siden av.
 
 Første forsøk traff begge disse riktig. Det er verdt å beholde.
 
+## Bilde 3 og 4 — de to kassene
+
+Kassevalget er det eneste stedet på siden der forskjellen er visuell før den er
+funksjonell. Aluminium koster **3 478 kr mer**, og det argumentet lar seg ikke
+føre i tekst alene — Zarges selges på utseende.
+
+**Begge må fotograferes likt.** Samme vinkel, samme lys, samme bakgrunn, samme
+avstand. Er de ulike, sammenligner kunden fotografiet og ikke kassen, og da er
+valget avgjort av hvilket bilde som ble penest.
+
+> Produktfotografi av en oppbevaringskasse mot nøytral bakgrunn.
+>
+> **Vinkel:** Tre kvart forfra og litt ovenfra, slik at lokket, fronten og den
+> ene kortsiden er synlig. Kassen står lukket.
+>
+> **Lys:** Mykt studiolys forfra og litt fra siden. Én nedtonet skygge under
+> kassen. Ingen harde refleksbånd i metall eller plast.
+>
+> **Bakgrunn:** Jevn, kjølig grågrønn, `#E3E9E4`, uten gradient og uten
+> horisontlinje.
+>
+> **Komposisjon:** Kassen sentrert, med luft på alle kanter. Format 4:3.
+>
+> **Ingen** tekst, logo, klistremerke, mennesker, hender eller rekvisitter.
+
+### Kasse 1 — plast
+
+> Motivet er en stablebar oppbevaringskasse i lys, matt plast med tett lokk,
+> tetningslist og to klips på langsiden. Kraftig håndtak støpt i kortsidene.
+> Nøktern og industriell, ikke husholdningsaktig. Rundt 45 liter.
+
+Lagres som `assets/img/kasse-plast-900.webp` og `-600.webp`.
+
+### Kasse 2 — aluminium
+
+> Motivet er en profesjonell transportkasse i børstet aluminium med
+> forsterkede hjørner, to hengslede låsebeslag i front, gummitetning under
+> lokket og et felt håndtak. Overflaten har synlig riflet struktur. Kassen ser
+> ut som utstyr, ikke som møbel. Rundt 60 liter.
+
+Lagres som `assets/img/kasse-alu-900.webp` og `-600.webp`.
+
+### Når de kommer
+
+Legg dem i `assets/img/` med akkurat de navnene, så vises de i valgkortene av
+seg selv. Markeringen ligger klar, og bildet fjerner seg selv hvis filen
+mangler — kortene fungerer altså både før og etter.
+
+Sjekk én ting når de er inne: **ser plastkassen billig ut ved siden av
+aluminiumskassen?** Den skal se solid ut, ikke som et alternativ man velger
+motvillig. De fleste kundene kommer til å velge plast, og de skal ikke føle at
+de valgte det dårlige.
+
 ## Når bildet kommer tilbake
 
 Sjekk tre ting før det legges inn. De to første er tillitsspørsmål, ikke

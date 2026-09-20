@@ -171,10 +171,19 @@ function byggValg(skjema) {
   if (eskeRot && !eskeRot.children.length) {
     eskeRot.innerHTML = ESKETYPER.map(
       (e, i) => `
-      <label class="option">
+      <label class="option option--bilde">
         <input type="radio" name="eskeType" value="${e.id}" ${i === 0 ? 'checked' : ''}
                aria-describedby="eske-${e.id}-desc">
         <span class="option__body">
+          ${
+            e.bilde
+              ? `<img class="option__foto" src="${e.bilde}-600.webp"
+                      srcset="${e.bilde}-600.webp 600w, ${e.bilde}-900.webp 900w"
+                      sizes="(min-width: 60rem) 22rem, 45vw"
+                      width="600" height="450" alt="" loading="lazy" decoding="async"
+                      onerror="this.remove()">`
+              : ''
+          }
           <span class="option__title">${e.navn} <span class="tnum" id="eske-${e.id}-pris"></span></span>
           <p class="option__desc" id="eske-${e.id}-desc">${e.beskrivelse}</p>
         </span>

@@ -420,3 +420,20 @@
   color: var(--text-muted);
   max-width: 62ch;
 }
+
+/* --- Valgkort med bilde --------------------------------------------------- */
+
+/* Kassevalget er det eneste stedet på siden der forskjellen er visuell før den
+   er funksjonell. Aluminium koster 3 478 kr mer, og det argumentet kan ikke
+   føres i tekst alene. Bildet fjerner seg selv hvis filen mangler, så kortet
+   fungerer også før bildene er på plass. */
+.option__foto {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--sp-3);
+  background: var(--surface-2);
+}
+.option--bilde .option__body { display: flex; flex-direction: column; }
