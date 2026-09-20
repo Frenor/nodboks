@@ -1194,6 +1194,7 @@ export const VARER = [
      * Alle tre står i produktteksten på siden. Å selge dette uten dem ville
      * vært å gjøre nøyaktig det vi kritiserer markedet for.
      */
+    bruksanvisning: 'beredskap/meshtastic.html',
     forbehold: [
       'Det er tekst, ikke tale. Telefonen er skjerm og tastatur – den virker uten nett, men trenger strøm, så powerbanken hører med.',
       'Rekkevidden avhenger av hvem andre som har utstyret. To enheter alene rekker to til ni kilometer med fri sikt, mindre i skog. Nettet er tettest rundt Oslo og Bergen og tynt nord for Trøndelag.',

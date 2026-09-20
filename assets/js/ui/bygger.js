@@ -264,6 +264,11 @@ function tegnTillegg(rot, pakke) {
                 ? `<details class="forbehold">
                      <summary>Tre ting du bør vite først</summary>
                      <ul>${t.forbehold.map((f) => `<li>${f}</li>`).join('')}</ul>
+                     ${
+                       t.bruksanvisning
+                         ? `<p style="margin-top:var(--sp-3)"><a href="${t.bruksanvisning}">Les bruksanvisningen</a></p>`
+                         : ''
+                     }
                    </details>`
                 : ''
             }
@@ -410,6 +415,7 @@ function tegnListe(rot, pakke) {
             <span class="vare__navn">${v.navn}</span>
             <span class="vare__antall">${tall(v.antall)} ${v.enhet}</span>
             ${v.hvorfor ? `<p class="vare__hvorfor">${v.hvorfor}</p>` : ''}
+            ${v.bruksanvisning ? `<p class="vare__hvorfor"><a href="${v.bruksanvisning}">Bruksanvisning</a></p>` : ''}
             <div class="vare__merker">
               ${holdbarhet(v.holdbarhetAr) ? `<span class="badge">Holdbar ${holdbarhet(v.holdbarhetAr)}</span>` : ''}
               <span class="badge">${v.type === 'engang' ? 'Varer i mange år' : 'Går ut på dato'}</span>
