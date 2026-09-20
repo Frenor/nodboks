@@ -387,3 +387,20 @@
   color: var(--text-muted);
 }
 .forbehold li + li { margin-top: var(--sp-2); }
+
+/* --- Herobildet ---------------------------------------------------------- */
+
+.hero__bilde { margin: 0; }
+.hero__bilde img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg);
+  /* Bildet er vidt og motivet ligger til høyre. På smale skjermer beskjæres
+     det mot høyre kant, så menneskene og utstyret blir værende i bildet. */
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: 72% center;
+}
+@media (min-width: 60rem) {
+  .hero__bilde img { aspect-ratio: auto; object-fit: fill; }
+}
