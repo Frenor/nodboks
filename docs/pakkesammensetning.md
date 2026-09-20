@@ -110,12 +110,14 @@ Dette skillet er selve grunnlaget for abonnementet, og det avgjør hva
 kunden faktisk betaler for over tid.
 
 - **Engangsutstyr** (`type: 'engang'`) kjøpes én gang og holder i mange år:
-  esken, vannkanner, kokeapparat, lykter, radio, powerbank, brannteppe,
-  boksåpner (fysisk), gaffateip, multiverktøy, bøttetoalett, dokumentmappe.
-  Ingen av disse har en reell utløpsdato – de blir ikke dårligere av å ligge
-  urørt i en bod i ti år.
+  esken, vannkanner, kokeapparat, CO-varsler, lykter, radio, powerbank,
+  brannteppe, boksåpner (fysisk), gaffateip, multiverktøy, bøttetoalett,
+  dokumentmappe. Ingen av disse har en reell utløpsdato – de blir ikke
+  dårligere av å ligge urørt i en bod i ti år. **Brennstoffet til
+  kokeapparatet er bevisst holdt utenfor denne listen: det følger ikke med i
+  det hele tatt** (se avsnitt 3).
 - **Forbruksvarer** (`type: 'forbruk'`) går ut på dato og må byttes med jevne
-  mellomrom: all mat, batterier, telys, nødteppe, rødsprit, aquatabs,
+  mellomrom: all mat, batterier, telys, nødteppe, aquatabs,
   førstehjelpsutstyrets forbruksdel, håndsprit, våtservietter.
 
 Tabellen under viser hele stykklisten klassifisert, med holdbarhet. Se
@@ -125,7 +127,8 @@ avsnitt 3–4 for produkt, pris og skaleringsregel per vare.
 | --- | --- | --- | --- |
 | Esken (stablekasser) | engang | – | Aldri – det er den fysiske beholderen abonnementet leverer inn i. |
 | Vannkanner 10 l | engang | – | Ingen utløpsdato på plasten. Vannet i dem bør skiftes årlig – det er en påminnelse, ikke en vareforsendelse. |
-| Stormkjøkken (Trangia) | engang | – | Mekanisk utstyr, ingen forbruksdel. |
+| Kokeapparat (Trangia + gassbrenner) | engang | – | Mekanisk utstyr uten forbruksdel. Brennstoffet – gass eller rødsprit – følger **ikke** med og kjøpes lokalt av kunden, se avsnitt 3. |
+| CO-varsler | engang | ca. 7 år (sensor) | Klassifisert som engangsutstyr i standardpakken. Sensoren har typisk sju års levetid; vi minner om funksjonstest ved neste komplette kjøp, men den inngår ikke i det ordinære matabonnementet. |
 | Nødradio | engang | – | Batteriet er innebygd og skiftbart kun på oppgraderingsmodellen; regnes som engangsutstyr i standardpakken. |
 | Powerbank | engang | – | Toppes opp årlig sammen med matbyttet, byttes ikke ut. |
 | Brannteppe | engang | – | Ubrukt teppe forringes ikke. |
@@ -140,7 +143,6 @@ avsnitt 3–4 for produkt, pris og skaleringsregel per vare.
 | Batterier, litium AAA/AA | forbruk | 25 år | I praksis nesten aldri i en ti-årshorisont – men formelt en forbruksvare. |
 | Telys | forbruk | 10 år | Byttes sjeldnere enn maten, men er ikke evigvarende. |
 | Nødteppe | forbruk | 5 år | Folien sprekker i brettekantene over tid. |
-| Rødsprit | forbruk | 10 år | Forseglet flaske, lang holdbarhet, men skal likevel inn i syklusen. |
 | Aquatabs | forbruk | 5 år | Aktivt klor brytes langsomt ned. |
 | Førstehjelpsskrin (forbruksdelen) | forbruk | 5 år | Sterile kompresser og sårvask er datomerket. |
 | Håndsprit | forbruk | 3 år | Alkoholprosenten synker. |
@@ -148,27 +150,32 @@ avsnitt 3–4 for produkt, pris og skaleringsregel per vare.
 
 ### Hva det betyr for totalkostnaden over ti år (eksempel: 4 personer, tørrmat, komplett pakke)
 
-Engangsutstyret koster ca. **5 340 kr**, betalt én gang: esken (3 kasser,
-897 kr), vannkanner (8 stk, 479 kr), stormkjøkken (799 kr), nødradio
-(530 kr), powerbank (659 kr), brannteppe (350 kr), gaffateip (192 kr),
-multiverktøy (250 kr), hodelykter og campinglykter (558 kr), bøttetoalett
-(399 kr), dokumentmappe (229 kr).
+Engangsutstyret koster ca. **6 190 kr**, betalt én gang: esken (3 kasser,
+897 kr), vannkanner (8 stk, 479 kr), kokeapparat – Trangia + gassbrenner,
+uten brennstoff (1 298 kr), CO-varsler (349 kr, vår egen utsalgspris – ikke
+en observert konkurrentpris, se avsnitt 3), nødradio (530 kr), powerbank
+(659 kr), brannteppe (350 kr), gaffateip (192 kr), multiverktøy (250 kr),
+hodelykter og campinglykter (558 kr), bøttetoalett (399 kr), dokumentmappe
+(229 kr).
 
 Forbruksvarene koster i snitt ca. **2 740 kr per år** over ti år, og maten
 er over 90 % av det tallet: ca. 2 491 kr i mat hvert år (se avsnitt 5),
 pluss aquatabs, nødteppe, håndsprit, våtservietter og førstehjelpsutstyr på
-sine egne, lengre sykluser (til sammen ca. 250 kr/år i snitt). Batteriene og
-rødspriten er så holdbare at de knapt trenger å byttes i det hele tatt i en
-tiårsperiode.
+sine egne, lengre sykluser (til sammen ca. 250 kr/år i snitt). Batteriene er
+så holdbare at de knapt trenger å byttes i det hele tatt i en tiårsperiode.
+Brennstoff er ikke med i dette regnestykket i det hele tatt – kunden kjøper
+gass eller rødsprit selv, lokalt, etter behov (se avsnitt 3), og det er en
+kostnad og et kjøp som aldri går gjennom oss.
 
-Ti år totalt blir da grovt **5 340 kr i engangsutstyr + ca. 27 400 kr i
-forbruk = rundt 32 700 kr**, mot en kunde som i stedet kjøper en helt ny
+Ti år totalt blir da grovt **6 190 kr i engangsutstyr + ca. 27 400 kr i
+forbruk = rundt 33 600 kr**, mot en kunde som i stedet kjøper en helt ny
 komplett pakke hos en konkurrent hvert femte år fordi ingen sier fra at
 maten er gått ut (2 × 6 999 kr hos beredskap1 for en firepersonspakke =
 13 998 kr for to bokser – og fortsatt uten garanti for at noen faktisk
-bytter maten i mellomtiden). Poenget er ikke at abonnementet er billigst
-første året – det er at det er den eneste modellen der kunden faktisk har
-fungerende beredskap i år ti, ikke bare i år én.
+bytter maten i mellomtiden, og uten CO-varsler i noen av dem). Poenget er
+ikke at abonnementet er billigst første året – det er at det er den eneste
+modellen der kunden faktisk har fungerende beredskap i år ti, ikke bare i
+år én.
 
 ---
 
@@ -198,8 +205,8 @@ forvirring i markedet.)
 | --- | --- | --- | --- | --- | --- | --- |
 | Drikkevann | Vanndunk 10 l, Biltema 88‑4110, 59,90 kr, leveres tom | stk | 2 per person (20 l/person) | `personer * 2` | – (vannet bør skiftes årlig) | DSBs eneste tallfestede råd. 10-literen er eneste størrelse hele husstanden – barn, eldre, gravide – faktisk kan bære og helle; en full 20-liter veier 21 kg. |
 | Mat, sju døgn | Nødboks Familiemeny (33 varelinjer, se avsnitt 5) | sett | Se avsnitt 5/6 | gram per person, se avsnitt 5 | ca. 1 år | DSBs mat-punkt, ordrett: «litt ekstra av den maten du spiser til vanlig» og «ekstra matvarer med lang holdbarhet». |
-| Kokeapparat | Trangia Stormkjøkken 25‑1 UL, Clas Ohlson 34‑6993, 799 kr | sett | 1 per påbegynt 4 personer | `Math.ceil(personer / 4)` | – | DSBs punkt om «kokeapparat som går på gass eller rødsprit». Rødspriten er en væske i en skrukork – ingen ventil som kan lekke, lovlig å lagre i kjellerbod (der gass er forbudt), og vindskjermen gjør at den virker på en balkong i november. Kokekar og panne følger med. |
-| Brennstoff | Kemetyl rødsprit 1 l, Clas Ohlson 34‑9841, 79,90 kr | flaske | min. 2, ellers 1 per påbegynt 2 personer | `Math.max(2, Math.ceil(personer / 2))` | 10 år (forseglet) | DSBs punkt om «ekstra gassbeholder eller brennstoff». Holder husstanden godt under grensen på 10 liter brannfarlig væske i bolig. |
+| Kokeapparat | Trangia Stormkjøkken 25‑1 UL (Clas Ohlson 34‑6993, 799 kr) + generisk gassbrenner 2800 W (Fangstmann.no, 499 kr) – ett sett, to brennstoffalternativer | sett | 1 per påbegynt 4 personer | `Math.ceil(personer / 4)` | – | DSBs punkt om «kokeapparat som går på gass eller rødsprit». Vi selger begge brennerne i samme sett, ikke bare én, fordi valget mellom gass (raskt, kraftig) og rødsprit (en væske i skrukork som tåler å stå glemt i en bod i årevis, uten ventil som kan lekke) er kundens, ikke vårt – begge er lovlige å eie, men rødsprit er det eneste av de to som er lovlig å *lagre* i kjellerbod, der gass er forbudt. Kokekar, panne og vindskjerm følger med. **Apparatet er ikke godkjent for bruk i lukket rom uten ventilasjon** – se Brennstoff og CO-varsler under. |
+| Brennstoff (gass eller rødsprit) | – **selges ikke, følger ikke med esken.** Kunden kjøper selv, lokalt (Clas Ohlson, Biltema, bensinstasjon m.fl.) | – | – | – | – | Gass er farlig gods klasse UN1950 (2.1) og rødsprit er UN1170 (klasse 3) – ingen av dem kan sendes som ordinær pakke. Vi sender derfor kokeapparatet helt uten brennstoff og sier nøyaktig hva du skal kjøpe og hvor mye: ca. 0,5 l rødsprit **eller** én 450 g gasskartusj per person for sju døgn ved én varm ting om dagen. Uansett hvilket du velger: **verken gass eller rødsprit er godkjent for bruk innendørs i lukket rom.** Karbonmonoksid er luktfritt – bruk apparatet med vindu på gløtt, aldri mens noen sover, og la CO-varsleren (se «Varme og lys» under) stå i samme rom. |
 | Tenning | Fyrstikker, 10 esker à 45 stk, Biltema 37‑680/Nitedals, 12,90 kr | pakke | 1 per husstand | `1` | – (fosforstripe svekkes i fukt) | Tenningen til kokeapparat, telys og eventuell vedovn. Billigste reelle nytte i hele boksen. |
 | Vannrensing | Aquatabs 50 stk, Beredskapsvakten, 149 kr | pakke | 1 per påbegynt 4 personer | `Math.ceil(personer / 4)` | 5 år | Reserve hvis en kanne må etterfylles fra usikker kilde, eller det kommer kokevarsel. Eneste komponent i vann-gruppen med utløpsdato. |
 | Kontanter | Ingen vareforsendelse – tom, merket kontantlomme i dokumentmappen (se «Informasjon») pluss trykt regel på nødkortet | – | – | Regel trykt, ikke vare: 500 kr/person, tak 3 000 kr/husstand | – | DSBs punkt om «litt kontanter … og flere betalingskort», presisert med Norges Banks råd om små valører (butikken har lite vekslepenger når alle plutselig betaler kontant) og ett fysisk BankAxept-kort, fordi flere nødordninger for kortbetaling bygger på nettopp det kortet. Vi sender ikke penger i en boks. |
@@ -212,8 +219,13 @@ fyrstikker og stearinlys, ved (hvis vedovn), gass-/parafinovn, avtale om
 overnatting, lommelykter/hodelykter. De tre første og de to siste av disse
 er ting husstanden enten allerede eier eller selv må avtale – DSB peker
 eksplisitt på klær, pledd, dyner og soveposer «folk allerede eier», ikke på
-kjøpsvarer. Vi selger derfor bare det som faktisk mangler i de fleste hjem:
-lys og batteriene til det.
+kjøpsvarer. Vi selger derfor det som faktisk mangler i de fleste hjem: lys
+og batteriene til det. Vi legger i tillegg til én vare DSBs sjekkliste ikke
+nevner, men som er en direkte konsekvens av at vi selger kokeapparatet i
+«Mat og vann»-gruppen over: en CO-varsler. Verken gass eller rødsprit er
+godkjent for lukket rom, men vi vet at folk kommer til å bruke apparatet
+inne når det er kaldt og mørkt ute – og karbonmonoksid er luktfritt. Ingen
+av de tolv kartlagte konkurrentene har dette med.
 
 | Vare | Produkt | Enhet | Mengde | Skaleringsregel | Holdbarhet | Hvorfor |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -221,6 +233,7 @@ lys og batteriene til det.
 | Romlys | Campinglykt 90 lm, Biltema 24‑977, 139 kr | stk | 1 per påbegynt 3 personer, maks 3 | `Math.min(3, Math.ceil(personer / 3))` | – | Fire personer med hodelykter rundt et bord lyser hverandre i ansiktet. Romlys er det som gjør at en familie kan spise og spille kort sammen. |
 | Batterier | Energizer Ultimate Lithium AAA (L92), 10‑pk, Batteri Online, 235 kr | pakke | 1 per påbegynt 2 personer | `Math.ceil(personer / 2)` | 25 år | DSBs råd slutter med «husk ekstra batterier» – en del av rådet, ikke et mersalg. Litium er valgt for lagringsforholdet, ikke ytelsen: en boks står urørt i en kald bod i tre til åtte år før den brukes, og alkaliske batterier kan lekke og ødelegge lykta stille, uten varsel. Batteriene skal ligge uåpnet i original blister, aldri monteres. |
 | Reservelys | Telys av stearin, 50‑pk, Biltema 47‑1676, 59,90 kr | pakke | 1 per husstand | `1` | 10 år | DSB navngir stearinlys eksplisitt. Skal presenteres som reserve, ikke hovedlys – 300 lystimer er langt mer enn sju døgn krever. |
+| CO-varsler | CO-varsler med display, batteridrevet, EN 50291‑1-sertifisert. Merke ikke valgt ennå – pris er vårt eget anslag, ikke en observert kilde (se `docs/innkjopsliste.md`) | stk | 1 for 1–4 personer, 2 for 5–8 | `personer <= 4 ? 1 : 2` | ca. 7 år (sensor) | Kokeapparatet er ikke godkjent for lukket rom, men folk kommer til å koke inne når det er kaldt og mørkt. De første symptomene på CO-forgiftning ligner influensa. Dette er den billigste varen i esken som kan redde liv, og den eneste grunnen til at vi tør selge et kokeapparat inn i en bolig for sju døgn. Kostnaden er rundt 209 kr eks. mva per stk – den skal kommuniseres som en inkludert selvfølge i komplett-pakken, ikke som et tillegg kunden må velge til. |
 
 ### Informasjon
 

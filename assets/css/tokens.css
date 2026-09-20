@@ -93,12 +93,12 @@
   --step-1:  clamp(1.18rem, 1.11rem + 0.34vw, 1.38rem);
   --step-2:  clamp(1.38rem, 1.25rem + 0.63vw, 1.75rem);
   --step-3:  clamp(1.62rem, 1.39rem + 1.08vw, 2.22rem);
-  --step-4:  clamp(1.91rem, 1.53rem + 1.75vw, 2.81rem);
-  --step-5:  clamp(2.24rem, 1.65rem + 2.76vw, 3.58rem);
+  --step-4:  clamp(1.91rem, 1.48rem + 2.05vw, 3.05rem);
+  --step-5:  clamp(2.35rem, 1.58rem + 3.55vw, 4.25rem);
 
-  --lh-tight: 1.12;
+  --lh-tight: 1.06;
   --lh-snug:  1.28;
-  --lh-body:  1.62;
+  --lh-body:  1.65;
 
   /* --- Rom: 4px-grid (uendret) --- */
   --sp-1: 0.25rem;  --sp-2: 0.5rem;   --sp-3: 0.75rem;  --sp-4: 1rem;

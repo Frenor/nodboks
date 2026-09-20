@@ -18,59 +18,68 @@
 
 /* Prisforankring over bretten. Tallet kommer fra samme beregning som
    byggeren bruker – aldri et eget markedsføringstall. */
+/* Prisforankringen. Satt som en kolofonlinje framfor et prisskilt: tallet er
+   stort, men alt rundt er dempet, slik at det leser som en opplysning og ikke
+   som et rop. */
 .hero__pris {
-  display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--sp-2) var(--sp-3);
-  margin-block: var(--sp-6) var(--sp-5);
+  display: grid;
+  gap: var(--sp-1);
+  margin-block: var(--sp-7) var(--sp-6);
   padding-top: var(--sp-5);
-  border-top: 1px solid var(--border);
+  border-top: 2px solid var(--text);
+  max-width: 34ch;
 }
-.hero__pris b { font-size: var(--step-3); font-weight: 650; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
-.hero__pris span { color: var(--text-muted); font-size: var(--step--1); }
-
-/* Esken, tegnet i CSS. Ingen glød, ingen gradient uten referent:
-   den lyser ikke, for lokket er lukket. */
-.eske {
-  --eske-b: 100%;
-  position: relative;
-  aspect-ratio: 5 / 4;
-  max-width: 26rem;
-  margin-inline: auto;
-  width: var(--eske-b);
+.hero__pris b {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--step-4);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
 }
-.eske__kropp {
-  position: absolute; inset: 26% 7% 8%;
-  z-index: 1;
-  background: var(--surface-2);
-  border: 2px solid var(--border-strong);
-  border-radius: 0 0 var(--radius) var(--radius);
-}
-/* Lokket males over kroppen, ellers kuttes konturen der de møtes. */
-.eske__lokk {
-  position: absolute; inset: 18% 3% 66%;
-  z-index: 2;
-  background: var(--surface);
-  border: 2px solid var(--border-strong);
-  border-radius: var(--radius-sm);
-}
-.eske__hank {
-  position: absolute; left: 50%; top: 11%;
-  width: 20%; height: 7.5%;
-  transform: translateX(-50%);
-  border: 2px solid var(--border-strong);
-  border-bottom: 0;
-  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-}
-/* Merket på esken – ravgul ø er byttet ut med aksentens ettergløde-verdi */
-.eske__merke {
-  position: absolute; left: 50%; top: 60%;
-  z-index: 3;
-  transform: translateX(-50%);
-  font-family: var(--font-ui);
-  font-size: var(--step--1);
-  font-weight: 650;
-  letter-spacing: 0.14em;
+.hero__pris span {
   color: var(--text-muted);
+  font-size: var(--step--1);
+  letter-spacing: 0.01em;
 }
+.hero__pris span:first-child {
+  font-weight: 620;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* Esken. Tegnet som presis strek framfor en flate med skygge: presisjon leser
+   som kvalitet, og en glød ville vært lys uten kilde – lokket er åpent, men
+   ingenting i esken lyser. Det eneste elementet i aksentfarge er lykten. */
+.eske { margin: 0; }
+.eske svg { width: 100%; height: auto; display: block; }
+.eske__tekst {
+  margin-top: var(--sp-4);
+  font-size: var(--step--1);
+  color: var(--text-faint);
+  text-align: center;
+}
+
+/* --- Premiumpremisset ---------------------------------------------------- */
+
+.premiss { display: grid; gap: var(--sp-7); }
+@media (min-width: 60rem) {
+  .premiss { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: var(--sp-8); align-items: start; }
+}
+.premiss > div > p { max-width: 58ch; }
+.premiss > div > p + p { margin-top: var(--sp-4); }
+
+.premiss__punkter { list-style: none; margin: 0; padding: 0; }
+.premiss__punkter li {
+  padding: var(--sp-4) 0;
+  border-top: 1px solid var(--border);
+  max-width: none;
+}
+.premiss__punkter li:first-child { border-top: 2px solid var(--text); padding-top: var(--sp-4); }
+.premiss__punkter b { display: block; margin-bottom: var(--sp-1); font-weight: 650; }
+.premiss__punkter span { color: var(--text-muted); font-size: var(--step--1); }
 
 /* --- Situasjon ----------------------------------------------------------- */
 

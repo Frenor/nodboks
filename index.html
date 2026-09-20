@@ -92,15 +92,15 @@
         <p class="eyebrow">Egenberedskap for én uke</p>
         <h1>Esken du håper du aldri må åpne.</h1>
         <p class="hero__lead">
-          Strømmen går, vannet blir borte eller butikken er stengt. Myndighetene
-          anbefaler at hver husstand klarer seg selv i sju døgn. Vi pakker det du
-          trenger i én eske – og sier fra i god tid før maten går ut på dato.
+          Myndighetene anbefaler at hver husstand klarer seg selv i sju døgn. Vi
+          pakker det du trenger i én eske – med utstyr du faktisk vil ta med på tur,
+          ikke billigvarer som ligger ubrukt til den dagen du trenger dem mest.
         </p>
 
         <p class="hero__pris">
-          <span>Komplett pakke, fire personer, vanlig mat:</span>
+          <span>Komplett pakke · fire personer · vanlig mat</span>
           <b data-hero-pris>–</b>
-          <span>inkl. mva., frakt kommer i tillegg</span>
+          <span>inkl. mva. Frakt kommer i tillegg.</span>
         </p>
 
         <p class="cluster">
@@ -115,12 +115,60 @@
         </p>
       </div>
 
-      <div class="eske" role="img" aria-label="Illustrasjon av en lukket beredskapseske">
-        <span class="eske__hank"></span>
-        <span class="eske__lokk"></span>
-        <span class="eske__kropp"></span>
-        <span class="eske__merke">NØDBOKS</span>
-      </div>
+      <figure class="eske">
+        <svg viewBox="0 0 420 330" role="img"
+             aria-labelledby="eske-tittel" fill="none"
+             stroke-linecap="round" stroke-linejoin="round">
+          <title id="eske-tittel">Beredskapseske med åpent lokk, sett fra siden</title>
+
+          <!-- Lokket, slått bakover på hengslene -->
+          <g stroke="var(--border-strong)" stroke-width="2">
+            <path d="M152 112 L176 70 L376 70 L352 112 Z"/>
+            <path d="M176 70 L176 62 L376 62 L376 70"/>
+          </g>
+
+          <!-- Kassen: topp, front, side -->
+          <g stroke="var(--text)" stroke-width="2.5">
+            <path d="M100 152 L152 112 L352 112 L300 152 Z"/>
+            <path d="M100 152 L100 282 L300 282 L300 152"/>
+            <path d="M300 152 L352 112 L352 242 L300 282"/>
+          </g>
+
+          <!-- Hairline-detaljer: håndtak, listverk, skillevegg -->
+          <g stroke="var(--border-strong)" stroke-width="1.25">
+            <path d="M126 196 L160 196"/>
+            <path d="M126 196 L126 210 M160 196 L160 210"/>
+            <path d="M100 258 L300 258"/>
+            <path d="M300 258 L352 218"/>
+            <path d="M212 152 L212 282" stroke-dasharray="3 5"/>
+          </g>
+
+          <!-- Innhold som stikker opp: kanne, radio med antenne, lykt -->
+          <g stroke="var(--text-muted)" stroke-width="2">
+            <path d="M126 152 L126 122 L160 122 L160 152"/>
+            <path d="M134 122 L134 114 L152 114 L152 122"/>
+            <path d="M232 152 L232 126 L272 126 L272 152"/>
+            <path d="M262 126 L278 96" stroke-width="1.5"/>
+          </g>
+
+          <!-- Ett element i aksentfarge: lykten. Det eneste lyset i bildet. -->
+          <g stroke="var(--accent)" stroke-width="2.5">
+            <path d="M178 152 L178 132 L214 132 L214 152"/>
+            <path d="M186 132 L186 124 L206 124 L206 132"/>
+          </g>
+
+          <!-- Merket, stemplet på fronten -->
+          <text x="200" y="228" text-anchor="middle"
+                font-family="var(--font-ui)" font-size="13"
+                letter-spacing="3.5" fill="var(--text-faint)" stroke="none">NØDBOKS</text>
+          <text x="200" y="246" text-anchor="middle"
+                font-family="var(--font-ui)" font-size="9.5"
+                letter-spacing="1.6" fill="var(--text-faint)" stroke="none">SJU DØGN · 4 PERSONER</text>
+        </svg>
+        <figcaption class="eske__tekst">
+          Illustrasjon. Innholdet settes sammen i byggeren under.
+        </figcaption>
+      </figure>
     </div>
   </section>
 
@@ -146,6 +194,58 @@
           <p>Radioen må gå på batteri, sveiv eller solceller, og den må ha DAB. NRK P1 er beredskapskanalen, og FM er slått av på riksnett.</p>
           <cite><a href="https://www.dsb.no/sikkerhverdag/egenberedskap/" rel="noopener">dsb.no</a></cite>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3b. Premiumpremisset ------------------------------------------------- -->
+  <section class="section">
+    <div class="wrap">
+      <div class="premiss">
+        <div>
+          <p class="eyebrow">Hvorfor vi ikke selger billig</p>
+          <h2>Utstyr som ligger ubrukt, kan du ikke stole på.</h2>
+          <p class="lead">
+            Den vanligste feilen i dette markedet er å fylle en kasse med det
+            billigste som finnes, sette den i boden og håpe at den aldri åpnes.
+          </p>
+          <p>
+            Problemet er at en hodelykt du aldri har brukt, er en hodelykt du fomler
+            med i mørket. Et stormkjøkken du aldri har tent, er noe du skal lære deg
+            den kvelden strømmen er borte og barna er sultne. Beredskap som aldri
+            berøres, er ikke beredskap. Det er en kasse med fremmede gjenstander.
+          </p>
+          <p>
+            Derfor velger vi utstyr du har lyst til å bruke. Lykten blir med på
+            hyttetur. Stormkjøkkenet står på svaberget i juli. Vannfilteret tar du
+            med på fjellet. Og når det virkelig gjelder, plukker du opp noe du
+            kjenner i hånda.
+          </p>
+          <p class="muted">
+            Det koster mer. Til gjengjeld er det ikke penger som står og taper seg i
+            en bod – det er utstyr du har glede av hver sommer, som tilfeldigvis også
+            er det du trenger den ene uka du håper aldri kommer.
+          </p>
+        </div>
+
+        <ul class="premiss__punkter">
+          <li>
+            <b>Kjente merker med ettermarked</b>
+            <span>Reservedeler og reparasjon, ikke importvarer uten ettermarked.</span>
+          </li>
+          <li>
+            <b>Virker i norsk vinter</b>
+            <span>Kulde, vått og mørkt. Et batteri som dør ved minus ti er ikke beredskap.</span>
+          </li>
+          <li>
+            <b>Ti års levetid</b>
+            <span>Utstyret skal overleve flere runder med matpåfyll.</span>
+          </li>
+          <li>
+            <b>Har du det fra før, tar vi det ut</b>
+            <span>Du skal ikke kjøpe en hodelykt til for å få resten av pakken.</span>
+          </li>
+        </ul>
       </div>
     </div>
   </section>
@@ -366,6 +466,14 @@
             Er dere seks, får dere seks hodelykter. Det er ikke en selvfølge i dette
             markedet: flere av de største leverer samme antall lykter, brennere og
             førstehjelpssett uansett hvor mange dere er.
+          </p>
+        </div>
+        <div class="tillit__punkt">
+          <h3>Vi sier hva hver oppgradering koster</h3>
+          <p>
+            Premium betyr ikke dyrest. Der et dyrere produkt ikke gjør en reell
+            forskjell, velger vi det billigere – og der vi går opp i pris, står
+            begrunnelsen i innholdslisten, så du kan være uenig.
           </p>
         </div>
         <div class="tillit__punkt">
