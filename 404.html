@@ -5,24 +5,82 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Fant ikke siden – Nødboks</title>
 <meta name="robots" content="noindex">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/assets/css/tokens.css">
-<link rel="stylesheet" href="/assets/css/base.css">
-<script>
-  try { var t = localStorage.getItem('nodboks:tema'); if (t) document.documentElement.setAttribute('data-theme', t) } catch (e) {}
-</script>
+<!--
+  Denne siden har stilene inline med vilje.
+
+  GitHub Pages serverer 404.html for en hvilken som helst manglende sti, også
+  dype. En relativ lenke til assets/ ville da peke feil vei, og en absolutt
+  ville brutt på prosjektsider som frenor.github.io/nodboks/. Seks fargeverdier
+  duplisert er billigere enn en 404-side uten stil.
+
+  Verdiene er hentet fra assets/css/tokens.css. Endres paletten, endres disse.
+-->
+<style>
+  :root {
+    --bg: #F1F4F1; --text: #10201C; --muted: #4E615B;
+    --accent: #52601B; --accent-ink: #FFFFFF; --linje: #CFD8D2;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0B1513; --text: #E8EFE9; --muted: #9CB0AA;
+      --accent: #D9E6A0; --accent-ink: #0B1513; --linje: #2C3D37;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh;
+    display: grid; place-content: center; justify-items: start;
+    gap: 1rem; padding: 2rem;
+    background: var(--bg); color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+  }
+  .merke { display: flex; align-items: center; gap: 0.5rem; font-weight: 650; margin-bottom: 1.5rem; }
+  h1 {
+    font-family: "Iowan Old Style", Palatino, Charter, Georgia, ui-serif, serif;
+    font-size: clamp(2rem, 1.5rem + 2.4vw, 3rem);
+    line-height: 1.06; letter-spacing: -0.03em; margin: 0;
+  }
+  p { color: var(--muted); max-width: 46ch; margin: 0; }
+  .knapper { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; }
+  a.btn {
+    display: inline-flex; align-items: center; min-height: 2.875rem;
+    padding: 0.75rem 1.5rem; border-radius: 10px;
+    border: 1px solid var(--linje); color: var(--text);
+    text-decoration: none; font-weight: 600;
+  }
+  a.btn--primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+</style>
 </head>
 <body>
-<main class="wrap section" style="min-height:70vh; display:grid; align-content:center">
-  <p class="eyebrow">404</p>
+  <p class="merke">
+    <svg width="24" height="24" viewBox="0 0 32 32" aria-hidden="true">
+      <circle cx="16" cy="16" r="10.5" fill="none" stroke="currentColor" stroke-width="3"/>
+      <circle cx="16" cy="16" r="5" fill="var(--accent)"/>
+    </svg>
+    Nødboks
+  </p>
   <h1>Den siden finnes ikke.</h1>
-  <p class="lead">
-    Lenken kan være gammel, eller så har vi flyttet noe. Pakkebyggeren står der den pleier.
+  <p>Lenken kan være gammel, eller så har vi flyttet noe. Pakkebyggeren står der den pleier.</p>
+  <p class="knapper">
+    <a class="btn btn--primary" id="hjem" href="/">Til forsiden</a>
   </p>
-  <p class="cluster" style="margin-top:var(--sp-5)">
-    <a class="btn btn--primary" href="/#bygg">Sett sammen esken</a>
-    <a class="btn" href="/">Til forsiden</a>
-  </p>
-</main>
+
+  <script>
+    /*
+     * GitHub Pages serverer denne filen for en hvilken som helst manglende
+     * sti, så vi vet ikke hvor rota er før vi står her. På et eget domene er
+     * den "/". På en prosjektside som frenor.github.io/nodboks/ er den
+     * "/nodboks/", og da fører "/" ut av prosjektet.
+     *
+     * Lenken står som "/" i markeringen, så den virker uten JavaScript på det
+     * domenet siden faktisk skal bo på.
+     */
+    if (location.hostname.endsWith('github.io')) {
+      var forste = location.pathname.split('/')[1]
+      if (forste) document.getElementById('hjem').setAttribute('href', '/' + forste + '/')
+    }
+  </script>
 </body>
 </html>

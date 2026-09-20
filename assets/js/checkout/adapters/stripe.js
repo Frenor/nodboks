@@ -40,7 +40,7 @@ export const adapterStripe = {
           referanse: ordre.referanse,
           konfigurasjon: ordre.konfigurasjon,
           retur: {
-            ok: `${location.origin}/takk.html`,
+            ok: new URL('takk.html', document.baseURI).href,
             avbrutt: `${location.origin}/#pakkebygger`,
           },
         }),
