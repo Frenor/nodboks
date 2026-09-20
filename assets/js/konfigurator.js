@@ -19,6 +19,22 @@ import {
   finnModus,
 } from './data/katalog.js'
 
+/**
+ * Merverdiavgift per varekategori.
+ *
+ * Næringsmidler har redusert sats. Alt annet – kanner, primus, lykter, radio –
+ * er ordinær sats, også når det står i «Mat og vann»-gruppen i prispanelet.
+ * Tomme vannkanner er utstyr, ikke drikkevarer.
+ *
+ * Satsen ligger her og ikke i grensesnittet, fordi både prispanelet og
+ * selvtesten trenger den og de to ikke får lov til å sprike.
+ */
+export const MVA = { mat: 0.15, standard: 0.25 }
+export const mvaSats = (kategori) => (kategori === 'Mat' ? MVA.mat : MVA.standard)
+
+/** Kategoriene som vises samlet som «Mat og vann» i prispanelet. */
+export const MATGRUPPER = ['Mat', 'Vann']
+
 /** Klemmer personantallet inn i det katalogen faktisk dekker. */
 export const klem = (n) =>
   Math.min(KONFIG.personerMaks, Math.max(KONFIG.personerMin, Math.round(n || 1)))
@@ -103,6 +119,16 @@ export function byggPakke(valg) {
   const abonnement = abonnementId ? finnPafyll(abonnementId) : null
   const abonnementsrabatt = abonnement ? Math.round(sum * abonnement.rabatt) : 0
 
+  // Mva regnes per linje, fordi mat og utstyr har ulik sats. Pakkerabatten
+  // fordeles proporsjonalt, ellers ville rabatten flyttet avgift mellom satsene.
+  const rabattfaktor = sumVarer ? sum / sumVarer : 1
+  const mvaBelop = linjer.reduce((n, l) => {
+    const brutto = l.sum * rabattfaktor
+    const sats = mvaSats(l.kategori)
+    return n + (brutto - brutto / (1 + sats))
+  }, 0)
+  const netto = sum - mvaBelop
+
   const kcal = linjer.reduce((n, l) => n + l.kcal, 0)
   const liter = linjer.reduce((n, l) => n + l.liter, 0)
   const vekt = linjer.reduce((n, l) => n + l.vekt, 0)
@@ -123,6 +149,8 @@ export function byggPakke(valg) {
     abonnement,
     abonnementsrabatt,
     sumMedAbonnement: sum - abonnementsrabatt,
+    mva: Math.round(mvaBelop),
+    netto: Math.round(netto),
     prisPerPerson: Math.round(sum / personer),
     prisPerPersonPerDogn: Math.round(sum / personer / KONFIG.dogn),
     kcal,

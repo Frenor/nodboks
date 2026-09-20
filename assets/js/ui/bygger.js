@@ -8,6 +8,7 @@
 
 import {
   byggPakke,
+  MATGRUPPER,
   referanse,
   tilKurvpost,
   klem,
@@ -208,7 +209,7 @@ function tegnPris(rot, pakke) {
 
   const linjer = $('#pris-linjer', rot)
   if (linjer) {
-    const mat = pakke.linjer.filter((l) => l.kategori === 'Mat og vann').reduce((n, l) => n + l.sum, 0)
+    const mat = pakke.linjer.filter((l) => MATGRUPPER.includes(l.kategori)).reduce((n, l) => n + l.sum, 0)
     const utstyr = pakke.sumVarer - mat
     const rader = []
     if (mat) rader.push(['Mat og vann', mat])
@@ -222,16 +223,12 @@ function tegnPris(rot, pakke) {
       `<div class="prispanel__linje prispanel__linje--sum"><span>Å betale</span><span>${kr(sum)}</span></div>`
   }
 
-  // Momsoppdelingen står synlig. Mat har 15 %, utstyr 25 %, og en kunde som
-  // sammenligner tilbud har krav på å se hvorfor to like pakker koster ulikt.
+  // Momsoppdelingen står synlig. Mat har redusert sats, utstyr ordinær, og en
+  // kunde som sammenligner to tilbud har krav på å se hvorfor de er ulike.
+  // Beløpet kommer fra konfiguratoren, ikke fra en egen utregning her.
   const mva = $('#pris-mva', rot)
   if (mva) {
-    const matSum = pakke.linjer.filter((l) => l.kategori === 'Mat og vann').reduce((n, l) => n + l.sum, 0)
-    const utstyrSum = pakke.sum - matSum
-    const mvaMat = matSum - matSum / 1.15
-    const mvaUtstyr = utstyrSum - utstyrSum / 1.25
-    mva.textContent =
-      `Herav mva. ${kr(mvaMat + mvaUtstyr)} – 15 % på mat, 25 % på utstyr.`
+    mva.textContent = `Herav mva. ${kr(pakke.mva)} – 15 % på mat, 25 % på utstyr.`
   }
 
   const neste = $('#pris-neste', rot)

@@ -77,7 +77,15 @@ for (const modus of MODUSER) {
 }
 
 // --- Marginer ---------------------------------------------------------------
-bolk('Marginer')
+/*
+ * Dekningsgrad regnes på NETTO, ikke på utsalgsprisen.
+ *
+ * `pris` i katalogen er inkl. mva, `innkjop` er eks. mva. Å trekke det ene fra
+ * det andre og kalle det margin er å sammenligne to ulike ting – det blåste
+ * opp dekningsgraden med rundt fjorten prosentpoeng her. Momsen er statens,
+ * ikke vår, og skal ut av begge sider av regnestykket.
+ */
+bolk('Marginer (regnet på netto, eks. mva)')
 const innkjopFor = (sku) =>
   VARER.find((v) => v.sku === sku)?.innkjop ?? ESKER.find((e) => e.sku === sku)?.innkjop ?? 0
 
@@ -86,8 +94,8 @@ for (const modus of MODUSER) {
     for (const p of [1, 2, 4, 6, 8]) {
       const pakke = byggPakke({ personer: p, matniva: niva.id, modus: modus.id })
       const kost = pakke.linjer.reduce((n, l) => n + innkjopFor(l.sku) * l.antall, 0)
-      const db = pakke.sum - kost
-      const margin = db / pakke.sum
+      const db = pakke.netto - kost
+      const margin = db / pakke.netto
       if (margin < 0.2) {
         nei(`${modus.id}/${niva.id}/${p}: dekningsgrad ${Math.round(margin * 100)} % – for tynt`)
       } else if (margin < 0.3) {
@@ -96,8 +104,11 @@ for (const modus of MODUSER) {
     }
     const p4 = byggPakke({ personer: 4, matniva: niva.id, modus: modus.id })
     const kost4 = p4.linjer.reduce((n, l) => n + innkjopFor(l.sku) * l.antall, 0)
-    ok(`${modus.id}/${niva.id} · 4 pers: ${p4.sum} kr, kost ${Math.round(kost4)} kr, ` +
-       `DG ${Math.round(((p4.sum - kost4) / p4.sum) * 100)} %`)
+    console.log(
+      `  \x1b[2m·\x1b[0m ${modus.id}/${niva.id} · 4 pers: ${p4.sum} kr inkl. mva ` +
+      `→ ${p4.netto} kr netto, kost ${Math.round(kost4)} kr, ` +
+      `DG ${Math.round(((p4.netto - kost4) / p4.netto) * 100)} %`
+    )
   }
 }
 
