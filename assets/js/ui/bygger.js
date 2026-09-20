@@ -9,6 +9,7 @@
 import {
   byggPakke,
   MATGRUPPER,
+  FRAVALG_TERSKEL,
   referanse,
   tilKurvpost,
   klem,
@@ -48,6 +49,7 @@ export function startBygger(rot = document) {
       personer: klem(Number(slider.value)),
       matniva: $('input[name="matniva"]:checked', skjema)?.value,
       modus: $('input[name="modus"]:checked', skjema)?.value,
+      utelatt: $$('input[name="harfraFor"]:checked', skjema).map((i) => i.value),
       abonnement: $('#abonnement', skjema)?.checked
         ? $('input[name="pafyll"]:checked', skjema)?.value ?? PAFYLL[0]?.id
         : null,
@@ -60,6 +62,7 @@ export function startBygger(rot = document) {
     tegnHusstand(rot, pakke)
     tegnSvar(rot, pakke)
     tegnMatnivaer(rot, pakke)
+    tegnHarFraFor(rot, pakke)
     tegnPris(rot, pakke)
     tegnListe(rot, pakke)
     tegnVarsler(rot, pakke)
@@ -194,6 +197,47 @@ function tegnMatnivaer(rot, pakke) {
   }
 }
 
+/**
+ * Utstyret kunden kan ha fra før.
+ *
+ * Listen bygges på nytt hver gang, fordi hvilket utstyr som er med avhenger av
+ * modus og husstandsstørrelse. Avkrysningene holdes ved like over rendring, så
+ * et hakk ikke forsvinner når kunden drar i slideren.
+ */
+function tegnHarFraFor(rot, pakke) {
+  const el = $('#harfraFor', rot)
+  if (!el) return
+  const steg = el.closest('.steg')
+  if (steg) steg.hidden = pakke.utstyrsvalg.length === 0
+
+  const avkrysset = new Set(pakke.valg.utelatt)
+  const signatur = pakke.utstyrsvalg.map((u) => `${u.sku}:${u.antall}:${u.sum}`).join('|')
+  if (el.dataset.signatur !== signatur) {
+    el.dataset.signatur = signatur
+    el.innerHTML = pakke.utstyrsvalg
+      .map(
+        (u) => `
+        <label class="harfor">
+          <input type="checkbox" name="harfraFor" value="${u.sku}" ${avkrysset.has(u.sku) ? 'checked' : ''}>
+          <span class="harfor__navn">${u.navn}</span>
+          <span class="harfor__sum tnum">− ${kr(u.sum)}</span>
+        </label>`
+      )
+      .join('')
+  } else {
+    for (const boks of $$('input[name="harfraFor"]', el)) {
+      boks.checked = avkrysset.has(boks.value)
+    }
+  }
+
+  const oppsummering = $('#harfraFor-sum', rot)
+  if (oppsummering) {
+    oppsummering.textContent = pakke.spartNetto
+      ? `Du sparer ${kr(pakke.spartNetto)} på å ikke kjøpe det du allerede har.`
+      : ''
+  }
+}
+
 function tegnPris(rot, pakke) {
   const abo = Boolean(pakke.abonnement)
   const sum = abo ? pakke.sumMedAbonnement : pakke.sum
@@ -209,11 +253,15 @@ function tegnPris(rot, pakke) {
 
   const linjer = $('#pris-linjer', rot)
   if (linjer) {
+    // Utstyret vises til full pris med fradraget som egen linje, ikke som et
+    // lavere tall uten forklaring. Kunden skal se hva settet koster og hva de
+    // slipper å betale for.
     const mat = pakke.linjer.filter((l) => MATGRUPPER.includes(l.kategori)).reduce((n, l) => n + l.sum, 0)
-    const utstyr = pakke.sumVarer - mat
+    const utstyr = pakke.sumVarer - mat + pakke.spart
     const rader = []
     if (mat) rader.push(['Mat og vann', mat])
     if (utstyr) rader.push([pakke.eske ? 'Utstyr og eske' : 'Utstyr', utstyr])
+    if (pakke.spart) rader.push(['Utstyr du har fra før', -pakke.spart])
     if (pakke.pakkerabatt) rader.push(['Pakkerabatt', -pakke.pakkerabatt])
     if (pakke.abonnementsrabatt) rader.push([`Påfyllsrabatt`, -pakke.abonnementsrabatt])
     linjer.innerHTML =

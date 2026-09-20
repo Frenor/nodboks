@@ -36,6 +36,15 @@ export const mvaSats = (kategori) => (kategori === 'Mat' ? MVA.mat : MVA.standar
 export const MATGRUPPER = ['Mat', 'Vann']
 
 /**
+ * Nedre grense for hva kunden kan krysse av som «har den fra før».
+ *
+ * Poenget er å slippe å kjøpe det dyre dobbelt. En eske fyrstikker til elleve
+ * kroner fortjener ikke en avkrysning – den gjør bare steget lengre og valget
+ * vanskeligere, og det er en dårlig byttehandel for begge parter.
+ */
+export const FRAVALG_TERSKEL = 100
+
+/**
  * Innholdslisten grupperes etter DSBs egne fire overskrifter, ikke etter våre.
  *
  * DSBs trykte sjekkliste har nøyaktig fire: «Mat og vann», «Varme og lys»,
@@ -96,10 +105,11 @@ export function byggPakke(valg) {
   const matniva = finnMatniva(valg.matniva)
   const modus = finnModus(valg.modus)
   const abonnementId = valg.abonnement ?? null
+  const utelatt = new Set(valg.utelatt ?? [])
 
   const kontekst = { personer, matniva: matniva.id, modus: modus.id }
 
-  const linjer = []
+  let linjer = []
   for (const vare of VARER) {
     if (!gjelder(vare, kontekst)) continue
     const antall = Math.max(0, Math.ceil(vare.antall(personer)))
@@ -145,6 +155,24 @@ export function byggPakke(valg) {
     })
   }
 
+  /*
+   * Utstyr kunden allerede eier.
+   *
+   * Bare engangsutstyr kan velges bort – man «har ikke havregryn fra før» på en
+   * måte som hjelper i sju døgn. Esken går heller ikke an å velge bort, fordi
+   * resten ikke har noe å ligge i.
+   *
+   * Dette koster oss penger med vilje. En kunde som allerede har en god hodelykt
+   * skal ikke måtte kjøpe en til for å få resten, og alternativet – at de lar
+   * være å kjøpe noe – er dyrere for begge.
+   */
+  const kanVelgesBort = linjer.filter(
+    (l) => l.type === 'engang' && l.kategori !== 'Esken' && l.sum >= FRAVALG_TERSKEL
+  )
+  const fravalgt = kanVelgesBort.filter((l) => utelatt.has(l.sku))
+  const spart = fravalgt.reduce((n, l) => n + l.sum, 0)
+  linjer = linjer.filter((l) => !utelatt.has(l.sku))
+
   const sumVarer = linjer.reduce((n, l) => n + l.sum, 0)
   const pakkerabatt = Math.round(sumVarer * (modus.rabatt ?? 0))
   const sum = sumVarer - pakkerabatt
@@ -170,12 +198,34 @@ export function byggPakke(valg) {
   const vannBehov = personer * KONFIG.vannLiterPerPerson
 
   return {
-    valg: { personer, matniva: matniva.id, modus: modus.id, abonnement: abonnementId },
+    valg: {
+      personer,
+      matniva: matniva.id,
+      modus: modus.id,
+      abonnement: abonnementId,
+      utelatt: [...utelatt],
+    },
     matniva,
     modus,
     eske: modus.medEske ? eske : null,
     linjer,
     grupper: grupper(linjer),
+    utstyrsvalg: kanVelgesBort.map((l) => ({
+      sku: l.sku,
+      navn: l.navn,
+      antall: l.antall,
+      sum: l.sum,
+      valgtBort: utelatt.has(l.sku),
+    })),
+    fravalgt,
+    /** Bruttoverdien av det som er tatt ut – brukes i prisoppsettets fradragslinje. */
+    spart,
+    /*
+     * Det kunden faktisk sparer. Lavere enn bruttoverdien, fordi pakkerabatten
+     * regnes av en mindre pakke når utstyr tas ut. Å love bruttotallet ville
+     * vært et kroner-og-øre-løfte vi ikke holder.
+     */
+    spartNetto: Math.round(spart * (1 - (modus.rabatt ?? 0))),
     sumVarer,
     pakkerabatt,
     sum,
@@ -271,6 +321,7 @@ export function referanse(pakke) {
     `${KONFIG.dogn} døgn`,
     pakke.matniva.navn,
   ]
+  if (pakke.fravalgt.length) deler.push(`uten ${pakke.fravalgt.length} vare${pakke.fravalgt.length === 1 ? '' : 'r'} du har fra før`)
   if (pakke.abonnement) deler.push(`påfyll ${pakke.abonnement.navn.toLowerCase()}`)
   return deler.join(' · ')
 }
@@ -278,7 +329,8 @@ export function referanse(pakke) {
 /** Stabil ID slik at samme konfigurasjon slår sammen i kurven. */
 export function pakkeId(pakke) {
   const v = pakke.valg
-  return ['pakke', v.modus, v.personer, v.matniva, v.abonnement ?? 'engang'].join('-')
+  const uten = v.utelatt?.length ? 'uten-' + [...v.utelatt].sort().join('_') : 'full'
+  return ['pakke', v.modus, v.personer, v.matniva, v.abonnement ?? 'engang', uten].join('-')
 }
 
 /** Gjør pakken om til en kurvpost. */

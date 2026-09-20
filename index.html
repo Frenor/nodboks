@@ -218,10 +218,26 @@
             <div class="segment__options" id="moduser"></div>
           </fieldset>
 
-          <!-- Steg 4 -->
-          <fieldset class="steg segment">
+          <!-- Steg 4: utstyr kunden allerede eier -->
+          <fieldset class="steg">
             <div class="steg__hode">
               <span class="steg__nr" aria-hidden="true">4</span>
+              <div>
+                <legend class="steg__tittel">Har du noe av dette fra før?</legend>
+                <p class="steg__hjelp">
+                  Kryss av, så tar vi det ut. Vi vil heller at du bruker lykten du
+                  allerede kjenner, enn at du kjøper en til.
+                </p>
+              </div>
+            </div>
+            <div id="harfraFor"></div>
+            <p class="svar" id="harfraFor-sum" style="margin-top:var(--sp-3)"></p>
+          </fieldset>
+
+          <!-- Steg 5 -->
+          <fieldset class="steg segment">
+            <div class="steg__hode">
+              <span class="steg__nr" aria-hidden="true">5</span>
               <div>
                 <legend class="steg__tittel">Skal vi minne dere på påfyll?</legend>
                 <p class="steg__hjelp">
