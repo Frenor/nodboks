@@ -314,3 +314,36 @@ beredskap1.no · nettbutikk.rodekors.no · foodstuff.no · krisskydd.no
 DSBs råd: dsb.no/sikkerhverdag/egenberedskap og DSBs egenberedskapsbrosjyre
 (bokmål). Se [`pakkesammensetning.md`](pakkesammensetning.md) for hvordan
 rådene omsettes til stykkliste.
+
+---
+
+## Tillegg: faktasjekk av tidligere research
+
+De åtte påstandene som lå til grunn for dette arbeidet, holdt mot det som
+faktisk står på butikkenes sider 20. september 2026.
+
+| Påstand | Dom | Hva som faktisk stemmer |
+| --- | --- | --- |
+| Røde Kors: 1 uke, 3 personer ≈ 3 299 kr | **Korrigert** | **3 499 kr.** Innholdet stemmer ellers: vanndunker (3 × 15 l + 2 × 10 l = 65 l), fyrstikker, 50 telys, 2 hodelykter, AAA-batterier, antibac, BP-ER nødrasjon, stabelbar kasse 40 × 30 cm. Holdbarhet «inntil sju år» bekreftet. |
+| Krisesikker: pakker for 1/2/3/4 personer, 4 999 kr nevnt | **Korrigert** | **Ingen 3-personspakke finnes.** Sortimentet er 1, 2 og 4 personer til 3 499 / 4 999 / 6 299 kr. De 4 999 er 2-personspakken. Fri frakt over 1 000 kr og 30 dagers åpent kjøp med gratis returfrakt bekreftet. |
+| Norgesberedskap «Beredskapspakke Smal» 2 999–3 999 kr | **Ikke funnet** | Ingen pakke med det navnet. De fire som finnes: hjem 4 999 (før 5 999), bil 2 999 (før 3 999), mat 2 999 (før 4 999), dyr 1 499 (før 1 999). Tallene i påstanden matcher bil- og hjempakken, så navnet er trolig feilhusket. |
+| Komplette pakker starter på 3 499 kr for én og 6 299 kr for familie på fire | **Delvis** | Det er **Krisesikkers prisstige**, ikke markedets bunn. Billigst i markedet er beredskapslager.no på 1 799 kr for én person og Røde Kors på 1 999 kr. |
+| Boligduden: testvinner med 21 REAL Turmat (25 år), DAB+/solcelle/sveiv, 20 000 mAh, 3000 W brenner, kjelesett, hodelykt, pledd, telys, batterier, førstehjelp | **Produktet identifisert** | Innholdslisten matcher **beredskapslager.no «Komplett beredskapspakke», 4 999 kr**, punkt for punkt. Men: den siden skriver «holdbarhet på opptil 25 år\*» der asterisken ikke fører noe sted, mens samme butikks egne REAL Turmat-pakker oppgir **5+ år**. Butikken motsier seg selv. Pakken var dessuten utsolgt. |
+| ReadyWise 60 porsjoner ≈ 4 395 kr | **Ikke bekreftet** | Funnet til **2 990 kr** hos krisskydd.no (utsolgt). ReadyWise 120 porsjoner koster 4 999 kr der. Prisen varierer sterkt mellom butikker; 4 395 kr er ikke observert. |
+| DSB: minst 7 døgn, ca. 20 liter drikkevann per person | **Bekreftet** | Ordrett: «Vi anbefaler å lagre rundt 20 liter drikkevann per person.» Sju døgn gjeldende siden 29. mai 2024. Se forbeholdet under. |
+| Frysetørket holder opptil 25 år, vanlig tørrmat 1–2 år | **Delvis** | 25 år gjelder **ReadyWise** (Metallyte-poser med oksygenabsorbent), som oppgir det som garantert. **REAL Turmat oppgis til 5+ år** av forhandleren selv. Food Force oppgir en fast dato, «minst til mai 2030», som krymper etter hvert som varen ligger på lager. Påstanden kan altså ikke brukes generelt om «frysetørket». |
+
+### Det viktigste forbeholdet
+
+**DSB tallfester ingenting annet enn vann.** «Rundt 20 liter per person» for uka
+er den eneste mengden i hele anbefalingen. Det finnes ingen kalorier, ingen kg
+mat, ingen antall stearinlys, batterier eller liter brennstoff, og ingen
+kronesum for kontanter. DSB skriver selv at listen «ikke [er] uttømmende, eller
+en fasit».
+
+Formuleringen «minst tre liter vann per person i døgnet», som sirkulerer bredt,
+står i DSBs **høringsutkast** fra desember 2023 og ble ikke videreført til de
+publiserte rådene.
+
+Det betyr at enhver kalorinorm i dette markedet er leverandørens egen. Det
+gjelder også oss: vår dimensjonering skal presenteres som vår, ikke som DSBs råd.

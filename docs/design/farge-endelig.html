@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Natt – fargeark for Nødboks</title>
+<!-- Arket laster de ekte tokenene framfor å gjenta hex-verdiene, og regner
+     kontrastene i nettleseren. Det kan derfor ikke bli utdatert: endrer du
+     tokens.css, endrer arket seg med. -->
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/base.css">
+<style>
+  body { padding-block: var(--sp-7); }
+  .ark + .ark { margin-top: var(--sp-8); }
+  .sw-grid { display: grid; gap: var(--sp-3); grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); }
+  .sw { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: var(--surface); }
+  .sw__chip { height: 3.5rem; border-bottom: 1px solid var(--border); }
+  .sw__body { padding: var(--sp-3); font-size: var(--step--1); }
+  .sw__navn { font-weight: 650; }
+  .sw__meta { color: var(--text-muted); font-variant-numeric: tabular-nums; }
+  .sw__meta b { font-weight: 650; }
+  .fail { color: var(--warn); }
+  .pass { color: var(--ok); }
+  .demo { display: grid; gap: var(--sp-5); grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); }
+  .pris { font-size: var(--step-5); font-weight: 650; font-variant-numeric: tabular-nums; letter-spacing: -0.03em; }
+  .linje { display: flex; justify-content: space-between; gap: var(--sp-4); padding: var(--sp-2) 0; border-bottom: 1px solid var(--border); font-size: var(--step--1); }
+  .linje:last-child { border-bottom: 0; }
+  .varsel { display: flex; gap: var(--sp-3); padding: var(--sp-3) var(--sp-4); border-radius: var(--radius); font-size: var(--step--1); }
+  .varsel--warn { background: var(--warn-soft); color: var(--warn); }
+  .varsel--ok   { background: var(--ok-soft);   color: var(--ok); }
+  .varsel--info { background: var(--info-soft); color: var(--info); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="eyebrow">Nødboks · fargeark</p>
+  <h1>Natt</h1>
+  <p class="lead">
+    Utledet fra strontiumaluminat – pigmentet i etterlysende rømningsmerking.
+    Det lader seg i dagslys og lyser grønngult i mørket. Lys modus henter fra
+    det uladede pigmentet, mørk modus fra ettergløden: samme kulør, motsatt valør.
+  </p>
+  <p class="cluster">
+    <button class="btn btn--sm" data-tema-bryter aria-pressed="false">Bytt lys/mørk</button>
+    <span class="badge" id="modus-etikett">følger systemet</span>
+  </p>
+
+  <hr>
+
+  <section class="ark">
+    <h2>Tokens</h2>
+    <p class="muted">Kontrastforholdene under er regnet ut i nettleseren nå, fra de faktiske tokenverdiene.</p>
+    <div class="sw-grid" id="swatches"></div>
+  </section>
+
+  <section class="ark">
+    <h2>Paletten i bruk</h2>
+    <div class="demo">
+
+      <div class="card card--raised">
+        <p class="eyebrow">Komplett pakke</p>
+        <h3>Sju døgn for fire personer</h3>
+        <p class="muted">Mat, vann og utstyr etter DSBs sjekkliste, ferdig pakket i én eske.</p>
+        <p class="pris">5 480 kr</p>
+        <p class="faint" style="font-size:var(--step--1)">196 kr per person per døgn</p>
+        <p class="cluster">
+          <button class="btn btn--primary">Legg i kurven</button>
+          <button class="btn">Se innholdet</button>
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Velg matnivå</h3>
+        <fieldset class="segment">
+          <div class="segment__options">
+            <label class="option">
+              <input type="radio" name="mat" checked>
+              <span class="option__body">
+                <span class="option__title">Vanlig norsk mat <span class="badge badge--accent">Anbefalt</span></span>
+                <span class="option__desc">Havregryn, hermetikk, knekkebrød. Barna spiser den. Holder 1–2 år, så vi minner deg om å bytte.</span>
+              </span>
+            </label>
+            <label class="option">
+              <input type="radio" name="mat">
+              <span class="option__body">
+                <span class="option__title">Langtidsmat</span>
+                <span class="option__desc">Frysetørkede måltider. Dyrere, men står i boden i mange år uten tilsyn.</span>
+              </span>
+            </label>
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="card card--flat">
+        <h3>Dette ligger i esken</h3>
+        <p class="eyebrow">Mat og vann</p>
+        <p class="linje"><span>Havregryn, 1,1 kg</span><span class="tnum">2 stk</span></p>
+        <p class="linje"><span>Middagshermetikk, 800 g</span><span class="tnum">6 stk</span></p>
+        <p class="linje"><span>Vannkanne 20 l</span><span class="tnum">4 stk</span></p>
+        <p class="eyebrow" style="margin-top:var(--sp-5)">Varme og lys</p>
+        <p class="linje"><span>Hodelykt</span><span class="tnum">4 stk</span></p>
+        <p class="linje"><span>Telys, 50-pakk</span><span class="tnum">1 stk</span></p>
+      </div>
+
+      <div class="card">
+        <h3>Varsler</h3>
+        <div class="stack">
+          <p class="varsel varsel--ok">Maten dekker sju døgn for alle fire.</p>
+          <p class="varsel varsel--warn">Kannene leveres tomme. Fyll dem, og skift vannet én gang i året.</p>
+          <p class="varsel varsel--info">Påfyllet inneholder bare mat og vann – utstyret forutsetter vi at du har.</p>
+        </div>
+        <p style="margin-top:var(--sp-5)">
+          <label for="epost">Varsle meg før maten går ut</label>
+          <input id="epost" type="email" placeholder="din@epost.no">
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="ark">
+    <h2>Hva arket ikke gjør</h2>
+    <ul class="prose">
+      <li>Ingen glødende gradient bak noe som helst.</li>
+      <li>Ingen skygge brukt for å skille flater som skal skilles med farge.</li>
+      <li>Ingen skjold-med-hake ved siden av DSBs navn.</li>
+    </ul>
+  </section>
+
+</div>
+
+<script type="module">
+import { koblTemabryter } from '../../assets/js/ui/tema.js'
+koblTemabryter()
+
+const TOKENS = [
+  ['bg', 'Sidebakgrunn', null, 0],
+  ['surface', 'Kort', 'bg', 0],
+  ['surface-2', 'Innskutt panel', 'surface', 0],
+  ['text', 'Brødtekst', 'bg', 4.5],
+  ['text-muted', 'Dempet tekst', 'bg', 4.5],
+  ['text-faint', 'Svak tekst', 'bg', 3.0],
+  ['border', 'Dekorativ kant', 'surface', 0],
+  ['border-strong', 'Kant på skjemakontroll', 'surface', 3.0],
+  ['brand', 'Merkeflate', null, 0],
+  ['brand-ink', 'Tekst på merkeflate', 'brand', 4.5],
+  ['accent', 'Aksent', 'bg', 4.5],
+  ['accent-ink', 'Knappetekst', 'accent', 4.5],
+  ['accent-soft', 'Svak aksentflate', null, 0],
+  ['ok', 'Bekreftelse', 'ok-soft', 4.5],
+  ['warn', 'Advarsel', 'warn-soft', 4.5],
+  ['info', 'Opplysning', 'info-soft', 4.5],
+  ['focus', 'Fokusring', 'bg', 3.0],
+]
+
+const les = (navn) => getComputedStyle(document.documentElement).getPropertyValue(`--${navn}`).trim()
+
+function rgb(farge) {
+  const d = document.createElement('div')
+  d.style.color = farge
+  document.body.appendChild(d)
+  const m = getComputedStyle(d).color.match(/\d+(\.\d+)?/g)
+  d.remove()
+  return m.slice(0, 3).map((n) => Number(n) / 255)
+}
+const luminans = (farge) => {
+  const [r, g, b] = rgb(farge).map((c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4))
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b
+}
+const kontrast = (a, b) => {
+  const [x, y] = [luminans(a), luminans(b)].sort((m, n) => n - m)
+  return (x + 0.05) / (y + 0.05)
+}
+
+function tegn() {
+  const rot = document.getElementById('swatches')
+  rot.innerHTML = ''
+  for (const [navn, rolle, mot, krav] of TOKENS) {
+    const verdi = les(navn)
+    let meta = verdi
+    if (mot) {
+      const r = kontrast(verdi, les(mot))
+      const ok = !krav || r >= krav
+      meta += ` · <b class="${krav ? (ok ? 'pass' : 'fail') : ''}">${r.toFixed(2).replace('.', ',')}:1</b> mot ${mot}`
+      if (krav) meta += ` (krav ${String(krav).replace('.', ',')})`
+    }
+    const el = document.createElement('div')
+    el.className = 'sw'
+    el.innerHTML = `<div class="sw__chip" style="background:${verdi}"></div>
+      <div class="sw__body"><div class="sw__navn">--${navn}</div>
+      <div class="sw__meta">${rolle}<br>${meta}</div></div>`
+    rot.appendChild(el)
+  }
+  const valgt = document.documentElement.getAttribute('data-theme')
+  document.getElementById('modus-etikett').textContent =
+    valgt ? `låst til ${valgt === 'dark' ? 'mørk' : 'lys'}` : 'følger systemet'
+}
+
+tegn()
+new MutationObserver(tegn).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', tegn)
+</script>
+</body>
+</html>
