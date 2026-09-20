@@ -1236,6 +1236,33 @@ export const VARER = [
     antall: (p) => Math.ceil(p / 5),
   },
 
+  {
+    sku: 'bottetoalett',
+    navn: 'Bøttetoalett 22 liter med sete og lokk',
+    beskrivelse:
+      'Bøtte med ekte toalettsete og tett lokk. Sittehøyde 37 cm, bæreevne 130 kg. Brukes med dobbel søppelsekk og absorbent.',
+    hvorfor:
+      'Uten vann virker heller ikke toalettet, og det er det som gjør en leilighet ubeboelig raskest – fortere enn maten tar slutt. En bøtte uten sete kan eldre, gravide og barn i praksis ikke bruke; sittehøyden og bæreevnen er hele forskjellen. DSB beskriver framgangsmåten med dobbel bærepose, men ingen i markedet selger en løsning, antagelig fordi det er det minst appetittvekkende produktet man kan tenke seg.',
+    kategori: 'Helse og hygiene',
+    type: 'engang',
+    moduser: ['komplett'],
+    enhet: 'stk',
+    pris: 399,
+    innkjop: 239.4,
+    holdbarhetAr: null,
+    vektKg: 1.8,
+    dsb: 'Hygiene: nødtoalett når vannet er borte',
+    produkt: {
+      merke: 'Home And Beauty',
+      modell: 'Bøttetoalett 22 l',
+      kilde: 'Observert 399 kr. MERK: var utsolgt ved kontroll – lagerstatus må bekreftes før lansering.',
+      url: '',
+    },
+    // Flere enn ett handler ikke om kø, men om posebytte: når en pose er full
+    // må den knytes og bæres ut, og da er det greit å ha et toalett igjen.
+    antall: (p) => Math.ceil(p / 4),
+  },
+
   // ---------------------------------------------------------------------------
   // Verktøy og dokumenter
   // ---------------------------------------------------------------------------
