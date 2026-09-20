@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 162 250" width="162mm" height="250mm"
+     font-family="Helvetica, Arial, sans-serif">
+  <title>Kontantkonvolutt – trykkoriginal, C6 liggende</title>
+
+  <!--
+    Trykkoriginal for kontantkonvolutten i Beredskapspermen.
+    En SVG-enhet = 1 mm. Formatet er C6 liggende, 162 x 114 mm.
+    Arket viser forside og innside under hverandre med brettelinje imellom.
+
+    Farge: natt-paletten, lys modus. Nøyaktig ETT felt bærer aksentfarge –
+    datofeltet for sist fylt. Det er det eneste som endrer seg over tid, og
+    det eneste kunden skal se med én gang. Se docs/profil.md § 4.2.
+
+    Vi trykker ingen kronesum. DSB oppgir ingen, og et tall vi fant på ville
+    sett ut som et myndighetsråd. Kunden fyller inn sitt eget.
+  -->
+
+  <!-- ============ FORSIDE ============ -->
+  <g>
+    <rect x="0" y="0" width="162" height="114" fill="#F1F4F1" stroke="#CFD8D2" stroke-width="0.3"/>
+
+    <!-- Merket -->
+    <g transform="translate(16 18)">
+      <circle cx="4" cy="4" r="3.4" fill="none" stroke="#10201C" stroke-width="0.95"/>
+      <circle cx="4" cy="4" r="1.6" fill="#52601B"/>
+    </g>
+    <text x="25" y="23.4" font-size="4.4" font-weight="600" letter-spacing="1.1" fill="#10201C">NØDBOKS</text>
+
+    <text x="16" y="45" font-size="11" font-weight="600" letter-spacing="-0.3" fill="#10201C">Kontanter</text>
+
+    <text x="16" y="57" font-size="4.3" fill="#4E615B">Kortterminaler krever strøm og nett.</text>
+    <text x="16" y="63.5" font-size="4.3" fill="#4E615B">Butikken kan ha lite vekslepenger når alle</text>
+    <text x="16" y="70" font-size="4.3" fill="#4E615B">betaler kontant samtidig.</text>
+
+    <!-- Datofeltet. Eneste aksentfargede element på hele konvolutten. -->
+    <line x1="16" y1="84" x2="146" y2="84" stroke="#CFD8D2" stroke-width="0.3"/>
+    <text x="16" y="92" font-size="3.8" letter-spacing="0.5" fill="#52601B" font-weight="600">SIST FYLT</text>
+    <line x1="42" y1="93.2" x2="146" y2="93.2" stroke="#52601B" stroke-width="0.5"/>
+
+    <text x="16" y="105" font-size="3.4" fill="#6E827B">Vi minner deg om dette sammen med matpåfyllet.</text>
+  </g>
+
+  <!-- Brettelinje -->
+  <line x1="0" y1="124" x2="162" y2="124" stroke="#CFD8D2" stroke-width="0.3" stroke-dasharray="2 2"/>
+  <text x="81" y="122" font-size="2.8" fill="#6E827B" text-anchor="middle">brett</text>
+
+  <!-- ============ INNSIDE ============ -->
+  <g transform="translate(0 134)">
+    <rect x="0" y="0" width="162" height="114" fill="#F1F4F1" stroke="#CFD8D2" stroke-width="0.3"/>
+
+    <text x="16" y="17" font-size="5.6" font-weight="600" letter-spacing="-0.2" fill="#10201C">Hva ligger her?</text>
+
+    <text x="16" y="26" font-size="3.6" fill="#4E615B">Fyll inn når du legger penger i. Da ser du hva som er her</text>
+    <text x="16" y="31.5" font-size="3.6" fill="#4E615B">uten å åpne, og du ser om noen har tatt av.</text>
+
+    <!-- Valørtabell -->
+    <g transform="translate(16 40)">
+      <line x1="0" y1="0" x2="130" y2="0" stroke="#10201C" stroke-width="0.6"/>
+      <text x="0" y="5.6" font-size="3.4" letter-spacing="0.4" fill="#4E615B">SEDDEL</text>
+      <text x="62" y="5.6" font-size="3.4" letter-spacing="0.4" fill="#4E615B" text-anchor="end">ANTALL</text>
+      <text x="130" y="5.6" font-size="3.4" letter-spacing="0.4" fill="#4E615B" text-anchor="end">SUM</text>
+      <line x1="0" y1="8.4" x2="130" y2="8.4" stroke="#CFD8D2" stroke-width="0.3"/>
+
+      <g font-size="4" fill="#10201C">
+        <text x="0" y="15.6">50-lapper</text>
+        <line x1="0" y1="17.6" x2="130" y2="17.6" stroke="#CFD8D2" stroke-width="0.25"/>
+        <text x="0" y="24.6">100-lapper</text>
+        <line x1="0" y1="26.6" x2="130" y2="26.6" stroke="#CFD8D2" stroke-width="0.25"/>
+        <text x="0" y="33.6">200-lapper</text>
+        <line x1="0" y1="35.6" x2="130" y2="35.6" stroke="#CFD8D2" stroke-width="0.25"/>
+        <text x="0" y="42.6">500-lapper</text>
+        <line x1="0" y1="44.6" x2="130" y2="44.6" stroke="#CFD8D2" stroke-width="0.25"/>
+        <text x="0" y="51.6">Mynt</text>
+        <line x1="0" y1="53.6" x2="130" y2="53.6" stroke="#CFD8D2" stroke-width="0.25"/>
+      </g>
+
+      <!-- Loddrette skiller mellom kolonnene -->
+      <line x1="66" y1="8.4" x2="66" y2="53.6" stroke="#CFD8D2" stroke-width="0.25"/>
+      <line x1="98" y1="8.4" x2="98" y2="53.6" stroke="#CFD8D2" stroke-width="0.25"/>
+
+      <text x="0" y="61.4" font-size="4" font-weight="650" fill="#10201C">Til sammen</text>
+      <line x1="0" y1="56.4" x2="130" y2="56.4" stroke="#10201C" stroke-width="0.6"/>
+      <line x1="98" y1="63" x2="130" y2="63" stroke="#10201C" stroke-width="0.4"/>
+    </g>
+
+    <text x="16" y="110" font-size="3.2" fill="#6E827B">Vi trykker ingen sum. DSB oppgir ingen, og beløpet er ditt valg.</text>
+  </g>
+</svg>

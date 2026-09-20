@@ -823,7 +823,264 @@ begrunnelse som i kjernesortimentet. Avvisningen gjelder uansett kanal.
 
 ---
 
-## 6. Forbehold
+## 6. Kontanter og valuta
+
+**Kortsvaret er nei til begge deler nå.** Et dollar-tilvalg er entydig
+valutavirksomhet etter finansforetaksloven § 2-5 og krever i praksis konsesjon
+som finansieringsforetak med 5 millioner euro i startkapital – det er ikke en
+terskel vi kommer over, og varen har dessuten ingen forankring i DSBs råd. Å
+legge norske sedler i esken er ikke valutavirksomhet, men kan være
+konsesjonspliktig som betalingstjenesten «pengeoverføring», og det spørsmålet
+klarte vi ikke å besvare mot noen kilde. Uautorisert konsesjonspliktig
+virksomhet er straffbart, så dette er ikke noe vi prøver oss fram på: behovet
+dekkes i mellomtiden av konvolutten vi allerede trykker.
+
+### 6.1 Regelverket
+
+Tabellen skiller mellom det som er lest ordrett i lovteksten og det som ikke er
+det. Ingenting under er juridisk rådgivning – det er hva vi fant, og hva som må
+sjekkes av noen som kan det.
+
+| Hjemmel | Hva den sier | Lest ordrett |
+| --- | --- | --- |
+| Finansforetaksloven § 2-5 | Valutavirksomhet er «virksomhet som består i omsetning av valuta», og kan bare drives av bank, betalingsforetak, e-pengeforetak eller finansieringsforetak med tillatelse | **Ja** |
+| Finansforetaksloven § 2-9 første ledd bokstav c | Et foretak som utelukkende skal drive valutaomsetning, må ha konsesjon som finansieringsforetak | **Ja** |
+| Finansforetaksloven § 3-4 første og femte ledd | Finansieringsforetak: minst 5 mill. euro startkapital. Departementet kan i særlige tilfeller godta ned til 1 mill. euro | **Ja** |
+| Finansforetaksloven § 3-4 andre ledd | Betalingsforetak og e-pengeforetak: 20 000–125 000 euro, avhengig av tjenestetype | **Ja** |
+| Finansforetaksloven § 22-1 | Bot, eller fengsel inntil ett år under særlig skjerpende omstendigheter, for forsettlig eller uaktsom overtredelse av loven | **Ja** |
+| Hvitvaskingsloven § 4 første ledd | Lister «foretak som driver valutavirksomhet» blant de rapporteringspliktige | **Ja** |
+| Merverdiavgiftsloven § 3-6 bokstav d | Omsetning av gyldige betalingsmidler er unntatt merverdiavgift | **Ja** |
+| Angrerettloven § 22 | Fjorten uttømmende unntak fra angreretten (bokstav a–n). Ingen av dem nevner penger. Bokstav d unntar varer der prisen avhenger av svingninger i finansmarkedet selgeren ikke kontrollerer | **Ja** |
+| Forbrukerkjøpsloven § 14 fjerde ledd | Ved sendekjøp går risikoen over på forbrukeren først når varen er fysisk mottatt, når det er selgeren som velger fraktløsning | **Ja** |
+| Finansavtaleloven § 1-5 første ledd | Definerer betalingstjenester, blant dem «overføring eller mottak av betalingsmidler uten kontoavtale» – pengeoverføring | **Nei.** Parafrasert sammendrag, ikke sitert lovtekst |
+| Finansforetaksloven § 1-7 bokstav k og l, jf. finansforetaksforskriften § 1-8 | Forenklet meldeplikt for betalingstjenester i begrenset nettverk eller lavvolums elektronisk kommunikasjon, med beløpstak på 50/300 euro | **Nei.** Lest hos Finanstilsynet, ikke i forskriftsteksten |
+| Hvitvaskingsloven kap. 3, 4, 5 og 7 | Risikovurdering, rutiner, kundetiltak, undersøkelses- og rapporteringsplikt til Økokrim, internkontroll og opplæring | **Nei.** Hentet fra kapitteloversikt, ikke lest paragraf for paragraf |
+| Hvitvaskingsloven kap. 2 (trolig § 5) | Forbud mot å motta 40 000 kr eller mer kontant som vederlag for varer | **Nei.** Sekundærkilder, og paragrafnummeret er ikke bekreftet |
+
+**Dollar er avgjort av de fire første linjene.** Å veksle USD mot NOK er
+omsetning av valuta. Sporet fram til lovlig drift går gjennom
+finansieringsforetak-konsesjon, og startkapitalkravet der er 5 millioner euro –
+rundt 55–60 millioner kroner. Selv unntaksbestemmelsen på 1 million euro er
+langt utenfor rekkevidde. Det eneste realistiske alternativet er et agent- eller
+distribusjonsforhold med noen som allerede har konsesjonen. Det er ikke
+undersøkt, verken rettslig eller praktisk, og skal ikke antas å finnes.
+
+**Norske kontanter er det uavklarte.** Selger vi norske sedler mot kortbetaling,
+skjer det ingen veksling mellom to valutaer, og det er derfor ikke
+valutavirksomhet etter § 2-5. Men kunden betaler uten kontoavtale hos oss, og vi
+gjør et tilsvarende beløp tilgjengelig i kontanter. Det ligner strukturelt på
+definisjonen av pengeoverføring i finansavtaleloven § 1-5.
+
+Her må vi være helt presise om hva vi vet: **vi fant ingen kilde – ingen
+forskrift, intet rundskriv, ingen forvaltningspraksis – som drøfter dette
+konkrete tilfellet.** En nettbutikk som sender fysiske sedler i posten til den
+samme personen som nettopp betalte med kort, er ikke et eksempel noen har
+skrevet om. Lesningen over er en slutning fra ordlyden, ikke en bekreftet
+konklusjon, og den skal ikke brukes i noen retning: verken som grunn til å la
+være, eller som trygghet for at det går bra. Den må avklares skriftlig før noe
+selges.
+
+Skulle svaret bli at det er pengeoverføring, går sporet til betalingsforetak,
+ikke finansieringsforetak, og startkapitalkravet er da 20 000–125 000 euro. Det
+er en reell konsesjonsprosess med egnethetsvurdering av eiere og ledelse, men
+ikke praktisk umulig slik finansieringsforetak-sporet er.
+
+**Hvitvaskingsloven følger med på kjøpet.** Blir Nødboks konsesjonert
+valutavirksomhet eller betalingsforetak, utløses hele pakken: egen skriftlig
+risikovurdering, ID-kontroll av kunden ved kjøp, en reell hvitvaskingsansvarlig
+i ledelsen, dokumenterte rutiner, og plikt til å undersøke og rapportere
+mistenkelige transaksjoner til Økokrim. Det er ikke et skjema som fylles ut én
+gang. Det er en løpende driftskostnad og et personlig ansvar, i en butikk som i
+dag har null compliance-apparat.
+
+**Og straffebudet er ekte.** Finansforetaksloven § 22-1 gir bot, og fengsel
+inntil ett år under særlig skjerpende omstendigheter, også ved uaktsom
+overtredelse. Bekymringen er altså ikke overdrevet, og «vi visste ikke» er ikke
+et forsvar loven gir oss.
+
+**Ett spor er ikke undersøkt i det hele tatt:** å selge sedler som *vare* –
+samlermynt eller pakket seddelsett til overpris – i stedet for som tjeneste.
+Intuisjonen er at en tilsynsmyndighet ville sett på det reelle innholdet i
+transaksjonen, kort inn og kontanter ut, og ikke på etiketten. Men det er en
+intuisjon, ikke et funn. Å bygge en forretningsmodell på den forskjellen uten en
+presis juridisk avklaring frarådes.
+
+### 6.2 Praktikken
+
+Anta for et øyeblikk at jusen løsner. Da gjenstår fire ting som hver for seg er
+håndterbare og til sammen ikke er det.
+
+**Frakt.** Kontanter kan ikke ligge i esken. Postens egne vilkår forbyr penger
+og verdipapirer i ordinær pakke – de kan bare sendes som **verdibrev**, som er
+en egen tjeneste og ikke et tillegg i en sending vi allerede gjør. Verdibrevet
+koster fra 656 kr, pluss 80 kr per påbegynte 10 000 kr i deklarert verdi over de
+første 10 000. Det er innenlands, maks 2 kg, maks 40 000 kr forsikret verdi, og
+**mottakeren må hente på postkontor og legitimere seg.** Det bryter med hele
+leveransemodellen: én eske, hjem til døren, alt i samme sending.
+
+**Forsikring og ansvar.** Posten fraskriver seg uttrykkelig ansvar for kontanter
+sendt på annen måte enn som verdipostsending, og selv med verdibrev er
+erstatningen begrenset til deklarert verdi. Det spiller uansett mindre rolle for
+oss enn det ser ut: etter forbrukerkjøpsloven § 14 fjerde ledd bærer **vi**
+risikoen helt til kunden fysisk har varen, fordi det er vi som velger
+fraktløsningen. Forsvinner en kontantsending, skylder vi kunden pengene,
+uavhengig av hva Posten betaler oss. En kontantbeholdning på lager er dessuten
+et eget sikringsspørsmål: som størrelsesorden begrenser ett forsikringsselskaps
+bedriftsvilkår erstatning for kontanter til 25 000 kr i FG-godkjent skap uten
+alarm og 50 000 kr med alarm, med krav om to ansatte eller kameraovervåkning
+over 200 000 kr. Tallene er ett selskaps vilkår, hentet via søk – de er en
+indikasjon på hva som vil kreves, ikke vår avtale.
+
+**Angrerett.** Angrerettloven § 22 har fjorten unntak, og ingen av dem nevner
+penger. For norske kroner treffer heller ikke bokstav d, som krever
+markedssvingning selgeren ikke kontrollerer: én krone er én krone. Da gjelder
+vanlig fjorten dagers angrerett på et produkt som er fullstendig fungibelt.
+Kunden kan motta sedlene og angre, og vi har ingen måte å se om det er de samme
+pengene som kommer tilbake. Det er en misbruksrisiko som er spesifikk for penger
+som vare, og den finnes ikke på noen annen linje i katalogen.
+
+**Merverdiavgift og margin.** Salg av gyldige betalingsmidler er unntatt mva
+etter merverdiavgiftsloven § 3-6 bokstav d. Det er den ene gode nyheten, og den
+løser ingenting: **en seddel solgt til pålydende har null dekningsbidrag.** Hele
+inntekten må ligge i et gebyr, og det gebyret skal dekke 656 kr i verdibrevporto,
+sikret lager, forsikring, ID-kontroll og en løpende hvitvaskingsrutine. DSB
+anbefaler «litt kontanter». Gebyret som bærer kostnadene ville vært en betydelig
+andel av beløpet kunden fikk utlevert, og det er ikke et produkt vi kan forsvare
+å sette navnet vårt på. Om et slikt gebyr i det hele tatt faller innenfor
+mva-unntaket, eller blir en egen avgiftspliktig tjeneste, er heller ikke avklart.
+
+Sett mot marginlogikken i § 1: dette er det motsatte av beredskapspermen. Permen
+er en egen trykksak med 69 % dekningsgrad og ingen regulatorisk overbygning.
+Kontanter er null margin på varen, en egen fraktklasse, en konsesjonsvurdering og
+et compliance-apparat.
+
+### 6.3 Dollar særskilt
+
+Dollar må avvises to ganger, og den andre gangen er den viktigste.
+
+**Juridisk** er det avgjort over: valutavirksomhet, finansieringsforetak, 5
+millioner euro. Det finnes ingen forenklet ordning som fanger dette – den
+meldepliktige lavvolumsordningen gjelder betalingsinstrumenter i begrensede
+nettverk med tak på 50 og 300 euro, ikke valutaveksling.
+
+**Merkevaremessig** ville vi sagt nei selv om konsesjonen lå i skuffen. DSBs
+brosjyre nevner konsekvent kontanter og aldri utenlandsk valuta – verken i
+avsnittet om betalingsberedskap eller i listen over hva man tar med ved
+evakuering på kort varsel. Norges Bank gir samme råd om kontanter og flere
+betalingskort, uten et ord om valuta. Mekanismen bak rådet forklarer hvorfor:
+poenget er at kortterminalen krever strøm og nett, og at nærbutikken da må kunne
+ta imot det den kan gi tilbake i vekslepenger. En nærbutikk uten strøm har verken
+kurs eller vekslingsmulighet for dollar. Tilvalget løser altså ikke scenarioet
+butikken er bygget rundt.
+
+Testen i § 1 er om varen kan begrunnes ut fra noe vi allerede har skrevet ned.
+Dollar kan det ikke, på nøyaktig samme måte som kart og kompass ikke kan det:
+det er et godt produkt for en annen situasjon. Det ærlige unntaket finnes – en
+husstand som må ut av landet, eller som handler over riksgrensen, kan ha reell
+nytte av utenlandsk valuta – men det er et annet behov enn sju døgn hjemme, og
+DSB nevner det ikke engang på evakueringslisten. Å ta det inn ville vært
+sortimentsspredning uten DSB-forankring, som er den ene feilen krav 5 er skrevet
+for å stoppe.
+
+**Dollar er derfor et nei uavhengig av hva den juridiske avklaringen lander på.**
+Det er verdt å si høyt, fordi det betyr at ingen bør bruke tid på
+konsesjonssporet for dollar i det hele tatt.
+
+### 6.4 Hva vi gjør i stedet
+
+Behovet er ekte og myndighetsforankret. Det er bare ikke et behov som må dekkes
+med en vare. Alle tre tiltakene under er billige, DSB-forankrede og bygger på noe
+vi allerede har.
+
+**1. Konvolutten i beredskapspermen får en valørtabell og et datofelt.**
+Konvolutten finnes allerede, tom, med en påminnelse om å legge penger i selv. Den
+mangler det rådet som faktisk er vanskelig å gi seg selv: hvilke valører. Norges
+Bank begrunner rådet om mindre valører konkret – butikkene kan ha begrenset med
+vekslepenger når mange betaler kontant samtidig, som er nøyaktig situasjonen
+kortterminalen er nede. Konvoluttens innside får derfor en enkel tabell der
+kunden fyller inn antall: femtilapper, hundrelapper, mynt til småbeløp. Beløpet
+skriver kunden selv, fordi DSB ikke oppgir noe.
+
+Pluss ett **«sist fylt»-felt** med dato. Konvolutten er en egen flate, og
+regelen i profilens § 4.2 gjelder der som andre steder: nøyaktig ett felt i
+aksentfarge, og det er det tidskritiske faktumet. På konvolutten er det denne
+datoen – ikke et andre aksentfelt på etiketten, og ikke et tillegg til
+byttedatoen.
+
+*Koster:* en trykksakendring i et opplag vi uansett skal bestille. Ingen ny
+varekost, ingen ny SKU, ingen endring i permens 69 %.
+
+**2. Én linje i utløpsvarselet.** Punkt 1 i veikartet sender allerede en årlig
+e-post om at maten nærmer seg dato. Den får én setning til om å sjekke
+kontantkonvolutten. Penger blir ikke dårlige – de blir glemt, og det er samme
+mekanisme tjenesten allerede er bygget for. Kostnad: en tekstendring. Det skal
+være én linje i en e-post som finnes, ikke et eget varsel med egen frekvens.
+
+**3. Et regnestykke for beløp – bare hvis kilden holder.** Kunden spør «hvor
+mye?», og DSB svarer bevisst ikke. Vi kan hjelpe med et åpent regnestykke for
+mat, drivstoff og apotekvarer i sju døgn, men bare med navngitt kilde per linje,
+etter prinsipp 3 og 5 i profilens tekstprofil. SIFOs referansebudsjett er den
+anerkjente norske kilden for matutgifter, men er ikke lest direkte i denne
+runden, og drivstoffprisen er ferskvare etter avgiftsendringen 1. september 2026.
+Holder ikke kildene, skal vi la være – et anslag fra oss er verre enn ingen
+kalkulator.
+
+Og kontanter blir stående under **«Dette selger vi ikke, men du bør ha det»**,
+sammen med medisiner og jodtabletter. Der hører det hjemme, og begrunnelsen kan
+stå rett ut i teksten: det å selge penger er en annen bransje med egen
+konsesjon. Det er innrømmelse før påstand, anvendt på noe vi faktisk ikke gjør.
+
+### 6.5 Forbehold
+
+**Ingenting i dette avsnittet er juridisk rådgivning.** Det er hva vi fant, og
+hva som må sjekkes av noen som kan det.
+
+- **Hovedspørsmålet er ubesvart.** Om salg av norske sedler mot kortbetaling
+  rammes som konsesjonspliktig pengeoverføring, er en slutning fra ordlyden i
+  finansavtaleloven § 1-5. Ingen kilde vi fant drøfter tilfellet. Det må avklares
+  skriftlig – med advokat, og trolig med en uttalelse fra Finanstilsynet – før
+  noe som helst selges. Det skal ikke antas i noen retning.
+- **Finansavtaleloven § 1-5 er ikke sitert ordrett** i denne runden, bare
+  parafrasert.
+- **Hvitvaskingslovens kapitler 3, 4, 5 og 7** er lest som kapitteloversikt, ikke
+  paragraf for paragraf. Omfanget av pliktene er derfor beskrevet i grove trekk.
+- **Kontantforbudet på 40 000 kr** er hentet fra sekundærkilder, og
+  paragrafnummeret er ikke bekreftet. Det treffer trolig ikke oss, siden kunden
+  betaler med kort – men det ville blitt relevant om betalingsformen endres.
+- **«Sedler som vare»-sporet er ikke undersøkt mot primærkilder overhodet.**
+  Ingen konklusjon er trukket der, bare en advarsel.
+- **Agent- eller distribusjonsforhold med en aktør som allerede har konsesjon**
+  er nevnt som en mulig vei, men er ikke utredet. Det er ikke en plan.
+- **Forsikringstallene er ett selskaps vilkår** via søk, ikke vår egen avtale.
+  Størrelsesorden, ikke fasit.
+- **Fraktvurderingen forutsetter Posten.** Bruker vi en annen fraktør, må
+  tilsvarende vilkår sjekkes der.
+- **Angrerettvurderingen for dollar** – at bokstav d trolig ville truffet fordi
+  valutakurs svinger utenfor vår kontroll – er vår egen lesning av lovteksten.
+  Ingen norsk forvaltningspraksis eller veiledning fra Forbrukertilsynet er
+  funnet som gjelder valutasalg fra nettbutikk. Den er uansett uten praktisk
+  betydning, siden dollar avvises på andre grunnlag.
+- **Om et handteringsgebyr faller innenfor mva-unntaket** i § 3-6 bokstav d er
+  ikke avklart. Må tas med regnskapsfører eller som bindende forhåndsuttalelse
+  før en pris settes.
+- **Kassasystem- og bokføringsspørsmålet** (om kontantsalg over nett utløser krav
+  til sertifisert kassasystem, og hvordan en kontantbeholdning for videresalg
+  skal klassifiseres i regnskapet) er bare berørt via sekundærkilder.
+- **Norges Banks formulering** om kontanter og valører er bekreftet på
+  norges-bank.no som veiledningsside, men det konkrete sitatet i researchen kom
+  via en sekundærkilde. Det må leses direkte før noe av det går i kundetekst.
+- **Ingen kronesum er verifisert hos DSB eller Norges Bank.** DSBs sjekkliste
+  sier «Litt kontanter og flere betalingskort», og brosjyren ber folk vurdere
+  beløpet ut fra husstandens størrelse. Tallene som sirkulerer i sekundærkilder –
+  1 000 kr til basisbehov, 5 000 kr til langvarig krise – finnes ikke igjen i
+  DSBs egen tekst og skal ikke siteres som DSBs anbefaling.
+- **SIFOs referansebudsjett** er ikke lest direkte, og drivstoffprisen er et
+  øyeblikksbilde rett etter en avgiftsendring. Begge må hentes på nytt, med dato,
+  hvis kalkulatoren faktisk bygges.
+
+---
+
+## 7. Forbehold
 
 ### Hvilke tall som er anslag
 
@@ -884,3 +1141,8 @@ begrunnelse som i kjernesortimentet. Avvisningen gjelder uansett kanal.
 8. **Gelerende luktkontrollpulver.** Ingen norsk forhandler funnet. Den reelle
    differensieringen i sanitærmodulen mangler dermed et siste produkt. Står som
    åpent punkt og fylles ikke med et gjettet tall.
+9. **Kontantsalg, hvis det noen gang tas opp igjen.** Om salg av norske sedler
+   mot kortbetaling er konsesjonspliktig pengeoverføring, er ubesvart og må
+   avklares skriftlig med advokat og Finanstilsynet før noe selges. Se § 6.
+   Dollar-tilvalget krever ingen slik avklaring – det er avvist også
+   merkevaremessig, og skal ikke utredes videre.

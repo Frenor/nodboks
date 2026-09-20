@@ -1378,9 +1378,9 @@ export const VARER = [
     sku: 'beredskapsperm',
     navn: 'Beredskapspermen',
     beskrivelse:
-      'Trykt hefte: hva du gjør de første timene, sju døgns menyplan med tilberedning, DSBs egen sjekkliste, skjema for kontakter og medisiner, og en konvolutt til kontanter.',
+      'Trykt hefte: hva du gjør de første timene, sju døgns menyplan med tilberedning, DSBs egen sjekkliste, skjema for kontakter og medisiner, og en kontantkonvolutt med valørtabell og dato for sist fylt.',
     hvorfor:
-      'Papir virker når telefonen er død. Menyplanen står trykt, døgn for døgn.',
+      'Papir virker når telefonen er død. Menyplanen står trykt, døgn for døgn, og konvolutten viser hva som ligger i den uten at du åpner den.',
     kategori: 'Verktøy og dokumenter',
     type: 'engang',
     moduser: ['komplett'],
