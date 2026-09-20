@@ -410,12 +410,14 @@ siteres.
 
 ### Moduler
 
-Syv kandidater ble testet. Tre besto den første gjennomgangen, og kontrollen
-felte to av dem på leverandørforhold:
+Syv kandidater ble testet i første runde. Tre besto den første gjennomgangen, og
+kontrollen felte to av dem på leverandørforhold. En åttende – LoRa og mesh – ble
+reist etterpå og er vurdert for seg rett under tabellen:
 
 | Modul | Status | Blokkering |
 | --- | --- | --- |
 | Kommunikasjon (PMR446) | **Holder uten forbehold** | Ingen |
+| Kommunikasjon (LoRa/mesh) | Forkastet for husstandsboksen | Krav 6: app og kanaloppsett før enheten sier et ord. Ingen norsk handel, og ingen noder i nabolaget for de fleste |
 | Sanitær | Holder som idé, ikke som forslag | Utsolgt + varen finnes ikke i katalogen |
 | Strøm | Holder som idé, ikke som forslag | Utsolgt + kampanjepris + klasse 9-frakt |
 | Vinter | Forkastet | Ville reversert vår egen trykte begrunnelse |
@@ -428,6 +430,212 @@ hvordan krav 5 skal brukes: den ville lansert pledd, soveposer og ullplagg –
 akkurat de varene `pakkesammensetning.md` eksplisitt holder utenfor fordi DSB
 selv peker på at husstanden allerede eier dem. Å selge dem nå ville motsagt vårt
 eget publiserte resonnement uten at én ny opplysning hadde endret det.
+
+### LoRa og mesh-kommunikasjon
+
+**Kortsvaret er nei.** Kommunikasjonsmodulen forblir Motorola Talkabout T42
+(PMR446, 319 kr). LoRa er lovlig uten søknad – det er ikke der problemet ligger
+– men enheten må pares med en telefon-app over Bluetooth, få riktig region og
+riktig kanalnøkkel før den sier et ord, og i Norge dessuten flyttes bort fra
+fabrikkfrekvensen for å nå noen i det hele tatt. Det er beredskapsutstyr som
+krever konfigurasjon når det gjelder, og det er nøyaktig det krav 6 er skrevet
+for å stoppe.
+
+Spørsmålet fortjener likevel et helt avsnitt, fordi anledningen er ekte:
+Egenberedskapsuka 2026 har bortfall av ekom som tema, bekreftet på dsb.no. Men
+DSBs eget svar på det temaet er kommunale informasjonspunkter og DAB-radio, ikke
+node-til-node-meldingsradio for enkelthusstander. Vi kan altså ikke hekte LoRa
+på DSB-forankringen. Hadde vi solgt det, måtte begrunnelsen båret seg selv – og
+den gjør den ikke.
+
+#### Regelverket: lovlig, og det er ikke problemet
+
+LoRa på 868 MHz er fribruk i Norge, uten søknad og uten individuell
+Nkom-tillatelse. Hjemmelen er fribruksforskriften (FOR-2012-01-19-77) § 8. Det
+gir LoRa samme rettslige status som PMR446, og en helt annen enn VHF, som ble
+forkastet i punkt 5 nettopp fordi Nkom-tillatelsen ville lagt en søknadsprosess
+på kunden. Den innvendingen gjelder ikke her.
+
+Begrensningene er tekniske, ikke administrative:
+
+- **Effekt og sendetid er delt i underbånd.** 862–868,6 MHz og deler av
+  869,2–870 MHz gir maks 25 mW e.r.p. med 0,1–1 % sendetid. 868,6–868,7 og
+  869,2–869,4 MHz (trygghetsalarmer) gir 10 mW. Det gunstigste underbåndet,
+  869,4–869,65 MHz, gir 500 mW e.r.p. og 10 % sendetid. Meshtastics europeiske
+  standardprofil sender på 869,525 MHz og er bygget for å holde seg innenfor
+  nettopp den 10 %-grensen.
+- **Sendetidsgrensen gjelder per enhet og teller videresendt trafikk.** Det
+  finnes ingen bestemmelse som forbyr mesh-relé – reglene bryr seg bare om
+  effekt og sendetid – men en node som relayer for mange andre nærmer seg taket
+  lettere enn én PMR446-samtale gjør. MeshCore-protokollen har 50 % airtime som
+  standard og ligger dermed langt over grensen; Meshtastics EU_868 gjør det
+  ikke, så lenge kunden ikke selv velger feil regionprofil.
+- **Kryptering er lov.** AES-256 på kanalnivå er innenfor fribruksforskriften.
+  Forbudet mot kodede meldinger gjelder amatørradiobåndene, ikke dette.
+
+Det som faktisk ville kostet oss noe, er to ting til:
+
+**Importøransvaret.** Salg krever CE-merking etter radioutstyrsdirektivet
+(2014/53/EU, gjennomført i FOR-2016-04-15-377). Kjøper vi maskinvaren direkte
+fra en produsent utenfor EØS – som er den vanlige kanalen i dette markedet –
+blir Nødboks selv rettslig importør og arver fullt samsvarsansvar: teknisk
+dokumentasjon og samsvarserklæring bevart i ti år, CE-merking på produkt og
+emballasje, eget navn og adresse på varen. Kjøper vi gjennom en EØS-etablert
+distributør som allerede har gjort jobben, reduseres det til å verifisere at
+dokumentasjonen følger med – altså samme situasjon som PMR446 hos en etablert
+forhandler. Forskjellen mellom de to kanalene er reell og må tas før første
+innkjøp, ikke etter.
+
+**Frakten er derimot ikke et problem.** Litiumbatteriene i en LoRa-håndenhet
+ligger typisk på 4–20 Wh og faller inn under særbestemmelse 188, som unntar små
+batterier montert i utstyr fra full klasse 9-behandling. De kan sendes som
+ordinær pakke med litiummerking, uten egen fraktavtale for farlig gods. Postens
+egne vilkår krever at batteriet sitter montert, er kortslutningssikret, og maks
+to batterier eller fire celler per sending. Dette er altså en annen situasjon
+enn EcoFlow-strømstasjonen i punkt 9 (245 Wh, UN 3480/3481, egen klasse
+9-avtale). *Forbehold:* DSBs FAQ om litiumbatterier ga 403 ved direkte henting,
+og innholdet er hentet via søkeindeksering. Det må etterprøves mot primærkilden
+før det legges til grunn for en fraktavtale.
+
+#### Produktene: én bekreftet norsk pris, og den var utsolgt
+
+Alle priser observert 20.09.2026.
+
+| Produkt | Pris | Butikk | Oppsett |
+| --- | ---: | --- | --- |
+| SenseCAP Card Tracker T1000-E | 899 kr | beredskapsutstyr.net | App, Bluetooth-PIN, regionvalg. Ingen skjerm å skrive tekst på – i praksis en tracker, ikke en meldingsenhet |
+| Meshtastic Startpakke (2 × Wio Tracker L1 Pro + 1 solnode) | 3 590 kr, **utsolgt** | beredskapsutstyr.net | Samme, og frekvensen må stemme med det norske nettet |
+| RAK WisMesh Pocket V2 | 99 EUR, ingen bekreftet NOK-pris | Hexaspot (EØS, VOEC-registrert for Norge) | Ferdig flashet, egen OLED-skjerm. Kanaloppsett fortsatt i app |
+| LilyGO T-Echo, T-Beam Supreme | ingen bekreftet pris | lilygo.cc, direkte fra Kina | Produsenten skriver selv at produktet forutsetter «basic programming knowledge» |
+| *Motorola Talkabout T42, 2-pk (referanse)* | *319 kr* | *avxperten.no* | *Batterier inn, velg kanal, trykk og snakk* |
+
+To ting i tabellen er verdt å lese to ganger. Den eneste ferdige norske pakken
+er syv ganger dyrere enn kommunikasjonsmodulen og var utsolgt med venteliste.
+Og IP-klasse er ikke oppgitt for T-Echo, T-Beam eller WisMesh Pocket – bare
+T1000-E har et tall (IP65). Krav 3 er altså ikke engang dokumenterbart for de
+fleste av dem, og vi skal ikke påstå noe vi ikke kan lese av et datablad.
+
+Prisbildet for maskinvaren er dessuten ustabilt: samme modell ga sprik fra
+13 til 45 dollar i ulike treff. Ingen av tallene over uten oppgitt norsk
+forhandler skal gjenbrukes senere; de må hentes på nytt på kjøpstidspunktet.
+
+#### Bruksrealiteten: hvem kunden faktisk kan snakke med
+
+Det norske Meshtastic-nettet er ekte, og det er lite. Ved kontroll 20.09.2026
+viste map.868.no **108 registrerte noder og 57 online**, kryssjekket mot et
+uavhengig globalt MQTT-kart som ga samme størrelsesorden. Fordelingen er
+skjevere enn tallet: rundt 62 noder i og ved Oslo, 18 ved Bergen, enkeltsifrede
+forekomster i Trøndelag, Møre og Romsdal, Innlandet, Agder og Vestfold – og
+praktisk talt ingenting i Nordland, Troms eller Finnmark.
+
+Konsekvensen er hele svaret på spørsmålet. For de aller fleste norske adresser
+kjøper kunden **to enheter som snakker med hverandre**. Det er punkt-til-punkt,
+ikke mesh: samme jobb som PMR446 gjør, i tekst i stedet for tale, til minst tre
+ganger prisen. Mesh-fordelen – at meldingen hopper videre via andres noder – er
+et fellesgode kunden ikke eier og ikke kan kjøpe: den forutsetter at fremmede i
+nabolaget har utstyret på, ladet og innenfor rekkevidde akkurat den dagen.
+
+Rekkevidden er lavere enn databladene. Norske brukere oppgir selv 2–9 km per
+hopp, der høyde er den dominerende faktoren og skog og kupert terreng kutter
+det. På Norsk Beredskapsforums egen tråd beskriver en bruker langs en fjordarm
+at han måtte planlegge egne repeaternoder på fjelltopper for å dekke sitt eget
+fjordområde. Det er brukernes egen erfaring med teknologien, ikke en konkurrents
+kritikk av den.
+
+Og fabrikkinnstillingene virker ikke her. Norske AMS-målere sender i samme
+frekvensområde, med dokumentert aktivitet nøyaktig på Meshtastics europeiske
+standardfrekvens 869,525 MHz. Det norske miljøet har derfor blitt enige om egne
+innstillinger – 869,618 MHz, 62 kHz båndbredde, spredningsfaktor 8 – for i det
+hele tatt å nå hverandre pålitelig. En kunde som pakker opp esken og lar
+innstillingene stå, står utenfor det norske nettet til noen endrer dem manuelt.
+*Forbehold:* interferensfunnet er dokumentert av entusiastmiljøet selv
+(meshwiki.no), ikke verifisert direkte mot Nkom i denne runden.
+
+#### Passformen mot de seks kravene
+
+| Krav | Dom | Hvorfor |
+| --- | --- | --- |
+| 1. En turgåer ville valgt det | **Nei** | Det brukes på tur i Norge i dag – av entusiaster med radioamatør- og makerbakgrunn, som selv bygger og plasserer repeatere. PMR446 står på ekte pakkelister. Meshtastic står i en Discord |
+| 2. Det holder i ti år | **Nei** | Ingen norsk garantikjede, ingen reservedeler, ingen reparasjon. goTenna er presedensen: forbrukerlinjen og supporten ble avviklet i 2024, selskapet kjøpt opp i oktober 2025, og enhetene mistet verdien sin mens de lå i skuffen |
+| 3. Det virker i norsk vinter | **Ikke dokumentert** | IP-klasse mangler for tre av fire enheter. T-Echo har dessuten 850 mAh, altså kort driftstid |
+| 4. Det finnes i norsk handel | **Nei** | Én norsk nisjebutikk med ferdig sett, utsolgt ved kontroll. Ellers EØS-nisjebutikk via VOEC eller direkte fra Shenzhen. Ingen av de store kjedene fører det |
+| 5. Skarpere, ikke bredere | **Nei** | Vare nummer to i en kategori vi allerede har løst. Samme feil som et nytt vannfilter ved siden av Katadyn BeFree, § 5 |
+| 6. Uten opplæring etter to år i en kasse | **Nei, og klarest av alle** | Se under |
+
+Krav 6 er det som avgjør, og det fortjener å stå i klartekst. Slik møter en
+LoRa-enhet kunden etter to år i kassen: batteriet er tomt, telefonen må ha
+Meshtastic-appen installert, enheten pares over Bluetooth med PIN-kode, regionen
+settes til EU_868, kanalnavn og nøkkel må stemme mellom alle enhetene i
+husstanden, og skal noen utenfor husstanden nås, må frekvensen dessuten flyttes
+bort fra fabrikkinnstillingen. Appen har hatt to år på seg til å endre seg.
+Talkabout T42 krever batterier, en kanal og en knapp. Forskjellen er ikke grader
+av brukervennlighet – det er forskjellen på et utstyr og et prosjekt.
+
+Og selv når oppsettet sitter: det er tekst, ikke tale. LoRa har ingen
+taleoverføring. Avstanden mellom å trykke på en knapp og å låse opp en telefon,
+åpne en app og skrive en setning er større i mørket, med barn, enn den ser ut på
+papiret. Det er akkurat den bruken familien i posisjonen vår faktisk trenger.
+
+#### Alternativene
+
+**Mot PMR446:** LoRa koster mer, krever oppsett, gir tekst i stedet for tale, og
+gir for de fleste kunder ikke lengre reell rekkevidde – fordi mesh-fordelen
+uteblir uten naboer på nettet. Det er dyrere på alle akser og bedre på ingen som
+gjelder en husstand hjemme. PMR446 blir stående.
+
+**Mot satellitt:** Garmin inReach Mini 2 koster 4 099 kr og inReach Messenger
+Plus 4 699 kr hos dntbutikken.no, Zoleo 2 999 kr hos widforss.no (utsolgt ved
+kontroll). Abonnement fra rundt 105 kr/mnd pluss 525 kr aktivering – tall fra en
+tredjepartskilde, ikke Garmins egen norske prisside, og må bekreftes før det
+brukes. Disse løser et annet problem enn LoRa: kontakt ut av området og en
+SOS-knapp mot en reell døgnbemannet sentral, uten at noe av det avhenger av
+naboene. Messenger Plus er den eneste enheten i hele gjennomgangen som kan lese
+og skrive meldinger uten telefon.
+
+Men prisnivået er ti til femten ganger kommunikasjonsmodulens, pluss abonnement,
+og satellitt er derfor ikke et svar på spørsmålet som ble stilt. Det er en egen
+kategorivurdering – med egen begrunnelse, egen marginregning og et åpent
+spørsmål om abonnement passer i en butikk som selger utstyr. Den er ikke
+bestilt, og den gjøres ikke her.
+
+#### Konklusjonen, med forbehold
+
+**Nei til LoRa i beredskapsboksen.** Kommunikasjonsmodulen står uendret: punkt 5
+i veikartet, Motorola Talkabout T42, 319 kr.
+
+Det smalere brukstilfellet parkeres framfor å forkastes. I et borettslag eller
+et hyttefelt kjøpes flere enheter inn i samme fysiske område samtidig, og da
+oppstår det interne meshet uten at noen fremmed node trengs – nøyaktig
+mekanismen som mangler for enkelthusstanden. Det er strukturelt samme sak som
+styreboksen og fellesvannlageret i punkt 10 og 11: en tjeneste til et
+fellesskap, ikke en vare til en husstand. Hører det hjemme noe sted, hører det
+hjemme der, som fastmontert utstyr med tilsyn – ikke som en enhet i familieesken.
+
+Dette er heller ikke et permanent nei. Nettet er lite, men organisert og i vekst,
+og bildet kan se annerledes ut om to–tre år. Vurder på nytt når tre ting er sanne
+samtidig: en ferdig konfigurert enhet selges av en etablert norsk forhandler med
+garanti; den virker uten telefon-app for både oppsett og daglig bruk; og
+nodetettheten dekker mer enn to byer. Ingen av de tre er sanne i dag. Sett en
+årlig gjennomgang.
+
+Forbehold ved denne vurderingen:
+
+- **Nodetallet er et gulv, ikke fasiten.** Mange noder velger bevisst å ikke
+  rapportere posisjon til offentlig MQTT. Det reelle nettet er trolig større enn
+  108/57, men vi har ingen pålitelig måte å tallfeste hvor mye – og et ukjent
+  tall skal ikke rundes oppover.
+- **Konklusjonen gjelder nasjonalt.** For husstander inne i Oslo- eller
+  Bergen-klyngen er brukstesten i praksis bestått allerede i dag. Det er likevel
+  ikke et argument for å selge produktet i en nasjonal katalog uten å si til
+  resten av kundene at konklusjonen ikke gjelder dem.
+- **AMS-interferensen** er dokumentert av entusiastmiljøet, ikke mot Nkom
+  direkte.
+- **SP188-unntaket for frakt** er hentet via søkeindeksering fordi dsb.no ga
+  403, og må etterprøves mot primærkilden.
+- **Ingen av de tolv aktørene i `konkurrentanalyse.md` er sjekket for om de
+  allerede selger LoRa eller satellitt.** Vi vet altså ikke om et nei her betyr
+  at vi står alene eller står med alle andre. Det er ikke kartlagt, og det skal
+  ikke påstås i noen retning.
 
 ### Turlinjen
 
