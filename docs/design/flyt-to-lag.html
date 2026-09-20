@@ -1,0 +1,1394 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nødboks – bestillingsflyt, retning «to-lag»</title>
+
+<!--
+  PROTOTYPE: retning «to-lag» for bestillingsflyten på nodboks.no
+  ================================================================
+  Én selvstendig fil. Ingen bygg, ingen avhengigheter, ingen fotografier –
+  alt visuelt er CSS/SVG. Åpnes direkte i nettleser.
+
+  GRUNNIDÉ
+  Overflaten har tre valg: hvor mange dere er (i heroen, som det aller første
+  steget), hva slags mat, og hva dere trenger. Under ligger «Finjuster esken»:
+  fire MULIGHETER (kassemateriale, ting dere har fra før, tillegg, påfyll) som
+  kunden kan ta, ikke må ta. Hver av de fire vises alltid som én lukket rad med
+  gjeldende tilstand skrevet ut i selve sammendraget – «Kassemateriale –
+  Plastkasser (standard)» – slik at ingenting føles skjult selv når det er
+  lukket, og standardvalget alltid er godt nok til å hoppe over resten.
+
+  PRISER I DENNE PROTOTYPEN
+  Katalogprisene (mat, vann, kokeapparat, lykter, radio, førstehjelp, esker,
+  PMR-/Meshtastic-tillegg) er hentet fra assets/js/data/katalog.js og er reelle
+  observerte priser i det virkelige sortimentet, ikke oppspinn.
+  Følgende er derimot PLASSHOLDERE laget for denne prototypen og finnes ikke
+  i den virkelige katalogen ennå:
+    – Kjæledyrfôr og -vannbehov (sku «kjaeledyrfor», kr 149 og 5 l/uke) –
+      dimensjonering og pris er et anslag, ikke et sourcet tall.
+    – Eskestørrelsenes persongrenser (≤2 / ≤4 / ≤8) er forenklet for denne
+      prototypen; de virkelige grensene ligger i katalogens ESKER-tabell og
+      følger vekt, ikke bare antall.
+    – Matmengdene bruker en forenklet kalorifordeling per vare (faste
+      andeler av et ukentlig kaloribehov), ikke katalogens fulle utvalg på
+      12+ matvarer. Selve barn/voksen-vektingen (1 450/2 338 kcal per døgn)
+      er oppdragsgivers egne, oppgitte tall.
+  Nøkkel: to-lag
+-->
+
+<style>
+  /* =========================================================================
+     Tokens – hentet fra assets/css/tokens.css, palett «Natt». Uendret verdier.
+     ========================================================================= */
+  :root {
+    color-scheme: light dark;
+
+    --bg:            #F1F4F1;
+    --bg-sunken:     #E3E9E4;
+    --surface:       #FFFFFF;
+    --surface-2:     #E3E9E4;
+    --border:        #CFD8D2;
+    --border-strong: #6B7D76;
+
+    --text:          #10201C;
+    --text-muted:    #4E615B;
+    --text-faint:    #6E827B;
+
+    --brand:         #12211D;
+    --brand-2:       #1B302A;
+    --brand-ink:     #F1F4F1;
+
+    --accent:        #52601B;
+    --accent-hover:  #3F4A12;
+    --accent-ink:    #FFFFFF;
+    --accent-soft:   #EDF2D4;
+    --accent-line:   #CDD9A4;
+
+    --ok:            #1F6B45;
+    --ok-soft:       #DFEFE6;
+    --warn:          #8A4B0A;
+    --warn-soft:     #FAEBDA;
+    --info:          #175E7C;
+    --info-soft:     #DEEDF4;
+
+    --focus:         #0F6A8C;
+
+    --shadow-sm: 0 1px 2px rgb(16 32 28 / 0.06), 0 1px 1px rgb(16 32 28 / 0.04);
+    --shadow-md: 0 2px 4px rgb(16 32 28 / 0.05), 0 6px 16px rgb(16 32 28 / 0.07);
+    --shadow-lg: 0 4px 8px rgb(16 32 28 / 0.05), 0 16px 40px rgb(16 32 28 / 0.10);
+
+    --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
+                    Charter, Georgia, ui-serif, serif;
+    --font-ui:      system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+                    Arial, "Noto Sans", sans-serif;
+    --font-mono:    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+    --step--1: clamp(0.82rem, 0.79rem + 0.13vw, 0.89rem);
+    --step-0:  clamp(1.00rem, 0.97rem + 0.16vw, 1.09rem);
+    --step-1:  clamp(1.18rem, 1.11rem + 0.34vw, 1.38rem);
+    --step-2:  clamp(1.38rem, 1.25rem + 0.63vw, 1.75rem);
+    --step-3:  clamp(1.62rem, 1.39rem + 1.08vw, 2.22rem);
+    --step-4:  clamp(1.91rem, 1.48rem + 2.05vw, 3.05rem);
+    --step-5:  clamp(2.35rem, 1.58rem + 3.55vw, 4.25rem);
+
+    --lh-tight: 1.06;
+    --lh-snug:  1.28;
+    --lh-body:  1.65;
+
+    --sp-1: 0.25rem;  --sp-2: 0.5rem;   --sp-3: 0.75rem;  --sp-4: 1rem;
+    --sp-5: 1.5rem;   --sp-6: 2rem;     --sp-7: 3rem;     --sp-8: 4rem;
+    --sp-9: 6rem;     --sp-10: 8rem;
+
+    --radius-sm: 2px;
+    --radius:    3px;
+    --radius-lg: 6px;
+    --radius-xl: 10px;
+    --radius-pill: 999px;
+
+    --width-page:  1140px;
+    --width-text:  62ch;
+
+    --ease:      cubic-bezier(0.22, 0.61, 0.36, 1);
+    --ease-out:  cubic-bezier(0.16, 1, 0.3, 1);
+    --dur-fast:  120ms;
+    --dur:       200ms;
+    --dur-slow:  360ms;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0B1513; --bg-sunken: #060E0D; --surface: #182A25; --surface-2: #253A34;
+      --border: #2C3D37; --border-strong: #6E8880;
+      --text: #E8EFE9; --text-muted: #9CB0AA; --text-faint: #7C908A;
+      --brand: #050D0C; --brand-2: #0F1F1B; --brand-ink: #E8EFE9;
+      --accent: #D9E6A0; --accent-hover: #E6F0B8; --accent-ink: #0B1513;
+      --accent-soft: #232D16; --accent-line: #3C4A26;
+      --ok: #8FD1A3; --ok-soft: #10231A; --warn: #E09A45; --warn-soft: #241A0D;
+      --info: #9CCBE4; --info-soft: #0F1E26; --focus: #B7E3EF;
+      --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.40);
+      --shadow-md: 0 2px 4px rgb(0 0 0 / 0.35), 0 8px 20px rgb(0 0 0 / 0.40);
+      --shadow-lg: 0 4px 10px rgb(0 0 0 / 0.35), 0 20px 48px rgb(0 0 0 / 0.50);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0B1513; --bg-sunken: #060E0D; --surface: #182A25; --surface-2: #253A34;
+    --border: #2C3D37; --border-strong: #6E8880;
+    --text: #E8EFE9; --text-muted: #9CB0AA; --text-faint: #7C908A;
+    --brand: #050D0C; --brand-2: #0F1F1B; --brand-ink: #E8EFE9;
+    --accent: #D9E6A0; --accent-hover: #E6F0B8; --accent-ink: #0B1513;
+    --accent-soft: #232D16; --accent-line: #3C4A26;
+    --ok: #8FD1A3; --ok-soft: #10231A; --warn: #E09A45; --warn-soft: #241A0D;
+    --info: #9CCBE4; --info-soft: #0F1E26; --focus: #B7E3EF;
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.40);
+    --shadow-md: 0 2px 4px rgb(0 0 0 / 0.35), 0 8px 20px rgb(0 0 0 / 0.40);
+    --shadow-lg: 0 4px 10px rgb(0 0 0 / 0.35), 0 20px 48px rgb(0 0 0 / 0.50);
+  }
+
+  /* =========================================================================
+     Grunnflate
+     ========================================================================= */
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-ui);
+    font-size: var(--step-0);
+    line-height: var(--lh-body);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: var(--lh-tight); margin: 0 0 var(--sp-3); color: var(--text); }
+  h1 { font-size: var(--step-5); letter-spacing: -0.01em; }
+  h2 { font-size: var(--step-3); }
+  h3 { font-size: var(--step-1); margin-bottom: var(--sp-2); }
+  p { margin: 0 0 var(--sp-4); }
+  a { color: var(--text); text-decoration-color: var(--border-strong); text-underline-offset: 0.16em; }
+  a:hover { text-decoration-color: currentColor; }
+  b, strong { font-weight: 700; }
+  .tnum { font-variant-numeric: tabular-nums; }
+  .muted { color: var(--text-muted); }
+  .visually-hidden {
+    position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden;
+    clip: rect(0,0,0,0); white-space: nowrap; border: 0; padding: 0;
+  }
+  :focus-visible { outline: 2.5px solid var(--focus); outline-offset: 2px; border-radius: var(--radius-sm); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+  }
+
+  .wrap { max-width: var(--width-page); margin-inline: auto; padding-inline: var(--sp-4); }
+  .eyebrow {
+    font-size: var(--step--1); font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--accent); margin: 0 0 var(--sp-2);
+  }
+  .lead { font-size: var(--step-1); color: var(--text-muted); max-width: var(--width-text); }
+
+  .section { padding-block: var(--sp-8); }
+  .section--sunken { background: var(--bg-sunken); }
+
+  /* --- Knapper --- */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--sp-2);
+    font: inherit; font-weight: 700; font-size: var(--step--1);
+    padding: 0.65em 1.15em; border-radius: var(--radius); border: 1.5px solid var(--border-strong);
+    background: transparent; color: var(--text); cursor: pointer;
+    transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease), transform var(--dur-fast) var(--ease);
+    text-decoration: none; line-height: 1.2;
+  }
+  .btn:hover { border-color: var(--text); }
+  .btn:active { transform: translateY(1px); }
+  .btn--primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .btn--primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+  .btn--lg { font-size: var(--step-0); padding: 0.85em 1.5em; }
+  .btn--block { width: 100%; }
+  .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+  .cluster { display: flex; flex-wrap: wrap; gap: var(--sp-3); align-items: center; margin: 0 0 var(--sp-4); }
+
+  /* =========================================================================
+     Topplinje
+     ========================================================================= */
+  .topbar {
+    position: sticky; top: 0; z-index: 40;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
+  .topbar__row { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); padding-block: var(--sp-3); }
+  .wordmark { display: flex; align-items: center; gap: var(--sp-2); font-family: var(--font-display); font-weight: 700; font-size: var(--step-1); color: var(--text); text-decoration: none; }
+  .wordmark__glo {
+    width: 1.4em; height: 1.4em; border-radius: 50%; border: 2px solid var(--accent);
+    position: relative; flex: none;
+  }
+  .wordmark__glo::after {
+    content: ""; position: absolute; inset: 28%; border-radius: 50%; background: var(--accent);
+  }
+  .topbar__aksjoner { display: flex; align-items: center; gap: var(--sp-3); }
+  .theme-toggle {
+    display: inline-flex; align-items: center; gap: var(--sp-2); border: 1.5px solid var(--border-strong);
+    background: var(--surface); color: var(--text); border-radius: var(--radius-pill);
+    padding: 0.4em 0.85em 0.4em 0.6em; font: inherit; font-size: var(--step--1); font-weight: 600; cursor: pointer;
+  }
+  .theme-toggle svg { width: 1.1em; height: 1.1em; }
+  @media (max-width: 30rem) {
+    .theme-toggle #theme-label { display: none; }
+    .theme-toggle { padding: 0.5em; }
+    .husstand-chip { padding-inline-end: 0.35em; font-size: 0.78rem; }
+  }
+
+  /* Husstands-chip: dukker opp når hero-velgeren er scrollet ut av syne */
+  .husstand-chip {
+    display: none; align-items: center; gap: var(--sp-2);
+    border: 1.5px solid var(--accent-line); background: var(--accent-soft); color: var(--text);
+    border-radius: var(--radius-pill); padding: 0.35em 0.5em 0.35em 0.9em;
+    font-size: var(--step--1); font-weight: 600; cursor: pointer;
+  }
+  .husstand-chip__endre {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--surface); border-radius: 50%; width: 1.6em; height: 1.6em;
+    font-size: 0.85em; border: 1px solid var(--border);
+  }
+  body.chip-synlig .husstand-chip { display: inline-flex; }
+
+  /* =========================================================================
+     Hero + tidlig CTA
+     ========================================================================= */
+  .hero { padding-block: var(--sp-7) var(--sp-8); }
+  .hero__inner { display: grid; gap: var(--sp-7); }
+  @media (min-width: 62rem) { .hero__inner { grid-template-columns: 1.05fr 0.95fr; align-items: start; } }
+  h1 { max-width: 14ch; }
+  .hero__lead { font-size: var(--step-1); color: var(--text-muted); max-width: 46ch; margin-bottom: var(--sp-5); }
+
+  .kilde-note { font-size: var(--step--1); color: var(--text-faint); max-width: 46ch; }
+
+  /* --- Husstandskortet: det tidlige CTA-et --- */
+  .husstandskort {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg); padding: var(--sp-5); position: relative; overflow: hidden;
+  }
+  .husstandskort::before {
+    content: ""; position: absolute; inset-block-start: -40%; inset-inline-end: -20%;
+    width: 60%; aspect-ratio: 1; border-radius: 50%;
+    background: radial-gradient(circle, var(--accent-soft), transparent 70%); pointer-events: none;
+  }
+  .husstandskort__kicker { display: flex; align-items: center; gap: var(--sp-2); font-size: var(--step--1); font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: var(--sp-2); }
+  .husstandskort__kicker .tall-badge {
+    display: inline-flex; align-items: center; justify-content: center; width: 1.5em; height: 1.5em;
+    border-radius: 50%; background: var(--accent); color: var(--accent-ink); font-size: 0.9em;
+  }
+  .husstandskort h2 { font-size: var(--step-2); margin-bottom: var(--sp-1); }
+  .husstandskort > p.muted { margin-bottom: var(--sp-5); }
+
+  .steppers { display: flex; flex-direction: column; gap: var(--sp-3); margin-bottom: var(--sp-5); position: relative; }
+  .stepper { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); padding: var(--sp-3); border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--bg-sunken); }
+  .stepper__label { display: flex; flex-direction: column; gap: 0.1em; min-width: 0; }
+  .stepper__navn { font-weight: 700; font-size: var(--step-0); }
+  .stepper__hjelp { font-size: var(--step--1); color: var(--text-muted); }
+  .stepper__kontroll { display: flex; align-items: center; gap: var(--sp-2); flex: none; }
+  .stepper__knapp {
+    width: 2.25rem; height: 2.25rem; border-radius: 50%; border: 1.5px solid var(--border-strong);
+    background: var(--surface); color: var(--text); font-size: var(--step-1); font-weight: 700;
+    display: flex; align-items: center; justify-content: center; cursor: pointer; line-height: 1;
+    transition: background var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease);
+  }
+  .stepper__knapp:hover { background: var(--accent-soft); border-color: var(--accent); }
+  .stepper__knapp:active { transform: scale(0.92); }
+  .stepper__knapp:disabled { opacity: 0.35; cursor: not-allowed; }
+  .stepper__tall {
+    width: 2.6rem; text-align: center; font: inherit; font-weight: 700; font-size: var(--step-1);
+    background: transparent; border: none; color: var(--text); -moz-appearance: textfield;
+  }
+  .stepper__tall::-webkit-inner-spin-button, .stepper__tall::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+  .husstand-svar {
+    border-top: 1px dashed var(--border); padding-top: var(--sp-4); margin-bottom: var(--sp-5);
+    font-size: var(--step--1); color: var(--text-muted); min-height: 2.6em;
+  }
+  .husstand-svar b { color: var(--text); }
+  .husstand-svar__pris { color: var(--text); font-weight: 700; }
+
+  /* =========================================================================
+     Option-kort (matniva / modus / eske / tillegg)
+     ========================================================================= */
+  .segment { border: none; padding: 0; margin: 0 0 var(--sp-6); }
+  .segment legend { padding: 0; }
+  .segment__options { display: grid; gap: var(--sp-3); margin-top: var(--sp-3); }
+  @media (min-width: 40rem) { .segment__options--row { grid-template-columns: 1fr 1fr; } }
+
+  .option {
+    display: block; position: relative; border: 1.5px solid var(--border); border-radius: var(--radius-lg);
+    background: var(--surface); padding: var(--sp-4); cursor: pointer;
+    transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease), background var(--dur) var(--ease);
+  }
+  .option input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .option:has(input:checked) { border-color: var(--accent); box-shadow: 0 0 0 1.5px var(--accent) inset; background: var(--accent-soft); }
+  .option:has(input:focus-visible) { outline: 2.5px solid var(--focus); outline-offset: 2px; }
+  .option:hover { border-color: var(--border-strong); }
+  .option__title { display: flex; justify-content: space-between; gap: var(--sp-2); font-weight: 700; font-size: var(--step-0); margin-bottom: var(--sp-1); }
+  .option__title .tnum { font-weight: 700; color: var(--text-muted); }
+  .option:has(input:checked) .option__title .tnum { color: var(--accent-hover); }
+  .option__desc { font-size: var(--step--1); color: var(--text-muted); margin: 0 0 var(--sp-2); }
+  .option__jobb { font-size: var(--step--1); margin: var(--sp-2) 0 0; padding-top: var(--sp-2); border-top: 1px dashed var(--border); }
+  .option__radiomerke {
+    position: absolute; top: var(--sp-4); right: var(--sp-4); width: 1.15rem; height: 1.15rem;
+    border-radius: 50%; border: 1.5px solid var(--border-strong); background: var(--surface);
+  }
+  .option:has(input:checked) .option__radiomerke { border-color: var(--accent); background: var(--accent); box-shadow: inset 0 0 0 3px var(--surface); }
+  .option:has(input[type="checkbox"]) .option__radiomerke { border-radius: var(--radius-sm); }
+
+  .holdbarhet { margin: var(--sp-2) 0; }
+  .holdbarhet__spor { height: 6px; border-radius: var(--radius-pill); background: var(--surface-2); overflow: hidden; }
+  .holdbarhet__fyll { height: 100%; background: var(--accent); border-radius: inherit; transition: width var(--dur-slow) var(--ease-out); }
+  .holdbarhet__tekst { display: flex; justify-content: space-between; font-size: var(--step--1); color: var(--text-faint); margin-top: 0.3em; }
+
+  /* =========================================================================
+     Byggeren: grid-layout
+     ========================================================================= */
+  .bygger-titt { max-width: var(--width-text); }
+  .byggerwrap {
+    display: grid; gap: var(--sp-6);
+    grid-template-columns: 1fr; grid-template-areas: "kontroll" "pris" "finjuster" "liste";
+  }
+  @media (min-width: 60rem) {
+    .byggerwrap {
+      grid-template-columns: 1fr 340px;
+      grid-template-areas: "kontroll pris" "finjuster pris" "liste liste";
+      align-items: start;
+    }
+  }
+  .kontroll { grid-area: kontroll; }
+  .finjuster-seksjon { grid-area: finjuster; }
+  .innholdsliste { grid-area: liste; }
+  .prispanel-holder { grid-area: pris; }
+
+  /* Husstands-lesevisning i byggeren (ikke et nytt spørsmål – en kvittering) */
+  .husstand-lest {
+    display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-3);
+    background: var(--accent-soft); border: 1px solid var(--accent-line); border-radius: var(--radius-lg);
+    padding: var(--sp-4); margin-bottom: var(--sp-6);
+  }
+  .husstand-lest__tagger { display: flex; flex-wrap: wrap; gap: var(--sp-2); flex: 1 1 auto; }
+  .tag {
+    display: inline-flex; align-items: center; gap: 0.4em; background: var(--surface); border: 1px solid var(--accent-line);
+    border-radius: var(--radius-pill); padding: 0.3em 0.8em; font-size: var(--step--1); font-weight: 600;
+  }
+  .husstand-lest__endre {
+    background: transparent; border: 1.5px solid var(--border-strong); color: var(--text);
+    border-radius: var(--radius-pill); padding: 0.4em 0.9em; font: inherit; font-size: var(--step--1); font-weight: 700; cursor: pointer;
+  }
+  .husstand-lest__endre:hover { border-color: var(--text); }
+
+  .steg-nr { display: flex; align-items: baseline; gap: var(--sp-2); margin-bottom: var(--sp-1); }
+  .steg-nr__tall {
+    display: inline-flex; align-items: center; justify-content: center; width: 1.6em; height: 1.6em;
+    border-radius: 50%; background: var(--brand); color: var(--brand-ink); font-size: var(--step--1); font-weight: 700; flex: none;
+  }
+  .steg-hjelp { font-size: var(--step--1); color: var(--text-muted); margin: 0 0 var(--sp-3); max-width: 52ch; }
+
+  /* =========================================================================
+     Prispanel
+     ========================================================================= */
+  .prispanel {
+    background: var(--brand); color: var(--brand-ink); border-radius: var(--radius-xl);
+    padding: var(--sp-5); box-shadow: var(--shadow-lg);
+  }
+  .prispanel-holder { position: sticky; top: calc(var(--sp-8) + 3.5rem); }
+  @media (max-width: 59.99rem) { .prispanel-holder { position: static; margin-top: var(--sp-6); } }
+  .prispanel__sum { font-family: var(--font-display); font-size: var(--step-3); font-weight: 700; margin: 0; }
+  .prispanel__enhet { font-size: var(--step--1); color: color-mix(in srgb, var(--brand-ink) 70%, transparent); margin: 0 0 var(--sp-4); }
+  .prispanel__linjer { border-top: 1px solid color-mix(in srgb, var(--brand-ink) 22%, transparent); padding-top: var(--sp-3); margin-bottom: var(--sp-2); }
+  .prispanel__linje { display: flex; justify-content: space-between; gap: var(--sp-3); font-size: var(--step--1); padding-block: 0.3em; }
+  .prispanel__linje--sum { font-weight: 700; font-size: var(--step-0); border-top: 1px solid color-mix(in srgb, var(--brand-ink) 22%, transparent); margin-top: var(--sp-2); padding-top: var(--sp-2); }
+  .prispanel__mva { font-size: var(--step--1); color: color-mix(in srgb, var(--brand-ink) 70%, transparent); margin: var(--sp-2) 0 0; }
+  .prispanel__fot { font-size: var(--step--1); color: color-mix(in srgb, var(--brand-ink) 70%, transparent); margin: var(--sp-2) 0 0; }
+  .prispanel .btn--primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); margin-top: var(--sp-4); }
+  .prispanel .btn--primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+
+  /* Mobil prislinje: alltid synlig nederst */
+  .prisbar-mobil {
+    position: fixed; inset-inline: 0; bottom: 0; z-index: 30;
+    display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3);
+    background: var(--brand); color: var(--brand-ink); padding: var(--sp-3) var(--sp-4);
+    padding-bottom: max(var(--sp-3), env(safe-area-inset-bottom));
+    box-shadow: 0 -6px 18px rgb(0 0 0 / 0.18);
+  }
+  .prisbar-mobil__sum { font-weight: 700; font-size: var(--step-1); }
+  .prisbar-mobil__enhet { display: block; font-size: 0.72rem; color: color-mix(in srgb, var(--brand-ink) 70%, transparent); }
+  .prisbar-mobil[hidden] { display: none; }
+  @media (min-width: 60rem) { .prisbar-mobil { display: none; } }
+  body.har-prisbar-mobil .byggerwrap { padding-bottom: 4.5rem; }
+  @media (min-width: 60rem) { body.har-prisbar-mobil .byggerwrap { padding-bottom: 0; } }
+
+  /* =========================================================================
+     Finjuster – lag 2
+     ========================================================================= */
+  .finjuster-intro {
+    display: flex; align-items: flex-start; gap: var(--sp-3); margin-bottom: var(--sp-4);
+    padding: var(--sp-4); border: 1px dashed var(--border-strong); border-radius: var(--radius-lg);
+  }
+  .finjuster-intro__ikon { flex: none; width: 2rem; height: 2rem; color: var(--accent); }
+  .finjuster-intro h3 { margin-bottom: 0.2em; }
+  .finjuster-intro p { margin: 0; font-size: var(--step--1); color: var(--text-muted); }
+
+  .finjuster-liste { display: flex; flex-direction: column; gap: var(--sp-3); }
+  .finjuster {
+    border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface); overflow: hidden;
+  }
+  .finjuster[open] { border-color: var(--border-strong); }
+  .finjuster > summary {
+    list-style: none; cursor: pointer; padding: var(--sp-4); display: flex; align-items: center; gap: var(--sp-3);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .finjuster > summary::-webkit-details-marker { display: none; }
+  .finjuster__ikon {
+    flex: none; width: 2.25rem; height: 2.25rem; border-radius: 50%; background: var(--bg-sunken);
+    display: flex; align-items: center; justify-content: center; color: var(--text-muted);
+  }
+  .finjuster__ikon svg { width: 1.15rem; height: 1.15rem; }
+  .finjuster__tekst { flex: 1 1 auto; min-width: 0; }
+  .finjuster__tittel { display: block; font-weight: 700; font-size: var(--step-0); }
+  .finjuster__tilstand { display: block; font-size: var(--step--1); color: var(--text-muted); margin-top: 0.1em; }
+  .finjuster__tilstand.er-endret { color: var(--accent-hover); font-weight: 600; }
+  :root[data-theme="dark"] .finjuster__tilstand.er-endret,
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .finjuster__tilstand.er-endret { color: var(--accent); } }
+  .finjuster__pil { flex: none; width: 1.2em; height: 1.2em; color: var(--text-faint); transition: transform var(--dur) var(--ease); }
+  .finjuster[open] > summary .finjuster__pil { transform: rotate(180deg); }
+  .finjuster__innhold { padding: 0 var(--sp-4) var(--sp-4); border-top: 1px solid var(--border); padding-top: var(--sp-4); }
+
+  .harfor-liste { display: flex; flex-direction: column; gap: var(--sp-2); }
+  .harfor {
+    display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-3); border: 1px solid var(--border);
+    border-radius: var(--radius); cursor: pointer; font-size: var(--step--1);
+  }
+  .harfor:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+  .harfor input { width: 1.15rem; height: 1.15rem; accent-color: var(--accent); flex: none; }
+  .harfor__navn { flex: 1 1 auto; font-weight: 600; }
+  .harfor__sum { color: var(--ok); font-weight: 700; }
+  .finjuster-sum { margin-top: var(--sp-3); font-size: var(--step--1); color: var(--ok); font-weight: 600; }
+
+  .forbehold { margin-top: var(--sp-2); font-size: var(--step--1); }
+  .forbehold summary { cursor: pointer; color: var(--text-muted); font-weight: 600; }
+  .forbehold ul { margin: var(--sp-2) 0 0; padding-left: 1.2em; }
+  .forbehold li { margin-bottom: 0.4em; }
+
+  .pafyll-toggle { display: flex; align-items: center; gap: var(--sp-3); margin-bottom: var(--sp-3); font-size: var(--step--1); font-weight: 600; }
+  .pafyll-toggle input { width: 1.2rem; height: 1.2rem; accent-color: var(--accent); }
+  .pafyll-avlyst { font-size: var(--step--1); color: var(--text-muted); background: var(--bg-sunken); border-radius: var(--radius); padding: var(--sp-3); }
+
+  /* =========================================================================
+     Innholdsliste
+     ========================================================================= */
+  .innholdsliste__hode { display: flex; align-items: baseline; justify-content: space-between; gap: var(--sp-3); margin-bottom: var(--sp-4); }
+  .badge {
+    display: inline-flex; align-items: center; font-size: var(--step--1); font-weight: 700;
+    background: var(--surface-2); color: var(--text-muted); border-radius: var(--radius-pill); padding: 0.25em 0.75em;
+  }
+  .gruppe { margin-bottom: var(--sp-5); }
+  .gruppe__navn { font-size: var(--step--1); text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-faint); border-bottom: 1px solid var(--border); padding-bottom: var(--sp-2); margin-bottom: var(--sp-2); }
+  .vare { display: grid; grid-template-columns: 1fr auto; gap: 0.2em var(--sp-3); padding-block: var(--sp-2); border-bottom: 1px dotted var(--border); }
+  .vare:last-child { border-bottom: none; }
+  .vare__navn { font-weight: 600; }
+  .vare__antall { font-size: var(--step--1); color: var(--text-muted); text-align: right; }
+  .vare__hvorfor { grid-column: 1 / -1; font-size: var(--step--1); color: var(--text-muted); margin: 0; }
+  .liste-fotnote { font-size: var(--step--1); color: var(--text-faint); margin-top: var(--sp-5); }
+
+  /* =========================================================================
+     Oppsummering
+     ========================================================================= */
+  .oppsummering-kort {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md); padding: var(--sp-6); max-width: 42rem; margin-inline: auto;
+  }
+  .oppsummering-rad { display: flex; justify-content: space-between; gap: var(--sp-3); padding-block: var(--sp-2); font-size: var(--step--1); border-bottom: 1px dotted var(--border); }
+  .oppsummering-rad:last-of-type { border-bottom: none; }
+  .oppsummering-rad--sum { font-weight: 700; font-size: var(--step-1); border-top: 1px solid var(--border); margin-top: var(--sp-2); padding-top: var(--sp-3); }
+  .oppsummering-notis {
+    margin-top: var(--sp-5); background: var(--info-soft); color: var(--info); border-radius: var(--radius); padding: var(--sp-4);
+    font-size: var(--step--1); display: none;
+  }
+  .oppsummering-notis.vis { display: block; }
+
+  footer.side-footer { padding-block: var(--sp-7); border-top: 1px solid var(--border); }
+  .side-footer p { font-size: var(--step--1); color: var(--text-faint); margin: 0; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar__row">
+    <a class="wordmark" href="#">
+      <span class="wordmark__glo" aria-hidden="true"></span>
+      Nødboks
+    </a>
+    <div class="topbar__aksjoner">
+      <button type="button" class="husstand-chip" id="husstand-chip">
+        <span id="chip-tekst">4 voksne</span>
+        <span class="husstand-chip__endre" aria-hidden="true">✎</span>
+        <span class="visually-hidden">Endre husstand</span>
+      </button>
+      <button type="button" class="theme-toggle" id="theme-toggle" aria-pressed="false">
+        <svg id="theme-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+          <circle cx="10" cy="10" r="4.2"/>
+          <path d="M10 1.5v2M10 16.5v2M3.5 10h-2M18.5 10h-2M5.2 5.2 3.8 3.8M16.2 16.2l-1.4-1.4M5.2 14.8 3.8 16.2M16.2 3.8l-1.4 1.4"/>
+        </svg>
+        <span id="theme-label">Mørk modus</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="hoved">
+
+  <!-- ============================== HERO ============================== -->
+  <section class="hero">
+    <div class="wrap hero__inner">
+      <div>
+        <p class="eyebrow">Beredskap for hele familien</p>
+        <h1>Samme utstyr, bare nok av det.</h1>
+        <p class="hero__lead">
+          Samme utstyr som dere ville tatt med på tur: Petzl, Trangia, Katadyn.
+          Ingen nødrasjoner, ingen merker dere aldri har hørt om. Forskjellen er
+          mengden – nok til alle som bor i huset, i sju døgn.
+        </p>
+        <p class="kilde-note">
+          Satt sammen etter
+          <a href="https://www.dsb.no/sikkerhverdag/egenberedskap/" rel="noopener">DSBs råd om egenberedskap</a>.
+          Nødboks er et privat firma og er ikke tilknyttet eller godkjent av DSB.
+        </p>
+      </div>
+
+      <div class="husstandskort" id="husstandskort">
+        <p class="husstandskort__kicker"><span class="tall-badge" aria-hidden="true">1</span> Det eneste dere trenger å svare på nå</p>
+        <h2>Hvor mange er dere?</h2>
+        <p class="muted">
+          Voksne og barn spiser ulikt, og vi regner med det. Har dere hund
+          eller katt, tar vi høyde for fôr og vann til dem også. Svaret følger
+          med resten av veien – dere skal ikke oppgi det på nytt.
+        </p>
+
+        <div class="steppers" id="steppers">
+          <div class="stepper" data-felt="voksne">
+            <div class="stepper__label">
+              <span class="stepper__navn">Voksne</span>
+              <span class="stepper__hjelp">13 år og oppover</span>
+            </div>
+            <div class="stepper__kontroll">
+              <button type="button" class="stepper__knapp" data-steg="-1" aria-label="Én voksen færre">−</button>
+              <input class="stepper__tall" type="number" inputmode="numeric" id="voksne-input" min="1" max="8" step="1" value="4" aria-label="Antall voksne">
+              <button type="button" class="stepper__knapp" data-steg="1" aria-label="Én voksen til">+</button>
+            </div>
+          </div>
+          <div class="stepper" data-felt="barn">
+            <div class="stepper__label">
+              <span class="stepper__navn">Barn</span>
+              <span class="stepper__hjelp">Under 13 år – spiser mindre, så mengden justeres</span>
+            </div>
+            <div class="stepper__kontroll">
+              <button type="button" class="stepper__knapp" data-steg="-1" aria-label="Ett barn færre">−</button>
+              <input class="stepper__tall" type="number" inputmode="numeric" id="barn-input" min="0" max="6" step="1" value="0" aria-label="Antall barn">
+              <button type="button" class="stepper__knapp" data-steg="1" aria-label="Ett barn til">+</button>
+            </div>
+          </div>
+          <div class="stepper" data-felt="kjaeledyr">
+            <div class="stepper__label">
+              <span class="stepper__navn">Kjæledyr</span>
+              <span class="stepper__hjelp">Hund eller katt</span>
+            </div>
+            <div class="stepper__kontroll">
+              <button type="button" class="stepper__knapp" data-steg="-1" aria-label="Ett kjæledyr færre">−</button>
+              <input class="stepper__tall" type="number" inputmode="numeric" id="kjaeledyr-input" min="0" max="4" step="1" value="0" aria-label="Antall kjæledyr">
+              <button type="button" class="stepper__knapp" data-steg="1" aria-label="Ett kjæledyr til">+</button>
+            </div>
+          </div>
+        </div>
+
+        <p class="husstand-svar" id="hero-svar" aria-live="polite"></p>
+
+        <p class="cluster" style="margin-bottom:0">
+          <button type="button" class="btn btn--primary btn--lg" id="til-bygger">Fortsett til esken →</button>
+          <a class="btn btn--lg" href="#innhold">Se hva som ligger i den</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== BYGGEREN ============================== -->
+  <section class="section" id="bygg">
+    <div class="wrap">
+      <p class="eyebrow">Pakkebyggeren</p>
+      <h2 class="bygger-titt">Tre valg, så er esken deres.</h2>
+      <p class="lead bygger-titt">
+        Husstanden har dere allerede sagt oss. Nå gjenstår maten og hva dere
+        trenger – resten er noe dere <em>kan</em> justere, ikke noe dere må.
+      </p>
+
+      <div class="byggerwrap" style="margin-top:var(--sp-6)">
+
+        <form class="kontroll" id="bygger">
+
+          <div class="husstand-lest">
+            <div class="husstand-lest__tagger" id="husstand-tagger" aria-live="polite"></div>
+            <button type="button" class="husstand-lest__endre" id="endre-husstand">Endre husstand</button>
+          </div>
+
+          <!-- Valg 1: mat -->
+          <fieldset class="segment">
+            <div class="steg-nr"><span class="steg-nr__tall" aria-hidden="true">1</span><legend><h3 style="margin:0">Hva slags mat?</h3></legend></div>
+            <p class="steg-hjelp">Det viktigste valget. Begge nivåene dekker sju døgn fullt ut – forskjellen er holdbarhet, vekt og pris.</p>
+            <div class="segment__options segment__options--row" id="matnivaer"></div>
+          </fieldset>
+
+          <!-- Valg 2: omfang -->
+          <fieldset class="segment">
+            <div class="steg-nr"><span class="steg-nr__tall" aria-hidden="true">2</span><legend><h3 style="margin:0">Hva trenger dere?</h3></legend></div>
+            <p class="steg-hjelp">Har dere primus, lykter og radio fra før, kjøper dere bare maten.</p>
+            <div class="segment__options segment__options--row" id="moduser"></div>
+          </fieldset>
+
+        </form>
+
+        <div class="prispanel-holder">
+          <aside class="prispanel" aria-labelledby="pris-tittel">
+            <h3 class="visually-hidden" id="pris-tittel">Pris</h3>
+            <p class="prispanel__sum tnum" id="pris-sum">–</p>
+            <p class="prispanel__enhet tnum" id="pris-enhet"></p>
+
+            <div class="prispanel__linjer" id="pris-linjer"></div>
+            <p class="prispanel__mva tnum" id="pris-mva"></p>
+
+            <button type="button" class="btn btn--primary btn--block btn--lg" id="legg-i-kurv">Legg i kurven</button>
+
+            <p class="prispanel__fot" id="pris-egenkjop"></p>
+            <p class="prispanel__fot">Frakt kommer i tillegg og beregnes i kassen.</p>
+            <p class="prispanel__fot" id="pris-neste"></p>
+
+            <p class="visually-hidden" role="status" aria-live="polite" id="pris-status"></p>
+          </aside>
+        </div>
+
+        <!-- Lag 2: Finjuster -->
+        <section class="finjuster-seksjon" aria-labelledby="finjuster-tittel">
+          <div class="finjuster-intro">
+            <svg class="finjuster-intro__ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <path d="M4 6h10M17 6h3M4 12h3M9 12h11M4 18h13M20 18h0"/>
+              <circle cx="14" cy="6" r="2.2"/><circle cx="6" cy="12" r="2.2"/><circle cx="17" cy="18" r="2.2"/>
+            </svg>
+            <div>
+              <h3 id="finjuster-tittel" style="margin-bottom:0">Finjuster esken</h3>
+              <p>Fire ting dere kan justere. Standardvalgene er gode – ingen av dem krever at dere gjør noe.</p>
+            </div>
+          </div>
+
+          <div class="finjuster-liste">
+
+            <details class="finjuster" id="finjuster-eske">
+              <summary>
+                <span class="finjuster__ikon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="8" width="17" height="12" rx="1.5"/><path d="M3.5 12h17M8 8V6a1.5 1.5 0 0 1 1.5-1.5h5A1.5 1.5 0 0 1 16 6v2"/></svg>
+                </span>
+                <span class="finjuster__tekst">
+                  <span class="finjuster__tittel">Kassemateriale</span>
+                  <span class="finjuster__tilstand" id="eske-tilstand"></span>
+                </span>
+                <svg class="finjuster__pil" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 8l5 5 5-5"/></svg>
+              </summary>
+              <div class="finjuster__innhold">
+                <p class="steg-hjelp" style="margin-top:0">Mat og vann ligger i plast uansett. Valget gjelder utstyrskassen.</p>
+                <div class="segment__options segment__options--row" id="eskevalg"></div>
+              </div>
+            </details>
+
+            <details class="finjuster" id="finjuster-fravalg">
+              <summary>
+                <span class="finjuster__ikon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12.5 9.5 17 19 6.5"/></svg>
+                </span>
+                <span class="finjuster__tekst">
+                  <span class="finjuster__tittel">Har dere noe fra før?</span>
+                  <span class="finjuster__tilstand" id="fravalg-tilstand"></span>
+                </span>
+                <svg class="finjuster__pil" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 8l5 5 5-5"/></svg>
+              </summary>
+              <div class="finjuster__innhold">
+                <p class="steg-hjelp" style="margin-top:0">Kryss av, så tar vi det ut av esken og av prisen. Vi vil heller at dere bruker lykten dere kjenner, enn at dere kjøper en til.</p>
+                <div class="harfor-liste" id="harfraFor"></div>
+                <p class="finjuster-sum" id="harfraFor-sum"></p>
+              </div>
+            </details>
+
+            <details class="finjuster" id="finjuster-tillegg">
+              <summary>
+                <span class="finjuster__ikon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 5v14M5 12h14"/></svg>
+                </span>
+                <span class="finjuster__tekst">
+                  <span class="finjuster__tittel">Vil dere ha noe i tillegg?</span>
+                  <span class="finjuster__tilstand" id="tillegg-tilstand"></span>
+                </span>
+                <svg class="finjuster__pil" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 8l5 5 5-5"/></svg>
+              </summary>
+              <div class="finjuster__innhold">
+                <p class="steg-hjelp" style="margin-top:0">Ikke med som standard. Legges bare til det dere faktisk krysser av.</p>
+                <div class="segment__options" id="tillegg"></div>
+              </div>
+            </details>
+
+            <details class="finjuster" id="finjuster-pafyll">
+              <summary>
+                <span class="finjuster__ikon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 4v6l4 2M12 21a8 8 0 1 1 6-2.5"/><path d="M18.5 20 21 22.5"/></svg>
+                </span>
+                <span class="finjuster__tekst">
+                  <span class="finjuster__tittel">Påfyll som abonnement</span>
+                  <span class="finjuster__tilstand" id="pafyll-tilstand"></span>
+                </span>
+                <svg class="finjuster__pil" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 8l5 5 5-5"/></svg>
+              </summary>
+              <div class="finjuster__innhold">
+                <p class="steg-hjelp" style="margin-top:0">Maten har en utløpsdato. Vi kan minne dere på det, eller sende nytt automatisk – dere kan si nei hver gang.</p>
+                <label class="pafyll-toggle">
+                  <input type="checkbox" id="abonnement">
+                  Ja, hold styr på datoene for oss
+                </label>
+                <div id="pafyll-innhold"></div>
+              </div>
+            </details>
+
+          </div>
+        </section>
+
+        <!-- Innholdsliste -->
+        <div class="innholdsliste" id="innhold">
+          <div class="innholdsliste__hode">
+            <h3 style="margin:0">Dette ligger i esken</h3>
+            <span class="badge tnum" id="innhold-teller"></span>
+          </div>
+          <div id="innholdslisteinnhold"></div>
+          <p class="liste-fotnote">
+            Kategoriene følger DSBs egen sjekkliste, så dere kan holde listen vår mot
+            den offisielle linje for linje.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== OPPSUMMERING ============================== -->
+  <section class="section section--sunken" id="oppsummering">
+    <div class="wrap">
+      <p class="eyebrow" style="text-align:center">Før dere går videre</p>
+      <h2 style="text-align:center">Oppsummering</h2>
+      <p class="lead" style="text-align:center; margin-inline:auto; margin-bottom:var(--sp-6)">
+        Dette er det dere har satt sammen. Ingenting her er skjult til slutt –
+        det er de samme linjene som lå i prispanelet hele veien.
+      </p>
+
+      <div class="oppsummering-kort">
+        <h3>Husstand</h3>
+        <p class="oppsummering-rad" id="opp-husstand" style="border-bottom:none; padding-top:0"></p>
+
+        <h3 style="margin-top:var(--sp-5)">Valgene deres</h3>
+        <div id="opp-valg"></div>
+
+        <h3 style="margin-top:var(--sp-5)">Pris</h3>
+        <div id="opp-pris"></div>
+        <p class="oppsummering-rad oppsummering-rad--sum" id="opp-sum"></p>
+        <p class="prispanel__fot tnum" id="opp-mva" style="color:var(--text-muted)"></p>
+
+        <p class="cluster" style="margin-top:var(--sp-5); margin-bottom:0">
+          <button type="button" class="btn btn--primary btn--lg btn--block" id="gaa-til-betaling">Gå videre til betaling</button>
+        </p>
+        <p class="oppsummering-notis" id="betaling-notis">
+          Dette er en klikkbar prototype for en designretning – ingen bestilling
+          er sendt, og ingen betaling er tatt.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="prisbar-mobil" id="prisbar-mobil" hidden>
+    <span>
+      <span class="prisbar-mobil__sum tnum" id="prisbar-sum">–</span>
+      <span class="prisbar-mobil__enhet tnum" id="prisbar-enhet"></span>
+    </span>
+    <a class="btn btn--primary" href="#bygg" style="padding:0.55em 1em; font-size:var(--step--1)">Til esken</a>
+  </div>
+
+</main>
+
+<footer class="side-footer">
+  <div class="wrap">
+    <p>
+      Prototype for interaksjonsretningen «to-lag» – ikke den publiserte
+      nettbutikken. Nøkkel: to-lag.
+      <a href="https://www.dsb.no/sikkerhverdag/egenberedskap/" rel="noopener">DSBs råd om egenberedskap</a>.
+    </p>
+  </div>
+</footer>
+
+<script>
+(() => {
+  'use strict';
+
+  /* ========================================================================
+     KATALOG (utdrag, reelle priser der ikke annet er markert – se HTML-
+     kommentaren øverst i filen for de tre plassholderne)
+     ======================================================================== */
+  const KONFIG = { dogn: 7, kcalVoksen: 2338, kcalBarn: 1450, vannPerPerson: 20, vannPerKjaeledyr: 5 };
+  const MVA = { mat: 0.15, standard: 0.25 };
+  const mvaSats = (kategori) => (kategori === 'Mat' ? MVA.mat : MVA.standard);
+  const FRAVALG_TERSKEL = 100;
+
+  const DSB_GRUPPE = {
+    'Mat': 'Mat og vann', 'Vann': 'Mat og vann', 'Matlaging': 'Mat og vann', 'Kjæledyr': 'Mat og vann',
+    'Varme og lys': 'Varme og lys',
+    'Strøm og samband': 'Informasjon',
+    'Helse og hygiene': 'Legemidler og hygiene',
+    'Esken': 'Esken',
+  };
+  const GRUPPEREKKEFOLGE = ['Mat og vann', 'Varme og lys', 'Informasjon', 'Legemidler og hygiene', 'Esken'];
+
+  const MATNIVAER = [
+    {
+      id: 'torrmat', navn: 'Vanlig butikkmat', holdbarhetAr: 1,
+      beskrivelse: 'Havregryn, knekkebrød, leverpostei og middagshermetikk – maten familien spiser fra før.',
+      jobb: 'Bytte omtrent hvert år.',
+    },
+    {
+      id: 'langtidsmat', navn: 'Frysetørket langtidsmat', holdbarhetAr: 5,
+      beskrivelse: 'Norskprodusert Drytech-mat fra Tromsø. Dyrere, men dere slipper å tenke på den.',
+      jobb: 'Nesten ingenting – fem års holdbarhet.',
+    },
+  ];
+
+  const MODUSER = [
+    {
+      id: 'komplett', navn: 'Komplett pakke', rabatt: 0.06, medUtstyr: true,
+      beskrivelse: 'Mat, vann, kokeapparat, lys, radio, førstehjelp og esken de skal ligge i.',
+    },
+    {
+      id: 'matpafyll', navn: 'Matpåfyll', rabatt: 0, medUtstyr: false,
+      beskrivelse: 'Bare mat og vannrensetabletter, til dere som har utstyret fra før.',
+    },
+  ];
+
+  const ESKETYPER = [
+    { id: 'plast', navn: 'Plastkasser', beskrivelse: 'Orthex SmartStore Dry, IP44, ti års garanti. Tett mot støv og fukt.' },
+    { id: 'alu', navn: 'Aluminiumskasse til utstyret', beskrivelse: 'Zarges Eurobox til utstyret. Tåler å stå ute – noe dere bruker, ikke bare noe innholdet ligger i.' },
+  ];
+  // PLASSHOLDER: persongrensene under er forenklet for prototypen (se HTML-kommentar øverst).
+  const ESKEPRIS = {
+    plast: [{ maks: 2, pris: 299 }, { maks: 4, pris: 598 }, { maks: 8, pris: 897 }],
+    alu: [{ maks: 2, pris: 3999 }, { maks: 4, pris: 4298 }, { maks: 8, pris: 4597 }],
+  };
+  const velgEske = (personer, type) => {
+    const tabell = ESKEPRIS[type] ?? ESKEPRIS.plast;
+    return tabell.find((e) => personer <= e.maks) ?? tabell[tabell.length - 1];
+  };
+
+  // Kalorifordeling: faste andeler av det ukentlige kaloribehovet. Forenklet
+  // utvalg for prototypen – katalogen har et bredere sortiment.
+  const MAT = [
+    { sku: 'havregryn', navn: 'Axa Bjørn Havregryn, 1,1 kg', kategori: 'Mat', enhet: 'pk', pris: 27, kcal: 4070, andel: 0.22, matniva: ['torrmat'], hvorfor: 'Billig og mettende frokost, spises frivillig også på døgn fem.' },
+    { sku: 'knekkebrod', navn: 'Wasa Husman knekkebrød, 520 g', kategori: 'Mat', enhet: 'pk', pris: 30, kcal: 1730, andel: 0.18, matniva: ['torrmat'] },
+    { sku: 'leverpostei', navn: 'Stabburet leverpostei, 200 g', kategori: 'Mat', enhet: 'stk', pris: 25, kcal: 560, andel: 0.10, matniva: ['torrmat'] },
+    { sku: 'middagshermetikk', navn: 'Trondhjems middagshermetikk', kategori: 'Mat', enhet: 'boks', pris: 67, kcal: 900, andel: 0.20, matniva: ['torrmat'], hvorfor: 'Kan spises kald hvis brenselet tar slutt.' },
+    { sku: 'sjokolade', navn: 'Freia Melkesjokolade, 200 g', kategori: 'Mat', enhet: 'pl', pris: 30, kcal: 1090, andel: 0.12, matniva: ['torrmat', 'langtidsmat'] },
+    { sku: 'real-middag', navn: 'REAL Field Meal – håndplukket utvalg', kategori: 'Mat', enhet: 'porsjon', pris: 129, kcal: 700, andel: 0.85, matniva: ['langtidsmat'], hvorfor: 'Én varm middag eller frokost, frysetørket i Tromsø.' },
+  ];
+
+  const VANN = [
+    { sku: 'vannkanne', navn: 'Vanndunk 10 liter, gjennomsiktig', kategori: 'Vann', enhet: 'stk', pris: 60, type: 'engang', kunKomplett: true },
+    { sku: 'aquatabs', navn: 'Aquatabs vannrensetabletter, 50 stk', kategori: 'Vann', enhet: 'pk', pris: 149, type: 'forbruk', qty: () => 1 },
+    { sku: 'vannfilter', navn: 'Katadyn BeFree 1 liter vannfilter', kategori: 'Vann', enhet: 'stk', pris: 799, type: 'engang', qty: () => 1, kunKomplett: true, hvorfor: 'Etterfyller kannene fra bekk eller regnvann om de 20 literne tar slutt.' },
+  ];
+
+  const MATLAGING = [
+    { sku: 'kokeapparat', navn: 'Trangia Stormkjøkken 25-5 HA', kategori: 'Matlaging', enhet: 'stk', pris: 1698, type: 'engang', qty: () => 1, kunKomplett: true },
+    { sku: 'fyrstikker', navn: 'Fyrstikker, 10 esker', kategori: 'Matlaging', enhet: 'pk', pris: 13, type: 'forbruk', qty: () => 1, kunKomplett: true },
+  ];
+
+  const LYS = [
+    { sku: 'hodelykt', navn: 'Petzl Actik Core hodelykt, 450 lumen', kategori: 'Varme og lys', enhet: 'stk', pris: 574, type: 'engang', qty: (p) => Math.max(1, p), kunKomplett: true, hvorfor: 'Én per person – ingen skal famle etter en lykt noen andre har.' },
+    { sku: 'campinglykt', navn: 'Ledlenser ML4 Warm Light lanterne', kategori: 'Varme og lys', enhet: 'stk', pris: 474, type: 'engang', qty: (p) => Math.max(1, Math.ceil(p / 2)), kunKomplett: true },
+    { sku: 'co-varsler', navn: 'CO-varsler med display', kategori: 'Varme og lys', enhet: 'stk', pris: 349, type: 'engang', qty: () => 1, kunKomplett: true, hvorfor: 'Ingen andre i markedet tilbyr dette. Fanger CO fra nødaggregat eller grill innendørs.' },
+    { sku: 'batterier', navn: 'AAA-batterier, 40-pakning', kategori: 'Varme og lys', enhet: 'pk', pris: 80, type: 'forbruk', qty: () => 1, kunKomplett: true },
+    { sku: 'telys', navn: 'Telys av stearin, 50-pakning', kategori: 'Varme og lys', enhet: 'pk', pris: 60, type: 'forbruk', qty: () => 1, kunKomplett: true },
+  ];
+
+  const INFO = [
+    { sku: 'nodradio', navn: 'Sangean MMR-88 DAB nødradio', kategori: 'Strøm og samband', enhet: 'stk', pris: 1190, type: 'engang', qty: () => 1, kunKomplett: true, hvorfor: 'DAB+, sveiv og solcelle. FM-riksnettet er slukket.' },
+    { sku: 'powerbank', navn: 'Anker PowerCore 20 000 mAh', kategori: 'Strøm og samband', enhet: 'stk', pris: 659, type: 'engang', qty: () => 1, kunKomplett: true },
+  ];
+
+  const HELSE = [
+    { sku: 'forstehjelp', navn: 'Lifesystems Waterproof førstehjelpssett', kategori: 'Helse og hygiene', enhet: 'sett', pris: 749, type: 'forbruk', qty: (p) => Math.ceil(p / 6), kunKomplett: true },
+    { sku: 'blodstopper', navn: 'Cederroth 4-in-1 blodstopper', kategori: 'Helse og hygiene', enhet: 'stk', pris: 99, type: 'forbruk', qty: (p) => Math.max(2, Math.ceil(p / 2)), kunKomplett: true },
+    { sku: 'hygienepakke', navn: 'Hygienepakke – servietter, håndsprit, søppelsekker', kategori: 'Helse og hygiene', enhet: 'sett', pris: 149, type: 'forbruk', qty: (p) => Math.ceil(p / 5), kunKomplett: true },
+    { sku: 'bottetoalett', navn: 'Bøttetoalett 22 liter med sete og lokk', kategori: 'Helse og hygiene', enhet: 'stk', pris: 399, type: 'engang', qty: () => 1, kunKomplett: true },
+  ];
+
+  // PLASSHOLDER: kjæledyr-fôr finnes ikke i den virkelige katalogen ennå.
+  const KJAELEDYR_VARE = { sku: 'kjaeledyrfor', navn: 'Fôr og vannskål, sju dagers rasjon', kategori: 'Kjæledyr', enhet: 'sett', pris: 149, type: 'forbruk' };
+
+  const TILLEGG = [
+    {
+      sku: 'pmr-radio', navn: 'Motorola Talkabout T42, toveisradio (2-pk)', kategori: 'Strøm og samband', enhet: 'sett', pris: 319,
+      beskrivelse: 'PMR446 med åtte kanaler. Ingen lisens – sett i batterier, velg kanal.',
+      qty: (p) => Math.max(1, Math.ceil(p / 4)),
+    },
+    {
+      sku: 'meshtastic', navn: 'Meshtastic-sett, ferdig satt opp (2 enheter)', kategori: 'Strøm og samband', enhet: 'sett', pris: 1798,
+      beskrivelse: 'To enheter som sender tekstmeldinger mellom telefoner uten mobilnett.',
+      qty: () => 1,
+      forbehold: [
+        'Det er tekst, ikke tale. Telefonen er skjerm og tastatur – den trenger strøm, så powerbanken hører med.',
+        'Rekkevidden avhenger av hvem andre som har utstyret: to til ni kilometer med fri sikt alene, mindre i skog.',
+        'Vi setter dem til frekvensen det norske miljøet bruker, ikke fabrikkinnstillingen.',
+      ],
+    },
+  ];
+
+  const PAFYLL = [
+    { id: 'varsel', navn: 'Gratis påminnelse', rabatt: 0, beskrivelse: 'Vi sier fra når maten nærmer seg datoen. Dere bestiller selv, eller lar være.' },
+    { id: 'arlig', navn: 'Årlig påfyll', rabatt: 0.10, beskrivelse: 'Ny mat på døra hvert år, før den gamle går ut. Kan stanses når som helst.' },
+  ];
+
+  const kr = (n) => Math.round(n).toLocaleString('nb-NO') + ' kr';
+  const tall = (n) => Math.round(n).toLocaleString('nb-NO');
+  const klem = (n, min, maks) => Math.min(maks, Math.max(min, Math.round(n || 0)));
+  const holdbarhet = (ar) => {
+    if (!ar) return null;
+    if (ar < 2) { const md = Math.round(ar * 12); return `${md} måned${md === 1 ? '' : 'er'}`; }
+    return `${tall(ar)} år`;
+  };
+
+  /* ========================================================================
+     Tilstand og beregning
+     ======================================================================== */
+  const $ = (sel, rot = document) => rot.querySelector(sel);
+  const $$ = (sel, rot = document) => [...rot.querySelectorAll(sel)];
+
+  const felt = {
+    voksne: $('#voksne-input'), barn: $('#barn-input'), kjaeledyr: $('#kjaeledyr-input'),
+  };
+
+  function lesValg() {
+    return {
+      voksne: klem(felt.voksne.value, 1, 8),
+      barn: klem(felt.barn.value, 0, 6),
+      kjaeledyr: klem(felt.kjaeledyr.value, 0, 4),
+      matniva: $('input[name="matniva"]:checked')?.value ?? 'torrmat',
+      modus: $('input[name="modus"]:checked')?.value ?? 'komplett',
+      eskeType: $('input[name="eskeType"]:checked')?.value ?? 'plast',
+      utelatt: new Set($$('input[name="harfraFor"]:checked').map((i) => i.value)),
+      tillegg: new Set($$('input[name="tillegg"]:checked').map((i) => i.value)),
+      abonnement: $('#abonnement')?.checked ? ($('input[name="pafyll"]:checked')?.value ?? PAFYLL[0].id) : null,
+    };
+  }
+
+  function byggPakke(v) {
+    const personer = v.voksne + v.barn;
+    const matniva = MATNIVAER.find((m) => m.id === v.matniva) ?? MATNIVAER[0];
+    const modus = MODUSER.find((m) => m.id === v.modus) ?? MODUSER[0];
+    const kcalBudsjett = (v.voksne * KONFIG.kcalVoksen + v.barn * KONFIG.kcalBarn) * KONFIG.dogn;
+
+    let linjer = [];
+
+    // Mat – alltid med, uansett omfang.
+    for (const m of MAT) {
+      if (!m.matniva.includes(v.matniva)) continue;
+      const antall = Math.max(1, Math.ceil((kcalBudsjett * m.andel) / m.kcal));
+      linjer.push(rad(m, antall));
+    }
+
+    // Vann – rensetabletter alltid med, kanner og filter kun i komplett.
+    const literBehov = KONFIG.vannPerPerson * personer + KONFIG.vannPerKjaeledyr * v.kjaeledyr;
+    for (const w of VANN) {
+      if (w.kunKomplett && !modus.medUtstyr) continue;
+      const antall = w.sku === 'vannkanne' ? Math.max(1, Math.ceil(literBehov / 10)) : w.qty(personer);
+      linjer.push(rad(w, antall));
+    }
+
+    if (modus.medUtstyr) {
+      for (const m of MATLAGING) linjer.push(rad(m, m.qty(personer)));
+      for (const l of LYS) linjer.push(rad(l, l.qty(personer)));
+      for (const i of INFO) linjer.push(rad(i, i.qty(personer)));
+      for (const h of HELSE) linjer.push(rad(h, h.qty(personer)));
+    }
+
+    if (v.kjaeledyr > 0) linjer.push(rad(KJAELEDYR_VARE, v.kjaeledyr));
+
+    if (modus.medUtstyr) {
+      const eske = velgEske(personer, v.eskeType);
+      const eskeNavn = ESKETYPER.find((e) => e.id === v.eskeType)?.navn ?? 'Eske';
+      linjer.unshift({ sku: `eske-${v.eskeType}`, navn: eskeNavn, kategori: 'Esken', enhet: 'stk', antall: 1, enhetspris: eske.pris, sum: eske.pris, type: 'engang' });
+    }
+
+    // Tillegg – kun det kunden har krysset av.
+    const tilleggsvalg = TILLEGG.map((t) => ({ ...t, antall: t.qty(personer), sum: t.pris * t.qty(personer), valgt: v.tillegg.has(t.sku) }));
+    for (const t of tilleggsvalg) {
+      if (t.valgt) linjer.push({ sku: t.sku, navn: t.navn, kategori: t.kategori, enhet: t.enhet, antall: t.antall, enhetspris: t.pris, sum: t.sum, type: 'engang', erTillegg: true });
+    }
+
+    // Hva kan velges bort: engang-utstyr over terskelen, ikke esken, ikke tillegg.
+    const kanVelgesBort = linjer.filter((l) => l.type === 'engang' && l.kategori !== 'Esken' && !l.erTillegg && l.sum >= FRAVALG_TERSKEL);
+    const fravalgt = kanVelgesBort.filter((l) => v.utelatt.has(l.sku));
+    const spart = fravalgt.reduce((n, l) => n + l.sum, 0);
+    linjer = linjer.filter((l) => !v.utelatt.has(l.sku));
+
+    const sumVarer = linjer.reduce((n, l) => n + l.sum, 0);
+    const pakkerabatt = Math.round(sumVarer * modus.rabatt);
+    const sum = sumVarer - pakkerabatt;
+
+    const abonnement = v.abonnement ? PAFYLL.find((p) => p.id === v.abonnement) : null;
+    const abonnementsrabatt = abonnement ? Math.round(sum * abonnement.rabatt) : 0;
+    const sumMedAbonnement = sum - abonnementsrabatt;
+
+    const rabattfaktor = sumVarer ? sum / sumVarer : 1;
+    const mvaBelop = linjer.reduce((n, l) => {
+      const brutto = l.sum * rabattfaktor;
+      const sats = mvaSats(l.kategori);
+      return n + (brutto - brutto / (1 + sats));
+    }, 0);
+
+    const grupper = GRUPPEREKKEFOLGE.map((navn) => ({
+      navn,
+      varer: linjer.filter((l) => (DSB_GRUPPE[l.kategori] ?? 'Annet') === navn),
+    })).filter((g) => g.varer.length);
+
+    return {
+      valg: v, personer, matniva, modus, kcalBudsjett,
+      linjer, grupper, kanVelgesBort, fravalgt, spart,
+      tilleggsvalg, sumVarer, pakkerabatt, sum, abonnement, abonnementsrabatt, sumMedAbonnement,
+      mva: mvaBelop, literBehov,
+    };
+  }
+
+  function rad(vare, antall) {
+    return {
+      sku: vare.sku, navn: vare.navn, kategori: vare.kategori, enhet: vare.enhet,
+      antall, enhetspris: vare.pris, sum: vare.pris * antall, type: vare.type ?? 'engang',
+      hvorfor: vare.hvorfor ?? null,
+    };
+  }
+
+  /* ========================================================================
+     Bygg opp statiske valgkort fra katalogen
+     ======================================================================== */
+  function byggValgkort() {
+    $('#matnivaer').innerHTML = MATNIVAER.map((m, i) => `
+      <label class="option">
+        <input type="radio" name="matniva" value="${m.id}" ${i === 0 ? 'checked' : ''}>
+        <span class="option__radiomerke" aria-hidden="true"></span>
+        <span class="option__title">${m.navn}</span>
+        <p class="option__desc">${m.beskrivelse}</p>
+        <div class="holdbarhet" data-holdbarhet="${m.id}">
+          <div class="holdbarhet__spor"><div class="holdbarhet__fyll"></div></div>
+          <div class="holdbarhet__tekst"><span>Holdbarhet</span><span>${m.holdbarhetAr} år</span></div>
+        </div>
+        <p class="option__jobb"><b>Deres jobb:</b> ${m.jobb}</p>
+      </label>`).join('');
+
+    $('#moduser').innerHTML = MODUSER.map((m, i) => `
+      <label class="option">
+        <input type="radio" name="modus" value="${m.id}" ${i === 0 ? 'checked' : ''}>
+        <span class="option__radiomerke" aria-hidden="true"></span>
+        <span class="option__title">${m.navn}</span>
+        <p class="option__desc" style="margin-bottom:0">${m.beskrivelse}</p>
+      </label>`).join('');
+
+    $('#eskevalg').innerHTML = ESKETYPER.map((e, i) => `
+      <label class="option">
+        <input type="radio" name="eskeType" value="${e.id}" ${i === 0 ? 'checked' : ''}>
+        <span class="option__radiomerke" aria-hidden="true"></span>
+        <span class="option__title">${e.navn} <span class="tnum" id="eskepris-${e.id}"></span></span>
+        <p class="option__desc" style="margin-bottom:0">${e.beskrivelse}</p>
+      </label>`).join('');
+
+    $('#tillegg').innerHTML = TILLEGG.map((t) => `
+      <label class="option">
+        <input type="checkbox" name="tillegg" value="${t.sku}">
+        <span class="option__radiomerke" aria-hidden="true"></span>
+        <span class="option__title">${t.navn} <span class="tnum">${kr(t.pris)}</span></span>
+        <p class="option__desc" style="margin-bottom:0">${t.beskrivelse}</p>
+        ${t.forbehold ? `<details class="forbehold"><summary>Tre ting dere bør vite først</summary><ul>${t.forbehold.map((f) => `<li>${f}</li>`).join('')}</ul></details>` : ''}
+      </label>`).join('');
+
+    $('#pafyll-innhold').innerHTML = `<div class="segment__options segment__options--row" id="pafyllsvalg" style="margin-top:var(--sp-3)">
+      ${PAFYLL.map((p, i) => `
+      <label class="option">
+        <input type="radio" name="pafyll" value="${p.id}" ${i === 0 ? 'checked' : ''}>
+        <span class="option__radiomerke" aria-hidden="true"></span>
+        <span class="option__title">${p.navn}</span>
+        <p class="option__desc" style="margin-bottom:0">${p.beskrivelse}</p>
+      </label>`).join('')}
+    </div><p class="pafyll-avlyst" id="pafyll-avlyst-notis" hidden></p>`;
+
+    const maks = Math.max(...MATNIVAER.map((m) => m.holdbarhetAr));
+    for (const m of MATNIVAER) {
+      const fyll = $(`[data-holdbarhet="${m.id}"] .holdbarhet__fyll`);
+      if (fyll) fyll.style.width = `${Math.max(6, (m.holdbarhetAr / maks) * 100)}%`;
+    }
+  }
+
+  /* ========================================================================
+     Rendring
+     ======================================================================== */
+  const husstandTekst = (v) => {
+    const deler = [`${v.voksne} voksen${v.voksne === 1 ? '' : 'e'}`];
+    if (v.barn) deler.push(`${v.barn} barn`);
+    if (v.kjaeledyr) deler.push(`${v.kjaeledyr} kjæledyr`);
+    return deler.join(', ').replace(/,(?=[^,]*$)/, ' og');
+  };
+
+  function tegnHusstand(pakke) {
+    const v = pakke.valg;
+    const barnTekst = v.barn ? ` og ${v.barn} barn` : '';
+    const kjaeledyrTekst = v.kjaeledyr ? `, pluss fôr til ${v.kjaeledyr} kjæledyr` : '';
+    $('#hero-svar').innerHTML =
+      `Det gir mat og vann til <b>${v.voksne} voksne${barnTekst}</b> i ${KONFIG.dogn} døgn${kjaeledyrTekst}.<br>
+       <span class="husstand-svar__pris">Fra ${kr(pakke.sum)}</span> med komplett pakke og vanlig mat.`;
+
+    const chipDeler = [`${v.voksne} voksne`];
+    if (v.barn) chipDeler.push(`${v.barn} barn`);
+    if (v.kjaeledyr) chipDeler.push(`${v.kjaeledyr} 🐾`);
+    $('#chip-tekst').textContent = chipDeler.join(' · ');
+
+    const tags = [`<span class="tag">${v.voksne} voksne</span>`];
+    if (v.barn) tags.push(`<span class="tag">${v.barn} barn</span>`);
+    tags.push(`<span class="tag">${v.kjaeledyr ? v.kjaeledyr + ' kjæledyr' : 'ingen kjæledyr'}</span>`);
+    $('#husstand-tagger').innerHTML = tags.join('');
+  }
+
+  function tegnEskevalg(pakke) {
+    const steg = $('#finjuster-eske');
+    if (steg) steg.hidden = !pakke.modus.medUtstyr;
+    for (const e of ESKETYPER) {
+      const eske = velgEske(pakke.personer, e.id);
+      const el = $(`#eskepris-${e.id}`);
+      if (el) el.textContent = kr(eske.pris);
+    }
+    const gjeldende = ESKETYPER.find((e) => e.id === pakke.valg.eskeType);
+    $('#eske-tilstand').textContent = pakke.modus.medUtstyr
+      ? `${gjeldende?.navn.split(' til')[0] ?? 'Plastkasser'} (${pakke.valg.eskeType === 'plast' ? 'standard' : 'valgt til'})`
+      : 'Ikke aktuelt for matpåfyll';
+  }
+
+  function tegnFravalg(pakke) {
+    const steg = $('#finjuster-fravalg');
+    if (steg) steg.hidden = pakke.kanVelgesBort.length === 0;
+    const avkrysset = pakke.valg.utelatt;
+    $('#harfraFor').innerHTML = pakke.kanVelgesBort.map((l) => `
+      <label class="harfor">
+        <input type="checkbox" name="harfraFor" value="${l.sku}" ${avkrysset.has(l.sku) ? 'checked' : ''}>
+        <span class="harfor__navn">${l.navn}</span>
+        <span class="harfor__sum tnum">− ${kr(l.sum)}</span>
+      </label>`).join('');
+    $('#harfraFor-sum').textContent = pakke.spart ? `Dere sparer ${kr(pakke.spart)} på å ikke kjøpe det dere allerede har.` : '';
+    $('#fravalg-tilstand').textContent = pakke.fravalgt.length
+      ? `${pakke.fravalgt.length} krysset av – spar ${kr(pakke.spart)}`
+      : steg?.hidden ? '' : 'Ingenting krysset av ennå';
+  }
+
+  function tegnTillegg(pakke) {
+    const valgt = pakke.tilleggsvalg.filter((t) => t.valgt);
+    $('#tillegg-tilstand').textContent = valgt.length ? valgt.map((t) => t.navn.split(',')[0]).join(' + ') : 'Ingen valgt';
+  }
+
+  function tegnPafyll(pakke) {
+    const erLangtid = pakke.valg.matniva === 'langtidsmat';
+    const arligLabel = $('label:has(input[value="arlig"])');
+    if (arligLabel) arligLabel.hidden = erLangtid;
+    const notis = $('#pafyll-avlyst-notis');
+    if (notis) {
+      notis.hidden = !erLangtid;
+      notis.textContent = 'Med fem års holdbarhet på langtidsmaten gir årlig påfyll lite mening. Dere får den gratis påminnelsen i stedet – kr 0, ingen forpliktelse.';
+    }
+    if (!pakke.valg.abonnement) {
+      $('#pafyll-tilstand').textContent = 'Av – ingen påminnelse bestilt';
+    } else {
+      const p = PAFYLL.find((x) => x.id === pakke.valg.abonnement);
+      $('#pafyll-tilstand').textContent = `${p?.navn ?? ''} · kr 0 i dag`;
+    }
+  }
+
+  function tegnPris(pakke) {
+    const abo = Boolean(pakke.abonnement);
+    const sum = abo ? pakke.sumMedAbonnement : pakke.sum;
+
+    $('#pris-sum').textContent = kr(sum);
+    const perDognPerPerson = pakke.personer ? sum / pakke.personer / KONFIG.dogn : 0;
+    $('#pris-enhet').textContent = `${kr(perDognPerPerson)} per person per døgn · ${husstandTekst(pakke.valg)} · ${KONFIG.dogn} døgn`;
+
+    const mat = pakke.linjer.filter((l) => l.kategori === 'Mat' || l.kategori === 'Vann' || l.kategori === 'Matlaging' || l.kategori === 'Kjæledyr').reduce((n, l) => n + l.sum, 0);
+    const utstyr = pakke.sumVarer - mat + pakke.spart;
+    const rader = [];
+    if (mat) rader.push(['Mat og vann', mat]);
+    if (utstyr) rader.push([pakke.modus.medUtstyr ? 'Utstyr og eske' : 'Utstyr', utstyr]);
+    if (pakke.spart) rader.push(['Utstyr dere har fra før', -pakke.spart]);
+    if (pakke.pakkerabatt) rader.push(['Pakkerabatt', -pakke.pakkerabatt]);
+    if (abo && pakke.abonnementsrabatt) rader.push(['Påfyllsrabatt', -pakke.abonnementsrabatt]);
+    $('#pris-linjer').innerHTML = rader.map(([n, v]) => `<div class="prispanel__linje"><span>${n}</span><span class="tnum">${kr(v)}</span></div>`).join('')
+      + `<div class="prispanel__linje prispanel__linje--sum"><span>Å betale</span><span class="tnum">${kr(sum)}</span></div>`;
+
+    $('#pris-mva').textContent = `Herav mva. ${kr(pakke.mva)} – 15 % på mat, 25 % på utstyr.`;
+    $('#pris-egenkjop').textContent = pakke.modus.medUtstyr
+      ? 'Varene koster det samme som i butikk. Det dere betaler for, er utvalget, riktige mengder og at noen holder styr på datoene.'
+      : '';
+    $('#pris-neste').textContent = pakke.matniva.holdbarhetAr ? `Neste påfyll om rundt ${holdbarhet(pakke.matniva.holdbarhetAr)}.` : '';
+
+    $('#prisbar-sum').textContent = kr(sum);
+    $('#prisbar-enhet').textContent = `${husstandTekst(pakke.valg)}`;
+
+    const status = $('#pris-status');
+    if (status) {
+      clearTimeout(status._t);
+      status._t = setTimeout(() => {
+        status.textContent = `${husstandTekst(pakke.valg)}, ${pakke.matniva.navn.toLowerCase()}, ${pakke.modus.navn.toLowerCase()}. ${kr(sum)}.`;
+      }, 400);
+    }
+  }
+
+  function tegnListe(pakke) {
+    const antall = pakke.linjer.reduce((n, l) => n + l.antall, 0);
+    $('#innhold-teller').textContent = `${tall(antall)} varer`;
+    $('#innholdslisteinnhold').innerHTML = pakke.grupper.map((g) => `
+      <section class="gruppe">
+        <h3 class="gruppe__navn">${g.navn}</h3>
+        ${g.varer.map((v) => `
+          <div class="vare">
+            <span class="vare__navn">${v.navn}</span>
+            <span class="vare__antall tnum">${tall(v.antall)} ${v.enhet}</span>
+            ${v.hvorfor ? `<p class="vare__hvorfor">${v.hvorfor}</p>` : ''}
+          </div>`).join('')}
+      </section>`).join('');
+  }
+
+  function tegnOppsummering(pakke) {
+    $('#opp-husstand').textContent = `${husstandTekst(pakke.valg)} · ${KONFIG.dogn} døgn`;
+
+    const valgLinjer = [
+      ['Mat', pakke.matniva.navn],
+      ['Omfang', pakke.modus.navn],
+    ];
+    if (pakke.modus.medUtstyr) valgLinjer.push(['Kassemateriale', ESKETYPER.find((e) => e.id === pakke.valg.eskeType)?.navn ?? '']);
+    if (pakke.fravalgt.length) valgLinjer.push(['Tatt ut – dere har det fra før', pakke.fravalgt.map((l) => l.navn).join(', ')]);
+    const valgtTillegg = pakke.tilleggsvalg.filter((t) => t.valgt);
+    if (valgtTillegg.length) valgLinjer.push(['Tillegg', valgtTillegg.map((t) => t.navn).join(', ')]);
+    valgLinjer.push(['Påfyll', pakke.abonnement ? `${pakke.abonnement.navn} · kr 0 i dag` : 'Ikke bestilt']);
+    $('#opp-valg').innerHTML = valgLinjer.map(([n, v]) => `<p class="oppsummering-rad"><span>${n}</span><span style="text-align:right">${v}</span></p>`).join('');
+
+    const abo = Boolean(pakke.abonnement);
+    const sum = abo ? pakke.sumMedAbonnement : pakke.sum;
+    const prisLinjer = [['Varer', pakke.sumVarer]];
+    if (pakke.pakkerabatt) prisLinjer.push(['Pakkerabatt', -pakke.pakkerabatt]);
+    if (abo && pakke.abonnementsrabatt) prisLinjer.push(['Påfyllsrabatt', -pakke.abonnementsrabatt]);
+    $('#opp-pris').innerHTML = prisLinjer.map(([n, v]) => `<p class="oppsummering-rad"><span>${n}</span><span class="tnum">${kr(v)}</span></p>`).join('');
+    $('#opp-sum').innerHTML = `<span>Å betale</span><span class="tnum">${kr(sum)}</span>`;
+    $('#opp-mva').textContent = `Herav mva. ${kr(pakke.mva)} – 15 % på mat, 25 % på utstyr. Frakt kommer i tillegg.`;
+  }
+
+  function tegn() {
+    const valg = lesValg();
+    const pakke = byggPakke(valg);
+    tegnHusstand(pakke);
+    tegnEskevalg(pakke);
+    tegnFravalg(pakke);
+    tegnTillegg(pakke);
+    tegnPafyll(pakke);
+    tegnPris(pakke);
+    tegnListe(pakke);
+    tegnOppsummering(pakke);
+    return pakke;
+  }
+
+  /* ========================================================================
+     Interaksjon
+     ======================================================================== */
+  byggValgkort();
+
+  // Steppere (husstand)
+  $$('.stepper').forEach((stepper) => {
+    const input = stepper.querySelector('.stepper__tall');
+    const [min, maks] = [Number(input.min), Number(input.max)];
+    const sett = (n) => { input.value = String(klem(n, min, maks)); input.dispatchEvent(new Event('input', { bubbles: true })); };
+    stepper.querySelectorAll('.stepper__knapp').forEach((knapp) => {
+      knapp.addEventListener('click', () => sett(Number(input.value) + Number(knapp.dataset.steg)));
+    });
+    input.addEventListener('change', () => { input.value = String(klem(input.value, min, maks)); tegn(); });
+  });
+
+  // Byggerwrap dekker skjemaet, prispanelet og hele finjuster-seksjonen (som
+  // ligger utenfor <form>, siden det er en egen, uavhengig del av flyten) –
+  // så én lytter her fanger alle valg, uansett hvor i markupet de ligger.
+  const byggerwrap = $('.byggerwrap');
+  byggerwrap.addEventListener('input', tegn);
+  byggerwrap.addEventListener('change', tegn);
+  $('#steppers').addEventListener('input', tegn);
+
+  // Fortsett til esken
+  const reduserMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+  $('#til-bygger').addEventListener('click', () => {
+    $('#bygg').scrollIntoView({ behavior: reduserMotion() ? 'auto' : 'smooth', block: 'start' });
+  });
+  const endreHusstand = () => {
+    $('#husstandskort').scrollIntoView({ behavior: reduserMotion() ? 'auto' : 'smooth', block: 'center' });
+    felt.voksne.focus();
+  };
+  $('#endre-husstand').addEventListener('click', endreHusstand);
+  $('#husstand-chip').addEventListener('click', endreHusstand);
+
+  // Legg i kurven / betaling – kun visuell tilbakemelding i prototypen
+  const kjop = $('#legg-i-kurv');
+  kjop.dataset.tekst = kjop.textContent;
+  kjop.addEventListener('click', () => {
+    kjop.textContent = 'Lagt i kurven';
+    $('#oppsummering').scrollIntoView({ behavior: reduserMotion() ? 'auto' : 'smooth', block: 'start' });
+    setTimeout(() => { kjop.textContent = kjop.dataset.tekst; }, 2200);
+  });
+  $('#gaa-til-betaling').addEventListener('click', () => { $('#betaling-notis').classList.add('vis'); });
+
+  // Husstands-chip i topplinjen når heroens velger er scrollet ut av syne
+  const observer = new IntersectionObserver((entries) => {
+    document.body.classList.toggle('chip-synlig', !entries[0].isIntersecting);
+  }, { rootMargin: '-64px 0px 0px 0px' });
+  observer.observe($('#husstandskort'));
+
+  // Mobil prislinje: vis når byggeren er synlig
+  const prisbar = $('#prisbar-mobil');
+  const byggerObserver = new IntersectionObserver((entries) => {
+    const synlig = entries[0].isIntersecting;
+    prisbar.hidden = !synlig;
+    document.body.classList.toggle('har-prisbar-mobil', synlig);
+  }, { threshold: 0 });
+  byggerObserver.observe($('#bygg'));
+
+  // Temavalg
+  const themeBtn = $('#theme-toggle');
+  const themeLabel = $('#theme-label');
+  const systemMorkt = () => matchMedia('(prefers-color-scheme: dark)').matches;
+  const gjeldendeTema = () => document.documentElement.getAttribute('data-theme') || (systemMorkt() ? 'dark' : 'light');
+  const settTemaLabel = () => {
+    const morkt = gjeldendeTema() === 'dark';
+    themeLabel.textContent = morkt ? 'Lys modus' : 'Mørk modus';
+    themeBtn.setAttribute('aria-pressed', String(morkt));
+    themeBtn.setAttribute('aria-label', `Bytt til ${morkt ? 'lys' : 'mørk'} modus`);
+  };
+  themeBtn.addEventListener('click', () => {
+    const nyttTema = gjeldendeTema() === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', nyttTema);
+    settTemaLabel();
+  });
+  settTemaLabel();
+
+  tegn();
+})();
+</script>
+
+</body>
+</html>

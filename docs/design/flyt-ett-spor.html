@@ -1,0 +1,1555 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nødboks – bestillingsflyten, ett spørsmål av gangen</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Designprototype: bestillingsflyten satt om til ett spørsmål av gangen, med et tidlig valg av husstand i heroen som følger med hele veien.">
+
+<!--
+  PROTOTYPE – RETNING «ETT SPOR»
+  ================================
+  Dette er én av fire uavhengige retninger på samme oppdrag: gjøre
+  pakkebyggeren på nodboks.no smidig og uproblematisk å bruke, med et tidlig
+  CTA i heroen som fanger husstanden og følger kunden inn i flyten.
+
+  Denne retningen viser énform-byggeren fra index.html/bygger.js om til én
+  beslutning av gangen, i full bredde. Ingen andre retninger er forsøkt
+  forenet med denne – se docs/designvalg.md for byggespecen dette bygger på,
+  docs/profil.md for stemme og fargebruk, og assets/css/tokens.css for
+  paletten «Natt» (kopiert inn under, uendret).
+
+  ALLE PRISER I DENNE FILEN ER PLAUSIBLE PLASSHOLDERE, ikke ekte
+  utsalgspriser. Kalori- og vannbehovet er hentet fra oppdraget og fra
+  assets/js/data/katalog.js (2338 kcal/voksendøgn, 1450 kcal/barnedøgn,
+  20 liter vann/person, holdbarhet 1 år tørrmat / 5 år langtidsmat, sju
+  døgns dimensjonering). Alle kronebeløp, produktutvalg og antall er satt for
+  å vise flyten – ikke den endelige varelisten. Verken org.nr., adresser,
+  kundeomtaler eller stjerner forekommer, i tråd med docs/designvalg.md § 7.
+-->
+
+<style>
+/* ==========================================================================
+   1. TOKENS – kopiert fra assets/css/tokens.css, uendret verdisett
+   ========================================================================== */
+:root {
+  color-scheme: light dark;
+
+  --bg:            #F1F4F1;
+  --bg-sunken:     #E3E9E4;
+  --surface:       #FFFFFF;
+  --surface-2:     #E3E9E4;
+  --border:        #CFD8D2;
+  --border-strong: #6B7D76;
+
+  --text:          #10201C;
+  --text-muted:    #4E615B;
+  --text-faint:    #6E827B;
+
+  --brand:         #12211D;
+  --brand-2:       #1B302A;
+  --brand-ink:     #F1F4F1;
+
+  --accent:        #52601B;
+  --accent-hover:  #3F4A12;
+  --accent-ink:    #FFFFFF;
+  --accent-soft:   #EDF2D4;
+  --accent-line:   #CDD9A4;
+
+  --ok:            #1F6B45;
+  --ok-soft:       #DFEFE6;
+  --warn:          #8A4B0A;
+  --warn-soft:     #FAEBDA;
+  --info:          #175E7C;
+  --info-soft:     #DEEDF4;
+
+  --focus:         #0F6A8C;
+
+  --shadow-sm: 0 1px 2px rgb(16 32 28 / 0.06), 0 1px 1px rgb(16 32 28 / 0.04);
+  --shadow-md: 0 2px 4px rgb(16 32 28 / 0.05), 0 6px 16px rgb(16 32 28 / 0.07);
+  --shadow-lg: 0 4px 8px rgb(16 32 28 / 0.05), 0 16px 40px rgb(16 32 28 / 0.10);
+
+  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
+                  Charter, Georgia, ui-serif, serif;
+  --font-ui:      system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+                  Arial, "Noto Sans", sans-serif;
+  --font-mono:    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  --step--1: clamp(0.82rem, 0.79rem + 0.13vw, 0.89rem);
+  --step-0:  clamp(1.00rem, 0.97rem + 0.16vw, 1.09rem);
+  --step-1:  clamp(1.18rem, 1.11rem + 0.34vw, 1.38rem);
+  --step-2:  clamp(1.38rem, 1.25rem + 0.63vw, 1.75rem);
+  --step-3:  clamp(1.62rem, 1.39rem + 1.08vw, 2.22rem);
+  --step-4:  clamp(1.91rem, 1.48rem + 2.05vw, 3.05rem);
+  --step-5:  clamp(2.35rem, 1.58rem + 3.55vw, 4.25rem);
+
+  --lh-tight: 1.06;
+  --lh-snug:  1.28;
+  --lh-body:  1.65;
+
+  --sp-1: 0.25rem;  --sp-2: 0.5rem;   --sp-3: 0.75rem;  --sp-4: 1rem;
+  --sp-5: 1.5rem;   --sp-6: 2rem;     --sp-7: 3rem;     --sp-8: 4rem;
+  --sp-9: 6rem;     --sp-10: 8rem;
+
+  --radius-sm: 2px;
+  --radius:    3px;
+  --radius-lg: 6px;
+  --radius-xl: 10px;
+  --radius-pill: 999px;
+
+  --width-page:  1140px;
+  --width-text:  68ch;
+  --width-narrow: 46ch;
+
+  --ease:      cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-out:  cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast:  120ms;
+  --dur:       200ms;
+  --dur-slow:  360ms;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0B1513; --bg-sunken: #060E0D; --surface: #182A25; --surface-2: #253A34;
+    --border: #2C3D37; --border-strong: #6E8880;
+    --text: #E8EFE9; --text-muted: #9CB0AA; --text-faint: #7C908A;
+    --brand: #050D0C; --brand-2: #0F1F1B; --brand-ink: #E8EFE9;
+    --accent: #D9E6A0; --accent-hover: #E6F0B8; --accent-ink: #0B1513;
+    --accent-soft: #232D16; --accent-line: #3C4A26;
+    --ok: #8FD1A3; --ok-soft: #10231A; --warn: #E09A45; --warn-soft: #241A0D;
+    --info: #9CCBE4; --info-soft: #0F1E26; --focus: #B7E3EF;
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.40);
+    --shadow-md: 0 2px 4px rgb(0 0 0 / 0.35), 0 8px 20px rgb(0 0 0 / 0.40);
+    --shadow-lg: 0 4px 10px rgb(0 0 0 / 0.35), 0 20px 48px rgb(0 0 0 / 0.50);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0B1513; --bg-sunken: #060E0D; --surface: #182A25; --surface-2: #253A34;
+  --border: #2C3D37; --border-strong: #6E8880;
+  --text: #E8EFE9; --text-muted: #9CB0AA; --text-faint: #7C908A;
+  --brand: #050D0C; --brand-2: #0F1F1B; --brand-ink: #E8EFE9;
+  --accent: #D9E6A0; --accent-hover: #E6F0B8; --accent-ink: #0B1513;
+  --accent-soft: #232D16; --accent-line: #3C4A26;
+  --ok: #8FD1A3; --ok-soft: #10231A; --warn: #E09A45; --warn-soft: #241A0D;
+  --info: #9CCBE4; --info-soft: #0F1E26; --focus: #B7E3EF;
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.40);
+  --shadow-md: 0 2px 4px rgb(0 0 0 / 0.35), 0 8px 20px rgb(0 0 0 / 0.40);
+  --shadow-lg: 0 4px 10px rgb(0 0 0 / 0.35), 0 20px 48px rgb(0 0 0 / 0.50);
+}
+
+/* ==========================================================================
+   2. RESET / BASE
+   ========================================================================== */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: var(--step-0);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 650; line-height: var(--lh-tight); margin: 0 0 var(--sp-3); color: var(--text); }
+h1 { font-size: var(--step-5); letter-spacing: -0.032em; }
+h2 { font-size: var(--step-4); letter-spacing: -0.024em; }
+h3 { font-size: var(--step-2); letter-spacing: -0.015em; }
+h4 { font-size: var(--step-1); letter-spacing: -0.015em; }
+p { margin: 0 0 var(--sp-4); }
+a { color: inherit; text-underline-offset: 0.2em; }
+a:not([class]) { color: var(--accent); text-decoration-thickness: from-font; }
+a:not([class]):hover { color: var(--accent-hover); }
+img, svg { display: block; max-width: 100%; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+.tnum { font-variant-numeric: tabular-nums; }
+
+.skip-link {
+  position: absolute; left: var(--sp-3); top: -3rem;
+  background: var(--brand); color: var(--brand-ink);
+  padding: var(--sp-3) var(--sp-4); border-radius: var(--radius);
+  z-index: 200; transition: top var(--dur) var(--ease);
+}
+.skip-link:focus { top: var(--sp-3); }
+
+:focus-visible {
+  outline: 2.5px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+:focus:not(:focus-visible) { outline: none; }
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.wrap { max-width: var(--width-page); margin-inline: auto; padding-inline: var(--sp-5); }
+@media (max-width: 26rem) { .wrap { padding-inline: 1rem; } }
+
+.muted { color: var(--text-muted); }
+.faint { color: var(--text-faint); }
+
+.btn {
+  --btn-bg: transparent; --btn-line: var(--border-strong); --btn-ink: var(--text);
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--sp-2);
+  min-height: 2.75rem; padding: var(--sp-2) var(--sp-5);
+  border-radius: var(--radius-lg); border: 1.5px solid var(--btn-line);
+  background: var(--btn-bg); color: var(--btn-ink);
+  font-weight: 600; font-size: var(--step-0); text-decoration: none;
+  transition: transform var(--dur-fast) var(--ease), background var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+.btn:hover { transform: translateY(-1px); background: var(--surface-2); }
+.btn:active { transform: translateY(0); }
+.btn[disabled], .btn[aria-disabled="true"] { opacity: 0.5; cursor: not-allowed; transform: none; }
+.btn--primary { --btn-bg: var(--accent); --btn-line: var(--accent); --btn-ink: var(--accent-ink); }
+.btn--primary:hover { --btn-bg: var(--accent-hover); --btn-line: var(--accent-hover); }
+.btn--ghost { --btn-line: transparent; }
+.btn--ghost:hover { background: var(--surface-2); }
+.btn--lg { min-height: 3.25rem; padding-inline: var(--sp-6); font-size: var(--step-1); }
+.btn--sm { min-height: 2.25rem; padding: var(--sp-2) var(--sp-3); font-size: var(--step--1); }
+.btn--block { width: 100%; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: var(--sp-1);
+  padding: 0.2em 0.65em; border-radius: var(--radius-pill);
+  font-size: var(--step--1); font-weight: 600; border: 1px solid var(--border);
+  background: var(--surface-2); color: var(--text-muted);
+}
+.badge--accent { background: var(--accent-soft); color: var(--accent); border-color: var(--accent-line); }
+
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: var(--sp-5); }
+.card--raised { box-shadow: var(--shadow-md); }
+
+/* ==========================================================================
+   3. TOPPLINJE
+   ========================================================================== */
+.site-header {
+  position: sticky; top: 0; z-index: 60;
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--border);
+}
+.site-header__inner { display: flex; align-items: center; gap: var(--sp-4); padding-block: var(--sp-3); }
+.brandmark { display: inline-flex; align-items: center; gap: var(--sp-2); font-family: var(--font-display); font-weight: 650; font-size: var(--step-1); letter-spacing: -0.02em; text-decoration: none; color: var(--text); }
+.tema-bryter {
+  margin-left: auto; display: inline-flex; align-items: center; justify-content: center;
+  width: 2.5rem; height: 2.5rem; border-radius: var(--radius-lg);
+  border: 1.5px solid var(--border-strong); background: transparent; color: var(--text);
+}
+.tema-bryter:hover { background: var(--surface-2); }
+.tema-ikon-luke { display: none; }
+[data-theme="dark"] .tema-ikon-sol,
+:root:not([data-theme="light"]) .tema-ikon-sol { display: none; }
+[data-theme="dark"] .tema-ikon-maane { display: block; }
+.proto-merke {
+  font-size: var(--step--1); color: var(--text-faint); border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-pill); padding: 0.2em 0.75em; white-space: nowrap;
+}
+
+/* ==========================================================================
+   4. HERO + HUSSTANDSVALG (det tidlige CTA-et)
+   ========================================================================== */
+.hero { padding-block: clamp(var(--sp-7), 7vw, var(--sp-9)) clamp(var(--sp-6), 5vw, var(--sp-8)); }
+.hero__grid { display: grid; gap: var(--sp-8); }
+@media (min-width: 60rem) {
+  .hero__grid { grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); align-items: center; }
+}
+.eyebrow { font-size: var(--step--1); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: var(--sp-3); }
+.hero__lead { font-size: var(--step-1); color: var(--text-muted); max-width: 46ch; }
+.hero__pris {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--sp-2) var(--sp-3);
+  margin: var(--sp-5) 0; padding: var(--sp-3) var(--sp-4);
+  background: var(--surface-2); border-radius: var(--radius-lg); border: 1px solid var(--border);
+  font-size: var(--step--1); color: var(--text-muted);
+}
+.hero__pris b { font-family: var(--font-display); font-size: var(--step-2); color: var(--text); font-weight: 650; }
+
+.hero__illustrasjon { justify-self: center; width: min(100%, 30rem); color: var(--text-muted); }
+
+/* --- Husstandskortet: selve det tidlige CTA-et --- */
+.husstand-kort { margin-top: var(--sp-6); }
+.husstand-kort__rader { display: flex; flex-direction: column; gap: var(--sp-4); margin: var(--sp-5) 0; }
+.husstand-rad {
+  display: grid; grid-template-columns: 1fr auto; align-items: center; gap: var(--sp-3);
+  padding-block: var(--sp-2);
+}
+.husstand-rad + .husstand-rad { border-top: 1px solid var(--border); padding-top: var(--sp-4); }
+.husstand-rad__navn { font-weight: 600; }
+.husstand-rad__hjelp { display: block; font-weight: 400; font-size: var(--step--1); color: var(--text-muted); margin-top: 0.15em; }
+.stepper { display: inline-flex; align-items: center; gap: var(--sp-2); }
+.stepper__knapp {
+  width: 2.5rem; height: 2.5rem; border-radius: var(--radius-lg);
+  border: 1.5px solid var(--border-strong); background: var(--surface);
+  font-size: var(--step-1); font-weight: 700; line-height: 1;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.stepper__knapp:hover { background: var(--surface-2); }
+.stepper__knapp:active { transform: translateY(1px); }
+.stepper__knapp[disabled] { opacity: 0.35; cursor: not-allowed; }
+.stepper__tall {
+  width: 3rem; text-align: center; font-variant-numeric: tabular-nums;
+  font-size: var(--step-1); font-weight: 650; border: 1.5px solid var(--border);
+  border-radius: var(--radius); padding: 0.35em 0; background: var(--bg);
+  -moz-appearance: textfield;
+}
+.stepper__tall::-webkit-inner-spin-button, .stepper__tall::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+.stepper__tall:focus-visible { outline: 2.5px solid var(--focus); outline-offset: 1px; }
+
+.husstand-kort__svar { font-size: var(--step--1); color: var(--text-muted); margin-top: 0; }
+.husstand-kort__svar b { color: var(--text); font-weight: 650; }
+.husstand-kort__cta-rad { margin-top: var(--sp-5); display: flex; flex-direction: column; gap: var(--sp-2); align-items: flex-start; }
+@media (min-width: 34rem) { .husstand-kort__cta-rad { flex-direction: row; align-items: center; gap: var(--sp-4); } }
+
+/* ==========================================================================
+   5. FLYTEN – ett spørsmål av gangen
+   ========================================================================== */
+#flyt { padding-bottom: clamp(var(--sp-8), 8vw, var(--sp-10)); scroll-margin-top: 4.5rem; }
+.flyt-inner { max-width: 46rem; margin-inline: auto; padding-inline: var(--sp-5); }
+@media (max-width: 26rem) { .flyt-inner { padding-inline: 1rem; } }
+
+.flyt-bar-sticky {
+  position: sticky; top: 3.75rem; z-index: 40;
+  background: color-mix(in srgb, var(--bg) 94%, transparent);
+  backdrop-filter: blur(6px);
+  padding-top: var(--sp-3);
+}
+.flyt-bar {
+  display: flex; align-items: center; gap: var(--sp-3);
+  max-width: 46rem; margin-inline: auto; padding: 0 var(--sp-5) var(--sp-3);
+}
+@media (max-width: 26rem) { .flyt-bar { padding-inline: 1rem; } }
+.flyt-bar__tilbake {
+  background: none; border: none; padding: var(--sp-2) var(--sp-1) var(--sp-2) 0;
+  color: var(--text-muted); font-weight: 600; font-size: var(--step--1);
+  display: inline-flex; align-items: center; gap: 0.35em; white-space: nowrap;
+}
+.flyt-bar__tilbake:hover { color: var(--text); }
+.flyt-bar__tilbake[hidden] { display: none; }
+.flyt-bar__steg { font-size: var(--step--1); color: var(--text-faint); white-space: nowrap; margin-right: auto; }
+.flyt-bar__pris {
+  display: inline-flex; align-items: baseline; gap: 0.5em;
+  background: var(--surface); border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius-pill); padding: 0.5em 1em;
+  font-weight: 700; white-space: nowrap; box-shadow: var(--shadow-sm);
+}
+.flyt-bar__pris span:last-child { font-weight: 500; color: var(--text-muted); font-size: var(--step--1); }
+.flyt-bar__pris:hover { border-color: var(--accent); }
+.flyt-fremdrift { height: 3px; background: var(--border); max-width: 46rem; margin-inline: auto; }
+.flyt-fremdrift__fyll { height: 100%; background: var(--accent); transition: width var(--dur-slow) var(--ease-out); }
+
+.steg-panel { padding-top: var(--sp-7); outline: none; }
+.steg-panel__hode { margin-bottom: var(--sp-6); }
+.steg-panel__nr { font-size: var(--step--1); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); margin-bottom: var(--sp-2); display: block; }
+.steg-panel h2 { font-size: var(--step-3); }
+.steg-panel__hjelp { color: var(--text-muted); font-size: var(--step-0); max-width: 42ch; margin-bottom: var(--sp-6); }
+
+/* Ekte <fieldset>/<legend> for stegene som spør om ett valg blant flere.
+   Nullstiller nettleserens standardramme; legend beholder sin semantiske
+   rolle som fieldsettets tilgjengelige navn, men ser ut som en overskrift. */
+.steg-fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+.steg-legend { display: block; width: 100%; padding: 0; margin: 0 0 var(--sp-2); float: none; }
+.steg-legend h2 { margin: 0; }
+
+.steg-panel { animation: steg-inn var(--dur-slow) var(--ease-out); }
+@keyframes steg-inn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .steg-panel { animation: none; } }
+
+.steg-svar {
+  margin-top: var(--sp-5); padding: var(--sp-4) var(--sp-5);
+  background: var(--surface-2); border-radius: var(--radius-lg);
+  font-size: var(--step--1); color: var(--text-muted);
+}
+.steg-svar b { color: var(--text); font-weight: 650; }
+
+.steg-aksjoner { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-3); margin-top: var(--sp-7); }
+
+/* --- Valgfliser (matnivå, omfang) --- */
+.fliser { display: grid; gap: var(--sp-4); margin-top: var(--sp-2); }
+@media (min-width: 34rem) { .fliser--to { grid-template-columns: 1fr 1fr; } }
+.flis { position: relative; }
+.flis input {
+  position: absolute; inset: 0; margin: 0; width: 100%; height: 100%;
+  opacity: 0; cursor: pointer;
+}
+.flis__body {
+  display: block; height: 100%; padding: var(--sp-5);
+  border: 1.5px solid var(--border); border-radius: var(--radius-xl);
+  background: var(--surface); transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+.flis input:hover + .flis__body { border-color: var(--border-strong); }
+.flis input:focus-visible + .flis__body { outline: 2.5px solid var(--focus); outline-offset: 2px; }
+.flis input:checked + .flis__body { border-color: var(--accent); background: var(--accent-soft); }
+.flis__topp { display: flex; align-items: baseline; justify-content: space-between; gap: var(--sp-2); margin-bottom: var(--sp-2); }
+.flis__tittel { font-size: var(--step-1); font-weight: 700; }
+.flis__pris { font-size: var(--step--1); font-weight: 700; color: var(--text-muted); white-space: nowrap; }
+.flis input:checked + .flis__body .flis__pris { color: var(--accent); }
+.flis__desc { font-size: var(--step--1); color: var(--text-muted); margin-bottom: var(--sp-4); }
+
+.holdbarhet { margin-top: var(--sp-4); }
+.holdbarhet__spor { height: 6px; border-radius: var(--radius-pill); background: var(--border); overflow: hidden; }
+.holdbarhet__fyll { height: 100%; background: var(--accent); border-radius: inherit; }
+.holdbarhet__tekst { display: flex; justify-content: space-between; font-size: var(--step--1); color: var(--text-muted); margin-top: var(--sp-2); }
+
+.spec-rad { font-size: var(--step--1); padding-top: var(--sp-3); margin-top: var(--sp-3); border-top: 1px dashed var(--border); }
+.spec-rad dt { color: var(--text-faint); margin-bottom: 0.2em; }
+.spec-rad dd { margin: 0; font-weight: 600; }
+
+details.detaljer { margin-top: var(--sp-5); }
+details.detaljer > summary { cursor: pointer; font-size: var(--step--1); font-weight: 600; color: var(--accent); list-style: none; display: inline-flex; align-items: center; gap: 0.4em; }
+details.detaljer > summary::-webkit-details-marker { display: none; }
+details.detaljer > summary::before { content: "+"; display: inline-block; width: 1.1em; }
+details.detaljer[open] > summary::before { content: "–"; }
+details.detaljer .detaljer__innhold { padding-top: var(--sp-3); font-size: var(--step--1); color: var(--text-muted); }
+
+/* --- Justering: kassemateriale, segmentert kontroll (lettere enn en flis) --- */
+.justering { margin-top: var(--sp-2); }
+.justering__merke { display: inline-flex; align-items: center; gap: 0.4em; font-size: var(--step--1); color: var(--text-faint); margin-bottom: var(--sp-4); }
+.segkontroll { display: inline-flex; border: 1.5px solid var(--border-strong); border-radius: var(--radius-lg); padding: 3px; gap: 3px; width: 100%; }
+@media (min-width: 30rem) { .segkontroll { width: auto; } }
+.segkontroll label { position: relative; flex: 1; }
+@media (min-width: 30rem) { .segkontroll label { flex: none; } }
+.segkontroll input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+.segkontroll__body {
+  display: flex; flex-direction: column; align-items: center; gap: 0.15em;
+  padding: var(--sp-3) var(--sp-5); border-radius: var(--radius); min-width: 9rem;
+  font-weight: 600; text-align: center;
+}
+.segkontroll input:checked + .segkontroll__body { background: var(--accent); color: var(--accent-ink); }
+.segkontroll input:focus-visible + .segkontroll__body { outline: 2.5px solid var(--focus); outline-offset: 2px; }
+.segkontroll__pris { font-size: var(--step--1); font-weight: 500; opacity: 0.85; }
+
+/* --- Kuratering: fravalg og tillegg --- */
+.kurert-rutenett { display: grid; gap: var(--sp-3); margin-top: var(--sp-2); }
+@media (min-width: 34rem) { .kurert-rutenett { grid-template-columns: 1fr 1fr; } }
+.kurert-kort {
+  border: 1.5px solid var(--border); border-radius: var(--radius-lg);
+  padding: var(--sp-4); background: var(--surface);
+  display: flex; flex-direction: column; gap: var(--sp-3);
+  transition: border-color var(--dur) var(--ease), opacity var(--dur) var(--ease);
+}
+/* Tillegg: «true» er en aktiv handling (lagt til) og skal utheves. */
+.kurert-kort[data-valgt="true"] { border-color: var(--accent); background: var(--accent-soft); }
+/* Fravalg: «med» er startpunktet (alt ligger i esken som normalt, ingen
+   handling er tatt), og skal derfor se helt nøytralt ut – ingen utheving.
+   «ute» er den aktive handlingen (dere har den fra før, tatt ut), og er
+   det eneste tilstanden som skal se annerledes ut. */
+.kurert-kort[data-valgt="ute"] { opacity: 0.66; }
+.kurert-kort__pris--strok { text-decoration: line-through; text-decoration-color: var(--text-faint); }
+.kurert-kort__topp { display: flex; justify-content: space-between; gap: var(--sp-2); }
+.kurert-kort__navn { font-weight: 700; }
+.kurert-kort__pris { font-size: var(--step--1); font-weight: 700; color: var(--text-muted); white-space: nowrap; }
+.kurert-kort__desc { font-size: var(--step--1); color: var(--text-muted); flex: 1; }
+.kurert-kort__knapp {
+  align-self: flex-start; min-height: 2.5rem; padding: 0 var(--sp-4);
+  border-radius: var(--radius-pill); border: 1.5px solid var(--border-strong);
+  background: var(--surface); font-size: var(--step--1); font-weight: 700;
+  display: inline-flex; align-items: center; gap: 0.4em;
+}
+.kurert-kort__knapp[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.kurert-kort__knapp:hover { border-color: var(--accent); }
+
+.kuratering-status {
+  display: flex; justify-content: space-between; gap: var(--sp-3); flex-wrap: wrap;
+  margin-top: var(--sp-5); padding: var(--sp-3) var(--sp-4);
+  background: var(--surface-2); border-radius: var(--radius-lg); font-size: var(--step--1);
+}
+.kuratering-status b { color: var(--accent); }
+
+/* --- Bryter (påfyll) --- */
+.bryter-rad { display: flex; align-items: flex-start; gap: var(--sp-4); padding: var(--sp-5); border: 1.5px solid var(--border); border-radius: var(--radius-xl); background: var(--surface); }
+.bryter { position: relative; flex-shrink: 0; width: 3.25rem; height: 1.75rem; }
+.bryter input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+.bryter__spor {
+  position: absolute; inset: 0; border-radius: var(--radius-pill);
+  background: var(--border-strong); transition: background var(--dur) var(--ease);
+}
+.bryter__spor::before {
+  content: ""; position: absolute; top: 2px; left: 2px; width: 1.35rem; height: 1.35rem;
+  border-radius: 50%; background: var(--surface); box-shadow: var(--shadow-sm);
+  transition: transform var(--dur) var(--ease-out);
+}
+.bryter input:checked ~ .bryter__spor { background: var(--accent); }
+.bryter input:checked ~ .bryter__spor::before { transform: translateX(1.5rem); background: var(--accent-ink); }
+.bryter input:focus-visible ~ .bryter__spor { outline: 2.5px solid var(--focus); outline-offset: 2px; }
+.bryter-rad__tekst { flex: 1; }
+.bryter-rad__tittel { font-weight: 700; display: block; margin-bottom: 0.2em; }
+.bryter-rad__pris { font-size: var(--step--1); color: var(--text-muted); }
+.bryter-senere { margin-top: var(--sp-4); font-size: var(--step--1); color: var(--text-muted); padding-top: var(--sp-4); border-top: 1px dashed var(--border); }
+
+/* --- Varsel --- */
+.varsel { display: flex; gap: var(--sp-3); padding: var(--sp-3) var(--sp-4); border-radius: var(--radius-lg); font-size: var(--step--1); margin-top: var(--sp-4); }
+.varsel svg { flex-shrink: 0; width: 18px; height: 18px; margin-top: 0.15em; }
+.varsel--info { background: var(--info-soft); color: var(--info); }
+.varsel--ok { background: var(--ok-soft); color: var(--ok); }
+.varsel p { margin: 0; }
+
+/* --- Oppsummeringssteget --- */
+.oppsum-topp { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--sp-3); }
+.oppsum-sum { font-family: var(--font-display); font-size: var(--step-4); font-weight: 650; }
+.oppsum-referanse { color: var(--text-muted); font-size: var(--step-0); margin-top: var(--sp-1); }
+
+.prisoppsett { margin-top: var(--sp-6); border-top: 1px solid var(--border); padding-top: var(--sp-4); }
+.prisoppsett__linje { display: flex; justify-content: space-between; gap: var(--sp-3); padding: var(--sp-2) 0; font-size: var(--step--1); }
+.prisoppsett__linje--sum { border-top: 1px solid var(--border); margin-top: var(--sp-2); padding-top: var(--sp-3); font-size: var(--step-0); font-weight: 700; }
+.prisoppsett__mva { font-size: var(--step--1); color: var(--text-faint); margin-top: var(--sp-2); }
+
+.innholdsliste-full { margin-top: var(--sp-7); }
+.gruppe { margin-top: var(--sp-6); }
+.gruppe:first-child { margin-top: var(--sp-4); }
+.gruppe__navn { font-size: var(--step-0); font-weight: 700; padding-bottom: var(--sp-2); border-bottom: 1.5px solid var(--border-strong); margin-bottom: var(--sp-3); }
+.gruppe__navn .badge { margin-left: var(--sp-2); font-weight: 500; }
+.vare-rad { display: flex; justify-content: space-between; gap: var(--sp-3); padding: var(--sp-2) 0; font-size: var(--step--1); border-bottom: 1px solid var(--border); }
+.vare-rad:last-child { border-bottom: none; }
+.vare-rad__navn { color: var(--text); }
+.vare-rad__meta { color: var(--text-faint); white-space: nowrap; }
+.vare-rad__fjernet .vare-rad__navn { text-decoration: line-through; color: var(--text-faint); }
+
+.kjop-kort { margin-top: var(--sp-7); padding: var(--sp-6); background: var(--brand); color: var(--brand-ink); border-radius: var(--radius-xl); }
+.kjop-kort .btn--primary { margin-top: var(--sp-4); }
+.kjop-kort__fot { font-size: var(--step--1); opacity: 0.75; margin-top: var(--sp-3); margin-bottom: 0; }
+
+/* ==========================================================================
+   6. OVERSIKT – sidepanel (desktop) / dialog (mobil)
+   ========================================================================== */
+.oversikt-liste { display: flex; flex-direction: column; gap: var(--sp-1); }
+.oversikt-liste button {
+  width: 100%; text-align: left; display: flex; justify-content: space-between; gap: var(--sp-3);
+  padding: var(--sp-3); border-radius: var(--radius-lg); border: 1px solid transparent;
+  background: transparent; font-size: var(--step--1);
+}
+.oversikt-liste button:hover { background: var(--surface-2); }
+.oversikt-liste button[aria-current="step"] { border-color: var(--accent); background: var(--accent-soft); }
+.oversikt-liste__label { color: var(--text-faint); display: block; }
+.oversikt-liste__verdi { font-weight: 600; color: var(--text); }
+
+.oversikt-rail { display: none; }
+@media (min-width: 68rem) {
+  #flyt-body { display: grid; grid-template-columns: minmax(0, 46rem) 18rem; gap: var(--sp-8); align-items: start; max-width: 68rem; margin-inline: auto; padding-inline: var(--sp-5); }
+  #flyt-body .flyt-inner { padding-inline: 0; max-width: none; }
+  .oversikt-rail {
+    display: block; position: sticky; top: 8rem;
+    border: 1px solid var(--border); border-radius: var(--radius-xl);
+    padding: var(--sp-5); background: var(--surface);
+  }
+  .oversikt-rail h3 { font-size: var(--step-0); margin-bottom: var(--sp-4); }
+  .oversikt-rail__sum { margin-top: var(--sp-4); padding-top: var(--sp-4); border-top: 1px solid var(--border); font-size: var(--step-1); font-weight: 700; }
+}
+
+dialog.oversikt-dialog {
+  border: none; border-radius: var(--radius-xl); padding: 0; width: min(92vw, 30rem);
+  box-shadow: var(--shadow-lg); color: var(--text); background: var(--surface);
+}
+dialog.oversikt-dialog::backdrop { background: rgb(5 13 12 / 0.55); }
+.oversikt-dialog__inner { padding: var(--sp-6); max-height: 85vh; overflow-y: auto; }
+.oversikt-dialog__hode { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--sp-3); margin-bottom: var(--sp-4); }
+.oversikt-dialog__lukk { border: 1.5px solid var(--border-strong); background: var(--surface); border-radius: var(--radius); width: 2.25rem; height: 2.25rem; font-size: var(--step-1); line-height: 1; }
+.oversikt-dialog__sum { margin-top: var(--sp-5); padding-top: var(--sp-4); border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: baseline; font-weight: 700; font-size: var(--step-1); }
+
+/* ==========================================================================
+   7. FOTNOTE-SEKSJON
+   ========================================================================== */
+.site-footer { border-top: 1px solid var(--border); padding-block: var(--sp-7); color: var(--text-muted); font-size: var(--step--1); }
+.site-footer a { color: inherit; }
+</style>
+
+<script>
+  // Setter temaet før første maling. Egen nøkkel fra hovedsiden, siden dette
+  // er en frittstående prototype som ikke skal dele lagring med nodboks.no.
+  try {
+    var t = localStorage.getItem('nodboks-prototype:tema')
+    if (t) document.documentElement.setAttribute('data-theme', t)
+  } catch (e) {}
+</script>
+</head>
+<body>
+
+<a class="skip-link" href="#flyt">Hopp til bestillingsflyten</a>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brandmark" href="#top">
+      <svg width="24" height="24" viewBox="0 0 32 32" aria-hidden="true">
+        <circle cx="16" cy="16" r="10.5" fill="none" stroke="currentColor" stroke-width="3"/>
+        <circle cx="16" cy="16" r="5" fill="var(--accent)"/>
+      </svg>
+      Nødboks
+    </a>
+    <span class="proto-merke">Prototype · retning «ett spor»</span>
+    <button class="tema-bryter" type="button" id="tema-knapp" aria-pressed="false" aria-label="Bytt til mørk modus">
+      <svg class="tema-ikon-sol" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
+      </svg>
+      <svg class="tema-ikon-maane" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="display:none">
+        <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ======================================================================
+       HERO + DET TIDLIGE CTA-ET
+       Husstanden telles her, øverst på forsiden, og følger med kunden inn i
+       flyten – i stedet for at knappen bare hopper til et tomt skjema.
+       ====================================================================== -->
+  <section class="hero">
+    <div class="wrap hero__grid">
+      <div>
+        <p class="eyebrow">Beredskap for hele familien</p>
+        <h1>Samme utstyr, bare nok av det.</h1>
+        <p class="hero__lead">
+          Samme utstyr som dere ville tatt med på tur: gode hodelykter, ordentlig
+          stormkjøkken, ekte vannfilter. Forskjellen er mengden – nok til alle
+          som bor i huset, i sju døgn.
+        </p>
+
+        <p class="hero__pris">
+          <span>Komplett pakke · fire personer · vanlig mat</span>
+          <b id="hero-pris-anker" class="tnum">kr 12 800</b>
+          <span>inkl. mva. Frakt kommer i tillegg.</span>
+        </p>
+
+        <!-- Husstandskortet -->
+        <div class="card card--raised husstand-kort" id="hero-husstand">
+          <h2 style="font-size:var(--step-1)">Hvor mange er dere?</h2>
+          <p class="muted" style="margin-top:var(--sp-1)">
+            Både voksne og barn – og dyrene som bor med dere. Det er alt vi
+            trenger for å starte, og svaret følger med hele veien inn i
+            resten av bestillingen.
+          </p>
+
+          <div class="husstand-kort__rader">
+            <div class="husstand-rad">
+              <span class="husstand-rad__navn">Voksne
+                <span class="husstand-rad__hjelp">Spiser fullt voksendøgn, får hver sin hodelykt.</span>
+              </span>
+              <span class="stepper">
+                <button type="button" class="stepper__knapp" data-just="voksne" data-delta="-1" aria-label="Én voksen færre">−</button>
+                <input class="stepper__tall" type="number" inputmode="numeric" id="inp-voksne" min="1" max="8" value="2" aria-label="Antall voksne">
+                <button type="button" class="stepper__knapp" data-just="voksne" data-delta="1" aria-label="Én voksen til">+</button>
+              </span>
+            </div>
+            <div class="husstand-rad">
+              <span class="husstand-rad__navn">Barn
+                <span class="husstand-rad__hjelp">Regnet til rundt 1 450 kcal per barnedøgn, ikke voksendøgn.</span>
+              </span>
+              <span class="stepper">
+                <button type="button" class="stepper__knapp" data-just="barn" data-delta="-1" aria-label="Ett barn færre">−</button>
+                <input class="stepper__tall" type="number" inputmode="numeric" id="inp-barn" min="0" max="6" value="2" aria-label="Antall barn">
+                <button type="button" class="stepper__knapp" data-just="barn" data-delta="1" aria-label="Ett barn til">+</button>
+              </span>
+            </div>
+            <div class="husstand-rad">
+              <span class="husstand-rad__navn">Kjæledyr
+                <span class="husstand-rad__hjelp">Star på DSBs egen liste. Vi legger på mat og vann til dem også.</span>
+              </span>
+              <span class="stepper">
+                <button type="button" class="stepper__knapp" data-just="kjaeledyr" data-delta="-1" aria-label="Ett kjæledyr færre">−</button>
+                <input class="stepper__tall" type="number" inputmode="numeric" id="inp-kjaeledyr" min="0" max="4" value="0" aria-label="Antall kjæledyr">
+                <button type="button" class="stepper__knapp" data-just="kjaeledyr" data-delta="1" aria-label="Ett kjæledyr til">+</button>
+              </span>
+            </div>
+          </div>
+
+          <p class="husstand-kort__svar" id="husstand-svar"></p>
+
+          <div class="husstand-kort__cta-rad">
+            <button type="button" class="btn btn--primary btn--lg" id="start-flyt-knapp">
+              Sett sammen esken deres
+            </button>
+            <span class="muted" style="font-size:var(--step--1)">
+              Tar under to minutter. Prisen følger dere hele veien.
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Illustrasjon: ingen fotografi, bare strek. Ett element i aksent
+           (lykten), resten hairline – samme regel som resten av merket. -->
+      <svg class="hero__illustrasjon" viewBox="0 0 320 300" fill="none" aria-hidden="true">
+        <rect x="46" y="150" width="228" height="112" rx="3" stroke="currentColor" stroke-width="2.5"/>
+        <path d="M46 150 66 118H254L274 150" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M66 118V150M254 118V150" stroke="currentColor" stroke-width="2.5"/>
+        <line x1="46" y1="188" x2="274" y2="188" stroke="currentColor" stroke-width="1.5" opacity=".5"/>
+        <!-- Hodelykt, det ene aksentfargede elementet -->
+        <g transform="translate(94,52)">
+          <circle cx="0" cy="0" r="16" fill="none" stroke="currentColor" stroke-width="2.5"/>
+          <circle cx="0" cy="0" r="6" fill="var(--accent)"/>
+          <path d="M14 -10 26 -20M17 0 30 0M14 10 26 20" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" opacity=".55"/>
+          <path d="M-24 8 Q-38 -6 -16 -14" stroke="currentColor" stroke-width="2" fill="none" opacity=".6"/>
+        </g>
+        <!-- Vannkanne -->
+        <g transform="translate(178,60)" stroke="currentColor" stroke-width="2.2" fill="none">
+          <rect x="-16" y="0" width="32" height="46" rx="3"/>
+          <path d="M-8 0V-10H8V0"/>
+          <line x1="-16" y1="16" x2="16" y2="16" opacity=".5"/>
+        </g>
+        <!-- Radio -->
+        <g transform="translate(232,70)" stroke="currentColor" stroke-width="2.2" fill="none">
+          <rect x="-18" y="-8" width="36" height="26" rx="2.5"/>
+          <line x1="14" y1="-8" x2="22" y2="-30"/>
+          <circle cx="-8" cy="5" r="4"/>
+          <line x1="2" y1="1" x2="10" y2="1" opacity=".6"/>
+          <line x1="2" y1="8" x2="10" y2="8" opacity=".6"/>
+        </g>
+        <text x="160" y="215" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10.5" letter-spacing="2.6" fill="currentColor" opacity=".55">NØDBOKS</text>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       FLYTEN – ett spørsmål om gangen
+       ====================================================================== -->
+  <section id="flyt" aria-label="Sett sammen esken">
+
+    <div class="flyt-bar-sticky">
+      <div class="flyt-bar">
+        <button type="button" class="flyt-bar__tilbake" id="flyt-tilbake">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 3 4 8l6 5"/></svg>
+          Tilbake
+        </button>
+        <span class="flyt-bar__steg" id="flyt-stegtekst">Steg 1 av 6</span>
+        <button type="button" class="flyt-bar__pris" id="pris-pille" aria-haspopup="dialog">
+          <span class="tnum" id="pris-pille-sum">kr 0</span>
+          <span id="pris-pille-meta">– varer</span>
+        </button>
+      </div>
+      <div class="flyt-fremdrift" aria-hidden="true"><div class="flyt-fremdrift__fyll" id="flyt-fremdrift-fyll" style="width:0%"></div></div>
+    </div>
+
+    <div id="flyt-body">
+      <div class="flyt-inner">
+        <div class="steg-panel" id="steg-panel" tabindex="-1"><!-- fylles av JS --></div>
+      </div>
+
+      <aside class="oversikt-rail" aria-label="Hele bestillingen">
+        <h3>Hele bestillingen</h3>
+        <ol class="oversikt-liste" id="oversikt-rail-liste"><!-- fylles av JS --></ol>
+        <p class="oversikt-rail__sum">
+          <span class="muted" style="font-weight:400;font-size:var(--step--1);display:block">I dag</span>
+          <span class="tnum" id="oversikt-rail-sum">kr 0</span>
+        </p>
+      </aside>
+    </div>
+
+    <p class="visually-hidden" role="status" aria-live="polite" id="flyt-status"></p>
+  </section>
+
+  <dialog class="oversikt-dialog" id="oversikt-dialog" aria-label="Hele bestillingen">
+    <div class="oversikt-dialog__inner">
+      <div class="oversikt-dialog__hode">
+        <h3 style="margin:0">Hele bestillingen</h3>
+        <button type="button" class="oversikt-dialog__lukk" id="oversikt-lukk" aria-label="Lukk oversikten">×</button>
+      </div>
+      <ol class="oversikt-liste" id="oversikt-dialog-liste"><!-- fylles av JS --></ol>
+      <p class="oversikt-dialog__sum"><span>I dag</span><span class="tnum" id="oversikt-dialog-sum">kr 0</span></p>
+    </div>
+  </dialog>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>
+      Designprototype for intern vurdering – retning «ett spor», ett av fire
+      forslag til hvordan bestillingsflyten på
+      <a href="https://nodboks.no/">nodboks.no</a> kan bli smidigere. Ikke en
+      side i produksjon. Se <code>docs/designvalg.md</code> og
+      <code>docs/profil.md</code> for grunnlaget den er bygget på.
+    </p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ========================================================================
+     0. TEMA
+     ==================================================================== */
+  var temaKnapp = document.getElementById('tema-knapp');
+  function gjeldendeTema() {
+    var attr = document.documentElement.getAttribute('data-theme');
+    if (attr) return attr;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  function settTema(t) {
+    document.documentElement.setAttribute('data-theme', t);
+    try { localStorage.setItem('nodboks-prototype:tema', t); } catch (e) {}
+    temaKnapp.setAttribute('aria-pressed', String(t === 'dark'));
+    temaKnapp.setAttribute('aria-label', t === 'dark' ? 'Bytt til lys modus' : 'Bytt til mørk modus');
+    temaKnapp.querySelector('.tema-ikon-sol').style.display = t === 'dark' ? 'none' : 'block';
+    temaKnapp.querySelector('.tema-ikon-maane').style.display = t === 'dark' ? 'block' : 'none';
+  }
+  settTema(gjeldendeTema());
+  temaKnapp.addEventListener('click', function () {
+    settTema(gjeldendeTema() === 'dark' ? 'light' : 'dark');
+  });
+
+  var redusertBevegelse = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ========================================================================
+     1. FORMATERING
+     ==================================================================== */
+  var krFormat = new Intl.NumberFormat('nb-NO', { maximumFractionDigits: 0 });
+  function kr(n) { return 'kr ' + krFormat.format(Math.round(n || 0)); }
+  function tall(n) { return krFormat.format(Math.round(n || 0)); }
+  function personerTekst(n) { return n + ' ' + (n === 1 ? 'person' : 'personer'); }
+  function klem(n, min, max) { return Math.min(max, Math.max(min, Math.round(n || 0))); }
+
+  /* ========================================================================
+     2. «KATALOG» – plausible plassholdertall, se HTML-kommentaren øverst.
+     ==================================================================== */
+  var KONFIG = { dogn: 7, kcalVoksenDogn: 2338, kcalBarnDogn: 1450, vannLiterPerson: 20 };
+
+  var MATNIVAER = {
+    torrmat: {
+      id: 'torrmat', navn: 'Vanlig butikkmat',
+      beskrivelse: 'Knekkebrød, havregryn og middagshermetikk – maten dere spiser fra før.',
+      holdbarhetAr: 1, krPer1000kcal: 34,
+      jobb: 'Bytte ut maten omtrent hvert år.',
+      linjer: [
+        { navn: 'Havregryn og knekkebrød', andel: 0.34 },
+        { navn: 'Middagshermetikk', andel: 0.4 },
+        { navn: 'Tørket frukt og nøtter', andel: 0.26 }
+      ]
+    },
+    langtidsmat: {
+      id: 'langtidsmat', navn: 'Frysetørket langtidsmat',
+      beskrivelse: 'Varm middag og frokost i pose. Vann og varme kokes rett oppi.',
+      holdbarhetAr: 5, krPer1000kcal: 96,
+      jobb: 'Nesten ingenting – sjekk datoen av og til.',
+      linjer: [
+        { navn: 'Frysetørket frokost', andel: 0.42 },
+        { navn: 'Frysetørket middag', andel: 0.58 }
+      ]
+    }
+  };
+
+  var MODUSER = {
+    komplett: { id: 'komplett', navn: 'Komplett pakke', beskrivelse: 'Mat, vann, kokeapparat, lys, radio, førstehjelp og esken de står i.', medUtstyr: true, rabatt: 0.06 },
+    matpafyll: { id: 'matpafyll', navn: 'Matpåfyll', beskrivelse: 'Bare mat, vann og rensetabletter – til dere som har utstyret fra før.', medUtstyr: false, rabatt: 0 }
+  };
+
+  // DSBs fire overskrifter, i DSBs rekkefølge. «Annet» og «Esken» er våre egne.
+  var DSB_GRUPPER = { 'Mat': 'Mat og vann', 'Vann': 'Mat og vann', 'Matlaging': 'Mat og vann',
+    'Varme og lys': 'Varme og lys', 'Strøm og samband': 'Informasjon',
+    'Helse og hygiene': 'Legemidler og hygiene', 'Verktøy og dokumenter': 'Annet', 'Esken': 'Esken' };
+  var GRUPPEREKKEFOLGE = ['Mat og vann', 'Varme og lys', 'Informasjon', 'Legemidler og hygiene', 'Annet', 'Esken'];
+  var MVA_MAT = 0.15, MVA_STANDARD = 0.25;
+  var mvaSats = function (kat) { return (kat === 'Mat' || kat === 'Vann') ? MVA_MAT : MVA_STANDARD; };
+
+  // Utstyr i komplett pakke. `fravalg:true` kan krysses av som «har fra før».
+  function utstyrsvarer(husstandTotal) {
+    var grupper = Math.max(1, Math.ceil(husstandTotal / 4));
+    return [
+      { sku: 'hodelykt', navn: 'Hodelykt, ladbar', kategori: 'Varme og lys', antall: husstandTotal, pris: 480, fravalg: true, hvorfor: 'Én hver, så ingen famler i mørket mens de venter på tur.' },
+      { sku: 'lanterne', navn: 'LED-lanterne til fellesrom', kategori: 'Varme og lys', antall: grupper, pris: 340, fravalg: false, hvorfor: 'Lys i rommet, ikke bare på hodet.' },
+      { sku: 'stormkjokken', navn: 'Stormkjøkken med kjeler', kategori: 'Matlaging', antall: grupper, pris: 1150, fravalg: true, hvorfor: 'Varm mat og kokt vann uten strøm.' },
+      { sku: 'vannfilter', navn: 'Vannfilter, håndpumpe', kategori: 'Vann', antall: 1, pris: 1390, fravalg: true, hvorfor: 'Til vann dere ikke stoler på, når kannene er tomme.' },
+      { sku: 'nodradio', navn: 'Nødradio med DAB, sveiv og solcelle', kategori: 'Strøm og samband', antall: 1, pris: 899, fravalg: true, hvorfor: 'NRK P1 er beredskapskanalen. Radioen må ha DAB.' },
+      { sku: 'powerbank', navn: 'Powerbank, 20 000 mAh', kategori: 'Strøm og samband', antall: 1, pris: 590, fravalg: true, hvorfor: 'Nok til å lade telefonene flere ganger.' },
+      { sku: 'co-varsler', navn: 'CO-varsler', kategori: 'Strøm og samband', antall: 1, pris: 249, fravalg: false, hvorfor: 'Den eneste grunnen til at vi tør selge et kokeapparat. Alltid med.' },
+      { sku: 'forstehjelp', navn: 'Førstehjelpssett', kategori: 'Helse og hygiene', antall: grupper, pris: 420, fravalg: false, hvorfor: 'Plaster, bandasje og det aller viktigste, i vannfast eske.' },
+      { sku: 'bottetoalett', navn: 'Bøttetoalett med poser', kategori: 'Helse og hygiene', antall: 1, pris: 360, fravalg: false, hvorfor: 'Om vannet er borte lenger enn kannene rekker.' },
+      { sku: 'perm', navn: 'Beredskapsperm', kategori: 'Verktøy og dokumenter', antall: 1, pris: 199, fravalg: false, hvorfor: 'DSBs sjekkliste, menyplan og skjema for kontakter og medisiner.' }
+    ];
+  }
+  var TILLEGGSVARER = [
+    { sku: 'meshtastic', navn: 'Meshtastic-radio', kategori: 'Strøm og samband', pris: 1990,
+      beskrivelse: 'Sender tekst mellom husstander uten mobilnett, via et lite radionettverk.',
+      forbehold: ['Krever at minst én til i nærheten har tilsvarende radio.', 'Rekkevidden faller kraftig innendørs og i skog.', 'Ikke en erstatning for nødnett eller 112.'] },
+    { sku: 'pmr', navn: 'PMR-radio, sett med to', kategori: 'Strøm og samband', pris: 690,
+      beskrivelse: 'Kortholdsradio for familien, uten abonnement eller nettverk.',
+      forbehold: ['Rekkevidde typisk under to kilometer i bebyggelse.', 'Åpen kanal – alle med samme kanal kan høre.', 'Batteritid rundt 12 timer ved normal bruk.'] }
+  ];
+
+  /* ========================================================================
+     3. TILSTAND
+     ==================================================================== */
+  var state = {
+    voksne: 2, barn: 2, kjaeledyr: 0,
+    matniva: 'torrmat', modus: 'komplett', eskeType: 'plast',
+    utelatt: new Set(), tillegg: new Set(), pafyll: false
+  };
+  var currentStepKey = null;
+  var flytStartet = false;
+  var kjoptStatus = false;
+
+  function husstandTotal() { return state.voksne + state.barn; }
+
+  /* ========================================================================
+     4. REGNEMOTOR
+     ==================================================================== */
+  function beregnPakke() {
+    var mn = MATNIVAER[state.matniva];
+    var md = MODUSER[state.modus];
+    var pt = husstandTotal();
+    var kcalBehov = state.voksne * KONFIG.kcalVoksenDogn * KONFIG.dogn + state.barn * KONFIG.kcalBarnDogn * KONFIG.dogn;
+    var vannBehov = pt * KONFIG.vannLiterPerson;
+    var kjaeledyrVannLiter = state.kjaeledyr * 14;
+
+    var linjer = [];
+
+    // Mat
+    var matSum = Math.round((kcalBehov / 1000) * mn.krPer1000kcal);
+    mn.linjer.forEach(function (l, i) {
+      var antall = pt * KONFIG.dogn;
+      linjer.push({
+        sku: 'mat-' + i, navn: l.navn, kategori: 'Mat', enhet: 'porsjoner',
+        antall: antall, pris: matSum * l.andel, fravalg: false,
+        holdbarhetAr: mn.holdbarhetAr, hvorfor: 'Del av matnivået «' + mn.navn.toLowerCase() + '».'
+      });
+    });
+
+    // Vann
+    var literTotalt = vannBehov + kjaeledyrVannLiter;
+    var kannerAntall = Math.max(1, Math.ceil(literTotalt / 10));
+    linjer.push({ sku: 'vannkanne', navn: 'Vannkanne, 10 liter (tom)', kategori: 'Vann', enhet: 'stk', antall: kannerAntall, pris: 149, fravalg: false, hvorfor: 'Dekker DSBs 20 liter per person, fylt av dere selv.' });
+
+    // Kjæledyr
+    if (state.kjaeledyr > 0) {
+      linjer.push({ sku: 'kjaeledyr-for', navn: 'Mat til kjæledyr, sju døgn', kategori: 'Mat', enhet: 'stk', antall: state.kjaeledyr, pris: 259, fravalg: false, hvorfor: 'Star på DSBs egen sjekkliste, dekkes ikke andre steder i esken.' });
+    }
+
+    // Utstyr, kun i komplett pakke
+    var utstyrKandidater = [];
+    if (md.medUtstyr) {
+      utstyrKandidater = utstyrsvarer(pt);
+      utstyrKandidater.forEach(function (v) {
+        if (state.utelatt.has(v.sku)) return;
+        linjer.push({ sku: v.sku, navn: v.navn, kategori: v.kategori, enhet: 'stk', antall: v.antall, pris: v.pris * v.antall, fravalg: v.fravalg, hvorfor: v.hvorfor });
+      });
+
+      var eskeAntall = Math.max(1, Math.ceil(pt / 4));
+      var eskePris = state.eskeType === 'alu' ? 3999 : 349;
+      linjer.push({
+        sku: 'eske', navn: (state.eskeType === 'alu' ? 'Aluminiumskasse' : 'Plastkasse') + (eskeAntall > 1 ? ', ' + eskeAntall + ' stk' : ''),
+        kategori: 'Esken', enhet: 'stk', antall: eskeAntall, pris: eskePris * eskeAntall, fravalg: false,
+        hvorfor: state.eskeType === 'alu' ? 'Tåler å stå ute, på et biltak eller i en båt.' : 'Tett mot støv og fukt, stablebar.'
+      });
+    }
+
+    // Tillegg – kun de kunden faktisk har valgt til
+    TILLEGGSVARER.forEach(function (v) {
+      if (!state.tillegg.has(v.sku)) return;
+      linjer.push({ sku: v.sku, navn: v.navn, kategori: v.kategori, enhet: 'stk', antall: 1, pris: v.pris, fravalg: false, hvorfor: v.beskrivelse });
+    });
+
+    var sumVarer = linjer.reduce(function (n, l) { return n + l.pris; }, 0);
+    var pakkerabatt = md.medUtstyr ? Math.round(sumVarer * md.rabatt) : 0;
+    var sum = sumVarer - pakkerabatt;
+
+    var rabattfaktor = sumVarer ? sum / sumVarer : 1;
+    var mvaBelop = linjer.reduce(function (n, l) {
+      var brutto = l.pris * rabattfaktor;
+      var sats = mvaSats(l.kategori);
+      return n + (brutto - brutto / (1 + sats));
+    }, 0);
+
+    var matLinjerSum = linjer.filter(function (l) { return l.kategori === 'Mat' || l.kategori === 'Vann'; }).reduce(function (n, l) { return n + l.pris; }, 0);
+    var utstyrLinjerSum = sumVarer - matLinjerSum;
+
+    var aboRabattsats = 0.1;
+    var abonnementsrabatt = state.pafyll ? Math.round(sum * aboRabattsats) : 0;
+
+    var grupperKart = {};
+    linjer.forEach(function (l) {
+      var g = DSB_GRUPPER[l.kategori] || 'Annet';
+      if (!grupperKart[g]) grupperKart[g] = [];
+      grupperKart[g].push(l);
+    });
+    var grupper = GRUPPEREKKEFOLGE.filter(function (g) { return grupperKart[g]; }).map(function (navn) {
+      return { navn: navn, varer: grupperKart[navn], erDsb: navn !== 'Annet' && navn !== 'Esken' };
+    });
+
+    var kannerNok = literTotalt <= vannBehov + kjaeledyrVannLiter + 0.001;
+    var kcalDekning = kcalBehov ? 1 : 0;
+
+    return {
+      pt: pt, kcalBehov: kcalBehov, vannBehov: vannBehov, kjaeledyrVannLiter: kjaeledyrVannLiter,
+      literTotalt: literTotalt, kannerAntall: kannerAntall,
+      linjer: linjer, grupper: grupper,
+      utstyrKandidater: utstyrKandidater.filter(function (v) { return v.fravalg; }),
+      sumVarer: sumVarer, pakkerabatt: pakkerabatt, sum: sum,
+      matSum: matLinjerSum, utstyrSum: utstyrLinjerSum,
+      mva: Math.round(mvaBelop), abonnementsrabatt: abonnementsrabatt,
+      sumMedAbonnement: sum - abonnementsrabatt,
+      prisPerPersonPerDogn: pt ? Math.round(sum / pt / KONFIG.dogn) : 0,
+      antallVarer: linjer.reduce(function (n, l) { return n + l.antall; }, 0),
+      matniva: mn, modus: md
+    };
+  }
+
+  function spartSum(pakke) {
+    var kand = utstyrsvarer(pakke.pt).filter(function (v) { return v.fravalg && state.utelatt.has(v.sku); });
+    return kand.reduce(function (n, v) { return n + v.pris * v.antall; }, 0);
+  }
+
+  function referanseTekst(pakke) {
+    var deler = [pakke.modus.navn, personerTekst(pakke.pt), KONFIG.dogn + ' døgn', pakke.matniva.navn];
+    if (state.kjaeledyr > 0) deler.push(state.kjaeledyr + ' kjæledyr');
+    return deler.join(' · ');
+  }
+
+  /* ========================================================================
+     5. STEG – rekkefølge og synlighet
+     ==================================================================== */
+  function alleSteg() {
+    var pakke = beregnPakke();
+    var s = ['matniva', 'modus'];
+    if (state.modus === 'komplett') s.push('eske');
+    if (state.modus === 'komplett' && pakke.utstyrKandidater.length) s.push('fravalg');
+    s.push('tillegg');
+    s.push('pafyll');
+    s.push('oppsummering');
+    return s;
+  }
+  var STEG_LABEL = {
+    matniva: 'Mat', modus: 'Omfang', eske: 'Kassemateriale',
+    fravalg: 'Har fra før', tillegg: 'Tillegg', pafyll: 'Påfyll', oppsummering: 'Oppsummering'
+  };
+
+  /* ========================================================================
+     6. DOM-REFERANSER
+     ==================================================================== */
+  var $ = function (id) { return document.getElementById(id); };
+  var panel = $('steg-panel');
+  var barTilbake = $('flyt-tilbake');
+  var barStegtekst = $('flyt-stegtekst');
+  var prisPille = $('pris-pille');
+  var prisPilleSum = $('pris-pille-sum');
+  var prisPilleMeta = $('pris-pille-meta');
+  var fremdriftFyll = $('flyt-fremdrift-fyll');
+  var statusFelt = $('flyt-status');
+  var oversiktDialog = $('oversikt-dialog');
+
+  /* ========================================================================
+     7. RENDRING AV HVERT STEG
+     ==================================================================== */
+  function ikonOk() { return '<svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8.5 6.5 12 13 4.5"/></svg>'; }
+  function ikonInfo() { return '<svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="6.5"/><path d="M8 7.2v4"/><path d="M8 4.6v.6"/></svg>'; }
+
+  function stegHode(nr, tittel, hjelp) {
+    var steg = alleSteg().filter(function (k) { return k !== 'oppsummering'; });
+    var idx = steg.indexOf(nr);
+    return (
+      '<div class="steg-panel__hode">' +
+        (nr !== 'oppsummering' ? '<p class="steg-panel__nr">Spørsmål ' + (idx + 1) + '</p>' : '') +
+        '<h2>' + tittel + '</h2>' +
+        '<p class="steg-panel__hjelp">' + hjelp + '</p>' +
+      '</div>'
+    );
+  }
+
+  /**
+   * Åpner et <fieldset> for steg som spør om ett valg blant flere
+   * (matnivå, omfang, kassemateriale). <legend> er første og eneste
+   * direkte barn, aldri pakket i en <div> – se docs/designvalg.md § 6.2.
+   * Kalles sammen med '</fieldset>' rundt selve valgkontrollen; hjelpetekst
+   * og øvrig innhold kan stå utenfor, som vanlige søsken i panelet.
+   */
+  function stegFieldsetApne(nr, tittel, hjelp) {
+    var steg = alleSteg().filter(function (k) { return k !== 'oppsummering'; });
+    var idx = steg.indexOf(nr);
+    return (
+      '<fieldset class="steg-fieldset">' +
+        '<legend class="steg-legend">' +
+          '<span class="steg-panel__nr">Spørsmål ' + (idx + 1) + '</span>' +
+          '<h2>' + tittel + '</h2>' +
+        '</legend>' +
+        '<p class="steg-panel__hjelp">' + hjelp + '</p>'
+    );
+  }
+
+  function renderMatniva(pakke) {
+    var mn = MATNIVAER;
+    var maksAr = Math.max(mn.torrmat.holdbarhetAr, mn.langtidsmat.holdbarhetAr);
+    function flis(m) {
+      var midlPakke = { matniva: m.id };
+      var kcalPris = Math.round((pakke.kcalBehov / 1000) * m.krPer1000kcal);
+      var checked = state.matniva === m.id ? 'checked' : '';
+      return (
+        '<label class="flis">' +
+          '<input type="radio" name="matniva" value="' + m.id + '" ' + checked + '>' +
+          '<span class="flis__body">' +
+            '<span class="flis__topp"><span class="flis__tittel">' + m.navn + '</span>' +
+              '<span class="flis__pris tnum">' + kr(kcalPris) + '</span></span>' +
+            '<span class="flis__desc">' + m.beskrivelse + '</span>' +
+            '<span class="holdbarhet">' +
+              '<span class="holdbarhet__spor"><span class="holdbarhet__fyll" style="width:' + Math.max(6, (m.holdbarhetAr / maksAr) * 100) + '%"></span></span>' +
+              '<span class="holdbarhet__tekst"><span>Holdbarhet</span><span>' + m.holdbarhetAr + ' år</span></span>' +
+            '</span>' +
+            '<dl class="spec-rad"><dt>Deres jobb</dt><dd>' + m.jobb + '</dd></dl>' +
+          '</span>' +
+        '</label>'
+      );
+    }
+    return (
+      stegFieldsetApne('matniva', 'Hva slags mat vil dere ha?', 'Det viktigste valget i esken. Begge er ærlige veier – de passer ulike hjem.') +
+      '<div class="fliser fliser--to" id="matniva-fliser">' + flis(mn.torrmat) + flis(mn.langtidsmat) + '</div>' +
+      '</fieldset>' +
+      '<div class="steg-svar">' +
+        'Med ' + personerTekst(pakke.pt) + (state.barn ? ' (' + state.voksne + ' voksne, ' + state.barn + ' barn)' : '') +
+        ' blir det <b class="tnum">' + tall(pakke.kcalBehov) + ' kcal</b> totalt for uka – barn regnes til et lavere daglig behov enn voksne, så ikke alle betaler for like mye mat.' +
+      '</div>' +
+      '<details class="detaljer"><summary>Flere detaljer om forskjellen</summary>' +
+        '<div class="detaljer__innhold">' +
+          '<p><strong>Vanlig mat:</strong> mye kan spises kaldt rett fra boksen, og barn spiser den uten motstand. Krever lite av dere utover å bytte den før datoen.</p>' +
+          '<p style="margin-bottom:0"><strong>Langtidsmat:</strong> lettere å lagre og glemme, men hver pose trenger 3,7 dl kokende vann – uten stormkjøkken er den lite verdt.</p>' +
+        '</div>' +
+      '</details>' +
+      stegAksjoner({ nesteAlltid: true })
+    );
+  }
+
+  function renderModus(pakke) {
+    var md = MODUSER;
+    function flis(m) {
+      var checked = state.modus === m.id ? 'checked' : '';
+      return (
+        '<label class="flis">' +
+          '<input type="radio" name="modus" value="' + m.id + '" ' + checked + '>' +
+          '<span class="flis__body">' +
+            '<span class="flis__topp"><span class="flis__tittel">' + m.navn + '</span></span>' +
+            '<span class="flis__desc" style="margin-bottom:0">' + m.beskrivelse + '</span>' +
+          '</span>' +
+        '</label>'
+      );
+    }
+    return (
+      stegFieldsetApne('modus', 'Skal vi sette opp alt, eller bare maten?', 'Har dere primus, lykter og radio fra før, holder det med matpåfyll.') +
+      '<div class="fliser fliser--to">' + flis(md.komplett) + flis(md.matpafyll) + '</div>' +
+      '</fieldset>' +
+      (state.modus === 'matpafyll'
+        ? '<div class="varsel varsel--info">' + ikonInfo() + '<p>Påfyllet inneholder bare mat, vann og rensetabletter. Utstyret forutsetter vi at dere allerede har.</p></div>'
+        : '') +
+      stegAksjoner({ nesteAlltid: true })
+    );
+  }
+
+  function renderEske(pakke) {
+    var alu = state.eskeType === 'alu';
+    return (
+      stegFieldsetApne('eske', 'Hva skal utstyret ligge i?', 'En detalj, ikke et valg som endrer innholdet – mat og vann ligger i plast uansett.') +
+      '<div class="justering">' +
+        '<span class="justering__merke">' + ikonInfo() + ' Justering, ikke et hovedvalg</span>' +
+        '<div class="segkontroll">' +
+          '<label><input type="radio" name="eske" value="plast" ' + (!alu ? 'checked' : '') + '>' +
+            '<span class="segkontroll__body">Plast<span class="segkontroll__pris tnum">kr 349 / kasse</span></span></label>' +
+          '<label><input type="radio" name="eske" value="alu" ' + (alu ? 'checked' : '') + '>' +
+            '<span class="segkontroll__body">Aluminium<span class="segkontroll__pris tnum">kr 3 999 / kasse</span></span></label>' +
+        '</div>' +
+      '</div>' +
+      '</fieldset>' +
+      '<p class="steg-svar">' + (alu
+        ? 'Zarges-typen tåler å stå ute, på et biltak eller i en båt – den er selv noe dere bruker.'
+        : 'Stablebar og tett mot støv og fukt. Det vanlige valget, og ingenting å skamme seg over.') + '</p>' +
+      stegAksjoner({ hoppOver: true, hoppTekst: 'Behold plast' })
+    );
+  }
+
+  function renderFravalg(pakke) {
+    var kandidater = pakke.utstyrKandidater;
+    var kort = kandidater.map(function (v) {
+      var ute = state.utelatt.has(v.sku);
+      return (
+        '<div class="kurert-kort" data-valgt="' + (ute ? 'ute' : 'med') + '">' +
+          '<div class="kurert-kort__topp"><span class="kurert-kort__navn">' + v.navn + '</span>' +
+            '<span class="kurert-kort__pris tnum' + (ute ? ' kurert-kort__pris--strok' : '') + '">' + kr(v.pris * v.antall) + '</span></div>' +
+          '<p class="kurert-kort__desc">' + v.hvorfor + '</p>' +
+          '<button type="button" class="kurert-kort__knapp" data-fravalg="' + v.sku + '" aria-pressed="' + ute + '">' +
+            (ute ? ikonOk() + ' Tatt ut – legg tilbake?' : 'Vi har den fra før') +
+          '</button>' +
+        '</div>'
+      );
+    }).join('');
+    var spart = spartSum(pakke);
+    return (
+      stegHode('fravalg', 'Har dere noe av dette fra før?', 'Ta det ut, så trekker vi prisen. Vi vil heller at dere bruker det dere allerede kjenner.') +
+      '<div class="kurert-rutenett">' + kort + '</div>' +
+      '<div class="kuratering-status">' +
+        '<span>' + kandidater.filter(function (v) { return state.utelatt.has(v.sku); }).length + ' av ' + kandidater.length + ' tatt ut</span>' +
+        '<span>Dere sparer <b class="tnum">' + kr(spart) + '</b></span>' +
+      '</div>' +
+      stegAksjoner({ hoppOver: true, hoppTekst: 'Vi har ingenting fra før' })
+    );
+  }
+
+  function renderTillegg(pakke) {
+    var kort = TILLEGGSVARER.map(function (v) {
+      var valgt = state.tillegg.has(v.sku);
+      return (
+        '<div class="kurert-kort" data-valgt="' + valgt + '">' +
+          '<div class="kurert-kort__topp"><span class="kurert-kort__navn">' + v.navn + '</span>' +
+            '<span class="kurert-kort__pris tnum">' + kr(v.pris) + '</span></div>' +
+          '<p class="kurert-kort__desc">' + v.beskrivelse + '</p>' +
+          '<details class="detaljer"><summary>Tre ting dere bør vite først</summary>' +
+            '<div class="detaljer__innhold"><ul>' + v.forbehold.map(function (f) { return '<li style="margin-bottom:.4em">' + f + '</li>'; }).join('') + '</ul></div>' +
+          '</details>' +
+          '<button type="button" class="kurert-kort__knapp" data-tillegg="' + v.sku + '" aria-pressed="' + valgt + '">' +
+            (valgt ? ikonOk() + ' Lagt til' : '+ Legg til') +
+          '</button>' +
+        '</div>'
+      );
+    }).join('');
+    var tilleggSum = TILLEGGSVARER.filter(function (v) { return state.tillegg.has(v.sku); }).reduce(function (n, v) { return n + v.pris; }, 0);
+    return (
+      stegHode('tillegg', 'Vil dere ha noe i tillegg?', 'Ikke med som standard. Legg til det dere faktisk vil ha, la resten stå igjen på hylla.') +
+      '<div class="kurert-rutenett">' + kort + '</div>' +
+      (state.tillegg.size
+        ? '<div class="kuratering-status"><span>' + state.tillegg.size + ' lagt til</span><span>+ <b class="tnum">' + kr(tilleggSum) + '</b></span></div>'
+        : '') +
+      stegAksjoner({ hoppOver: true, hoppTekst: 'Ikke nå' })
+    );
+  }
+
+  function renderPafyll(pakke) {
+    var langtid = state.matniva === 'langtidsmat';
+    var fremtidigKr = Math.round(pakke.sum * 0.1);
+    return (
+      stegHode('pafyll', 'Skal vi minne dere på påfyll?', 'Maten har en utløpsdato. Vi varsler før den kommer, og sender nytt hvis dere vil.') +
+      '<div class="bryter-rad">' +
+        '<span class="bryter"><input type="checkbox" id="pafyll-bryter" ' + (state.pafyll ? 'checked' : '') + '><span class="bryter__spor"></span></span>' +
+        '<span class="bryter-rad__tekst">' +
+          '<label class="bryter-rad__tittel" for="pafyll-bryter">' +
+            (langtid ? 'Gratis påminnelse' : 'Ja, hold styr på datoene for oss') +
+          '</label>' +
+          '<span class="bryter-rad__pris">' +
+            (langtid
+              ? 'kr 0 · et abonnement ville ikke gitt dere noe nytt med fem års holdbarhet.'
+              : 'kr 0 i dag. Dere kan si nei hver gang, og avslutte når dere vil.') +
+          '</span>' +
+        '</span>' +
+      '</div>' +
+      (state.pafyll && !langtid
+        ? '<p class="bryter-senere">Neste sending: om rundt ett år · anslagsvis <b class="tnum">' + kr(fremtidigKr) + '</b> · ingen bindingstid.</p>'
+        : '') +
+      stegAksjoner({ hoppOver: true, hoppTekst: 'Nei takk' })
+    );
+  }
+
+  function renderOppsummering(pakke) {
+    var sum = state.pafyll ? pakke.sumMedAbonnement : pakke.sum;
+    var grupper = pakke.grupper.map(function (g) {
+      return (
+        '<div class="gruppe">' +
+          '<h4 class="gruppe__navn">' + g.navn + (g.erDsb ? ' <span class="badge">DSBs liste</span>' : '') + '</h4>' +
+          g.varer.map(function (v) {
+            return '<div class="vare-rad"><span class="vare-rad__navn">' + v.navn + '</span>' +
+              '<span class="vare-rad__meta tnum">' + tall(v.antall) + ' ' + v.enhet + ' · ' + kr(v.pris) + '</span></div>';
+          }).join('') +
+        '</div>'
+      );
+    }).join('');
+
+    var linjer = [];
+    if (pakke.matSum) linjer.push(['Mat og vann', pakke.matSum]);
+    if (pakke.utstyrSum) linjer.push([pakke.modus.medUtstyr ? 'Utstyr og eske' : 'Utstyr', pakke.utstyrSum]);
+    if (pakke.pakkerabatt) linjer.push(['Pakkerabatt', -pakke.pakkerabatt]);
+    if (pakke.abonnementsrabatt) linjer.push(['Påfyllsrabatt', -pakke.abonnementsrabatt]);
+
+    return (
+      '<div class="steg-panel__hode"><h2>Esken deres er klar</h2>' +
+        '<p class="steg-panel__hjelp">Hele listen står under, gruppert etter DSBs egen sjekkliste – hold den mot den offisielle, linje for linje.</p></div>' +
+      '<div class="oppsum-topp">' +
+        '<div><p class="oppsum-sum tnum">' + kr(sum) + '</p>' +
+        '<p class="oppsum-referanse">' + referanseTekst(pakke) + '</p></div>' +
+        '<span class="muted tnum" style="font-size:var(--step--1)">' + kr(pakke.prisPerPersonPerDogn) + ' per person per døgn</span>' +
+      '</div>' +
+
+      '<div class="prisoppsett">' +
+        linjer.map(function (l) { return '<div class="prisoppsett__linje"><span>' + l[0] + '</span><span class="tnum">' + kr(l[1]) + '</span></div>'; }).join('') +
+        '<div class="prisoppsett__linje prisoppsett__linje--sum"><span>Å betale i dag</span><span class="tnum">' + kr(sum) + '</span></div>' +
+        '<p class="prisoppsett__mva">Herav mva. ' + kr(pakke.mva) + ' – 15 % på mat, 25 % på utstyr.</p>' +
+        '<p class="prisoppsett__mva">Frakt kommer i tillegg og beregnes i kassen.</p>' +
+      '</div>' +
+
+      '<div class="innholdsliste-full">' +
+        '<h3 style="font-size:var(--step-1)">Dette ligger i esken <span class="badge">' + tall(pakke.antallVarer) + ' varer</span></h3>' +
+        grupper +
+      '</div>' +
+
+      '<div class="kjop-kort">' +
+        '<h3 style="color:inherit;margin-bottom:.25em">Klar til å legge i kurven</h3>' +
+        '<p style="opacity:.85;margin-bottom:0">' + kr(sum) + ' i dag. Varene koster det samme som i butikk – det dere betaler for er utvalget, riktige mengder og at noen holder styr på datoene.</p>' +
+        '<button type="button" class="btn btn--primary btn--lg btn--block" id="kjop-knapp">Legg i kurven</button>' +
+        '<p class="kjop-kort__fot">Dette er en designprototype. Ingen betaling skjer her.</p>' +
+      '</div>' +
+
+      stegAksjoner({ oppsummering: true })
+    );
+  }
+
+  function stegAksjoner(opts) {
+    opts = opts || {};
+    var steg = alleSteg();
+    var idx = steg.indexOf(currentStepKey);
+    var erSiste = idx === steg.length - 2; // siste spørsmål før oppsummering
+    if (opts.oppsummering) {
+      return '<div class="steg-aksjoner"><button type="button" class="btn" id="rediger-svar-knapp">Endre et svar</button></div>';
+    }
+    var nesteTekst = erSiste ? 'Gå til oppsummering' : 'Neste';
+    return (
+      '<div class="steg-aksjoner">' +
+        '<button type="button" class="btn btn--primary btn--lg" id="neste-knapp">' + nesteTekst + '</button>' +
+        (opts.hoppOver ? '<button type="button" class="btn btn--ghost" id="hopp-knapp">' + (opts.hoppTekst || 'Hopp over') + '</button>' : '') +
+      '</div>'
+    );
+  }
+
+  var RENDERERE = {
+    matniva: renderMatniva, modus: renderModus, eske: renderEske,
+    fravalg: renderFravalg, tillegg: renderTillegg, pafyll: renderPafyll,
+    oppsummering: renderOppsummering
+  };
+
+  /* ========================================================================
+     8. HOVEDRENDRING
+     ==================================================================== */
+  var statusTimer = null;
+  function render(flyttFokus) {
+    var pakke = beregnPakke();
+    var steg = alleSteg();
+    if (steg.indexOf(currentStepKey) === -1) currentStepKey = steg[0];
+    var idx = steg.indexOf(currentStepKey);
+    var nummererbare = steg.filter(function (k) { return k !== 'oppsummering'; });
+
+    panel.innerHTML = RENDERERE[currentStepKey](pakke);
+    kobleStegHandlinger(pakke);
+
+    // Toppfelt: tilbake / stegtekst / fremdrift
+    barTilbake.hidden = (currentStepKey === nummererbare[0]);
+    barStegtekst.textContent = currentStepKey === 'oppsummering' ? 'Ferdig' : ('Steg ' + (nummererbare.indexOf(currentStepKey) + 1) + ' av ' + nummererbare.length);
+    fremdriftFyll.style.width = (currentStepKey === 'oppsummering' ? 100 : Math.round((nummererbare.indexOf(currentStepKey) / nummererbare.length) * 100)) + '%';
+
+    // Prisen – synlig gjennom hele flyten, aldri skjult til slutt
+    var sum = state.pafyll ? pakke.sumMedAbonnement : pakke.sum;
+    prisPilleSum.textContent = kr(sum);
+    prisPilleMeta.textContent = tall(pakke.antallVarer) + ' varer i esken';
+
+    renderOversikt(pakke, 'oversikt-rail-liste');
+    renderOversikt(pakke, 'oversikt-dialog-liste');
+    $('oversikt-rail-sum') && ($('oversikt-rail-sum').textContent = kr(sum));
+    $('oversikt-dialog-sum').textContent = kr(sum);
+
+    if (flyttFokus) panel.focus({ preventScroll: true });
+
+    // role=status, debouncet ca. 700 ms, én samlet melding
+    clearTimeout(statusTimer);
+    statusTimer = setTimeout(function () {
+      statusFelt.textContent = 'Steg ' + (idx + 1) + ' av ' + steg.length + ': ' + STEG_LABEL[currentStepKey] + '. ' + referanseTekst(pakke) + '. ' + kr(sum) + '.';
+    }, 700);
+  }
+
+  function renderOversikt(pakke, malId) {
+    var el = $(malId);
+    if (!el) return;
+    var steg = alleSteg().filter(function (k) { return k !== 'oppsummering'; });
+    var verdi = {
+      matniva: pakke.matniva.navn,
+      modus: pakke.modus.navn,
+      eske: state.eskeType === 'alu' ? 'Aluminium' : 'Plast',
+      fravalg: state.utelatt.size ? state.utelatt.size + ' tatt ut' : 'Alt med',
+      tillegg: state.tillegg.size ? state.tillegg.size + ' valgt' : 'Ingen valgt',
+      pafyll: state.pafyll ? 'Ja' : 'Nei'
+    };
+    el.innerHTML = steg.map(function (k, i) {
+      return (
+        '<li><button type="button" data-jump="' + k + '" aria-current="' + (k === currentStepKey ? 'step' : 'false') + '">' +
+          '<span><span class="oversikt-liste__label">' + (i + 1) + '. ' + STEG_LABEL[k] + '</span>' +
+          '<span class="oversikt-liste__verdi">' + verdi[k] + '</span></span>' +
+          (k === currentStepKey ? '' : '<span aria-hidden="true">→</span>') +
+        '</button></li>'
+      );
+    }).join('') + '<li><button type="button" data-jump="oppsummering" aria-current="' + (currentStepKey === 'oppsummering' ? 'step' : 'false') + '">' +
+      '<span class="oversikt-liste__label">Oppsummering</span></button></li>';
+  }
+
+  /* ========================================================================
+     9. NAVIGASJON
+     ==================================================================== */
+  function gaTil(key, flyttFokus) {
+    currentStepKey = key;
+    render(flyttFokus !== false);
+    if (flytStartet) {
+      document.getElementById('flyt').scrollIntoView({ behavior: redusertBevegelse ? 'auto' : 'smooth', block: 'start' });
+    }
+  }
+  function nesteSteg() {
+    var steg = alleSteg();
+    var idx = steg.indexOf(currentStepKey);
+    gaTil(steg[Math.min(idx + 1, steg.length - 1)]);
+  }
+  function forrigeSteg() {
+    var steg = alleSteg();
+    var idx = steg.indexOf(currentStepKey);
+    if (idx <= 0) {
+      window.scrollTo({ top: 0, behavior: redusertBevegelse ? 'auto' : 'smooth' });
+      $('inp-voksne').focus();
+      return;
+    }
+    gaTil(steg[idx - 1]);
+  }
+
+  /* ========================================================================
+     10. HENDELSER PER STEG (delegert, satt opp hver rendring)
+     ==================================================================== */
+  function kobleStegHandlinger() {
+    // NB: dette kjøres på nytt for hver rendring, fordi knappene under
+    // erstattes med panel.innerHTML. Lyttere som skal leve på selve
+    // `panel`-elementet (som ikke byttes ut) står i stedet i det
+    // delegerte, ett-gangs oppsettet i seksjon 10b – legges de her i
+    // stedet, hoper de seg opp én gang per rendring.
+    var nesteKnapp = $('neste-knapp');
+    if (nesteKnapp) nesteKnapp.addEventListener('click', nesteSteg);
+    var hoppKnapp = $('hopp-knapp');
+    if (hoppKnapp) hoppKnapp.addEventListener('click', nesteSteg);
+    var redigerKnapp = $('rediger-svar-knapp');
+    if (redigerKnapp) redigerKnapp.addEventListener('click', function () { apneOversikt(); });
+    var kjopKnapp = $('kjop-knapp');
+    if (kjopKnapp) kjopKnapp.addEventListener('click', function () {
+      kjoptStatus = true;
+      kjopKnapp.textContent = 'Lagt i kurven';
+      kjopKnapp.disabled = true;
+      setTimeout(function () { kjopKnapp.textContent = 'Lagt i kurven ✓'; }, 250);
+    });
+  }
+
+  /* --- 10b. Delegerte lyttere på selve panelet, koblet ÉN gang ---------
+     `panel` byttes aldri ut (bare innholdet i det), så disse skal ikke
+     kobles på nytt for hver rendring – da ville hver tidligere rendrings
+     lytter blitt liggende igjen og samme klikk ville trigget flere ganger. */
+  panel.addEventListener('change', function (e) {
+    if (e.target.name === 'matniva') { state.matniva = e.target.value; render(); }
+    if (e.target.name === 'modus') { state.modus = e.target.value; render(); }
+    if (e.target.name === 'eske') { state.eskeType = e.target.value; render(); }
+    if (e.target.id === 'pafyll-bryter') { state.pafyll = e.target.checked; render(); }
+  });
+  panel.addEventListener('click', function (e) {
+    var fravalgBtn = e.target.closest('[data-fravalg]');
+    if (fravalgBtn) {
+      var sku = fravalgBtn.dataset.fravalg;
+      if (state.utelatt.has(sku)) state.utelatt.delete(sku); else state.utelatt.add(sku);
+      render();
+      return;
+    }
+    var tilleggBtn = e.target.closest('[data-tillegg]');
+    if (tilleggBtn) {
+      var tsku = tilleggBtn.dataset.tillegg;
+      if (state.tillegg.has(tsku)) state.tillegg.delete(tsku); else state.tillegg.add(tsku);
+      render();
+    }
+  });
+
+  /* ========================================================================
+     11. HERO – HUSSTANDSTELLER
+     ==================================================================== */
+  var inpVoksne = $('inp-voksne'), inpBarn = $('inp-barn'), inpKjaeledyr = $('inp-kjaeledyr');
+  var husstandSvar = $('husstand-svar');
+  var heroPrisAnker = $('hero-pris-anker');
+
+  function oppdaterHusstandFelter() {
+    inpVoksne.value = state.voksne;
+    inpBarn.value = state.barn;
+    inpKjaeledyr.value = state.kjaeledyr;
+    document.querySelectorAll('[data-just="voksne"][data-delta="-1"]')[0].disabled = state.voksne <= 1;
+    document.querySelectorAll('[data-just="voksne"][data-delta="1"]')[0].disabled = husstandTotal() >= 8;
+    document.querySelectorAll('[data-just="barn"][data-delta="-1"]')[0].disabled = state.barn <= 0;
+    document.querySelectorAll('[data-just="barn"][data-delta="1"]')[0].disabled = husstandTotal() >= 8;
+    document.querySelectorAll('[data-just="kjaeledyr"][data-delta="-1"]')[0].disabled = state.kjaeledyr <= 0;
+    document.querySelectorAll('[data-just="kjaeledyr"][data-delta="1"]')[0].disabled = state.kjaeledyr >= 4;
+
+    var deler = [personerTekst(husstandTotal()) + ' totalt'];
+    if (state.kjaeledyr) deler.push(state.kjaeledyr + ' kjæledyr');
+    husstandSvar.innerHTML = 'Det blir <b>' + deler.join(', ') + '</b>. Dere ser nøyaktig hvordan det slår ut i prisen på neste steg.';
+
+    // Prisanker: grov, live overslag basert på tørrmat + komplett (samme motor).
+    var lagretState = { voksne: state.voksne, barn: state.barn, kjaeledyr: state.kjaeledyr, matniva: 'torrmat', modus: 'komplett', eskeType: 'plast', utelatt: new Set(), tillegg: new Set(), pafyll: false };
+    var gammelState = state;
+    state = lagretState;
+    var overslag = beregnPakke();
+    state = gammelState;
+    heroPrisAnker.textContent = kr(overslag.sum);
+  }
+
+  document.querySelectorAll('[data-just]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var felt = btn.dataset.just, delta = Number(btn.dataset.delta);
+      if (felt === 'voksne') state.voksne = klem(state.voksne + delta, 1, husstandTotal() + delta > 8 ? state.voksne : 8);
+      if (felt === 'barn') state.barn = klem(state.barn + delta, 0, 6);
+      if (felt === 'kjaeledyr') state.kjaeledyr = klem(state.kjaeledyr + delta, 0, 4);
+      if ((felt === 'voksne' || felt === 'barn') && husstandTotal() > 8) {
+        // Klem totalen til 8, uansett hvilket felt som nettopp ble endret.
+        if (felt === 'voksne') state.barn = Math.max(0, 8 - state.voksne);
+        else state.voksne = Math.max(1, 8 - state.barn);
+      }
+      oppdaterHusstandFelter();
+      if (flytStartet) render(false);
+    });
+  });
+  [inpVoksne, inpBarn, inpKjaeledyr].forEach(function (inp) {
+    inp.addEventListener('change', function () {
+      var v = klem(Number(inp.value), Number(inp.min), Number(inp.max));
+      if (inp === inpVoksne) state.voksne = v;
+      if (inp === inpBarn) state.barn = v;
+      if (inp === inpKjaeledyr) state.kjaeledyr = v;
+      if (husstandTotal() > 8) {
+        if (inp === inpBarn) state.barn = Math.max(0, 8 - state.voksne);
+        else state.voksne = Math.max(1, 8 - state.barn);
+      }
+      oppdaterHusstandFelter();
+      if (flytStartet) render(false);
+    });
+  });
+  oppdaterHusstandFelter();
+
+  $('start-flyt-knapp').addEventListener('click', function () {
+    flytStartet = true;
+    gaTil('matniva', true);
+  });
+
+  /* ========================================================================
+     12. OVERSIKT – dialog
+     ==================================================================== */
+  function apneOversikt() {
+    if (typeof oversiktDialog.showModal === 'function') oversiktDialog.showModal();
+    else oversiktDialog.setAttribute('open', '');
+  }
+  function lukkOversikt() { oversiktDialog.close ? oversiktDialog.close() : oversiktDialog.removeAttribute('open'); }
+  prisPille.addEventListener('click', apneOversikt);
+  $('oversikt-lukk').addEventListener('click', lukkOversikt);
+  oversiktDialog.addEventListener('click', function (e) { if (e.target === oversiktDialog) lukkOversikt(); });
+  document.body.addEventListener('click', function (e) {
+    var jump = e.target.closest('[data-jump]');
+    if (!jump) return;
+    flytStartet = true;
+    lukkOversikt();
+    gaTil(jump.dataset.jump, true);
+  });
+
+  barTilbake.addEventListener('click', forrigeSteg);
+
+  /* ========================================================================
+     13. START
+     ==================================================================== */
+  currentStepKey = 'matniva';
+  render(false);
+})();
+</script>
+</body>
+</html>

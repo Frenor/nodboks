@@ -9,8 +9,24 @@
  * etter endringer i katalogen – det er billigere enn å oppdage det i kassen.
  */
 
+import { readFileSync, existsSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
+import { dirname, join } from 'node:path'
 import { byggPakke, klem } from '../assets/js/konfigurator.js'
 import { KONFIG, VARER, ESKER, MATNIVAER, MODUSER, PAFYLL } from '../assets/js/data/katalog.js'
+
+/*
+ * Innkjøpsprisene ligger utenfor git, i innkjop.local.json.
+ *
+ * Repoet er offentlig og siden serveres fra det, så kostnadsstrukturen vår
+ * har ingenting i katalogen å gjøre. Finnes filen ikke, hopper marginkontrollen
+ * over – resten av selvtesten kjører som før, så en ny utvikler uten filen
+ * fortsatt kan verifisere energi, vann og prisstigning.
+ */
+const rot = join(dirname(fileURLToPath(import.meta.url)), '..')
+const stiInnkjop = join(rot, 'innkjop.local.json')
+const harInnkjop = existsSync(stiInnkjop)
+const INNKJOP = harInnkjop ? JSON.parse(readFileSync(stiInnkjop, 'utf8')) : {}
 
 let feil = 0
 let advarsler = 0
@@ -28,8 +44,11 @@ for (const v of VARER) {
   if (skuer.has(v.sku)) nei(`duplisert SKU: ${v.sku}`)
   skuer.add(v.sku)
   if (!(v.pris > 0)) nei(`${v.sku}: mangler pris`)
-  if (!(v.innkjop >= 0)) nei(`${v.sku}: mangler innkjøpspris`)
-  if (v.innkjop >= v.pris) obs(`${v.sku}: innkjøp ${v.innkjop} ≥ utsalg ${v.pris} – null margin`)
+  if (harInnkjop) {
+    const ink = INNKJOP[v.sku]?.innkjop
+    if (!(ink >= 0)) nei(`${v.sku}: mangler innkjøpspris i innkjop.local.json`)
+    else if (ink >= v.pris) obs(`${v.sku}: innkjøp ${ink} ≥ utsalg ${v.pris} – null margin`)
+  }
   if (!v.hvorfor) nei(`${v.sku}: mangler begrunnelse (hvorfor)`)
   if (!['engang', 'forbruk'].includes(v.type)) nei(`${v.sku}: ugyldig type «${v.type}»`)
   if (typeof v.antall !== 'function') nei(`${v.sku}: antall må være en funksjon av personer`)
@@ -86,10 +105,13 @@ for (const modus of MODUSER) {
  * ikke vår, og skal ut av begge sider av regnestykket.
  */
 bolk('Marginer (regnet på netto, eks. mva)')
-const innkjopFor = (sku) =>
-  VARER.find((v) => v.sku === sku)?.innkjop ?? ESKER.find((e) => e.sku === sku)?.innkjop ?? 0
+if (!harInnkjop) {
+  console.log('  \x1b[2m· hoppet over – innkjop.local.json finnes ikke.')
+  console.log('    Kopier innkjop.eksempel.json til innkjop.local.json for å slå den på.\x1b[0m')
+}
+const innkjopFor = (sku) => INNKJOP[sku]?.innkjop ?? 0
 
-for (const modus of MODUSER) {
+for (const modus of harInnkjop ? MODUSER : []) {
   for (const niva of MATNIVAER) {
     for (const p of [1, 2, 4, 6, 8]) {
       const pakke = byggPakke({ personer: p, matniva: niva.id, modus: modus.id })

@@ -14,6 +14,12 @@ build/
 .vscode/
 *.swp
 
+# Innkjøpspriser og leverandørforhold.
+# Repoet er offentlig og siden serveres fra det, så kostnadsstrukturen skal
+# ikke ligge her. innkjop.eksempel.json er malen; kopier den til
+# innkjop.local.json og fyll inn de ekte tallene.
+innkjop.local.json
+
 # Miljø og nøkler – checkout-nøkler settes i assets/js/config.js,
 # hold ekte produksjonsnøkler utenfor repoet
 .env

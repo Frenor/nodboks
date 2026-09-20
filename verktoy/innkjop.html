@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Innkjøp – Nødboks</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/tokens.css">
+<link rel="stylesheet" href="../assets/css/base.css">
+<script>
+  try { var t = localStorage.getItem('nodboks:tema'); if (t) document.documentElement.setAttribute('data-theme', t) } catch (e) {}
+</script>
+<style>
+  body { padding-block: var(--sp-6) var(--sp-9); }
+  .verktoy { width: min(100% - 2rem, 88rem); margin-inline: auto; }
+
+  .tall { display: grid; gap: var(--sp-4); grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr)); margin-block: var(--sp-6); }
+  .tall__kort { border: 1px solid var(--border); border-radius: var(--radius); padding: var(--sp-4); background: var(--surface); }
+  .tall__verdi { font-size: var(--step-3); font-weight: 650; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .tall__navn { font-size: var(--step--1); color: var(--text-muted); margin-top: var(--sp-2); }
+  .tall__kort--fare .tall__verdi { color: var(--warn); }
+  .tall__kort--ok .tall__verdi { color: var(--ok); }
+
+  table.innkjop { width: 100%; border-collapse: collapse; font-size: var(--step--1); }
+  table.innkjop th { text-align: left; padding: var(--sp-2); border-bottom: 2px solid var(--border-strong); color: var(--text-muted); font-weight: 650; position: sticky; top: 0; background: var(--bg); z-index: 2; }
+  table.innkjop td { padding: var(--sp-2); border-bottom: 1px solid var(--border); vertical-align: middle; }
+  table.innkjop td.num, table.innkjop th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  table.innkjop tr:hover td { background: var(--surface-2); }
+  table.innkjop input { min-height: 2.25rem; padding: var(--sp-1) var(--sp-2); font-size: var(--step--1); }
+  table.innkjop input[type="number"] { width: 6.5rem; text-align: right; font-variant-numeric: tabular-nums; }
+  table.innkjop input[type="text"] { width: 100%; min-width: 8rem; }
+  .dg { font-weight: 650; }
+  .dg--lav { color: var(--warn); }
+  .dg--ok { color: var(--ok); }
+  .anslag { font-size: var(--step--1); color: var(--text-faint); }
+  .endret td { background: var(--accent-soft) !important; }
+  .verktoylinje { display: flex; flex-wrap: wrap; gap: var(--sp-3); align-items: center; margin-block: var(--sp-5); }
+  .melding { padding: var(--sp-4); border-radius: var(--radius); background: var(--info-soft); color: var(--info); margin-block: var(--sp-5); }
+  .tabellramme { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); }
+</style>
+</head>
+<body>
+<div class="verktoy">
+
+  <p class="eyebrow">Internt verktøy</p>
+  <h1 style="font-size:var(--step-4)">Innkjøp og marginer</h1>
+  <p class="lead">
+    Endrer du et innkjøpstall her, ser du hva det gjør med dekningsgraden med én gang.
+    Ingenting lagres automatisk – last ned filen når du er ferdig.
+  </p>
+
+  <div id="advarsel" hidden class="melding">
+    <strong>Fant ikke innkjop.local.json.</strong>
+    Filen er utenfor git med vilje, siden repoet er offentlig.
+    Kopier <code>innkjop.eksempel.json</code> til <code>innkjop.local.json</code> i rota,
+    og last siden på nytt. Verktøyet må kjøres fra en lokal server, ikke fra <code>file://</code>.
+  </div>
+
+  <div class="tall" id="noekkeltall"></div>
+
+  <div class="verktoylinje">
+    <label for="husstand" style="font-size:var(--step--1)">Regn margin for</label>
+    <select id="husstand" style="width:auto">
+      <option value="1">1 person</option>
+      <option value="2">2 personer</option>
+      <option value="4" selected>4 personer</option>
+      <option value="6">6 personer</option>
+      <option value="8">8 personer</option>
+    </select>
+    <select id="matniva" style="width:auto">
+      <option value="torrmat" selected>Vanlig tørrmat</option>
+      <option value="langtidsmat">Langtidsmat</option>
+    </select>
+    <span style="flex:1"></span>
+    <button class="btn btn--sm" id="last-ned-json">Last ned JSON</button>
+    <button class="btn btn--sm" id="last-ned-csv">Last ned CSV</button>
+    <label class="btn btn--sm" for="les-inn" style="cursor:pointer">Les inn fil</label>
+    <input type="file" id="les-inn" accept=".json,.csv" hidden>
+  </div>
+
+  <div class="tabellramme">
+    <table class="innkjop">
+      <thead>
+        <tr>
+          <th>Vare</th>
+          <th class="num">Antall</th>
+          <th class="num">Utsalg</th>
+          <th class="num">Innkjøp eks. mva</th>
+          <th class="num">DG</th>
+          <th>Leverandør</th>
+          <th>Kontakt</th>
+          <th>Notat</th>
+        </tr>
+      </thead>
+      <tbody id="rader"></tbody>
+    </table>
+  </div>
+
+  <h2 style="font-size:var(--step-2); margin-top:var(--sp-8)">Følsomhet</h2>
+  <p class="muted" style="font-size:var(--step--1)">
+    Hva dekningsgraden blir hvis innkjøpsprisen er en gitt andel av utsalgsprisen,
+    for hele pakken. Dagens anslag er 0,6.
+  </p>
+  <div class="tabellramme" style="margin-top:var(--sp-4)">
+    <table class="innkjop">
+      <thead><tr><th>Innkjøpsfaktor</th><th class="num">Vareforbruk</th><th class="num">Dekningsgrad</th><th class="num">Dekningsbidrag</th></tr></thead>
+      <tbody id="folsomhet"></tbody>
+    </table>
+  </div>
+
+  <p style="margin-top:var(--sp-7)">
+    <a class="btn btn--sm" href="../">← Til forsiden</a>
+  </p>
+</div>
+
+<script type="module">
+import { byggPakke } from '../assets/js/konfigurator.js'
+import { VARER, ESKER } from '../assets/js/data/katalog.js'
+import { kr, tall } from '../assets/js/config.js'
+import { koblTemabryter } from '../assets/js/ui/tema.js'
+
+const $ = (s) => document.querySelector(s)
+const MVA_MAT = 0.15
+const MVA_STD = 0.25
+
+let data = {}
+let endret = new Set()
+
+const alleVarer = [...VARER, ...ESKER]
+const finn = (sku) => alleVarer.find((v) => v.sku === sku)
+
+/** Netto for én linje, med riktig sats. Mat har redusert. */
+const nettoFor = (l) => l.sum / (1 + (l.kategori === 'Mat' ? MVA_MAT : MVA_STD))
+
+function pakke() {
+  return byggPakke({
+    personer: Number($('#husstand').value),
+    matniva: $('#matniva').value,
+    modus: 'komplett',
+  })
+}
+
+function regn() {
+  const p = pakke()
+  let netto = 0
+  let kost = 0
+  for (const l of p.linjer) {
+    netto += nettoFor(l)
+    kost += (data[l.sku]?.innkjop ?? 0) * l.antall
+  }
+  // Pakkerabatten trekkes proporsjonalt fra netto, som i selvtesten.
+  netto *= p.sumVarer ? p.sum / p.sumVarer : 1
+  return { p, netto, kost, db: netto - kost, dg: netto ? (netto - kost) / netto : 0 }
+}
+
+function tegnNokkeltall() {
+  const { p, netto, kost, db, dg } = regn()
+  const klasse = dg >= 0.3 ? 'tall__kort--ok' : dg < 0.2 ? 'tall__kort--fare' : ''
+  $('#noekkeltall').innerHTML = `
+    <div class="tall__kort"><div class="tall__verdi">${kr(p.sum)}</div><div class="tall__navn">Utsalg inkl. mva</div></div>
+    <div class="tall__kort"><div class="tall__verdi">${kr(netto)}</div><div class="tall__navn">Netto eks. mva</div></div>
+    <div class="tall__kort"><div class="tall__verdi">${kr(kost)}</div><div class="tall__navn">Vareforbruk</div></div>
+    <div class="tall__kort"><div class="tall__verdi">${kr(db)}</div><div class="tall__navn">Dekningsbidrag</div></div>
+    <div class="tall__kort ${klasse}"><div class="tall__verdi">${Math.round(dg * 100)} %</div><div class="tall__navn">Dekningsgrad</div></div>`
+}
+
+function tegnFolsomhet() {
+  const { p, netto } = regn()
+  const rader = [0.7, 0.65, 0.6, 0.55, 0.5, 0.45, 0.4].map((f) => {
+    // Observert butikkpris er utsalg, siden katalogen priser til butikkpris.
+    const kost = p.linjer.reduce((n, l) => n + l.enhetspris * f * l.antall, 0)
+    const dg = netto ? (netto - kost) / netto : 0
+    const merk = Math.abs(f - 0.6) < 0.001 ? ' <span class="anslag">← dagens anslag</span>' : ''
+    const kl = dg >= 0.3 ? 'dg--ok' : dg < 0.2 ? 'dg--lav' : ''
+    return `<tr><td>${f.toFixed(2).replace('.', ',')}${merk}</td>
+      <td class="num">${kr(kost)}</td>
+      <td class="num dg ${kl}">${Math.round(dg * 100)} %</td>
+      <td class="num">${kr(netto - kost)}</td></tr>`
+  })
+  $('#folsomhet').innerHTML = rader.join('')
+}
+
+function tegnRader() {
+  const p = pakke()
+  const iPakken = new Map(p.linjer.map((l) => [l.sku, l.antall]))
+
+  $('#rader').innerHTML = alleVarer
+    .map((v) => {
+      const d = data[v.sku] ?? {}
+      const antall = iPakken.get(v.sku) ?? 0
+      const mva = v.kategori === 'Mat' ? MVA_MAT : MVA_STD
+      const netto = v.pris / (1 + mva)
+      const dg = netto && d.innkjop != null ? (netto - d.innkjop) / netto : null
+      const kl = dg == null ? '' : dg >= 0.3 ? 'dg--ok' : dg < 0.2 ? 'dg--lav' : ''
+      return `<tr data-sku="${v.sku}" class="${endret.has(v.sku) ? 'endret' : ''}">
+        <td>${v.navn}${antall ? '' : ' <span class="anslag">(ikke i denne pakken)</span>'}</td>
+        <td class="num">${antall || '–'}</td>
+        <td class="num">${tall(v.pris)}</td>
+        <td class="num"><input type="number" step="0.01" min="0" value="${d.innkjop ?? ''}"
+            data-felt="innkjop" aria-label="Innkjøpspris for ${v.navn}"></td>
+        <td class="num dg ${kl}">${dg == null ? '–' : Math.round(dg * 100) + ' %'}</td>
+        <td><input type="text" value="${(d.leverandor ?? '').replace(/"/g, '&quot;')}" data-felt="leverandor" aria-label="Leverandør for ${v.navn}"></td>
+        <td><input type="text" value="${(d.kontakt ?? '').replace(/"/g, '&quot;')}" data-felt="kontakt" aria-label="Kontakt for ${v.navn}"></td>
+        <td><input type="text" value="${(d.notat ?? '').replace(/"/g, '&quot;')}" data-felt="notat" aria-label="Notat for ${v.navn}"></td>
+      </tr>`
+    })
+    .join('')
+}
+
+function tegn() {
+  tegnRader()
+  tegnNokkeltall()
+  tegnFolsomhet()
+}
+
+$('#rader').addEventListener('input', (e) => {
+  const inp = e.target
+  const rad = inp.closest('tr')
+  if (!rad) return
+  const sku = rad.dataset.sku
+  const felt = inp.dataset.felt
+  data[sku] ??= { navn: finn(sku)?.navn ?? sku }
+  data[sku][felt] = felt === 'innkjop' ? (inp.value === '' ? null : Number(inp.value)) : inp.value
+  if (felt === 'innkjop') data[sku].kilde = 'Oppgitt av leverandør'
+  endret.add(sku)
+  rad.classList.add('endret')
+  // Nøkkeltallene skal følge tastetrykkene; radene tegnes ikke på nytt,
+  // ellers mister feltet fokus midt i innskrivingen.
+  tegnNokkeltall()
+  tegnFolsomhet()
+  const dgCelle = rad.children[4]
+  const v = finn(sku)
+  if (v && data[sku].innkjop != null) {
+    const netto = v.pris / (1 + (v.kategori === 'Mat' ? MVA_MAT : MVA_STD))
+    const dg = (netto - data[sku].innkjop) / netto
+    dgCelle.textContent = Math.round(dg * 100) + ' %'
+    dgCelle.className = 'num dg ' + (dg >= 0.3 ? 'dg--ok' : dg < 0.2 ? 'dg--lav' : '')
+  }
+})
+
+for (const id of ['#husstand', '#matniva']) $(id).addEventListener('change', tegn)
+
+function lastNed(navn, innhold, type) {
+  const a = document.createElement('a')
+  a.href = URL.createObjectURL(new Blob([innhold], { type }))
+  a.download = navn
+  a.click()
+  URL.revokeObjectURL(a.href)
+}
+
+$('#last-ned-json').addEventListener('click', () =>
+  lastNed('innkjop.local.json', JSON.stringify(data, null, 2) + '\n', 'application/json')
+)
+
+$('#last-ned-csv').addEventListener('click', () => {
+  const felt = ['sku', 'navn', 'utsalg', 'innkjop', 'kilde', 'leverandor', 'kontakt', 'minsteordre', 'notat']
+  const esc = (x) => `"${String(x ?? '').replace(/"/g, '""')}"`
+  const rader = Object.entries(data).map(([sku, d]) =>
+    felt.map((f) => esc(f === 'sku' ? sku : d[f])).join(';')
+  )
+  // Semikolon og BOM, fordi norsk Excel forventer begge deler.
+  lastNed('innkjop.csv', '﻿' + felt.join(';') + '\n' + rader.join('\n') + '\n', 'text/csv')
+})
+
+$('#les-inn').addEventListener('change', async (e) => {
+  const fil = e.target.files[0]
+  if (!fil) return
+  const tekst = await fil.text()
+  try {
+    if (fil.name.endsWith('.json')) {
+      data = JSON.parse(tekst)
+    } else {
+      const linjer = tekst.replace(/^﻿/, '').trim().split('\n')
+      const hode = linjer[0].split(';').map((h) => h.replace(/^"|"$/g, ''))
+      for (const linje of linjer.slice(1)) {
+        const v = linje.match(/("([^"]|"")*"|[^;]*)/g).filter((_, i) => i % 2 === 0)
+        const rad = {}
+        hode.forEach((h, i) => (rad[h] = (v[i] ?? '').replace(/^"|"$/g, '').replace(/""/g, '"')))
+        if (!rad.sku) continue
+        data[rad.sku] = { ...data[rad.sku], ...rad, innkjop: rad.innkjop === '' ? null : Number(rad.innkjop) }
+        delete data[rad.sku].sku
+      }
+    }
+    endret = new Set(Object.keys(data))
+    tegn()
+  } catch (feil) {
+    alert('Klarte ikke lese filen: ' + feil.message)
+  }
+})
+
+koblTemabryter()
+
+try {
+  const svar = await fetch('../innkjop.local.json')
+  if (!svar.ok) throw new Error(String(svar.status))
+  data = await svar.json()
+} catch {
+  $('#advarsel').hidden = false
+  data = {}
+}
+tegn()
+</script>
+</body>
+</html>

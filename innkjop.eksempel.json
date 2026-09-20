@@ -1,0 +1,422 @@
+{
+  "knekkebrod": {
+    "navn": "Wasa Husman knekkebrød, 520 g",
+    "utsalg": 30,
+    "innkjop": 17.95,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "leverpostei": {
+    "navn": "Stabburet Leverpostei Original, 200 g",
+    "utsalg": 25,
+    "innkjop": 14.95,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "kaviar": {
+    "navn": "Mills Kaviar, 185 g",
+    "utsalg": 37,
+    "innkjop": 22.3,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "makrell-tomat": {
+    "navn": "Stabburet Makrell i tomat, 170 g",
+    "utsalg": 35,
+    "innkjop": 20.95,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "nugatti": {
+    "navn": "Nugatti Original, 350 g",
+    "utsalg": 28,
+    "innkjop": 16.75,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "sjokolade": {
+    "navn": "Freia Melkesjokolade, 200 g",
+    "utsalg": 30,
+    "innkjop": 17.95,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "mariekjeks": {
+    "navn": "Sætre Mariekjeks, 350 g",
+    "utsalg": 32,
+    "innkjop": 19.15,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "peanotter": {
+    "navn": "Peanøtter, 500 g",
+    "utsalg": 40,
+    "innkjop": 24.2,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "rosiner": {
+    "navn": "Rosiner, 500 g",
+    "utsalg": 55,
+    "innkjop": 33.3,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "oboy": {
+    "navn": "O'boy sjokoladedrikk, 450 g",
+    "utsalg": 55,
+    "innkjop": 32.95,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "fruktcocktail": {
+    "navn": "Fruktcocktail i sukkerlake, 820 g",
+    "utsalg": 31,
+    "innkjop": 18.7,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "havregryn": {
+    "navn": "Axa Bjørn Lettkokte Havregryn, 1,1 kg",
+    "utsalg": 27,
+    "innkjop": 16.15,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "middagshermetikk": {
+    "navn": "Trondhjems middagshermetikk, fire sorter",
+    "utsalg": 67,
+    "innkjop": 40.4,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "real-middag": {
+    "navn": "REAL Field Meal, 700 kcal – håndplukket utvalg",
+    "utsalg": 129,
+    "innkjop": 77.4,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "real-frokost": {
+    "navn": "REAL Turmat frokost – müsli og havregrøt",
+    "utsalg": 93,
+    "innkjop": 55.7,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "vannkanne-10": {
+    "navn": "Vanndunk 10 liter, gjennomsiktig",
+    "utsalg": 60,
+    "innkjop": 35.95,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "aquatabs": {
+    "navn": "Aquatabs vannrensetabletter, 50 stk",
+    "utsalg": 149,
+    "innkjop": 89.4,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "vannfilter": {
+    "navn": "Katadyn BeFree 1 liter vannfilter",
+    "utsalg": 799,
+    "innkjop": 479.4,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "kokeapparat": {
+    "navn": "Trangia Stormkjøkken 25-5 HA med gassbrenner",
+    "utsalg": 1698,
+    "innkjop": 1018.8,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "co-varsler": {
+    "navn": "CO-varsler med display, batteridrevet",
+    "utsalg": 349,
+    "innkjop": 209,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "fyrstikker": {
+    "navn": "Fyrstikker, 10 esker",
+    "utsalg": 13,
+    "innkjop": 7.75,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "hodelykt": {
+    "navn": "Petzl Actik Core hodelykt, 450 lumen",
+    "utsalg": 574,
+    "innkjop": 344.4,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "campinglykt": {
+    "navn": "Ledlenser ML4 Warm Light lanterne",
+    "utsalg": 474,
+    "innkjop": 284.4,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "batterier-aaa": {
+    "navn": "AAA-batterier, alkaliske, 40-pakning",
+    "utsalg": 80,
+    "innkjop": 47.95,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "telys": {
+    "navn": "Telys av stearin, 50-pakning",
+    "utsalg": 60,
+    "innkjop": 35.95,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "nodteppe": {
+    "navn": "Nødteppe, 140 × 220 cm",
+    "utsalg": 30,
+    "innkjop": 17.95,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "nodradio": {
+    "navn": "Sangean MMR-88 DAB nødradio",
+    "utsalg": 1190,
+    "innkjop": 714,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "pmr-radio": {
+    "navn": "Motorola Talkabout T42, toveisradio (2-pakning)",
+    "utsalg": 319,
+    "innkjop": 191.4,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "meshtastic": {
+    "navn": "Meshtastic-sett, ferdig satt opp (2 enheter)",
+    "utsalg": 1798,
+    "innkjop": 1078.8,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "powerbank": {
+    "navn": "Anker PowerCore 20 000 mAh",
+    "utsalg": 659,
+    "innkjop": 395.4,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "forstehjelp": {
+    "navn": "Lifesystems Waterproof førstehjelpssett",
+    "utsalg": 749,
+    "innkjop": 449.4,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "blodstopper": {
+    "navn": "Cederroth 4-in-1 blodstopper",
+    "utsalg": 99,
+    "innkjop": 59.25,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "hygienepakke": {
+    "navn": "Hygienepakke",
+    "utsalg": 149,
+    "innkjop": 89.4,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "bottetoalett": {
+    "navn": "Bøttetoalett 22 liter med sete og lokk",
+    "utsalg": 399,
+    "innkjop": 239.4,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "multiverktoy": {
+    "navn": "Leatherman Rev multiverktøy",
+    "utsalg": 799,
+    "innkjop": 479.4,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "beredskapsperm": {
+    "navn": "Beredskapspermen",
+    "utsalg": 199,
+    "innkjop": 49,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "eske-liten": {
+    "navn": "Nødboks Liten – én kasse på 45 liter",
+    "utsalg": 299,
+    "innkjop": 179.4,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "eske-mellom": {
+    "navn": "Nødboks Mellom – to kasser på 45 liter",
+    "utsalg": 598,
+    "innkjop": 358.8,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "eske-stor": {
+    "navn": "Nødboks Stor – tre kasser på 45 liter",
+    "utsalg": 897,
+    "innkjop": 538.2,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "eske-alu-liten": {
+    "navn": "Nødboks Liten i aluminium – én Zarges-kasse",
+    "utsalg": 3999,
+    "innkjop": 2399.4,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "eske-alu-mellom": {
+    "navn": "Nødboks Mellom i aluminium – Zarges og matkasse",
+    "utsalg": 4298,
+    "innkjop": 2578.8,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "eske-alu-stor": {
+    "navn": "Nødboks Stor i aluminium – Zarges og to matkasser",
+    "utsalg": 4597,
+    "innkjop": 2758.2,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  }
+}

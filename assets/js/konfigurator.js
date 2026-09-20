@@ -10,7 +10,6 @@
 
 import {
   KONFIG,
-  INNKJOPSFAKTOR,
   ESKER,
   VARER,
   MATNIVAER,
@@ -143,7 +142,6 @@ export function byggPakke(valg) {
       enhet: vare.enhet,
       antall,
       enhetspris: vare.pris,
-      innkjop: vare.innkjop ?? null,
       sum: vare.pris * antall,
       holdbarhetAr: vare.holdbarhetAr ?? null,
       dsb: vare.dsb ?? null,
@@ -169,7 +167,6 @@ export function byggPakke(valg) {
       enhet: 'stk',
       antall: 1,
       enhetspris: eske.pris,
-      innkjop: eske.innkjop ?? null,
       sum: eske.pris,
       holdbarhetAr: null,
       dsb: null,
@@ -230,22 +227,6 @@ export function byggPakke(valg) {
   const netto = sum - mvaBelop
 
   /*
-   * Hva delene ville kostet hver for seg.
-   *
-   * Katalogen setter innkjop = INNKJOPSFAKTOR x observert butikkpris, så den
-   * observerte prisen kan regnes tilbake eksakt. Utstyr prises hos oss rundt
-   * 85 % av butikkpris og mat til butikkpris, så differansen er reell, men den
-   * er en følge av prisregelen vår – ikke et tilbud vi har funnet på.
-   *
-   * For de få varene som ennå ikke er sourcet, er den observerte prisen selv et
-   * anslag. Derfor presenteres tallet som omtrentlig.
-   */
-  const egenkjop = linjer.reduce(
-    (n, l) => n + (l.innkjop ? l.innkjop / INNKJOPSFAKTOR : l.enhetspris) * l.antall,
-    0
-  )
-
-  /*
    * Hvor lenge maten rekker uten brennstoff.
    *
    * Vi sender ikke gass eller rødsprit – det kan ikke fraktes som vanlig pakke.
@@ -304,8 +285,6 @@ export function byggPakke(valg) {
     abonnement,
     abonnementsrabatt,
     sumMedAbonnement: sum - abonnementsrabatt,
-    egenkjop: Math.round(egenkjop),
-    spartMotEgenkjop: Math.round(egenkjop - sum),
     mva: Math.round(mvaBelop),
     netto: Math.round(netto),
     prisPerPerson: Math.round(sum / personer),
