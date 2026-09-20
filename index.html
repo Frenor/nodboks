@@ -113,59 +113,15 @@
         </p>
       </div>
 
-      <figure class="eske">
-        <svg viewBox="0 0 420 330" role="img"
-             aria-labelledby="eske-tittel" fill="none"
-             stroke-linecap="round" stroke-linejoin="round">
-          <title id="eske-tittel">Beredskapseske med åpent lokk, sett fra siden</title>
-
-          <!-- Lokket, slått bakover på hengslene -->
-          <g stroke="var(--border-strong)" stroke-width="2">
-            <path d="M152 112 L176 70 L376 70 L352 112 Z"/>
-            <path d="M176 70 L176 62 L376 62 L376 70"/>
-          </g>
-
-          <!-- Kassen: topp, front, side -->
-          <g stroke="var(--text)" stroke-width="2.5">
-            <path d="M100 152 L152 112 L352 112 L300 152 Z"/>
-            <path d="M100 152 L100 282 L300 282 L300 152"/>
-            <path d="M300 152 L352 112 L352 242 L300 282"/>
-          </g>
-
-          <!-- Hairline-detaljer: håndtak, listverk, skillevegg -->
-          <g stroke="var(--border-strong)" stroke-width="1.25">
-            <path d="M126 196 L160 196"/>
-            <path d="M126 196 L126 210 M160 196 L160 210"/>
-            <path d="M100 258 L300 258"/>
-            <path d="M300 258 L352 218"/>
-            <path d="M212 152 L212 282" stroke-dasharray="3 5"/>
-          </g>
-
-          <!-- Innhold som stikker opp: kanne, radio med antenne, lykt -->
-          <g stroke="var(--text-muted)" stroke-width="2">
-            <path d="M126 152 L126 122 L160 122 L160 152"/>
-            <path d="M134 122 L134 114 L152 114 L152 122"/>
-            <path d="M232 152 L232 126 L272 126 L272 152"/>
-            <path d="M262 126 L278 96" stroke-width="1.5"/>
-          </g>
-
-          <!-- Ett element i aksentfarge: lykten. Det eneste lyset i bildet. -->
-          <g stroke="var(--accent)" stroke-width="2.5">
-            <path d="M178 152 L178 132 L214 132 L214 152"/>
-            <path d="M186 132 L186 124 L206 124 L206 132"/>
-          </g>
-
-          <!-- Merket, stemplet på fronten -->
-          <text x="200" y="228" text-anchor="middle"
-                font-family="var(--font-ui)" font-size="13"
-                letter-spacing="3.5" fill="var(--text-faint)" stroke="none">NØDBOKS</text>
-          <text x="200" y="246" text-anchor="middle"
-                font-family="var(--font-ui)" font-size="9.5"
-                letter-spacing="1.6" fill="var(--text-faint)" stroke="none">SJU DØGN · 4 PERSONER</text>
-        </svg>
-        <figcaption class="eske__tekst">
-          Illustrasjon. Innholdet settes sammen i byggeren under.
-        </figcaption>
+      <figure class="hero__bilde">
+        <picture>
+          <source srcset="assets/img/hero-2048.webp 2048w, assets/img/hero-1600.webp 1600w, assets/img/hero-1200.webp 1200w"
+                  sizes="(min-width: 60rem) 50vw, 100vw" type="image/webp">
+          <img src="assets/img/hero-2048.webp"
+               width="2048" height="768"
+               alt="En voksen og et barn koker vann på et stormkjøkken på et svaberg i skumringen. Barnet holder en hodelykt, og en vannkanne står ved siden av."
+               fetchpriority="high" decoding="async">
+        </picture>
       </figure>
     </div>
   </section>

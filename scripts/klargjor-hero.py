@@ -19,7 +19,9 @@ import sys
 from PIL import Image
 
 ROT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-BREDDER = [(1600, "hero-1600"), (2400, "hero-2400")]
+# Faste bredder, pluss kildens egen hvis den ligger mellom dem. Et bilde
+# skaleres aldri opp – da lages det bare piksler som ikke finnes.
+BREDDER = [1200, 1600, 2400]
 KVALITET = 82
 TAK_KB = 300
 
@@ -40,11 +42,10 @@ def main():
         print("  ! Smalere enn ventet. Heroen er satt opp for et vidt format;")
         print("    sjekk at motivet ikke beskjæres feil på mobil.")
 
+    mål = sorted({min(x, b) for x in BREDDER})
     utdata = []
-    for bredde, navn in BREDDER:
-        if bredde > b:
-            print(f"  · hopper over {bredde} px – kilden er bare {b} px bred")
-            continue
+    for bredde in mål:
+        navn = f"hero-{bredde}"
         ny = bilde.resize((bredde, round(bredde / forhold)), Image.LANCZOS)
         sti = os.path.join(ROT, "assets/img", navn + ".webp")
         ny.save(sti, "WEBP", quality=KVALITET, method=6)
@@ -56,10 +57,14 @@ def main():
     if not utdata:
         sys.exit("Ingen filer skrevet – kilden er for liten.")
 
+    # srcset bygges av filene som faktisk ble laget, aldri av lista over
+    # ønskede bredder. En kilde som er smalere enn taket skal ikke gi en
+    # peker til en fil som ikke finnes.
+    srcset = ", ".join(f"assets/img/{n}.webp {s[0]}w" for n, s in reversed(utdata))
     stor = utdata[-1]
     markering = f"""      <figure class="hero__bilde">
         <picture>
-          <source srcset="assets/img/hero-2400.webp 2400w, assets/img/hero-1600.webp 1600w"
+          <source srcset="{srcset}"
                   sizes="(min-width: 60rem) 50vw, 100vw" type="image/webp">
           <img src="assets/img/{stor[0]}.webp"
                width="{stor[1][0]}" height="{stor[1][1]}"
@@ -77,7 +82,11 @@ def main():
         )
         print("\n✓ index.html: strektegningen er byttet ut med bildet")
     elif 'class="hero__bilde"' in html:
-        print("\n· index.html har allerede bildet – markeringen er ikke rørt")
+        eldre = re.search(r'      <figure class="hero__bilde">.*?</figure>', html, re.S)
+        open(sti_html, "w", encoding="utf-8").write(
+            html[: eldre.start()] + markering + html[eldre.end():]
+        )
+        print("\n✓ index.html: markeringen er oppdatert")
     else:
         print("\n! Fant verken strektegningen eller bildet i index.html.")
         print("  Lim inn dette der heroillustrasjonen skal stå:\n")
