@@ -1177,7 +1177,7 @@ export const VARER = [
     produkt: {
       merke: 'Seeed Studio',
       modell: 'SenseCAP Card Tracker T1000-E',
-      kilde: 'Observert 899 kr per enhet. MERK: lagerstatus og importøransvar må avklares, se docs/sortiment.md',
+      kilde: 'Observert 899 kr per enhet. Kjøpes fra EØS-forhandler, så importøransvaret ligger hos dem. Lagerstatus må bekreftes per ordre.',
       url: '',
     },
     /*

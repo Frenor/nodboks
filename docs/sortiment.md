@@ -453,11 +453,18 @@ eget publiserte resonnement uten at én ny opplysning hadde endret det.
 >   nøyaktig det vi kritiserer markedet for.
 > - **Det er et tillegg, ikke standard.** Ingen får det uten å be om det.
 >
-> **Dette må avklares før første salg:** kjøper vi fra en produsent utenfor EØS,
-> blir Nødboks rettslig importør etter radioutstyrsdirektivet. Det betyr CE-
-> merking, ti års dokumentasjonsplikt, og vårt eget navn og adresse på varen.
-> Det er en reell forpliktelse, ikke en formalitet, og den må løses eller
-> unngås ved å kjøpe gjennom en EØS-forhandler.
+> **Importøransvaret er avklart.** Enhetene kjøpes fra forhandler innenfor EØS.
+> Da er det forhandleren som er importør etter radioutstyrsdirektivet og bærer
+> CE-merking, samsvarserklæring og dokumentasjonsplikten. Nødboks er distributør,
+> og plikten vår er lettere, men ikke null: vi skal kontrollere at CE-merke og
+> norsk eller engelsk bruksanvisning følger med, ikke selge utstyr vi har grunn
+> til å tro ikke er i samsvar, og kunne opplyse hvem vi kjøpte fra i ti år.
+>
+> Det siste er verdt å merke seg fordi det påvirker en praktisk ting: vi
+> konfigurerer enhetene før forsendelse. Å endre frekvens og kanal innenfor det
+> enheten allerede er godkjent for er bruk, ikke en endring av produktet – men
+> fastvareoppdatering til en versjon produsenten ikke har samsvarsvurdert ville
+> vært noe annet. Vi setter opp, vi flasher ikke.
 
 
 **Kortsvaret er nei.** Kommunikasjonsmodulen forblir Motorola Talkabout T42
@@ -512,6 +519,9 @@ distributør som allerede har gjort jobben, reduseres det til å verifisere at
 dokumentasjonen følger med – altså samme situasjon som PMR446 hos en etablert
 forhandler. Forskjellen mellom de to kanalene er reell og må tas før første
 innkjøp, ikke etter.
+
+*Valgt 20.09.2026: EØS-forhandler. Vi blir distributør, ikke importør. Se
+beslutningsboksen øverst i dette avsnittet for hva plikten da faktisk er.*
 
 **Frakten er derimot ikke et problem.** Litiumbatteriene i en LoRa-håndenhet
 ligger typisk på 4–20 Wh og faller inn under særbestemmelse 188, som unntar små
