@@ -1,0 +1,20 @@
+# Avhengigheter (siden har ingen byggsteg – dette er kun for verktøy)
+node_modules/
+
+# Bygg-/verktøyartefakter
+dist/
+build/
+.cache/
+*.log
+
+# Editor og OS
+.DS_Store
+.idea/
+.fleet/
+.vscode/
+*.swp
+
+# Miljø og nøkler – checkout-nøkler settes i assets/js/config.js,
+# hold ekte produksjonsnøkler utenfor repoet
+.env
+.env.*
