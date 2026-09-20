@@ -887,7 +887,7 @@ export const VARER = [
       'Ekte DAB+ og FM, 2000 mAh batteri, lading via USB-C, solcelle eller håndsveiv. Lommelykt med SOS.',
     hvorfor:
       'NRKs FM-riksnett ble slukket i 2017, og NRK P1 – myndighetenes beredskapskanal – sendes på DAB+. En ren FM-radio dekker derfor ikke DSBs råd i Norge. Vi oppgir merke, modell og EAN, som ingen av de tolv konkurrentene vi kartla gjør. Om sveiven: ett minutt gir tre til fem minutters radio, så den er siste utvei – driftsformen er ladet batteri, solcelle i vinduet og USB-C fra powerbanken.',
-    kategori: 'Strom og samband',
+    kategori: 'Strøm og samband',
     type: 'engang',
     moduser: ['komplett'],
     enhet: 'stk',
@@ -913,7 +913,7 @@ export const VARER = [
     beskrivelse: 'Nødlading til mobil, hodelykt og radio. USB-C inn og ut.',
     hvorfor:
       'Radioens eget batteri skal brukes til radio. Nødlading av mobil er en egen jobb, og 10 000 mAh er rundt to fulle telefonladinger – nok til å holde én telefon i live gjennom uka hvis den brukes med måte. Skal toppes opp én gang i året; det minner vi om sammen med matbyttet.',
-    kategori: 'Strom og samband',
+    kategori: 'Strøm og samband',
     type: 'engang',
     moduser: ['komplett'],
     enhet: 'stk',
@@ -997,7 +997,7 @@ export const VARER = [
       'Trykt hefte: hva du gjør de første timene, sju døgns menyplan med tilberedning, DSBs egen sjekkliste, skjema for kontakter og medisiner, og en konvolutt til kontanter.',
     hvorfor:
       'Papir virker når telefonen er død. Menyplanen står trykt fordi den eneste måten å vite at maten faktisk rekker sju døgn, er å ha den fordelt på døgn på forhånd – og fordi minst to måltider hver dag skal kunne lages helt uten varme. Konvolutten er tom; kontanter legger du i selv, men vi minner om det, for kortterminaler går på strøm.',
-    kategori: 'Verktoy og dokumenter',
+    kategori: 'Verktøy og dokumenter',
     type: 'engang',
     moduser: ['komplett'],
     enhet: 'stk',

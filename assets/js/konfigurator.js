@@ -35,6 +35,39 @@ export const mvaSats = (kategori) => (kategori === 'Mat' ? MVA.mat : MVA.standar
 /** Kategoriene som vises samlet som «Mat og vann» i prispanelet. */
 export const MATGRUPPER = ['Mat', 'Vann']
 
+/**
+ * Innholdslisten grupperes etter DSBs egne fire overskrifter, ikke etter våre.
+ *
+ * DSBs trykte sjekkliste har nøyaktig fire: «Mat og vann», «Varme og lys»,
+ * «Informasjon» og «Legemidler og hygiene». Ved å bruke de samme kan kunden
+ * holde vår liste mot den offisielle linje for linje. Det er et sterkere
+ * tillitsgrep enn kategorier vi finner på selv, og det koster oss ingenting.
+ *
+ * «Annet» og «Esken» er våre egne og står sist, tydelig atskilt fra DSBs.
+ */
+export const DSB_GRUPPER = {
+  'Mat': 'Mat og vann',
+  'Vann': 'Mat og vann',
+  'Matlaging': 'Mat og vann',
+  'Varme og lys': 'Varme og lys',
+  'Strøm og samband': 'Informasjon',
+  'Helse og hygiene': 'Legemidler og hygiene',
+  'Verktøy og dokumenter': 'Annet',
+  'Esken': 'Esken',
+}
+
+const GRUPPEREKKEFOLGE = [
+  'Mat og vann',
+  'Varme og lys',
+  'Informasjon',
+  'Legemidler og hygiene',
+  'Annet',
+  'Esken',
+]
+
+/** Hvilken av DSBs overskrifter varen hører under. */
+export const dsbGruppe = (kategori) => DSB_GRUPPER[kategori] ?? 'Annet'
+
 /** Klemmer personantallet inn i det katalogen faktisk dekker. */
 export const klem = (n) =>
   Math.min(KONFIG.personerMaks, Math.max(KONFIG.personerMin, Math.round(n || 1)))
@@ -165,19 +198,24 @@ export function byggPakke(valg) {
   }
 }
 
-/** Grupperer linjene til visning, i katalogens kategorirekkefølge. */
+/** Grupperer linjene etter DSBs overskrifter, i DSBs egen rekkefølge. */
 function grupper(linjer) {
   const kart = new Map()
   for (const l of linjer) {
-    if (!kart.has(l.kategori)) kart.set(l.kategori, [])
-    kart.get(l.kategori).push(l)
+    const g = dsbGruppe(l.kategori)
+    if (!kart.has(g)) kart.set(g, [])
+    kart.get(g).push(l)
   }
-  return [...kart.entries()].map(([navn, varer]) => ({
-    navn,
-    varer,
-    sum: varer.reduce((n, v) => n + v.sum, 0),
-    antall: varer.reduce((n, v) => n + v.antall, 0),
-  }))
+  return GRUPPEREKKEFOLGE.filter((g) => kart.has(g)).map((navn) => {
+    const varer = kart.get(navn)
+    return {
+      navn,
+      dsb: navn !== 'Annet' && navn !== 'Esken',
+      varer,
+      sum: varer.reduce((n, v) => n + v.sum, 0),
+      antall: varer.reduce((n, v) => n + v.antall, 0),
+    }
+  })
 }
 
 /** Korteste holdbarhet i pakken – det er den som avgjør når påfyll trengs. */

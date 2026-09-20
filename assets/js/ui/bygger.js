@@ -180,7 +180,7 @@ function tegnSvar(rot, pakke) {
   const mat = pakke.linjer.filter((l) => l.kcal > 0).reduce((n, l) => n + l.antall, 0)
   if (mat) deler.push(`<b>${tall(mat)}</b> matvarer`)
   if (pakke.liter) deler.push(`<b>${tall(pakke.liter)} liter</b> vannkapasitet`)
-  if (pakke.eske) deler.push(`én eske på rundt <b>${tall(pakke.vekt, 0)} kg</b>`)
+  if (pakke.eske) deler.push(`${pakke.eske.navn.toLowerCase().startsWith('nødboks') ? pakke.eske.navn.split('–')[1]?.trim() ?? 'esken' : 'esken'} på til sammen <b>${tall(pakke.vekt, 0)} kg</b>`)
   el.innerHTML = `<p>Det gir ${deler.join(', ')} – nok til ${personer(pakke.valg.personer)}
     i ${KONFIG.dogn} døgn.</p>`
 }

@@ -38,20 +38,23 @@
   width: var(--eske-b);
 }
 .eske__kropp {
-  position: absolute; inset: 22% 6% 8%;
+  position: absolute; inset: 26% 7% 8%;
+  z-index: 1;
   background: var(--surface-2);
   border: 2px solid var(--border-strong);
-  border-radius: var(--radius);
+  border-radius: 0 0 var(--radius) var(--radius);
 }
+/* Lokket males over kroppen, ellers kuttes konturen der de møtes. */
 .eske__lokk {
-  position: absolute; inset: 14% 2% 66%;
+  position: absolute; inset: 18% 3% 66%;
+  z-index: 2;
   background: var(--surface);
   border: 2px solid var(--border-strong);
   border-radius: var(--radius-sm);
 }
 .eske__hank {
-  position: absolute; left: 50%; top: 8%;
-  width: 22%; height: 8%;
+  position: absolute; left: 50%; top: 11%;
+  width: 20%; height: 7.5%;
   transform: translateX(-50%);
   border: 2px solid var(--border-strong);
   border-bottom: 0;
@@ -59,7 +62,8 @@
 }
 /* Merket på esken – ravgul ø er byttet ut med aksentens ettergløde-verdi */
 .eske__merke {
-  position: absolute; left: 50%; top: 58%;
+  position: absolute; left: 50%; top: 60%;
+  z-index: 3;
   transform: translateX(-50%);
   font-family: var(--font-ui);
   font-size: var(--step--1);
