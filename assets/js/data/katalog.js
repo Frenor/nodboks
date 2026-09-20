@@ -327,6 +327,18 @@ export const MODUSER = [
 // Den gratis påminnelsen ligger først med vilje: den er det ærligste tilbudet
 // i lista, og for en langtidsmatkunde er det som regel det riktige.
 
+/*
+ * Påfyllsnivåer.
+ *
+ * Det fantes et halvårlig nivå som sendte hele matpakken på nytt hver sjette
+ * måned, til mat med ett års holdbarhet. Det er å selge folk mat de ikke
+ * trenger, og det er nøyaktig oppførselen vi kritiserer markedet for. Det er
+ * fjernet.
+ *
+ * Det legitime halvårsbehovet finnes likevel: meieri og annet med kort dato
+ * tåler ikke et helt år. Det hører hjemme som en egen liten ferskmodul, ikke
+ * som en dobbel forsendelse av alt. Se docs/sortiment.md.
+ */
 export const PAFYLL = [
   {
     id: 'varsel',
@@ -343,14 +355,6 @@ export const PAFYLL = [
       'Ny mat på døra hvert år, før den gamle går ut. Du spiser opp den gamle. Kan stanses når som helst.',
     intervallDager: 365,
     rabatt: 0.1,
-  },
-  {
-    id: 'halvarlig',
-    navn: 'Halvårlig påfyll',
-    beskrivelse:
-      'For husstander som vil ha det ferskeste lageret, og for deg som også vil ha meieri og annet med kort dato i samme forsendelse.',
-    intervallDager: 182,
-    rabatt: 0.15,
   },
 ]
 
