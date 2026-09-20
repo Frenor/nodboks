@@ -175,20 +175,13 @@ function byggValg(skjema) {
         <input type="radio" name="eskeType" value="${e.id}" ${i === 0 ? 'checked' : ''}
                aria-describedby="eske-${e.id}-desc">
         <span class="option__body">
-          ${
-            e.bilde
-              ? `<img class="option__foto" src="${e.bilde}-600.webp"
-                      srcset="${e.bilde}-600.webp 600w, ${e.bilde}-900.webp 900w"
-                      sizes="(min-width: 60rem) 22rem, 45vw"
-                      width="600" height="450" alt="" loading="lazy" decoding="async"
-                      onerror="this.remove()">`
-              : ''
-          }
+
           <span class="option__title">${e.navn} <span class="tnum" id="eske-${e.id}-pris"></span></span>
           <p class="option__desc" id="eske-${e.id}-desc">${e.beskrivelse}</p>
         </span>
       </label>`
     ).join('')
+    visKassebilder(eskeRot)
   }
 
   const pafyllRot = $('#pafyllsvalg', skjema)
@@ -287,6 +280,50 @@ function tegnTillegg(rot, pakke) {
       .join('')
   } else {
     for (const boks of $$('input[name="tillegg"]', el)) boks.checked = valgt.has(boks.value)
+  }
+}
+
+/**
+ * Legger inn bildene av kassene – men bare hvis ALLE finnes.
+ *
+ * Et valgkort med foto ved siden av et uten er ikke et nøytralt valg. Bildet
+ * selger for seg selv, og kunden velger det de får se. Siden hele poenget er at
+ * aluminium koster tre og et halvt tusen mer og den forskjellen er visuell,
+ * ville en ensidig illustrasjon vært en tommel på vekten.
+ *
+ * Derfor lastes bildene før de settes inn, og det holder ikke at feltet er
+ * fylt ut i katalogen – filen må faktisk svare.
+ */
+async function visKassebilder(rot) {
+  const typer = ESKETYPER.filter((e) => e.bilde)
+  if (typer.length !== ESKETYPER.length) return
+
+  const lastet = await Promise.all(
+    typer.map(
+      (e) =>
+        new Promise((ok) => {
+          const bilde = new Image()
+          bilde.onload = () => ok(true)
+          bilde.onerror = () => ok(false)
+          bilde.src = e.bilde
+        })
+    )
+  )
+  if (!lastet.every(Boolean)) return
+
+  for (const type of typer) {
+    const felt = rot.querySelector(`input[value="${type.id}"]`)?.closest('.option')
+    const kropp = felt?.querySelector('.option__body')
+    if (!kropp || kropp.querySelector('.option__foto')) continue
+    const el = document.createElement('img')
+    el.className = 'option__foto'
+    el.src = type.bilde
+    el.width = 600
+    el.height = 600
+    el.alt = ''
+    el.loading = 'lazy'
+    el.decoding = 'async'
+    kropp.prepend(el)
   }
 }
 

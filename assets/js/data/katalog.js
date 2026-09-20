@@ -154,14 +154,14 @@ export const ESKETYPER = [
     // Bildet er ikke pynt. Aluminiumskassen koster 3 478 kr mer, og den
     // forskjellen er visuell og taktil før den er funksjonell – å be noen
     // betale for den uten å vise den er å be dem kjøpe katta i sekken.
-    bilde: 'assets/img/kasse-plast',
+    bilde: 'assets/img/kasse-plast.webp',
     navn: 'Plastkasser',
     beskrivelse:
       'SmartStore Dry 45 fra Orthex: IP44, tåler −40 til +70 °C, næringsmiddelgodkjent, ti års garanti. Stablbar, tett mot støv og fukt.',
   },
   {
     id: 'alu',
-    bilde: 'assets/img/kasse-alu',
+    bilde: 'assets/img/kasse-alu.webp',
     navn: 'Aluminiumskasse til utstyret',
     beskrivelse:
       'Zarges Eurobox i aluminium til utstyret, plastkasser til mat og vann. Kassen tåler å stå ute, på et biltak eller i en båt – den er selv noe du bruker, ikke bare noe innholdet ligger i.',

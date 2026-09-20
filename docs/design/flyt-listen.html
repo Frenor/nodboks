@@ -171,6 +171,10 @@ img, svg { max-width: 100%; height: auto; display: block; }
 :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: var(--radius-sm); }
 :focus:not(:focus-visible) { outline: none; }
 button { font: inherit; }
+/* [hidden] må alltid vinne, uansett hvilken display-verdi en klasse på samme
+   element setter (f.eks. .kvittering__linje{display:flex}) – ellers slår
+   ikke skjul/vis-logikken i JS (spartRad.hidden = true) faktisk gjennom. */
+[hidden] { display: none !important; }
 
 .visually-hidden:not(:focus):not(:active) {
   position: absolute !important; width: 1px; height: 1px;
@@ -394,8 +398,24 @@ input:focus-visible { border-color: var(--focus); }
   .bygger-grid > * + * { margin-top: 0; }
 }
 .beslutninger { grid-area: kontroll; display: grid; gap: var(--sp-5); }
-.varegrupper { grid-area: liste; display: grid; gap: var(--sp-7); min-width: 0; }
+.varegrupper { grid-area: liste; display: grid; gap: var(--sp-7); min-width: 0; padding-bottom: 6.5rem; }
+/* Prisen skal alltid være synlig (ufravikelig krav). Under 64rem brukes
+   position:fixed for prisrailen – det er den eneste teknikken vi kan stole
+   100 % på for «alltid synlig, uansett hvor langt ned i listen». Fra 64rem
+   og opp er det plass til en egen kolonne, og der bruker vi position:sticky
+   (top-forankret – den samme, veldokumentert pålitelige varianten som
+   .site-header og .undernav lenger opp på siden). */
 .prisrail { grid-area: pris; }
+.prisrail__fastbunn {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+  display: flex; justify-content: center;
+}
+.prisrail__fastbunn > .prisrail__kort { width: min(100%, var(--width-page)); }
+@media (min-width: 64rem) {
+  .varegrupper { padding-bottom: 0; }
+  .prisrail__fastbunn { position: static; display: block; }
+  .prisrail { position: sticky; top: 8.5rem; }
+}
 
 /* --- Beslutningskort (VALG – store, tydelige) ------------------------------ */
 .beslutning__hode { display: flex; align-items: baseline; gap: var(--sp-2); margin-bottom: var(--sp-1); }
@@ -570,16 +590,12 @@ details.forbehold li + li { margin-top: var(--sp-1); }
    8. PRISRAIL – prisen skal alltid være synlig
    ========================================================================== */
 .prisrail__kort {
-  position: sticky; bottom: 0; z-index: 40;
   background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   box-shadow: var(--shadow-lg); padding: var(--sp-4) var(--sp-5);
-  margin-inline: -1rem; /* bleder til skjermkanten, samme mengde som .wrap sin egen kant under 40rem */
-}
-@media (min-width: 40rem) {
-  .prisrail__kort { margin-inline: -1.5rem; }
+  max-height: 70vh; overflow-y: auto;
 }
 @media (min-width: 64rem) {
-  .prisrail__kort { position: sticky; top: 8.5rem; bottom: auto; border-radius: var(--radius-lg); margin-inline: 0; }
+  .prisrail__kort { border-radius: var(--radius-lg); max-height: none; overflow-y: visible; }
 }
 .prisrail__topp { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--sp-3); flex-wrap: wrap; }
 .prisrail__sum { font-family: var(--font-display); font-size: var(--step-3); font-weight: 650; margin: 0; line-height: 1; }
@@ -795,6 +811,7 @@ details.prisoppsett[open] summary::after { transform: rotate(-135deg) translate(
 
         <!-- ---- Prisrail: alltid synlig ---- -->
         <aside class="prisrail" aria-labelledby="pris-tittel">
+         <div class="prisrail__fastbunn">
           <div class="card prisrail__kort">
             <h3 class="visually-hidden" id="pris-tittel">Pris</h3>
             <div class="prisrail__topp">
@@ -829,6 +846,7 @@ details.prisoppsett[open] summary::after { transform: rotate(-135deg) translate(
 
             <p class="visually-hidden" role="status" aria-live="polite" id="status-oppsummering"></p>
           </div>
+         </div>
         </aside>
 
         <!-- ---- Varegruppene: selve listen ---- -->

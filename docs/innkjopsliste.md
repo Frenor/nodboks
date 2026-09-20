@@ -33,6 +33,11 @@ For hver leverandør, be om:
    igjen når den kommer, er en helt annen vare enn en med to.
 6. **Artikkelnummerets levetid.** Biltema roterer sortimentet raskt; en trykt
    innholdsliste mot et artikkelnummer som byttes er en reell lagerrisiko.
+7. **Bilderettigheter.** Be skriftlig om tillatelse til å bruke produktbildene
+   deres i vår nettbutikk. De fleste produsenter har en bildebank for
+   forhandlere og gir det uten videre – men det skal stå i en e-post, ikke
+   forutsettes. Vi bruker Zarges' eget produktbilde i kassevalget i dag, og det
+   er ikke avklart.
 
 Si at du bygger en nettbutikk for beredskapspakker og forventer jevn etterspørsel
 med topper i oktober, når Egenberedskapsuka går. Det er et argument for staffel.
