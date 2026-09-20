@@ -238,6 +238,20 @@ img, svg, video { max-width: 100%; height: auto; display: block; }
 
 label { font-weight: 600; }
 
+/* Avkrysningsbokser holder WCAG 2.5.8 på 24 px, selv når de ligger i en label
+   som er større. Boksen er også et treffmål i seg selv, og nettleserens
+   standard på 13 px er ikke det. */
+input[type="checkbox"],
+input[type="radio"] {
+  width: 1.5rem;
+  height: 1.5rem;
+  min-height: 0;
+  flex: none;
+  margin: 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
 input, select, textarea {
   font: inherit;
   color: var(--text);
