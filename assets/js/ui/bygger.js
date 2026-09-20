@@ -30,6 +30,21 @@ const $$ = (sel, rot = document) => [...rot.querySelectorAll(sel)]
 /** Norsk flertall uten å skrive «1 personer». */
 const personer = (n) => `${n} ${n === 1 ? 'person' : 'personer'}`
 
+/**
+ * Holdbarhet som noe man kan lese.
+ *
+ * Katalogen lagrer år som desimaltall fordi mengdene regnes ut av dem. «1,2 år»
+ * er presist og ubrukelig; under to år er måneder det folk faktisk tenker i.
+ */
+function holdbarhet(ar) {
+  if (!ar) return null
+  if (ar < 2) {
+    const md = Math.round(ar * 12)
+    return `${md} måned${md === 1 ? '' : 'er'}`
+  }
+  return `${tall(Math.round(ar))} år`
+}
+
 const ikon = {
   ok: '<svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8.5 6.5 12 13 4.5"/></svg>',
   warn: '<svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2.5 15 14H1z"/><path d="M8 6.5v3.2"/><path d="M8 11.8v.6"/></svg>',
@@ -329,7 +344,7 @@ function tegnPris(rot, pakke) {
   const neste = $('#pris-neste', rot)
   if (neste) {
     neste.textContent = pakke.holdbarhetAr
-      ? `Neste påfyll om rundt ${pakke.holdbarhetAr} år.`
+      ? `Neste påfyll om rundt ${holdbarhet(pakke.holdbarhetAr)}.`
       : ''
   }
 }
@@ -355,7 +370,7 @@ function tegnListe(rot, pakke) {
             <span class="vare__antall">${tall(v.antall)} ${v.enhet}</span>
             ${v.hvorfor ? `<p class="vare__hvorfor">${v.hvorfor}</p>` : ''}
             <div class="vare__merker">
-              ${v.holdbarhetAr ? `<span class="badge">Holdbar ${v.holdbarhetAr} år</span>` : ''}
+              ${holdbarhet(v.holdbarhetAr) ? `<span class="badge">Holdbar ${holdbarhet(v.holdbarhetAr)}</span>` : ''}
               <span class="badge">${v.type === 'engang' ? 'Varer i mange år' : 'Går ut på dato'}</span>
             </div>
           </div>`
