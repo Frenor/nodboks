@@ -349,8 +349,10 @@ oppgitt pris til oss.
 
 ## Varer uten kilde – må sourcees før lansering
 
-Tre varer har ingen navngitt produkt og ingen observert pris i det hele tatt:
-**powerbank**, **førstehjelpspakke** og **hygienepakke**. Sammen med de tre
+Fire varer har ingen navngitt produkt og ingen observert pris i det hele tatt:
+**powerbank**, **førstehjelpspakke**, **hygienepakke** og **CO-varsler**.
+CO-varsleren må være EN 50291-1-sertifisert for bolig – det er ikke en
+valgfri spesifikasjon, og den skal etterspørres skriftlig. Sammen med de tre
 eskene, som også er rene anslag, utgjør de rundt 19 % av varelinjen i en
 firepersonspakke. Her er det ikke snakk om å forhandle ned en kjent pris – vi
 vet ikke hva de koster.
