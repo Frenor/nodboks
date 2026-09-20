@@ -108,6 +108,71 @@ dyp blågrønn. Ikke be om «natt» — da blir det dramatisk. Be om **blåtimen
 
 ---
 
+## Bilde 2, andre forsøk — eksakt varelista
+
+Første forsøk kom tilbake med presenning, tau, strips, børste, ullsokker og
+AA-batterier. Ingen av dem er i esken. Det manglet samtidig bøttetoalettet og
+beredskapspermen. Det er nøyaktig det avviket sjekklisten under advarer mot: et
+bilde som viser mer enn esken inneholder, er en påstand vi ikke innfrir.
+
+Bruk denne lista i stedet for en beskrivelse. Den er hentet ut av katalogen og
+er innholdet i **komplett pakke, fire personer, vanlig tørrmat** — 33 varelinjer,
+86 enheter.
+
+> Flat lay ovenfra av nøyaktig disse gjenstandene, ikke flere og ikke færre:
+>
+> **Vann (ni gjenstander):** 8 gjennomsiktige vannkanner på 10 liter med
+> bærehåndtak og sort skrukork, tomme. 1 liten hvit boks med
+> vannrensetabletter. 1 sammenleggbar vannfilterflaske i mykplast med
+> filterhals, ikke et sugerør.
+>
+> **Matlaging (to gjenstander):** 1 stormkjøkken i aluminium med rund
+> vindskjerm, to kjeler, stekepanne og gripetang, satt sammen som ett sett.
+> 1 bunt fyrstikkesker.
+>
+> **Varme og lys (elleve gjenstander):** 4 hodelykter med sort hodebånd.
+> 1 liten lanterne med krok. 1 pakke AAA-batterier. 1 pakke telys — flate,
+> runde lys i aluminiumsform, ikke blokklys. 4 sammenbrettede nødtepper i sølv.
+> 1 CO-varsler, hvit boks med lite display.
+>
+> **Strøm og samband (to gjenstander):** 1 liten DAB-radio med antenne og
+> sveiv. 1 sort powerbank på størrelse med en mobil.
+>
+> **Helse og hygiene (fem gjenstander):** 1 rød førstehjelpspose med hvitt
+> kors. 2 flate hvite pakker med trykkbandasje. 1 gjennomsiktig pose med
+> våtservietter, håndsprit og søppelsekker. 1 hvit bøtte med toalettsete og
+> lokk.
+>
+> **Verktøy og papir (to gjenstander):** 1 sammenslått multiverktøy i stål.
+> 1 trykt hefte i A5 med enkelt omslag.
+>
+> **Mat (tretten typer, uten lesbare etiketter):** knekkebrød i flate pakker,
+> små runde påleggsbokser, tuber, flate fiskebokser, glass med brun
+> sjokoladepålegg, sjokoladeplater, kjekspakker, poser med nøtter og rosiner,
+> en boks kakaopulver, en hermetikkboks med frukt, poser med havregryn, og
+> femten middagshermetikkbokser i tre størrelser.
+>
+> **Esken:** 2 stablebare plastkasser med tett lokk og klips, satt ved siden
+> av oppstillingen, ikke under den.
+>
+> **Ikke ta med:** presenning, tau, strips, børste, sokker, klær, verktøy
+> utover multiverktøyet, AA-batterier, blokklys, kniver, gassbokser,
+> brennstoff av noe slag, kart, kompass, eller noe militært.
+>
+> Alt ligger rett og parallelt med lik avstand, ingenting overlapper. Mykt
+> diffust lys ovenfra, nesten ingen skygger, rett ovenfra uten
+> perspektivforvrengning. Bakgrunn i kjølig grågrønn, `#E3E9E4`. Ingen lesbar
+> tekst eller logo på noe.
+
+### Hvorfor antallene betyr noe
+
+Fire hodelykter og åtte vannkanner er ikke pynt. Det er hele hovedargumentet
+vårt gjort synlig: konkurrentene leverer én lykt uansett hvor mange dere er,
+og flere av dem ligger under DSBs 20 liter per person. Viser bildet feil antall,
+motsier det teksten det står ved siden av.
+
+Første forsøk traff begge disse riktig. Det er verdt å beholde.
+
 ## Når bildet kommer tilbake
 
 Sjekk tre ting før det legges inn. De to første er tillitsspørsmål, ikke
