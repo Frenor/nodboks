@@ -376,46 +376,34 @@ input:focus-visible { border-color: var(--focus); }
 .pille__tall { font-size: 0.85em; opacity: 0.75; }
 
 /* ==========================================================================
-   6. BYGGEREN – layout (kontroll+pris+liste via grid-areas)
+   6. BYGGEREN – layout (kontroll + liste i grid; prisen er egen fast bunnlinje)
    ========================================================================== */
 .bygger-intro { margin-bottom: var(--sp-6); }
-/* Under 64rem er dette bevisst VANLIG BLOKKFLYT, ikke et grid. Kontroll,
-   prisrail og varegrupper er tre søsken i rekkefølge; fordi ingen av dem er
-   grid-elementer, spenner prisrailens nærmeste blokk (.bygger-grid) over hele
-   listens høyde, og position:sticky får dermed plass til å følge med helt til
-   bunnen av listen. Legges dette i et CSS grid (som ved 64rem+), blir hvert
-   barns "sticky-boks" begrenset til sin egen korte rad, og klistringen brytes
-   – nøyaktig samme felle som er dokumentert i docs/designvalg.md § 3.2/3.4. */
 .bygger-grid { display: block; }
 .bygger-grid > * + * { margin-top: var(--sp-6); }
 @media (min-width: 64rem) {
   .bygger-grid {
-    display: grid; gap: var(--sp-6);
+    display: grid; gap: var(--sp-7);
     grid-template-columns: minmax(21rem, 24rem) minmax(0, 1fr);
-    grid-template-areas: "kontroll liste" "pris liste";
-    align-items: start; column-gap: var(--sp-7); row-gap: var(--sp-6);
+    align-items: start;
   }
   .bygger-grid > * + * { margin-top: 0; }
 }
-.beslutninger { grid-area: kontroll; display: grid; gap: var(--sp-5); }
-.varegrupper { grid-area: liste; display: grid; gap: var(--sp-7); min-width: 0; padding-bottom: 6.5rem; }
-/* Prisen skal alltid være synlig (ufravikelig krav). Under 64rem brukes
-   position:fixed for prisrailen – det er den eneste teknikken vi kan stole
-   100 % på for «alltid synlig, uansett hvor langt ned i listen». Fra 64rem
-   og opp er det plass til en egen kolonne, og der bruker vi position:sticky
-   (top-forankret – den samme, veldokumentert pålitelige varianten som
-   .site-header og .undernav lenger opp på siden). */
-.prisrail { grid-area: pris; }
+.beslutninger { display: grid; gap: var(--sp-5); }
+.varegrupper { display: grid; gap: var(--sp-7); min-width: 0; padding-bottom: 7rem; }
+
+/* Prisen skal alltid være synlig (ufravikelig krav). Løst med ÉN teknikk på
+   alle bredder: en fast bunnlinje (position:fixed), ikke position:sticky.
+   Sticky inni et CSS grid begrenses til elementets egen (korte) gridcelle og
+   slutter i praksis å følge med – utprøvd og forkastet her. Fixed er det
+   eneste vi kan stole på uansett hvor langt ned i listen kunden har scrollet.
+   .varegrupper har bunnmarg over, slik at bunnlinjen aldri dekker siste vare. */
+.prisrail { display: contents; }
 .prisrail__fastbunn {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
-  display: flex; justify-content: center;
+  display: flex; justify-content: center; pointer-events: none;
 }
-.prisrail__fastbunn > .prisrail__kort { width: min(100%, var(--width-page)); }
-@media (min-width: 64rem) {
-  .varegrupper { padding-bottom: 0; }
-  .prisrail__fastbunn { position: static; display: block; }
-  .prisrail { position: sticky; top: 8.5rem; }
-}
+.prisrail__fastbunn > .prisrail__kort { width: min(100%, var(--width-page)); pointer-events: auto; }
 
 /* --- Beslutningskort (VALG – store, tydelige) ------------------------------ */
 .beslutning__hode { display: flex; align-items: baseline; gap: var(--sp-2); margin-bottom: var(--sp-1); }

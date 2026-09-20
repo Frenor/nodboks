@@ -305,7 +305,7 @@ async function visKassebilder(rot) {
           const bilde = new Image()
           bilde.onload = () => ok(true)
           bilde.onerror = () => ok(false)
-          bilde.src = e.bilde
+          bilde.src = `${e.bilde}-600.webp`
         })
     )
   )
@@ -317,9 +317,14 @@ async function visKassebilder(rot) {
     if (!kropp || kropp.querySelector('.option__foto')) continue
     const el = document.createElement('img')
     el.className = 'option__foto'
-    el.src = type.bilde
-    el.width = 600
-    el.height = 600
+    el.src = `${type.bilde}-900.webp`
+    el.srcset = `${type.bilde}-900.webp 900w, ${type.bilde}-600.webp 600w`
+    el.sizes = '(min-width: 60rem) 22rem, 45vw'
+    el.width = 900
+    el.height = 675
+    // Bildene er tomme for informasjon ut over det teksten allerede sier, så
+    // de er dekorative. En skjermleser skal ikke lese «bilde av kasse» to
+    // ganger etter hverandre.
     el.alt = ''
     el.loading = 'lazy'
     el.decoding = 'async'

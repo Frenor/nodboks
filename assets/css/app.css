@@ -427,17 +427,17 @@
    er funksjonell. Aluminium koster 3 478 kr mer, og det argumentet kan ikke
    føres i tekst alene. Bildet fjerner seg selv hvis filen mangler, så kortet
    fungerer også før bildene er på plass. */
-/* Produktbildene er skutt mot hvitt, som er bransjestandard. Flisen er derfor
-   lys i begge modi – et produktfoto med hvit bakgrunn limt rett på en mørk
+/* Flisen har samme farge som bakgrunnen i selve fotografiet, så bildet flyter
+   sammen med rammen sin i stedet for å ligge som et utklipp oppå den. Fargen
+   er låst i begge modi: et produktfoto med lys bakgrunn limt rett på en mørk
    flate ser ut som en feil, ikke som et valg. */
 .option__foto {
   width: 100%;
   height: auto;
-  aspect-ratio: 1 / 1;
-  object-fit: contain;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
   border-radius: var(--radius-sm);
   margin-bottom: var(--sp-3);
-  background: #FFFFFF;
-  padding: var(--sp-2);
+  background: #DAE2DC;
 }
 .option--bilde .option__body { display: flex; flex-direction: column; }
