@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nødboks – ferdigpakket beredskap for sju døgn</title>
+<meta name="description" content="Ferdigpakkede beredskapsbokser for norske husstander, satt sammen etter DSBs råd om sju døgns egenberedskap. Mat familien faktisk spiser, utstyr til alle som bor der, og påfyll før maten går ut.">
+<link rel="canonical" href="https://nodboks.no/">
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="nb_NO">
+<meta property="og:site_name" content="Nødboks">
+<meta property="og:title" content="Nødboks – ferdigpakket beredskap for sju døgn">
+<meta property="og:description" content="Mat familien faktisk spiser, utstyr til alle som bor der, og påfyll før maten går ut.">
+<meta property="og:url" content="https://nodboks.no/">
+<meta property="og:image" content="https://nodboks.no/assets/img/og-bilde.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0B1513">
+
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/base.css">
+<link rel="stylesheet" href="/assets/css/app.css">
+
+<!-- Setter temaet før første maling, så siden ikke blinker hvitt i mørk modus. -->
+<script>
+  try {
+    var t = localStorage.getItem('nodboks:tema')
+    if (t) document.documentElement.setAttribute('data-theme', t)
+  } catch (e) {}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Store",
+  "name": "Nødboks",
+  "url": "https://nodboks.no/",
+  "description": "Ferdigpakkede beredskapsbokser for norske husstander, satt sammen etter DSBs råd om sju døgns egenberedskap.",
+  "areaServed": "NO",
+  "currenciesAccepted": "NOK"
+}
+</script>
+</head>
+<body>
+
+<a class="skip-link" href="#hoved">Hopp til innhold</a>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brandmark" href="/">
+      <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true">
+        <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12.2 6.5V5.2a1.7 1.7 0 0 1 1.7-1.7h4.2a1.7 1.7 0 0 1 1.7 1.7v1.3"/>
+          <rect x="3.6" y="6.5" width="24.8" height="21" rx="3.6"/>
+          <path d="M3.6 13.1h24.8"/>
+        </g>
+        <g fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round">
+          <circle cx="16" cy="20.3" r="3.5"/><path d="M13.3 22.9 18.7 17.7"/>
+        </g>
+      </svg>
+      Nødboks
+    </a>
+
+    <nav class="site-nav" aria-label="Hovedmeny">
+      <a href="#bygg">Sett sammen esken</a>
+      <a href="#matnivaa">Vanlig mat eller langtidsmat</a>
+      <a href="#tillit">Slik jobber vi</a>
+      <a href="#faq">Spørsmål</a>
+    </nav>
+
+    <div class="cluster" style="margin-left:auto; gap:var(--sp-2)">
+      <button class="btn btn--sm btn--ghost" data-tema-bryter aria-pressed="false" aria-label="Bytt til mørk modus">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" data-tema-ikon>
+          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>
+        </svg>
+      </button>
+      <a class="btn btn--sm btn--primary" href="#bygg">Sett sammen esken</a>
+    </div>
+  </div>
+</header>
+
+<main id="hoved">
+
+  <!-- 2. Hero ------------------------------------------------------------ -->
+  <section class="hero">
+    <div class="wrap hero__inner">
+      <div>
+        <p class="eyebrow">Egenberedskap for én uke</p>
+        <h1>Esken du håper du aldri må åpne.</h1>
+        <p class="hero__lead">
+          Strømmen går, vannet blir borte eller butikken er stengt. Myndighetene
+          anbefaler at hver husstand klarer seg selv i sju døgn. Vi pakker det du
+          trenger i én eske – og sier fra i god tid før maten går ut på dato.
+        </p>
+
+        <p class="hero__pris">
+          <span>Komplett pakke, fire personer, vanlig mat:</span>
+          <b data-hero-pris>–</b>
+          <span>inkl. mva.</span>
+        </p>
+
+        <p class="cluster">
+          <a class="btn btn--primary btn--lg" href="#bygg">Sett sammen esken din</a>
+          <a class="btn btn--lg" href="#innhold">Se hva som ligger i den</a>
+        </p>
+
+        <p class="muted" style="font-size:var(--step--1); margin-top:var(--sp-5)">
+          Satt sammen etter
+          <a href="https://www.dsb.no/sikkerhverdag/egenberedskap/" rel="noopener">DSBs råd om egenberedskap</a>.
+          Nødboks er et privat firma og er ikke tilknyttet eller godkjent av DSB.
+        </p>
+      </div>
+
+      <div class="eske" role="img" aria-label="Illustrasjon av en lukket beredskapseske">
+        <span class="eske__hank"></span>
+        <span class="eske__lokk"></span>
+        <span class="eske__kropp"></span>
+        <span class="eske__merke">NØDBOKS</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Situasjon -------------------------------------------------------- -->
+  <section class="section section--sunken">
+    <div class="wrap">
+      <h2>Det er ikke dramatisk. Det er bare uvant.</h2>
+      <p class="lead">Tre tall som er verdt å kjenne, med kilden oppgitt.</p>
+
+      <div class="fakta" style="margin-top:var(--sp-6)">
+        <div>
+          <p class="fakta__tall">7 døgn</p>
+          <p>Så lenge bør en husstand klare seg selv, ifølge myndighetene. Rådet ble utvidet fra tre døgn i mai 2024.</p>
+          <cite><a href="https://www.dsb.no/sikkerhverdag/egenberedskap/" rel="noopener">dsb.no</a></cite>
+        </div>
+        <div>
+          <p class="fakta__tall">20 liter</p>
+          <p>Drikkevann per person for uka. Det skal dekke drikke, matlaging og hygiene. Det er den eneste mengden DSB tallfester.</p>
+          <cite><a href="https://www.dsb.no/sikkerhverdag/egenberedskap/vann-i-beredskap/" rel="noopener">dsb.no om vann</a></cite>
+        </div>
+        <div>
+          <p class="fakta__tall">DAB</p>
+          <p>Radioen må gå på batteri, sveiv eller solceller, og den må ha DAB. NRK P1 er beredskapskanalen, og FM er slått av på riksnett.</p>
+          <cite><a href="https://www.dsb.no/sikkerhverdag/egenberedskap/" rel="noopener">dsb.no</a></cite>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Pakkebyggeren ---------------------------------------------------- -->
+  <section class="section" id="bygg">
+    <div class="wrap">
+      <p class="eyebrow">Pakkebyggeren</p>
+      <h2>Fire valg, så er esken deres.</h2>
+      <p class="lead">
+        Fortell oss hvor mange dere er hjemme. Vi regner ut mengdene, viser hele
+        innholdslisten og prisen mens du velger. Ingenting skjules til kassen.
+      </p>
+
+      <div class="bygger" style="margin-top:var(--sp-6)">
+
+        <form class="kontroll" id="bygger">
+
+          <!-- Steg 1 -->
+          <div class="steg">
+            <div class="steg__hode">
+              <span class="steg__nr" aria-hidden="true">1</span>
+              <div>
+                <h3 class="steg__tittel"><label for="husstand">Hvor mange bor hjemme?</label></h3>
+                <p class="steg__hjelp">Både voksne og barn. Antallet styrer mengdene og hvilken eske dere får.</p>
+              </div>
+            </div>
+
+            <p class="husstand__verdi">
+              <span class="husstand__tall" id="husstand-tall">4</span>
+              <span class="muted" id="husstand-etikett">personer</span>
+            </p>
+
+            <div class="husstand__rad">
+              <button type="button" class="husstand__knapp" data-husstand-steg="-1" aria-label="Én person færre">−</button>
+              <input class="slider" type="range" id="husstand" name="husstand"
+                     min="1" max="8" step="1" value="4"
+                     aria-describedby="svar">
+              <button type="button" class="husstand__knapp" data-husstand-steg="1" aria-label="Én person til">+</button>
+            </div>
+            <p class="husstand__hakk" aria-hidden="true"><span>1</span><span>8</span></p>
+
+            <div class="svar" id="svar"></div>
+          </div>
+
+          <!-- Steg 2 -->
+          <fieldset class="steg segment">
+            <div class="steg__hode">
+              <span class="steg__nr" aria-hidden="true">2</span>
+              <div>
+                <legend class="steg__tittel">Hva slags mat?</legend>
+                <p class="steg__hjelp">
+                  Det viktigste valget. Se
+                  <a href="#matnivaa">hele sammenligningen</a> hvis du er i tvil.
+                </p>
+              </div>
+            </div>
+            <div class="segment__options" id="matnivaer"></div>
+          </fieldset>
+
+          <!-- Steg 3 -->
+          <fieldset class="steg segment">
+            <div class="steg__hode">
+              <span class="steg__nr" aria-hidden="true">3</span>
+              <div>
+                <legend class="steg__tittel">Hva trenger dere?</legend>
+                <p class="steg__hjelp">Har dere primus, lykter og radio fra før, kjøper dere bare maten.</p>
+              </div>
+            </div>
+            <div class="segment__options" id="moduser"></div>
+          </fieldset>
+
+          <!-- Steg 4 -->
+          <fieldset class="steg segment">
+            <div class="steg__hode">
+              <span class="steg__nr" aria-hidden="true">4</span>
+              <div>
+                <legend class="steg__tittel">Skal vi minne dere på påfyll?</legend>
+                <p class="steg__hjelp">
+                  Maten har en utløpsdato. Vi varsler før den kommer, og sender nytt
+                  hvis dere vil. Du kan si nei hver gang, og avslutte når du vil.
+                </p>
+              </div>
+            </div>
+            <p>
+              <label class="cluster" style="gap:var(--sp-3)">
+                <input type="checkbox" id="abonnement" style="width:auto;min-height:0">
+                <span>Ja, hold styr på datoene for oss</span>
+              </label>
+            </p>
+            <div class="segment__options" id="pafyllsvalg" style="margin-top:var(--sp-4)"></div>
+          </fieldset>
+        </form>
+
+        <!-- Prispanel -->
+        <aside class="prispanel" aria-labelledby="pris-tittel">
+          <h3 class="visually-hidden" id="pris-tittel">Pris</h3>
+          <p class="prispanel__sum" id="pris-sum">–</p>
+          <p class="prispanel__enhet" id="pris-enhet"></p>
+
+          <div class="prispanel__linjer" id="pris-linjer"></div>
+          <p class="prispanel__mva" id="pris-mva"></p>
+
+          <p style="margin-top:var(--sp-4)">
+            <button type="button" class="btn btn--primary btn--block btn--lg" id="legg-i-kurv">
+              Legg i kurven
+            </button>
+          </p>
+
+          <p class="prispanel__fot" id="pris-neste"></p>
+          <p class="prispanel__fot" id="kasse-notis" hidden>
+            Vi tar imot bestillingen på e-post og svarer med betalingsinformasjon
+            samme dag. Betalingsløsning kommer.
+          </p>
+
+          <p class="visually-hidden" role="status" aria-live="polite" id="pris-status"></p>
+        </aside>
+
+        <!-- Innholdsliste -->
+        <div class="innholdsliste" id="innhold">
+          <div class="innholdsliste__hode">
+            <h3 style="margin:0">Dette ligger i esken</h3>
+            <span class="badge" id="innhold-teller"></span>
+          </div>
+
+          <div class="stack" id="varsler" style="margin-bottom:var(--sp-5)"></div>
+
+          <div id="innholdsliste"></div>
+
+          <p class="muted" style="font-size:var(--step--1); margin-top:var(--sp-5)">
+            Kategoriene følger DSBs egen sjekkliste, så du kan holde listen vår mot
+            den offisielle linje for linje.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Matnivå-sammenligning -------------------------------------------- -->
+  <section class="section section--sunken" id="matnivaa">
+    <div class="wrap">
+      <h2>Vanlig mat eller langtidsmat?</h2>
+      <p class="lead">
+        Det er ikke billig mot dyrt. Det er to ærlige veier, og de passer ulike hjem.
+      </p>
+
+      <table class="sml" style="margin-top:var(--sp-6)">
+        <thead>
+          <tr><th>&nbsp;</th><th>Vanlig norsk mat</th><th>Langtidsmat</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td data-kolonne="Hva det er"><strong>Hva det er</strong></td>
+            <td data-kolonne="Vanlig mat">Havregryn, hermetikk, knekkebrød, tørket frukt. Mat dere kjenner igjen.</td>
+            <td data-kolonne="Langtidsmat">Frysetørkede måltider. Vann og varme kokes i posen.</td>
+          </tr>
+          <tr>
+            <td data-kolonne="Spiser barna det?"><strong>Spiser barna det?</strong></td>
+            <td data-kolonne="Vanlig mat">Ja. Det er den samme maten som står i skapet ellers.</td>
+            <td data-kolonne="Langtidsmat">Som regel. Velg retter dere har smakt på tur først.</td>
+          </tr>
+          <tr>
+            <td data-kolonne="Holdbarhet"><strong>Holdbarhet</strong></td>
+            <td data-kolonne="Vanlig mat">1–2 år. Må byttes.</td>
+            <td data-kolonne="Langtidsmat">Flere år. Sjekk datoen på posen – tallene som sirkulerer i bransjen spriker.</td>
+          </tr>
+          <tr>
+            <td data-kolonne="Din jobb"><strong>Din jobb</strong></td>
+            <td data-kolonne="Vanlig mat">Bytte maten når vi sier fra. Ta gjerne det gamle inn i skapet.</td>
+            <td data-kolonne="Langtidsmat">Nesten ingenting. Sett den bort og sjekk datoen av og til.</td>
+          </tr>
+          <tr>
+            <td data-kolonne="Krever"><strong>Krever</strong></td>
+            <td data-kolonne="Vanlig mat">Lite. Mye kan spises kaldt rett fra boksen.</td>
+            <td data-kolonne="Langtidsmat">Vann og varme. Uten primus og vannlager er maten ubrukelig.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="muted" style="margin-top:var(--sp-5); font-size:var(--step--1)">
+        Vi sier ikke at langtidsmat er tryggere. Mat som står i skapet og faktisk
+        blir spist, er også beredskap – og DSB anbefaler selv å
+        <a href="https://www.dsb.no/sikkerhverdag/egenberedskap/mat-du-bor-ha-i-hus-i-tilfelle-krise/" rel="noopener">ha litt ekstra av den maten du spiser til vanlig</a>.
+      </p>
+
+      <a class="tilbake" href="#bygg">← Tilbake til byggeren</a>
+    </div>
+  </section>
+
+  <!-- 6. Tillit ------------------------------------------------------------ -->
+  <section class="section" id="tillit">
+    <div class="wrap">
+      <h2>Slik jobber vi</h2>
+      <p class="lead">Fire ting du kan etterprøve, ikke fire løfter.</p>
+
+      <div class="tillit" style="margin-top:var(--sp-6)">
+        <div class="tillit__punkt">
+          <h3>Utstyret skalerer med husstanden</h3>
+          <p>
+            Er dere seks, får dere seks hodelykter. Det er ikke en selvfølge i dette
+            markedet: flere av de største leverer samme antall lykter, brennere og
+            førstehjelpssett uansett hvor mange dere er.
+          </p>
+        </div>
+        <div class="tillit__punkt">
+          <h3>Full vannmengde, og vi sier fra at kannene er tomme</h3>
+          <p>
+            20 liter per person, slik DSB anbefaler. Kannene sendes tomme fordi vann
+            er tungt å frakte – fyll dem når esken kommer, og skift vannet én gang i året.
+          </p>
+        </div>
+        <div class="tillit__punkt">
+          <h3>Utløpsdato på hver vare</h3>
+          <p>
+            Innholdslisten viser holdbarheten per vare og den korteste i pakken. Det er
+            den som avgjør når påfyll trengs, og den vi varsler på.
+          </p>
+        </div>
+        <div class="tillit__punkt">
+          <h3>Vi er ikke godkjent av noen</h3>
+          <p>
+            Nødboks er et privat firma. Vi følger DSBs offentlige råd, men vi er ikke
+            tilknyttet DSB, og ingen myndighet har godkjent pakkene våre.
+          </p>
+        </div>
+      </div>
+
+      <a class="tilbake" href="#bygg">← Tilbake til byggeren</a>
+    </div>
+  </section>
+
+  <!-- 7. Dette selger vi ikke ---------------------------------------------- -->
+  <section class="section section--sunken">
+    <div class="wrap">
+      <h2>Dette selger vi ikke, men du bør ha det</h2>
+      <p class="lead">Fem ting vi ikke tjener en krone på.</p>
+
+      <ul class="ikkesalg prose" style="margin-top:var(--sp-6)">
+        <li><b>Medisinene dine.</b>
+          <span>Ha minst sju dagers ekstra forsyning av det du bruker fast. Snakk med legen, og hent påfyll senest en uke før du går tom.</span></li>
+        <li><b>Jodtabletter.</b>
+          <span>Fås på apotek. Gjelder barn og voksne under 40, gravide og ammende – og skal bare tas etter beskjed fra myndighetene.</span></li>
+        <li><b>Kontanter.</b>
+          <span>Ha litt hjemme i små valører. Kortterminaler krever strøm og nett. DSB oppgir ingen sum; vurder den ut fra hvor mange dere er.</span></li>
+        <li><b>En liste med telefonnumre på papir.</b>
+          <span>Nødnummer, legevakt, veterinær, naboer. Mobilen kan være død når du trenger den.</span></li>
+        <li><b>En avtale med naboen.</b>
+          <span>Den som har vedovn, og den som har plass. Avtalen bør gjøres før noe skjer.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 8. FAQ ---------------------------------------------------------------- -->
+  <section class="section" id="faq">
+    <div class="wrap" style="max-width:var(--width-text)">
+      <h2>Spørsmål</h2>
+
+      <details class="accordion">
+        <summary>Er dette godkjent av DSB eller myndighetene?</summary>
+        <p>
+          Nei. Ingen myndighet godkjenner beredskapspakker, og de som antyder noe annet
+          strekker sannheten. Vi setter sammen pakkene etter DSBs offentlige råd, og
+          viser i innholdslisten hvilket råd hver vare dekker, slik at du kan
+          kontrollere det selv.
+        </p>
+      </details>
+
+      <details class="accordion">
+        <summary>Hvorfor følger det ikke vann med kannene?</summary>
+        <p>
+          80 liter vann veier 80 kilo. Frakten ville kostet mer enn innholdet, og vannet
+          fra springen din er like godt. Fyll kannene når esken kommer, og skift vannet
+          én gang i året for smakens skyld.
+        </p>
+      </details>
+
+      <details class="accordion">
+        <summary>Hvor mye mat er «nok»?</summary>
+        <p>
+          DSB oppgir ingen kalorimengde – de sier bare «nok mat for en uke». Vi
+          dimensjonerer etter et normalt daglig energibehov og viser regnestykket i
+          innholdslisten. Det er vår dimensjonering, ikke DSBs anbefaling, og vi
+          skriver det slik fordi resten av bransjen presenterer egne tall som om de
+          var offentlige råd.
+        </p>
+      </details>
+
+      <details class="accordion">
+        <summary>Er abonnementet en binding?</summary>
+        <p>
+          Nei. Vi sender en e-post før maten går ut. Du svarer ja eller nei, og kan
+          avslutte når som helst. Velger du langtidsmat er abonnementet lite relevant,
+          og da sier vi det i stedet for å selge det til deg.
+        </p>
+      </details>
+
+      <details class="accordion">
+        <summary>Kan jeg sette sammen dette selv?</summary>
+        <p>
+          Ja, og det bør du gjøre hvis du har tid og lyst – det blir billigere.
+          DSBs egen <a href="https://www.dsb.no/sikkerhverdag/egenberedskap/" rel="noopener">sjekkliste</a>
+          er gratis og fullstendig. Vi selger at det er gjort ferdig, riktig
+          dimensjonert, og at noen holder styr på datoene.
+        </p>
+      </details>
+
+      <a class="tilbake" href="#bygg">← Tilbake til byggeren</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="grid grid--3">
+      <div>
+        <p><strong>Nødboks</strong></p>
+        <p>Ferdigpakket egenberedskap for norske husstander.</p>
+      </div>
+      <div>
+        <p><strong>Om pakkene</strong></p>
+        <p>
+          <a href="#matnivaa">Vanlig mat eller langtidsmat</a><br>
+          <a href="#innhold">Hva som ligger i esken</a><br>
+          <a href="#faq">Spørsmål</a>
+        </p>
+      </div>
+      <div>
+        <p><strong>Kilder</strong></p>
+        <p>
+          <a href="https://www.dsb.no/sikkerhverdag/egenberedskap/" rel="noopener">DSB om egenberedskap</a><br>
+          <a href="https://www.dsb.no/sikkerhverdag/egenberedskap/vann-i-beredskap/" rel="noopener">DSB om beredskapsvann</a>
+        </p>
+      </div>
+    </div>
+    <p style="margin-top:var(--sp-6)">
+      Nødboks er et privat firma og er ikke tilknyttet eller godkjent av DSB.
+      Rådene er gjengitt med kildehenvisning.
+    </p>
+  </div>
+</footer>
+
+<script type="module" src="/assets/js/main.js"></script>
+</body>
+</html>

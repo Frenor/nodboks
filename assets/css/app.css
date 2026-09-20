@@ -1,0 +1,322 @@
+/* ==========================================================================
+   Nødboks – sidespesifikke seksjoner
+   Avhenger av tokens.css og base.css. Se docs/designvalg.md for begrunnelsene.
+   ========================================================================== */
+
+/* --- Hero ---------------------------------------------------------------- */
+
+.hero {
+  padding-block: clamp(var(--sp-7), 9vw, var(--sp-9));
+  border-bottom: 1px solid var(--border);
+}
+.hero__inner { display: grid; gap: var(--sp-6); }
+@media (min-width: 60rem) {
+  .hero__inner { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); align-items: center; gap: var(--sp-8); }
+}
+.hero h1 { margin-bottom: var(--sp-5); }
+.hero__lead { font-size: var(--step-1); color: var(--text-muted); max-width: 46ch; }
+
+/* Prisforankring over bretten. Tallet kommer fra samme beregning som
+   byggeren bruker – aldri et eget markedsføringstall. */
+.hero__pris {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--sp-2) var(--sp-3);
+  margin-block: var(--sp-6) var(--sp-5);
+  padding-top: var(--sp-5);
+  border-top: 1px solid var(--border);
+}
+.hero__pris b { font-size: var(--step-3); font-weight: 650; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.hero__pris span { color: var(--text-muted); font-size: var(--step--1); }
+
+/* Esken, tegnet i CSS. Ingen glød, ingen gradient uten referent:
+   den lyser ikke, for lokket er lukket. */
+.eske {
+  --eske-b: 100%;
+  position: relative;
+  aspect-ratio: 5 / 4;
+  max-width: 26rem;
+  margin-inline: auto;
+  width: var(--eske-b);
+}
+.eske__kropp {
+  position: absolute; inset: 22% 6% 8%;
+  background: var(--surface-2);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius);
+}
+.eske__lokk {
+  position: absolute; inset: 14% 2% 66%;
+  background: var(--surface);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+}
+.eske__hank {
+  position: absolute; left: 50%; top: 8%;
+  width: 22%; height: 8%;
+  transform: translateX(-50%);
+  border: 2px solid var(--border-strong);
+  border-bottom: 0;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+/* Merket på esken – ravgul ø er byttet ut med aksentens ettergløde-verdi */
+.eske__merke {
+  position: absolute; left: 50%; top: 58%;
+  transform: translateX(-50%);
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+  font-weight: 650;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+}
+
+/* --- Situasjon ----------------------------------------------------------- */
+
+.fakta { display: grid; gap: var(--sp-5); }
+@media (min-width: 46rem) { .fakta { grid-template-columns: repeat(3, 1fr); } }
+.fakta__tall {
+  font-size: var(--step-4);
+  font-weight: 650;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  margin-bottom: var(--sp-2);
+}
+.fakta p { font-size: var(--step--1); color: var(--text-muted); margin: 0; }
+.fakta cite { display: block; margin-top: var(--sp-2); font-size: var(--step--1); font-style: normal; }
+
+/* --- Pakkebyggeren ------------------------------------------------------- */
+
+.bygger { display: grid; gap: var(--sp-6); }
+
+@media (min-width: 60rem) {
+  .bygger {
+    grid-template-columns: minmax(22.5rem, 25.25rem) minmax(0, 1fr);
+    grid-template-areas:
+      "kontroll liste"
+      "pris     liste";
+    align-items: start;
+    column-gap: var(--sp-7);
+  }
+  .kontroll      { grid-area: kontroll; }
+  .prispanel     { grid-area: pris; }
+  .innholdsliste { grid-area: liste; }
+  /* Plass så prispanelet ikke dekker siste steg når det stopper i sticky. */
+  .kontroll { padding-bottom: var(--sp-5); }
+}
+
+.steg { border-top: 1px solid var(--border); padding-block: var(--sp-5); }
+.steg:first-child { border-top: 0; padding-top: 0; }
+.steg__hode {
+  display: flex; align-items: baseline; gap: var(--sp-3);
+  margin-bottom: var(--sp-4);
+}
+.steg__nr {
+  flex: none;
+  width: 1.75rem; height: 1.75rem;
+  display: grid; place-items: center;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  font-size: var(--step--1);
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+.steg__tittel { margin: 0; font-size: var(--step-1); }
+.steg__hjelp { margin: var(--sp-1) 0 0; font-size: var(--step--1); color: var(--text-muted); max-width: none; }
+
+/* Husstandsslider */
+.husstand__verdi {
+  display: flex; align-items: baseline; gap: var(--sp-2);
+  margin-bottom: var(--sp-3);
+}
+.husstand__tall {
+  font-size: var(--step-4);
+  font-weight: 650;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.husstand__rad { display: flex; align-items: center; gap: var(--sp-3); }
+.husstand__knapp {
+  flex: none;
+  width: 2.75rem; height: 2.75rem;
+  display: grid; place-items: center;
+  font-size: var(--step-1);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  color: var(--text);
+  cursor: pointer;
+}
+.husstand__knapp:hover { background: var(--surface-2); }
+.husstand__hakk {
+  display: flex; justify-content: space-between;
+  margin-top: var(--sp-2);
+  font-size: var(--step--1);
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Svaret som kommer umiddelbart, så konsekvensen er synlig uten å scrolle */
+.svar {
+  margin-top: var(--sp-4);
+  padding: var(--sp-3) var(--sp-4);
+  border-left: 3px solid var(--accent);
+  background: var(--surface-2);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-size: var(--step--1);
+}
+.svar p { margin: 0; max-width: none; }
+.svar b { font-variant-numeric: tabular-nums; }
+
+/* Holdbarhetslinjal i matkortene – forskjellen ligger i valget, ikke i en fotnote */
+.holdbarhet { margin-top: var(--sp-3); }
+.holdbarhet__spor {
+  height: 4px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.holdbarhet__fyll { height: 100%; background: var(--accent); }
+.holdbarhet__tekst {
+  display: flex; justify-content: space-between;
+  margin-top: var(--sp-1);
+  font-size: var(--step--1);
+  color: var(--text-muted);
+}
+.option__spec {
+  margin-top: var(--sp-3);
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--border);
+  display: grid; gap: var(--sp-1);
+  font-size: var(--step--1);
+}
+.option__spec div { display: flex; justify-content: space-between; gap: var(--sp-3); }
+.option__spec dt { color: var(--text-muted); }
+.option__spec dd { margin: 0; text-align: right; }
+
+/* --- Prispanelet --------------------------------------------------------- */
+
+.prispanel {
+  position: sticky;
+  bottom: 0;
+  z-index: 20;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-5);
+  box-shadow: var(--shadow-md);
+}
+.prispanel__sum {
+  font-size: var(--step-5);
+  font-weight: 650;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums;
+}
+.prispanel__enhet { font-size: var(--step--1); color: var(--text-muted); margin: var(--sp-2) 0 var(--sp-4); }
+.prispanel__linjer { margin-block: var(--sp-4); }
+.prispanel__linje {
+  display: flex; justify-content: space-between; gap: var(--sp-4);
+  padding: var(--sp-2) 0;
+  border-bottom: 1px solid var(--border);
+  font-size: var(--step--1);
+}
+.prispanel__linje:last-child { border-bottom: 0; }
+.prispanel__linje span:last-child { font-variant-numeric: tabular-nums; }
+.prispanel__linje--sum { font-weight: 650; border-top: 1px solid var(--border-strong); border-bottom: 0; padding-top: var(--sp-3); }
+.prispanel__mva { font-size: var(--step--1); color: var(--text-faint); margin-top: var(--sp-2); }
+.prispanel__fot { margin-top: var(--sp-4); font-size: var(--step--1); color: var(--text-muted); }
+
+/* --- Innholdslisten ------------------------------------------------------ */
+
+.innholdsliste__hode {
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-5);
+}
+.gruppe + .gruppe { margin-top: var(--sp-6); }
+.gruppe__navn {
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding-bottom: var(--sp-2);
+  border-bottom: 1px solid var(--border-strong);
+  margin-bottom: 0;
+}
+.vare {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--sp-1) var(--sp-4);
+  padding-block: var(--sp-3);
+  border-bottom: 1px solid var(--border);
+}
+.vare__navn { font-weight: 550; }
+.vare__antall { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+.vare__hvorfor {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: var(--step--1);
+  color: var(--text-muted);
+  max-width: 62ch;
+}
+.vare__merker { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-top: var(--sp-1); }
+
+/* --- Varsler ------------------------------------------------------------- */
+
+.varsel {
+  display: flex; gap: var(--sp-3); align-items: flex-start;
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--radius);
+  font-size: var(--step--1);
+}
+.varsel svg { flex: none; width: 1.15em; height: 1.15em; margin-top: 0.15em; }
+.varsel p { margin: 0; max-width: none; }
+.varsel--ok   { background: var(--ok-soft);   color: var(--ok); }
+.varsel--warn { background: var(--warn-soft); color: var(--warn); }
+.varsel--info { background: var(--info-soft); color: var(--info); }
+
+/* --- Sammenligningstabell ------------------------------------------------ */
+
+.sml { width: 100%; border-collapse: collapse; }
+.sml th, .sml td {
+  text-align: left;
+  padding: var(--sp-3);
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.sml thead th { font-size: var(--step--1); color: var(--text-muted); }
+.sml td.num { text-align: right; font-variant-numeric: tabular-nums; }
+@media (max-width: 45rem) {
+  .sml, .sml tbody, .sml tr, .sml td { display: block; width: 100%; }
+  .sml thead { display: none; }
+  .sml tr { border: 1px solid var(--border); border-radius: var(--radius); padding: var(--sp-3); margin-bottom: var(--sp-4); }
+  .sml td { border: 0; padding: var(--sp-2) 0; display: flex; justify-content: space-between; gap: var(--sp-4); }
+  .sml td::before { content: attr(data-kolonne); color: var(--text-muted); font-size: var(--step--1); }
+  .sml td.num { text-align: right; }
+}
+
+/* --- Tillit -------------------------------------------------------------- */
+
+.tillit { display: grid; gap: var(--sp-5); }
+@media (min-width: 46rem) { .tillit { grid-template-columns: repeat(2, 1fr); } }
+.tillit__punkt { padding-top: var(--sp-4); border-top: 2px solid var(--border-strong); }
+.tillit__punkt h3 { font-size: var(--step-1); margin-bottom: var(--sp-2); }
+.tillit__punkt p { font-size: var(--step--1); color: var(--text-muted); margin: 0; }
+
+/* Lista over det vi ikke selger. Den taper oss penger, og det er poenget. */
+.ikkesalg li { margin-bottom: var(--sp-4); }
+.ikkesalg b { display: block; }
+.ikkesalg span { color: var(--text-muted); font-size: var(--step--1); }
+
+/* --- Retur til byggeren -------------------------------------------------- */
+
+.tilbake {
+  display: inline-flex; align-items: center; gap: var(--sp-2);
+  margin-top: var(--sp-6);
+  font-size: var(--step--1);
+  font-weight: 600;
+}
