@@ -1,0 +1,2110 @@
+<!DOCTYPE html>
+<html lang="nb" data-theme="auto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nødboks – beredskap for sju døgn, ferdig pakket</title>
+<meta name="description" content="Ferdigpakkede beredskapsbokser til norske husstander, bygget på DSBs råd om sju døgns egenberedskap. Velg antall personer og matnivå, så pakker vi esken.">
+<meta name="theme-color" content="#FAF7F1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#14120F" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://nodboks.no/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="nb_NO">
+<meta property="og:site_name" content="Nødboks">
+<meta property="og:title" content="Slik ser sju døgn ut for din husstand">
+<meta property="og:description" content="Ferdigpakkede beredskapsbokser bygget på DSBs råd. Én avgjørelse, tatt ferdig på ti minutter.">
+<meta property="og:url" content="https://nodboks.no/">
+<meta property="og:image" content="https://nodboks.no/assets/img/og-bilde.png">
+
+<!-- ==========================================================================
+     DESIGNSKISSE – retning «Nordisk redaksjonell»
+     --------------------------------------------------------------------------
+     Selvstendig fil: all CSS og JS ligger inline, ingen byggsteg, ingen
+     eksterne kall. Ingen webfonter – systemets egen serif (Iowan/Palatino/
+     Charter/Georgia) bærer det redaksjonelle uttrykket til null nettverkskost
+     og null layout-shift. Alt visuelt er CSS og inline SVG; ingen bilder.
+
+     >>> ALLE PRISER OG TALL I DENNE FILEN ER PLASSHOLDERE. <<<
+     Se objektet PRIS i skriptet nederst. Mengdene i innholdslisten er
+     plausible, men ikke innkjøpsverifiserte.
+     ========================================================================== -->
+
+<style>
+/* ==========================================================================
+   1. Tokens
+   Papir og trykksverte. Én varm aksent – teglrød i lys modus, brent oransje i
+   mørk. Mørk modus er ikke invertert lys modus: den er trykk på mørkt papir,
+   med varm beige tekst og litt lavere kontrast i hårfine linjer.
+   ========================================================================== */
+:root{
+  color-scheme: light dark;
+
+  --papir:        #FAF7F1;
+  --papir-2:      #F2EDE3;
+  --ark:          #FFFDF9;
+  --ark-2:        #F7F2E9;
+
+  --blekk:        #1A1714;
+  --blekk-2:      #5C554B;
+  --blekk-3:      #6F6759;
+
+  --linje:        #E2DACB;
+  --linje-2:      #C7BCA8;
+
+  --aksent:       #9E3B22;
+  --aksent-2:     #86301A;
+  --aksent-mot:   #FFFFFF;
+  --aksent-svak:  #F6E7DE;
+  --aksent-linje: #E3C8B7;
+
+  --fokus:        #1B5673;
+  --ok:           #2F6B4A;
+
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
+           Charter, Georgia, ui-serif, serif;
+  --sans:  system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+           Arial, "Noto Sans", sans-serif;
+
+  --t--1: clamp(0.80rem, 0.78rem + 0.10vw, 0.86rem);
+  --t-0:  clamp(1.00rem, 0.97rem + 0.16vw, 1.08rem);
+  --t-1:  clamp(1.13rem, 1.07rem + 0.30vw, 1.31rem);
+  --t-2:  clamp(1.32rem, 1.20rem + 0.58vw, 1.66rem);
+  --t-3:  clamp(1.56rem, 1.33rem + 1.05vw, 2.16rem);
+  --t-4:  clamp(1.95rem, 1.50rem + 2.10vw, 3.10rem);
+  --t-5:  clamp(2.45rem, 1.60rem + 3.90vw, 4.60rem);
+
+  --side:  1160px;
+  --spalte: 62ch;
+
+  --r-sm: 3px;
+  --r:    5px;
+  --r-lg: 8px;
+
+  --ease: cubic-bezier(.22,.61,.36,1);
+}
+
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --papir:        #14120F;
+    --papir-2:      #0E0C0A;
+    --ark:          #1C1915;
+    --ark-2:        #23201A;
+
+    --blekk:        #EFE8DA;
+    --blekk-2:      #B4A996;
+    --blekk-3:      #9A9080;
+
+    --linje:        #2E2A24;
+    --linje-2:      #4A443A;
+
+    --aksent:       #E08155;
+    --aksent-2:     #EC9871;
+    --aksent-mot:   #17120E;
+    --aksent-svak:  #2A1C15;
+    --aksent-linje: #4A2E20;
+
+    --fokus:        #7FC2E0;
+    --ok:           #79C79E;
+  }
+}
+:root[data-theme="dark"]{
+  --papir:        #14120F;
+  --papir-2:      #0E0C0A;
+  --ark:          #1C1915;
+  --ark-2:        #23201A;
+
+  --blekk:        #EFE8DA;
+  --blekk-2:      #B4A996;
+  --blekk-3:      #9A9080;
+
+  --linje:        #2E2A24;
+  --linje-2:      #4A443A;
+
+  --aksent:       #E08155;
+  --aksent-2:     #EC9871;
+  --aksent-mot:   #17120E;
+  --aksent-svak:  #2A1C15;
+  --aksent-linje: #4A2E20;
+
+  --fokus:        #7FC2E0;
+  --ok:           #79C79E;
+}
+
+/* ==========================================================================
+   2. Grunn
+   ========================================================================== */
+*,*::before,*::after{ box-sizing:border-box; }
+html{ -webkit-text-size-adjust:100%; }
+body{
+  margin:0;
+  background:var(--papir);
+  color:var(--blekk);
+  font-family:var(--serif);
+  font-size:var(--t-0);
+  line-height:1.62;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  font-kerning:normal;
+}
+h1,h2,h3,h4{ font-family:var(--serif); font-weight:600; line-height:1.1; margin:0; letter-spacing:-.012em; }
+p{ margin:0 0 1em; }
+a{ color:inherit; }
+:where(a):focus-visible,:where(button):focus-visible,:where(input):focus-visible,
+:where(summary):focus-visible,:where(label):focus-visible{
+  outline:2px solid var(--fokus); outline-offset:3px; border-radius:2px;
+}
+img,svg{ max-width:100%; }
+hr{ border:0; border-top:1px solid var(--linje); margin:0; }
+
+.side{ max-width:var(--side); margin-inline:auto; padding-inline:16px; }
+@media (min-width:600px){ .side{ padding-inline:32px; } }
+.maks{ max-width:var(--spalte); }
+
+.eyebrow{
+  font-family:var(--sans); font-size:.70rem; font-weight:600;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--blekk-3);
+  margin:0 0 .9rem;
+}
+.eyebrow .strek{ display:inline-block; width:22px; height:1px; background:var(--aksent);
+  vertical-align:.32em; margin-right:.6em; }
+
+.sans{ font-family:var(--sans); }
+.tall{ font-variant-numeric:tabular-nums; }
+.skjult{
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
+}
+.hopp{
+  position:absolute; left:16px; top:-60px; z-index:50; background:var(--blekk);
+  color:var(--papir); padding:.7rem 1.1rem; font-family:var(--sans); font-size:.9rem;
+  border-radius:var(--r); transition:top .15s var(--ease);
+}
+.hopp:focus{ top:12px; }
+
+/* Knapper --------------------------------------------------------------- */
+.knapp{
+  display:inline-flex; align-items:center; gap:.55em; justify-content:center;
+  font-family:var(--sans); font-size:.95rem; font-weight:600; letter-spacing:.005em;
+  padding:.85em 1.4em; border-radius:var(--r); border:1px solid transparent;
+  text-decoration:none; cursor:pointer; background:var(--aksent); color:var(--aksent-mot);
+  transition:background .18s var(--ease), transform .18s var(--ease);
+  min-height:48px;
+}
+.knapp:hover{ background:var(--aksent-2); }
+.knapp:active{ transform:translateY(1px); }
+.knapp--stille{
+  background:transparent; color:var(--blekk); border-color:var(--linje-2);
+}
+.knapp--stille:hover{ background:var(--ark-2); border-color:var(--blekk-3); }
+.knapp svg{ width:18px; height:18px; flex:none; }
+
+/* ==========================================================================
+   3. Topplinje
+   ========================================================================== */
+.topp{ border-bottom:1px solid var(--linje); background:var(--papir); }
+.topp-rad{
+  display:flex; align-items:center; gap:1rem; min-height:68px;
+}
+.merke{ display:flex; align-items:center; gap:.6rem; text-decoration:none; margin-right:auto; }
+.merke-glyf{ width:30px; height:30px; flex:none; }
+.merke-navn{ font-family:var(--serif); font-size:1.32rem; font-weight:600; letter-spacing:-.02em; }
+.merke-under{
+  display:block; font-family:var(--sans); font-size:.60rem; letter-spacing:.17em;
+  text-transform:uppercase; color:var(--blekk-3); margin-top:-2px; white-space:nowrap;
+}
+@media (max-width:430px){
+  .merke-under{ display:none; }
+  .tema label{ padding:.5rem .45rem; font-size:.64rem; }
+}
+.topp-nav{ display:none; gap:1.6rem; font-family:var(--sans); font-size:.86rem; }
+.topp-nav a{ text-decoration:none; color:var(--blekk-2); padding:.4rem 0; border-bottom:1px solid transparent; }
+.topp-nav a:hover{ color:var(--blekk); border-bottom-color:var(--aksent); }
+@media (min-width:860px){ .topp-nav{ display:flex; } }
+
+.tema{ display:flex; border:1px solid var(--linje); border-radius:var(--r); overflow:hidden; }
+.tema label{
+  font-family:var(--sans); font-size:.68rem; letter-spacing:.08em; text-transform:uppercase;
+  padding:.5rem .6rem; color:var(--blekk-3); cursor:pointer; background:var(--papir);
+  border-right:1px solid var(--linje); user-select:none; min-height:34px; display:flex; align-items:center;
+}
+.tema label:last-child{ border-right:0; }
+.tema input{ position:absolute; opacity:0; pointer-events:none; }
+.tema input:checked + span{ color:var(--blekk); font-weight:600; }
+.tema label:has(input:checked){ background:var(--ark-2); }
+.tema label:has(input:focus-visible){ outline:2px solid var(--fokus); outline-offset:-2px; }
+
+/* ==========================================================================
+   4. Hero
+   ========================================================================== */
+.hero{ padding:clamp(2.4rem,7vw,5.2rem) 0 0; }
+.hero-grid{ display:grid; gap:2.4rem; }
+@media (min-width:960px){
+  .hero-grid{ grid-template-columns:minmax(0,1fr) minmax(0,.92fr); gap:4rem; align-items:center; }
+}
+.hero h1{
+  font-size:var(--t-5); line-height:1.02; letter-spacing:-.028em;
+  margin:0 0 1.1rem; max-width:14ch;
+}
+.hero h1 em{ font-style:italic; color:var(--aksent); }
+.ingress{
+  font-size:var(--t-1); line-height:1.5; color:var(--blekk-2); max-width:44ch; margin-bottom:1.8rem;
+}
+.hero-handling{ display:flex; flex-wrap:wrap; gap:.75rem; align-items:center; }
+.hero-note{ font-family:var(--sans); font-size:var(--t--1); color:var(--blekk-3); margin:1.3rem 0 0; }
+
+.hero-figur{ position:relative; }
+.hero-figur svg{ display:block; width:100%; height:auto; }
+/* SVG-farger settes i CSS, ikke i presentasjonsattributter – da virker tokens
+   i begge fargemodi. */
+.hero-figur .strek{ fill:none; stroke:var(--linje-2); stroke-width:1.6;
+  stroke-linejoin:round; stroke-linecap:round; }
+.hero-figur .haar{ stroke:var(--linje); }
+.hero-figur .f-papir{ fill:var(--papir-2); }
+.hero-figur .f-ark{ fill:var(--ark); }
+.hero-figur .f-ark2{ fill:var(--ark-2); }
+.hero-figur .f-aksent{ fill:var(--aksent); stroke:none; }
+.hero-figur .s-aksent{ stroke:var(--aksent); }
+.hero-figur .f-linje{ fill:var(--linje-2); stroke:none; }
+.hero-figur .t-navn{ font-family:var(--serif); fill:var(--blekk-2); font-size:21px; letter-spacing:-.4px; }
+.hero-figur .t-meta{ font-family:var(--sans); fill:var(--blekk-3); font-size:11px; letter-spacing:1.6px; }
+.merke-glyf .plate{ fill:var(--blekk); }
+.merke-glyf .strek{ fill:none; stroke:var(--papir); stroke-width:2;
+  stroke-linecap:round; stroke-linejoin:round; }
+.merke-glyf .prikk{ fill:var(--aksent); }
+.figur-tekst{
+  font-family:var(--sans); font-size:.68rem; letter-spacing:.13em; text-transform:uppercase;
+  color:var(--blekk-3); text-align:center; margin-top:.9rem; padding-top:.7rem;
+  border-top:1px solid var(--linje);
+}
+
+/* Fakta-stripe ---------------------------------------------------------- */
+.fakta{
+  margin-top:clamp(2.4rem,6vw,4.2rem); border-top:1px solid var(--blekk);
+  border-bottom:1px solid var(--linje);
+  display:grid; grid-template-columns:1fr;
+}
+@media (min-width:720px){ .fakta{ grid-template-columns:repeat(3,1fr); } }
+.fakta div{ padding:1.15rem 0; border-bottom:1px solid var(--linje); }
+.fakta div:last-child{ border-bottom:0; }
+@media (min-width:720px){
+  .fakta div{ border-bottom:0; border-right:1px solid var(--linje); padding:1.3rem 1.6rem; }
+  .fakta div:first-child{ padding-left:0; }
+  .fakta div:last-child{ border-right:0; }
+}
+.fakta dt{ font-family:var(--sans); font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; color:var(--blekk-3); }
+.fakta dd{ margin:.25rem 0 0; font-size:var(--t-1); }
+
+/* ==========================================================================
+   5. Døgnstripe
+   ========================================================================== */
+.dogn{ padding:clamp(3rem,8vw,5.5rem) 0 0; }
+.dogn-hode{ display:flex; align-items:baseline; justify-content:space-between; gap:1rem; flex-wrap:wrap; margin-bottom:1.6rem; }
+.dogn-hode h2{ font-size:var(--t-3); max-width:20ch; }
+.dogn-hint{ font-family:var(--sans); font-size:var(--t--1); color:var(--blekk-3); }
+.dogn-rad{
+  display:grid; grid-auto-flow:column; grid-auto-columns:78%;
+  gap:0; overflow-x:auto; scroll-snap-type:x mandatory;
+  margin-inline:-16px; padding-inline:16px;
+  scrollbar-width:thin;
+}
+@media (min-width:600px){ .dogn-rad{ margin-inline:-32px; padding-inline:32px; grid-auto-columns:42%; } }
+@media (min-width:1000px){
+  .dogn-rad{ grid-auto-flow:row; grid-template-columns:repeat(7,1fr); overflow:visible;
+    margin-inline:0; padding-inline:0; border-left:1px solid var(--linje); }
+}
+.dogn-celle{
+  scroll-snap-align:start; padding:1.1rem 1.1rem 1.5rem; border-top:1px solid var(--blekk);
+  border-right:1px solid var(--linje); min-width:0;
+}
+@media (min-width:1000px){ .dogn-celle{ border-right:1px solid var(--linje); } }
+.dogn-celle:last-child{ border-right:0; }
+.dogn-nr{
+  font-family:var(--sans); font-size:.66rem; letter-spacing:.15em; text-transform:uppercase;
+  color:var(--aksent); margin-bottom:.5rem;
+}
+.dogn-celle p{ margin:0; font-size:.98rem; line-height:1.5; color:var(--blekk-2); }
+.dogn-celle:first-child p{ color:var(--blekk); }
+.dogn-celle p.dogn-nr{ color:var(--aksent); }
+
+/* ==========================================================================
+   6. Pakkebyggeren
+   ========================================================================== */
+.bygger{ padding:clamp(3.2rem,8vw,6rem) 0 0; scroll-margin-top:1rem; }
+/* Plass til den faste bunnlinjen på mobil, slik at kjøpsknappen aldri ligger under den */
+@media (max-width:999px){ .bygger{ padding-bottom:104px; } }
+.bygger-hode{ border-bottom:1px solid var(--blekk); padding-bottom:1.4rem; margin-bottom:2rem; }
+.bygger-hode h2{ font-size:var(--t-4); max-width:16ch; margin-bottom:.7rem; }
+.bygger-hode p{ color:var(--blekk-2); max-width:52ch; margin:0; }
+
+.bygger-grid{ display:grid; gap:2.6rem; }
+@media (min-width:1000px){
+  .bygger-grid{
+    grid-template-columns:minmax(0,1fr) 336px; gap:0 3.6rem; align-items:start;
+  }
+  .skjema{ grid-column:1; grid-row:1; }
+  .innhold{ grid-column:1; grid-row:2; padding-top:2.6rem; }
+  .panel-hylse{ grid-column:2; grid-row:1 / span 2; position:sticky; top:20px; }
+}
+
+/* Skjemabolker ----------------------------------------------------------- */
+.bolk{
+  border:0; border-top:1px solid var(--linje); padding:1.8rem 0;
+  margin:0; min-width:0;
+}
+.bolk:first-of-type{ border-top:0; padding-top:0; }
+.bolk > legend{ padding:0; }
+.bolk-hode{ display:flex; gap:.8rem; align-items:baseline; margin-bottom:1.1rem; }
+.bolk-nr{
+  font-family:var(--sans); font-size:.68rem; font-weight:700; letter-spacing:.1em;
+  color:var(--aksent); border:1px solid var(--aksent-linje); border-radius:50%;
+  width:24px; height:24px; display:grid; place-items:center; flex:none; align-self:center;
+}
+.bolk h3{ font-size:var(--t-2); }
+.bolk-under{ font-family:var(--sans); font-size:var(--t--1); color:var(--blekk-3); margin:-.7rem 0 1.2rem 2.2rem; max-width:48ch; }
+
+/* Slider ---------------------------------------------------------------- */
+.slider-tall{ display:flex; align-items:flex-end; gap:.8rem; margin-bottom:.4rem; }
+.slider-tall .n{ font-size:clamp(3rem,13vw,4.4rem); line-height:.9; font-weight:600; letter-spacing:-.04em; }
+.slider-tall .etikett{ font-family:var(--sans); font-size:.95rem; color:var(--blekk-2); padding-bottom:.45rem; }
+.figurer{ display:flex; gap:.35rem; margin:.9rem 0 1.2rem; }
+.figurer svg{ width:clamp(20px,5.4vw,26px); height:auto; color:var(--linje-2); transition:color .2s var(--ease); }
+.figurer svg.pa{ color:var(--aksent); }
+
+.slider-rad{ display:flex; align-items:center; gap:.7rem; }
+.stegknapp{
+  width:44px; height:44px; flex:none; border:1px solid var(--linje-2); background:var(--ark);
+  border-radius:50%; font-family:var(--sans); font-size:1.3rem; line-height:1; color:var(--blekk);
+  cursor:pointer; display:grid; place-items:center; transition:border-color .15s var(--ease), background .15s var(--ease);
+}
+.stegknapp:hover:not(:disabled){ border-color:var(--blekk); background:var(--ark-2); }
+.stegknapp:disabled{ opacity:.35; cursor:not-allowed; }
+.slider-felt{ flex:1; min-width:0; }
+
+input[type=range]{
+  -webkit-appearance:none; appearance:none; width:100%; background:transparent;
+  height:44px; margin:0; display:block; cursor:pointer;
+}
+input[type=range]::-webkit-slider-runnable-track{
+  height:3px; border-radius:2px;
+  background:linear-gradient(to right, var(--aksent) 0 var(--pct,50%), var(--linje-2) var(--pct,50%) 100%);
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none; width:26px; height:26px; border-radius:50%;
+  background:var(--aksent); border:3px solid var(--papir);
+  box-shadow:0 0 0 1px var(--aksent); margin-top:-12px;
+}
+input[type=range]::-moz-range-track{
+  height:3px; border-radius:2px; background:var(--linje-2);
+}
+input[type=range]::-moz-range-progress{ height:3px; border-radius:2px; background:var(--aksent); }
+input[type=range]::-moz-range-thumb{
+  width:22px; height:22px; border-radius:50%; background:var(--aksent);
+  border:3px solid var(--papir); box-shadow:0 0 0 1px var(--aksent);
+}
+.hakk{
+  display:flex; justify-content:space-between; padding-inline:9px; margin-top:-2px;
+  font-family:var(--sans); font-size:.72rem; color:var(--blekk-3);
+}
+.hakk span{ font-variant-numeric:tabular-nums; }
+.hakk span.pa{ color:var(--aksent); font-weight:700; }
+
+.slider-svar{
+  margin-top:1.1rem; padding:.85rem 1rem; background:var(--ark-2);
+  border-left:2px solid var(--aksent); font-family:var(--sans); font-size:.9rem;
+  color:var(--blekk-2); border-radius:0 var(--r) var(--r) 0;
+}
+.slider-svar b{ color:var(--blekk); font-weight:600; }
+
+/* Valgkort -------------------------------------------------------------- */
+.valg{ display:grid; gap:0; border:1px solid var(--linje); border-radius:var(--r-lg); overflow:hidden; background:var(--ark); }
+@media (min-width:680px){ .valg{ grid-template-columns:1fr 1fr; } }
+.kort{ display:block; position:relative; cursor:pointer; padding:1.2rem 1.15rem 1.35rem; border-top:1px solid var(--linje); }
+.kort:first-child{ border-top:0; }
+@media (min-width:680px){
+  .kort{ border-top:0; border-left:1px solid var(--linje); }
+  .kort:first-child{ border-left:0; }
+}
+.kort input{ position:absolute; opacity:0; width:1px; height:1px; }
+.kort-topp{ display:flex; align-items:flex-start; gap:.7rem; }
+.merkeboks{
+  width:20px; height:20px; border:1.5px solid var(--linje-2); border-radius:50%;
+  flex:none; margin-top:.28rem; display:grid; place-items:center; background:var(--papir);
+  transition:border-color .15s var(--ease);
+}
+.merkeboks::after{
+  content:''; width:9px; height:9px; border-radius:50%; background:var(--aksent);
+  transform:scale(0); transition:transform .18s var(--ease);
+}
+.kort input:checked ~ .kort-topp .merkeboks{ border-color:var(--aksent); }
+.kort input:checked ~ .kort-topp .merkeboks::after{ transform:scale(1); }
+.kort input:focus-visible ~ .kort-topp .merkeboks{ outline:2px solid var(--fokus); outline-offset:3px; }
+.kort:has(input:checked){ background:var(--aksent-svak); }
+.kort-tittel{ display:block; font-size:var(--t-1); font-weight:600; line-height:1.2; }
+.kort-pris{ display:block; font-family:var(--sans); font-size:.82rem; color:var(--blekk-3); margin-top:.25rem; }
+.kort-brod{ display:block; margin:.8rem 0 0 1.7rem; font-size:.95rem; line-height:1.5; color:var(--blekk-2); }
+.avkryss-tittel{ display:block; }
+
+/* Sammenlikningsrad inne i matkortene */
+.spec{ margin:.95rem 0 0 1.7rem; border-top:1px solid var(--linje); }
+.spec div{ display:flex; gap:.6rem; justify-content:space-between; padding:.42rem 0; border-bottom:1px solid var(--linje); font-family:var(--sans); font-size:.79rem; }
+.spec dt{ color:var(--blekk-3); }
+.spec dd{ margin:0; text-align:right; color:var(--blekk); }
+.holdbar{ margin:.9rem 0 0 1.7rem; }
+.holdbar-spor{ height:6px; background:var(--papir-2); border:1px solid var(--linje); border-radius:3px; overflow:hidden; }
+.holdbar-fyll{ height:100%; background:var(--aksent); border-radius:2px 0 0 2px; }
+.holdbar-tekst{ font-family:var(--sans); font-size:.72rem; color:var(--blekk-3); margin-top:.35rem; display:flex; justify-content:space-between; }
+
+/* Påfyll ----------------------------------------------------------------- */
+.paafyll{
+  border:1px solid var(--linje); border-radius:var(--r-lg); background:var(--ark);
+  padding:1.15rem 1.15rem 1.25rem;
+}
+.paafyll:has(input:checked){ border-color:var(--aksent-linje); background:var(--aksent-svak); }
+.avkryss{ display:flex; gap:.8rem; align-items:flex-start; cursor:pointer; }
+.avkryss input{ position:absolute; opacity:0; width:1px; height:1px; }
+.rute{
+  width:22px; height:22px; border:1.5px solid var(--linje-2); border-radius:var(--r-sm);
+  flex:none; margin-top:.2rem; display:grid; place-items:center; background:var(--papir);
+  color:var(--aksent-mot);
+}
+.rute svg{ width:14px; height:14px; opacity:0; transform:scale(.6); transition:opacity .15s var(--ease), transform .15s var(--ease); }
+.avkryss input:checked ~ .rute{ background:var(--aksent); border-color:var(--aksent); }
+.avkryss input:checked ~ .rute svg{ opacity:1; transform:scale(1); }
+.avkryss input:focus-visible ~ .rute{ outline:2px solid var(--fokus); outline-offset:3px; }
+.avkryss-tittel{ font-size:var(--t-1); font-weight:600; line-height:1.25; display:block; }
+.paafyll-brod{ margin:.7rem 0 0 2.6rem; font-size:.94rem; color:var(--blekk-2); }
+.paafyll-brod p{ margin:0 0 .5em; }
+.paafyll-brod p:last-child{ margin:0; }
+.paafyll-liten{ font-family:var(--sans); font-size:var(--t--1); color:var(--blekk-3); }
+
+/* Innholdsliste ---------------------------------------------------------- */
+.innhold-hode{
+  display:flex; align-items:baseline; justify-content:space-between; gap:1rem;
+  flex-wrap:wrap; border-top:1px solid var(--blekk); padding-top:1.2rem; margin-bottom:.4rem;
+}
+.innhold-hode h3{ font-size:var(--t-2); }
+.innhold-sum{ font-family:var(--sans); font-size:var(--t--1); color:var(--blekk-3); font-variant-numeric:tabular-nums; }
+.gruppe{ border-top:1px solid var(--linje); padding:1.3rem 0 .4rem; }
+.gruppe[hidden]{ display:none; }
+.gruppe-hode{ display:flex; align-items:center; gap:.6rem; margin-bottom:.7rem; }
+.gruppe-hode svg{ width:19px; height:19px; color:var(--aksent); flex:none; }
+.gruppe-hode h4{
+  font-family:var(--sans); font-size:.72rem; font-weight:700; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--blekk-2);
+}
+.vareliste{ list-style:none; margin:0; padding:0; }
+.vare{ padding:.42rem 0; border-bottom:1px solid var(--linje); }
+.vare:last-child{ border-bottom:0; }
+.vare[hidden]{ display:none; }
+.vare-rad{ display:flex; align-items:baseline; gap:.1rem; }
+.vare-navn{ font-size:.99rem; }
+.prikker{ flex:1; border-bottom:1px dotted var(--linje-2); margin:0 .5rem; transform:translateY(-.25rem); min-width:14px; }
+.vare-ant{
+  font-family:var(--sans); font-size:.88rem; font-variant-numeric:tabular-nums;
+  white-space:nowrap; color:var(--blekk); padding:.1rem .35rem; border-radius:var(--r-sm);
+}
+.vare-note{ font-size:.86rem; color:var(--blekk-3); margin:.12rem 0 0; max-width:56ch; line-height:1.45; }
+@keyframes blink{ 0%{ background:var(--aksent-svak); } 100%{ background:transparent; } }
+.vare-ant.endret{ animation:blink .9s var(--ease); }
+.innhold-fot{
+  font-family:var(--sans); font-size:var(--t--1); color:var(--blekk-3);
+  border-top:1px solid var(--linje); padding-top:1rem; margin-top:.6rem;
+}
+
+/* Prispanel -------------------------------------------------------------- */
+.panel{
+  border:1px solid var(--linje); border-radius:var(--r-lg); background:var(--ark);
+  padding:1.3rem 1.25rem 1.4rem;
+}
+.panel-tittel{
+  font-family:var(--sans); font-size:.68rem; font-weight:700; letter-spacing:.15em;
+  text-transform:uppercase; color:var(--blekk-3); border-bottom:1px solid var(--blekk);
+  padding-bottom:.7rem; margin-bottom:.9rem;
+}
+.linje-rad{
+  display:flex; justify-content:space-between; gap:.8rem; font-family:var(--sans);
+  font-size:.88rem; padding:.42rem 0; color:var(--blekk-2);
+}
+.linje-rad b{ color:var(--blekk); font-weight:600; font-variant-numeric:tabular-nums; }
+.linje-rad[hidden]{ display:none; }
+.linje-rad .etikett{ min-width:0; }
+.linje-rad .etikett small{ display:block; color:var(--blekk-3); font-size:.76rem; }
+.panel-sum{
+  border-top:1px solid var(--blekk); margin-top:.8rem; padding-top:.9rem;
+  display:flex; align-items:baseline; justify-content:space-between; gap:.8rem;
+}
+.panel-sum .ord{ font-family:var(--sans); font-size:.8rem; letter-spacing:.1em; text-transform:uppercase; color:var(--blekk-3); }
+.panel-sum .kr{ font-size:var(--t-3); font-weight:600; font-variant-numeric:tabular-nums; letter-spacing:-.02em; }
+.panel-per{ font-family:var(--sans); font-size:.79rem; color:var(--blekk-3); margin:.3rem 0 0; text-align:right; }
+.panel-abo{
+  margin-top:1rem; padding:.75rem .85rem; border:1px dashed var(--aksent-linje);
+  border-radius:var(--r); font-family:var(--sans); font-size:.79rem; color:var(--blekk-2);
+  background:var(--aksent-svak);
+}
+.panel-abo b{ color:var(--blekk); }
+.panel-abo[hidden]{ display:none; }
+.panel .knapp{ width:100%; margin-top:1.1rem; }
+.panel-fot{ font-family:var(--sans); font-size:.75rem; color:var(--blekk-3); margin:.8rem 0 0; text-align:center; }
+.panel-kvitt{
+  font-family:var(--sans); font-size:.78rem; color:var(--ok); margin:.6rem 0 0; text-align:center; min-height:1.2em;
+}
+
+/* Fast bunnlinje på mobil ------------------------------------------------ */
+.bunnlinje{
+  position:fixed; left:0; right:0; bottom:0; z-index:40;
+  background:color-mix(in srgb, var(--papir) 92%, transparent);
+  backdrop-filter:saturate(140%) blur(8px);
+  border-top:1px solid var(--blekk);
+  padding:.6rem 16px calc(.6rem + env(safe-area-inset-bottom));
+  display:flex; align-items:center; gap:.8rem;
+  transform:translateY(105%); transition:transform .25s var(--ease);
+  pointer-events:none;
+}
+.bunnlinje.vis{ transform:translateY(0); pointer-events:auto; }
+@media (min-width:1000px){ .bunnlinje{ display:none; } }
+.bunn-tekst{ min-width:0; flex:1; }
+.bunn-sum{ font-size:1.32rem; font-weight:600; font-variant-numeric:tabular-nums; line-height:1.1; }
+.bunn-opp{
+  font-family:var(--sans); font-size:.68rem; color:var(--blekk-3); white-space:nowrap;
+  overflow:hidden; text-overflow:ellipsis; display:block;
+}
+.bunnlinje .knapp{ padding:.7em 1.1em; min-height:44px; flex:none; }
+
+/* ==========================================================================
+   7. Tillit
+   ========================================================================== */
+.tillit{ padding:clamp(3.4rem,9vw,6rem) 0 0; }
+.tillit-hode{ max-width:34ch; margin-bottom:2.4rem; }
+.tillit-hode h2{ font-size:var(--t-4); }
+.punkter{ display:grid; gap:0; border-top:1px solid var(--blekk); }
+@media (min-width:720px){ .punkter{ grid-template-columns:1fr 1fr; column-gap:3rem; } }
+.punkt{ padding:1.4rem 0; border-bottom:1px solid var(--linje); display:flex; gap:1rem; }
+.punkt svg{ width:22px; height:22px; color:var(--aksent); flex:none; margin-top:.25rem; }
+.punkt h3{ font-size:var(--t-1); margin-bottom:.3rem; }
+.punkt p{ margin:0; font-size:.96rem; color:var(--blekk-2); line-height:1.55; }
+
+.sitat{
+  margin:clamp(2.6rem,7vw,4rem) 0 0; padding:clamp(1.8rem,5vw,2.8rem) 0;
+  border-top:1px solid var(--blekk); border-bottom:1px solid var(--blekk); text-align:center;
+}
+.sitat blockquote{ margin:0 auto; max-width:24ch; font-size:var(--t-3); line-height:1.24; font-style:italic; }
+.sitat cite{
+  display:block; margin-top:1.1rem; font-style:normal; font-family:var(--sans);
+  font-size:.7rem; letter-spacing:.15em; text-transform:uppercase; color:var(--blekk-3);
+}
+
+.steg{ display:grid; gap:0; margin-top:clamp(2.6rem,7vw,3.6rem); }
+@media (min-width:760px){ .steg{ grid-template-columns:repeat(3,1fr); column-gap:2.4rem; } }
+.steg > div{ padding:1.4rem 0; border-top:1px solid var(--linje); }
+.steg-nr{ font-size:var(--t-3); color:var(--aksent); line-height:1; margin-bottom:.4rem; }
+.steg h3{ font-size:var(--t-1); margin-bottom:.25rem; }
+.steg p{ margin:0; color:var(--blekk-2); font-size:.96rem; }
+
+/* ==========================================================================
+   8. Matnivåer
+   ========================================================================== */
+.mat{ padding:clamp(3.4rem,9vw,6rem) 0 0; }
+.mat-hode{ max-width:38ch; margin-bottom:1.8rem; }
+.mat-hode h2{ font-size:var(--t-4); margin-bottom:.9rem; }
+.mat-hode p{ color:var(--blekk-2); }
+.tabell{ width:100%; border-collapse:collapse; font-size:.96rem; }
+.tabell caption{ text-align:left; font-family:var(--sans); font-size:var(--t--1); color:var(--blekk-3); padding-bottom:.7rem; }
+.tabell th,.tabell td{ text-align:left; padding:.85rem .9rem; border-bottom:1px solid var(--linje); vertical-align:top; }
+.tabell thead th{
+  border-bottom:1px solid var(--blekk); font-family:var(--serif); font-size:var(--t-1);
+  font-weight:600; padding-top:0;
+}
+.tabell thead th:first-child{ font-family:var(--sans); font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; color:var(--blekk-3); font-weight:600; }
+.tabell tbody th{ font-family:var(--sans); font-size:.78rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--blekk-3); width:26%; }
+.tabell td{ color:var(--blekk-2); }
+.tabell td:first-of-type{ border-right:1px solid var(--linje); }
+.tabell th:first-child{ padding-left:0; }
+@media (max-width:719px){
+  .tabell, .tabell tbody, .tabell tr, .tabell th, .tabell td{ display:block; }
+  .tabell thead{ display:none; }
+  .tabell tr{ border-top:1px solid var(--blekk); padding:1rem 0 .4rem; }
+  .tabell tbody th{ width:auto; padding:0 0 .5rem; border:0; }
+  .tabell td{ border:0 !important; padding:.15rem 0 .5rem; position:relative; padding-left:0; }
+  .tabell td::before{
+    content:attr(data-kol); display:block; font-family:var(--sans); font-size:.68rem;
+    letter-spacing:.12em; text-transform:uppercase; color:var(--aksent); margin-bottom:.1rem;
+  }
+}
+.mat-rad{ margin-top:2rem; padding:1.4rem 1.3rem; background:var(--ark-2); border-radius:var(--r-lg); border:1px solid var(--linje); }
+.mat-rad h3{ font-size:var(--t-1); margin-bottom:.45rem; }
+.mat-rad p{ margin:0; color:var(--blekk-2); max-width:70ch; }
+
+/* ==========================================================================
+   9. FAQ
+   ========================================================================== */
+.faq{ padding:clamp(3.4rem,9vw,6rem) 0 0; }
+.faq-grid{ display:grid; gap:2rem; }
+@media (min-width:900px){ .faq-grid{ grid-template-columns:minmax(0,.55fr) minmax(0,1fr); gap:4rem; } }
+.faq h2{ font-size:var(--t-4); max-width:12ch; }
+.faq-intro{ color:var(--blekk-2); margin-top:1rem; max-width:34ch; }
+.faq-liste{ border-top:1px solid var(--blekk); }
+details{ border-bottom:1px solid var(--linje); }
+summary{
+  cursor:pointer; list-style:none; padding:1.1rem 2.4rem 1.1rem 0; position:relative;
+  font-size:var(--t-1); line-height:1.3; font-weight:600;
+}
+summary::-webkit-details-marker{ display:none; }
+summary::after{
+  content:''; position:absolute; right:.35rem; top:1.5rem; width:11px; height:11px;
+  border-right:1.5px solid var(--aksent); border-bottom:1.5px solid var(--aksent);
+  transform:rotate(45deg); transition:transform .2s var(--ease);
+}
+details[open] summary::after{ transform:rotate(-135deg); top:1.75rem; }
+details .svar{ padding:0 1.5rem 1.3rem 0; color:var(--blekk-2); max-width:58ch; }
+details .svar p{ margin:0 0 .7em; }
+details .svar p:last-child{ margin:0; }
+
+/* ==========================================================================
+   10. Bunn
+   ========================================================================== */
+.bunn{ margin-top:clamp(4rem,10vw,7rem); border-top:1px solid var(--blekk); background:var(--papir-2); }
+.bunn-inn{ padding:clamp(2.4rem,6vw,3.6rem) 0 2rem; display:grid; gap:2.2rem; }
+@media (min-width:820px){ .bunn-inn{ grid-template-columns:minmax(0,1.3fr) repeat(3,minmax(0,.7fr)); gap:3rem; } }
+.bunn h2{ font-size:var(--t-2); margin-bottom:.6rem; }
+.bunn p{ color:var(--blekk-2); font-size:.95rem; max-width:34ch; }
+.bunn h3{
+  font-family:var(--sans); font-size:.68rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--blekk-3); margin-bottom:.8rem;
+}
+.bunn ul{ list-style:none; margin:0; padding:0; font-family:var(--sans); font-size:.9rem; }
+.bunn li{ margin-bottom:.55rem; }
+.bunn a{ color:var(--blekk-2); text-decoration:none; border-bottom:1px solid transparent; }
+.bunn a:hover{ color:var(--blekk); border-bottom-color:var(--aksent); }
+.kolofon{
+  border-top:1px solid var(--linje); padding:1.2rem 0 2.2rem; display:flex; flex-wrap:wrap;
+  gap:.6rem 1.6rem; font-family:var(--sans); font-size:.76rem; color:var(--blekk-3);
+}
+.kolofon .plassholder{ color:var(--aksent); }
+
+/* ==========================================================================
+   11. Bevegelse av
+   ========================================================================== */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms !important; animation-iteration-count:1 !important;
+    transition-duration:.001ms !important; scroll-behavior:auto !important;
+  }
+  .bunnlinje{ transition:none; }
+}
+html{ scroll-behavior:smooth; }
+@media (prefers-reduced-motion:reduce){ html{ scroll-behavior:auto; } }
+</style>
+</head>
+
+<body>
+<a class="hopp" href="#bygg">Hopp til pakkebyggeren</a>
+
+<!-- Ikonsprite: hårfine strekikoner, tegnet én gang, gjenbrukt med <use>. -->
+<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <symbol id="i-mat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="12" cy="6.2" rx="6" ry="2.4"/><path d="M6 6.2v11.6c0 1.3 2.7 2.4 6 2.4s6-1.1 6-2.4V6.2"/><path d="M6 11.5c0 1.3 2.7 2.4 6 2.4s6-1.1 6-2.4"/>
+  </symbol>
+  <symbol id="i-vann" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3.2c3.3 3.9 5.1 6.5 5.1 8.8a5.1 5.1 0 0 1-10.2 0c0-2.3 1.8-4.9 5.1-8.8z"/><path d="M9.4 13.4a2.8 2.8 0 0 0 2.2 2.8"/>
+  </symbol>
+  <symbol id="i-lys" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 17.2a5.8 5.8 0 1 1 6 0v1.6H9z"/><path d="M10 21h4"/><path d="M12 2.5v1.3M4.2 6.4l.9.9M19.8 6.4l-.9.9"/>
+  </symbol>
+  <symbol id="i-varme" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3.2c2.6 3.1 4.6 5.2 4.6 8.2a4.6 4.6 0 1 1-9.2 0c0-1.5.6-2.6 1.6-3.6.3 1.2 1 2 2 2 .6-2 .5-4.1 1-6.6z"/>
+  </symbol>
+  <symbol id="i-helse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3.5" y="6" width="17" height="13" rx="2.5"/><path d="M9 6V4.6c0-.6.5-1.1 1.1-1.1h3.8c.6 0 1.1.5 1.1 1.1V6"/><path d="M12 10v5M9.5 12.5h5"/>
+  </symbol>
+  <symbol id="i-eske" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3.6 7.4 12 3.4l8.4 4v9.2L12 20.6l-8.4-4z"/><path d="m3.6 7.4 8.4 4 8.4-4M12 11.4v9.2"/>
+  </symbol>
+  <symbol id="i-radio" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2.8" y="8.6" width="18.4" height="11.4" rx="2"/><circle cx="8.2" cy="14.3" r="2.7"/><path d="M14.4 12.4h4.2M14.4 16.2h4.2M7 8.6l9.6-5"/>
+  </symbol>
+  <symbol id="i-sjekk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="m4.5 12.6 4.8 4.8L19.5 7.2"/>
+  </symbol>
+  <symbol id="i-pil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 12h15M13.4 6.2 19.6 12l-6.2 5.8"/>
+  </symbol>
+  <symbol id="i-person" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="6.6" r="3.4"/><path d="M4.8 21c0-4.2 3.2-7.2 7.2-7.2s7.2 3 7.2 7.2"/>
+  </symbol>
+  <symbol id="i-dokument" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M5.5 3.5h8l5 5v12h-13z"/><path d="M13.5 3.5v5h5M8.5 13h7M8.5 16.5h5"/>
+  </symbol>
+  <symbol id="i-hjerte" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 20.3S3.6 15.4 3.6 9.6a4.4 4.4 0 0 1 8.4-1.8 4.4 4.4 0 0 1 8.4 1.8c0 5.8-8.4 10.7-8.4 10.7z"/>
+  </symbol>
+</svg>
+
+<!-- ==========================================================================
+     Topplinje
+     ========================================================================== -->
+<header class="topp">
+  <div class="side topp-rad">
+    <a class="merke" href="#">
+      <svg class="merke-glyf" viewBox="0 0 32 32" aria-hidden="true">
+        <rect class="plate" width="32" height="32" rx="6"/>
+        <g class="strek">
+          <rect x="6.8" y="9.8" width="18.4" height="14.8" rx="2.4"/><path d="M6.8 14.6h18.4"/>
+        </g>
+        <circle class="prikk" cx="16" cy="19.6" r="2.4"/>
+      </svg>
+      <span>
+        <span class="merke-navn">Nødboks</span>
+        <span class="merke-under">Sju døgn, ferdig pakket</span>
+      </span>
+    </a>
+
+    <nav class="topp-nav" aria-label="Hovedmeny">
+      <a href="#dogn">Sju døgn</a>
+      <a href="#bygg">Pakkebyggeren</a>
+      <a href="#matnivaa">Matnivåene</a>
+      <a href="#sporsmal">Spørsmål</a>
+    </nav>
+
+    <fieldset class="tema" id="tema">
+      <legend class="skjult">Fargemodus</legend>
+      <label><input type="radio" name="tema" value="auto" checked><span>Auto</span></label>
+      <label><input type="radio" name="tema" value="light"><span>Lys</span></label>
+      <label><input type="radio" name="tema" value="dark"><span>Mørk</span></label>
+    </fieldset>
+  </div>
+</header>
+
+<main id="hoved">
+
+<!-- ==========================================================================
+     Hero
+     ========================================================================== -->
+<section class="hero">
+  <div class="side">
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow"><span class="strek"></span>Egenberedskap for vanlige hjem</p>
+        <h1>Slik ser sju døgn ut for <em>din</em> husstand.</h1>
+        <p class="ingress">
+          Myndighetene ber hver husstand om å klare seg selv i en uke. Vi har gjort
+          den lista om til én eske du kan sette i boden – riktig mengde mat, vann,
+          lys og varme for akkurat så mange dere er.
+        </p>
+        <div class="hero-handling">
+          <a class="knapp" href="#bygg">Bygg pakken din<svg aria-hidden="true"><use href="#i-pil"/></svg></a>
+          <a class="knapp knapp--stille" href="#innholdsliste">Se hva som ligger i esken</a>
+        </div>
+        <p class="hero-note">
+          Fri frakt over 1 500 kr · Sendes fra Norge · 30 dagers åpent kjøp
+        </p>
+      </div>
+
+      <!-- Hero-figur: linjetegnet eske, ren CSS/SVG. Ingen bilder på siden. -->
+      <figure class="hero-figur" style="margin:0">
+        <svg viewBox="0 0 640 430" role="img" aria-labelledby="figur-tittel figur-tekst">
+          <title id="figur-tittel">Åpen beredskapseske sett forfra</title>
+          <desc id="figur-tekst">Strektegning av en åpen eske med vannkanne, hermetikk, lykt og nødradio.</desc>
+          <g class="strek">
+
+            <!-- gulvlinje -->
+            <path class="haar" d="M40 348h560"/>
+
+            <!-- lokket, satt inntil veggen bak -->
+            <path class="f-papir" d="M470 132 596 104v226l-126 22z"/>
+            <path class="haar" d="M470 174 596 146"/>
+
+            <!-- åpningen, sett ovenfra -->
+            <path class="f-papir" d="M96 196 176 138h330l-80 58z"/>
+
+            <!-- innholdet, tegnet før frontflaten så den dekker nedre halvdel -->
+            <g>
+              <!-- vannkanne -->
+              <path class="f-ark" d="M186 106h56v12l14 8v66h-84v-66l14-8z"/>
+              <path class="f-ark" d="M200 92h28v14h-28z"/>
+              <path class="haar" d="M186 148h70"/>
+              <path class="haar" d="M186 168h70"/>
+
+              <!-- hermetikk -->
+              <path class="f-ark" d="M270 128h44v62h-44z"/>
+              <ellipse class="f-ark" cx="292" cy="128" rx="22" ry="7"/>
+              <path class="haar" d="M270 146h44"/>
+              <path class="f-ark" d="M322 142h40v48h-40z"/>
+              <ellipse class="f-ark" cx="342" cy="142" rx="20" ry="6.4"/>
+              <path class="haar" d="M322 158h40"/>
+
+              <!-- lykt med varmt lys -->
+              <path class="f-ark" d="M384 120h52v70h-52z"/>
+              <path class="haar" d="M384 136h52"/>
+              <path d="M392 120v-8a18 18 0 0 1 36 0v8"/>
+              <rect class="f-aksent" x="396" y="146" width="28" height="30" rx="3"/>
+              <path class="s-aksent" d="M410 100v-14"/>
+
+              <!-- nødradio med antenne -->
+              <path class="f-ark" d="M448 150h72v40h-72z"/>
+              <circle cx="468" cy="170" r="10" fill="none"/>
+              <path class="haar" d="M488 164h22M488 176h22"/>
+              <path d="M470 150 516 96"/>
+              <circle class="f-linje" cx="518" cy="93" r="3.4"/>
+            </g>
+
+            <!-- frontflate, dekker innholdets nedre halvdel -->
+            <path class="f-ark" d="M96 196h330v146H96z"/>
+            <!-- høyre sideflate -->
+            <path class="f-ark2" d="M426 196 506 138v146l-80 58z"/>
+            <!-- håndtak -->
+            <path class="haar" d="M212 238h98a8 8 0 0 1 0 16h-98a8 8 0 0 1 0-16z"/>
+            <!-- etikett -->
+            <path class="haar" d="M130 270h176v50H130z"/>
+          </g>
+          <text class="t-navn" x="146" y="296">Nødboks</text>
+          <text class="t-meta" x="146" y="312">7 DØGN · 4 PERSONER</text>
+          <circle class="f-aksent" cx="288" cy="292" r="7"/>
+        </svg>
+        <figcaption class="figur-tekst">Én eske, 62 liter. Står under senga eller i boden.</figcaption>
+      </figure>
+    </div>
+
+    <dl class="fakta">
+      <div>
+        <dt>Anbefalingen</dt>
+        <dd>Sju døgn hjemme</dd>
+      </div>
+      <div>
+        <dt>Tid du bruker</dt>
+        <dd>Omtrent ti minutter</dd>
+      </div>
+      <div>
+        <dt>Etterpå</dt>
+        <dd>Vi minner deg om datoene</dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     Døgnstripe
+     ========================================================================== -->
+<section class="dogn" id="dogn" aria-labelledby="dogn-tittel">
+  <div class="side">
+    <div class="dogn-hode">
+      <div>
+        <p class="eyebrow"><span class="strek"></span>Uka det gjelder</p>
+        <h2 id="dogn-tittel">Det er ikke dramatisk. Det er bare uvant.</h2>
+      </div>
+      <p class="dogn-hint">Dra sidelengs for å lese uka →</p>
+    </div>
+
+    <div class="dogn-rad" tabindex="0" role="group" aria-label="Sju døgn, dag for dag">
+      <article class="dogn-celle">
+        <p class="dogn-nr">Døgn 1</p>
+        <p>Strømmen blir borte i kveldingen. Hodelyktene ligger øverst i esken, én til hver.</p>
+      </article>
+      <article class="dogn-celle">
+        <p class="dogn-nr">Døgn 2</p>
+        <p>Springen kan bli stille. Kannene fylte du den dagen esken kom, og de står i gangen.</p>
+      </article>
+      <article class="dogn-celle">
+        <p class="dogn-nr">Døgn 3</p>
+        <p>Nødradioen sier hva som skjer og hvor lenge det varer. Sveiven lader også telefonen.</p>
+      </article>
+      <article class="dogn-celle">
+        <p class="dogn-nr">Døgn 4</p>
+        <p>Middag på stormkjøkkenet. Varm mat endrer stemningen i huset mer enn du tror.</p>
+      </article>
+      <article class="dogn-celle">
+        <p class="dogn-nr">Døgn 5</p>
+        <p>Det blir kaldt innendørs. Ullteppene og stearinlysene gjør stua til ett rom dere klarer dere i.</p>
+      </article>
+      <article class="dogn-celle">
+        <p class="dogn-nr">Døgn 6</p>
+        <p>Naboen mangler batterier. Dere har nok til begge, og det er halve poenget.</p>
+      </article>
+      <article class="dogn-celle">
+        <p class="dogn-nr">Døgn 7</p>
+        <p>Det meste er tilbake. Esken settes på plass, og du fyller på det som ble brukt.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     Pakkebyggeren
+     ========================================================================== -->
+<section class="bygger" id="bygg" aria-labelledby="bygg-tittel">
+  <div class="side">
+    <div class="bygger-hode">
+      <p class="eyebrow"><span class="strek"></span>Pakkebyggeren</p>
+      <h2 id="bygg-tittel">Fire valg, så er det gjort.</h2>
+      <p>
+        Dra i skalaen, velg matnivå, bestem om du trenger utstyret eller bare maten.
+        Innholdslisten og prisen oppdaterer seg mens du velger – du ser nøyaktig hva
+        som kommer i esken før du bestemmer deg.
+      </p>
+    </div>
+
+    <form class="bygger-grid" id="skjema" novalidate>
+
+      <!-- ---------- Skjemaet ---------- -->
+      <div class="skjema">
+
+        <!-- 1. Husstand -->
+        <fieldset class="bolk">
+          <legend class="skjult">Steg 1: Hvor mange er dere?</legend>
+          <div class="bolk-hode">
+            <span class="bolk-nr" aria-hidden="true">1</span>
+            <h3>Hvor mange er dere?</h3>
+          </div>
+          <p class="bolk-under">Antall personer styrer både mengden av hver vare og hvor stor esken blir. Regn med alle som sover hjemme til vanlig.</p>
+
+          <div class="slider-tall">
+            <span class="n tall" id="ut-antall">4</span>
+            <span class="etikett" id="ut-antall-ord">personer i husstanden</span>
+          </div>
+
+          <div class="figurer" id="figurer" aria-hidden="true"></div>
+
+          <div class="slider-rad">
+            <button type="button" class="stegknapp" id="minus" aria-label="Én person færre">−</button>
+            <div class="slider-felt">
+              <label class="skjult" for="personer">Antall personer i husstanden</label>
+              <input type="range" id="personer" name="personer" min="1" max="8" step="1" value="4"
+                     aria-describedby="slider-svar">
+              <div class="hakk" id="hakk" aria-hidden="true">
+                <span>1</span><span>2</span><span>3</span><span>4</span>
+                <span>5</span><span>6</span><span>7</span><span>8</span>
+              </div>
+            </div>
+            <button type="button" class="stegknapp" id="pluss" aria-label="Én person mer">+</button>
+          </div>
+
+          <p class="slider-svar" id="slider-svar">
+            Det gir <b>56 måltider</b>, <b>60 liter vann</b> og <b>én eske</b> på rundt 31 kg.
+          </p>
+        </fieldset>
+
+        <!-- 2. Matnivå -->
+        <fieldset class="bolk">
+          <legend class="skjult">Steg 2: Hvilken mat?</legend>
+          <div class="bolk-hode">
+            <span class="bolk-nr" aria-hidden="true">2</span>
+            <h3>Hvilken mat?</h3>
+          </div>
+          <p class="bolk-under">Dette er det valget som betyr mest – både for prisen og for hva du må gjøre om to år.</p>
+
+          <div class="valg">
+            <label class="kort">
+              <input type="radio" name="matniva" value="vanlig" checked>
+              <span class="kort-topp">
+                <span class="merkeboks" aria-hidden="true"></span>
+                <span>
+                  <span class="kort-tittel">Tørrmat fra butikk</span>
+                  <span class="kort-pris" id="pris-vanlig">690 kr per person</span>
+                </span>
+              </span>
+              <span class="kort-brod">
+                Hermetikk, knekkebrød, havregryn og pålegg – vanlige merkevarer du kjenner fra
+                butikkhylla. Kan spises kald hvis du må.
+              </span>
+              <dl class="spec">
+                <div><dt>Holdbarhet</dt><dd>1–2 år</dd></div>
+                <div><dt>Tilberedning</dt><dd>Kan spises kald</dd></div>
+                <div><dt>Din jobb</dt><dd>Bytte annethvert år</dd></div>
+              </dl>
+              <div class="holdbar" aria-hidden="true">
+                <div class="holdbar-spor"><div class="holdbar-fyll" style="width:8%"></div></div>
+                <div class="holdbar-tekst"><span>2 år</span><span>25 år</span></div>
+              </div>
+            </label>
+
+            <label class="kort">
+              <input type="radio" name="matniva" value="lang">
+              <span class="kort-topp">
+                <span class="merkeboks" aria-hidden="true"></span>
+                <span>
+                  <span class="kort-tittel">Langtidsmat, frysetørket</span>
+                  <span class="kort-pris" id="pris-lang">1 490 kr per person</span>
+                </span>
+              </span>
+              <span class="kort-brod">
+                Frysetørrede middager og frokoster på pose og boks. Dyrere én gang, så er den
+                ferdig – men den trenger kokende vann for å bli mat.
+              </span>
+              <dl class="spec">
+                <div><dt>Holdbarhet</dt><dd>Opptil 25 år</dd></div>
+                <div><dt>Tilberedning</dt><dd>Krever vann og varme</dd></div>
+                <div><dt>Din jobb</dt><dd>Nesten ingenting</dd></div>
+              </dl>
+              <div class="holdbar" aria-hidden="true">
+                <div class="holdbar-spor"><div class="holdbar-fyll" style="width:100%"></div></div>
+                <div class="holdbar-tekst"><span>2 år</span><span>25 år</span></div>
+              </div>
+            </label>
+          </div>
+        </fieldset>
+
+        <!-- 3. Omfang -->
+        <fieldset class="bolk">
+          <legend class="skjult">Steg 3: Hele pakken, eller bare maten?</legend>
+          <div class="bolk-hode">
+            <span class="bolk-nr" aria-hidden="true">3</span>
+            <h3>Hele pakken, eller bare maten?</h3>
+          </div>
+          <p class="bolk-under">Har du allerede lykt, radio og stormkjøkken i boden, er det ingen grunn til å kjøpe det på nytt.</p>
+
+          <div class="valg">
+            <label class="kort">
+              <input type="radio" name="modus" value="komplett" checked>
+              <span class="kort-topp">
+                <span class="merkeboks" aria-hidden="true"></span>
+                <span>
+                  <span class="kort-tittel">Komplett pakke</span>
+                  <span class="kort-pris">Mat og utstyr i én eske</span>
+                </span>
+              </span>
+              <span class="kort-brod">
+                Alt på lista: mat, vannkanner, stormkjøkken, lommelykt og hodelykter, nødradio
+                med sveiv og solcelle, powerbank, førstehjelp, batterier, lys og varme.
+              </span>
+            </label>
+
+            <label class="kort">
+              <input type="radio" name="modus" value="paafyll">
+              <span class="kort-topp">
+                <span class="merkeboks" aria-hidden="true"></span>
+                <span>
+                  <span class="kort-tittel">Kun matpåfyll</span>
+                  <span class="kort-pris">For deg som har utstyret</span>
+                </span>
+              </span>
+              <span class="kort-brod">
+                Bare mat og vannbehandling, i riktig mengde for husstanden. Perfekt når den
+                gamle maten nærmer seg datoen og resten står klart.
+              </span>
+            </label>
+          </div>
+        </fieldset>
+
+        <!-- 4. Påfyll -->
+        <fieldset class="bolk">
+          <legend class="skjult">Steg 4: Skal vi holde øye med datoene?</legend>
+          <div class="bolk-hode">
+            <span class="bolk-nr" aria-hidden="true">4</span>
+            <h3>Skal vi holde øye med datoene?</h3>
+          </div>
+          <p class="bolk-under">Den vanligste feilen er ikke å la være å kjøpe. Det er å glemme det som står i boden.</p>
+
+          <div class="paafyll" id="paafyll-boks">
+            <label class="avkryss">
+              <input type="checkbox" id="paafyll">
+              <span class="rute" aria-hidden="true"><svg><use href="#i-sjekk"/></svg></span>
+              <span>
+                <span class="avkryss-tittel">Ja, minn meg på det og send påfyll</span>
+              </span>
+            </label>
+            <div class="paafyll-brod" id="paafyll-tekst">
+              <p>
+                Vi sender deg en e-post <b>fire uker før</b> noe går ut på dato, med hva det
+                gjelder og hva det koster. Du svarer ja eller nei.
+              </p>
+              <p class="paafyll-liten" id="paafyll-detalj">
+                Neste gang blir om lag om to år. Du betaler ingenting nå, og du kan slutte
+                når som helst med én e-post.
+              </p>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+
+      <!-- ---------- Innholdslisten ---------- -->
+      <div class="innhold" id="innholdsliste">
+        <div class="innhold-hode">
+          <div>
+            <p class="eyebrow" style="margin-bottom:.5rem"><span class="strek"></span>Innholdet i esken</p>
+            <h3 id="innhold-tittel">Dette får du</h3>
+          </div>
+          <p class="innhold-sum"><span id="ut-varer">0</span> enkeltvarer · ca. <span id="ut-vekt-2">0</span> kg</p>
+        </div>
+
+        <div id="grupper"><!-- fylles av skriptet --></div>
+
+        <p class="innhold-fot">
+          Mengdene regnes ut fra sju døgn per person, etter samme oppsett som DSBs liste for
+          egenberedskap. Enkeltvarer kan bli byttet mot tilsvarende produkt hvis noe er utsolgt –
+          aldri mot noe dårligere.
+        </p>
+      </div>
+
+      <!-- ---------- Prispanelet ---------- -->
+      <div class="panel-hylse">
+        <div class="panel" id="panel">
+          <p class="panel-tittel">Din pakke</p>
+
+          <div class="linje-rad" id="rad-mat">
+            <span class="etikett">Mat<small id="rad-mat-under">4 personer × 690 kr</small></span>
+            <b id="rad-mat-sum">2 760 kr</b>
+          </div>
+          <div class="linje-rad" id="rad-grunn">
+            <span class="etikett">Utstyr, grunnpakke<small>Stormkjøkken, radio, lykter, førstehjelp</small></span>
+            <b id="rad-grunn-sum">2 890 kr</b>
+          </div>
+          <div class="linje-rad" id="rad-person">
+            <span class="etikett">Utstyr per person<small id="rad-person-under">4 × 240 kr</small></span>
+            <b id="rad-person-sum">960 kr</b>
+          </div>
+          <div class="linje-rad" id="rad-frakt">
+            <span class="etikett">Frakt<small id="rad-frakt-under">Fri frakt over 1 500 kr</small></span>
+            <b id="rad-frakt-sum">0 kr</b>
+          </div>
+
+          <div class="panel-sum">
+            <span class="ord">Totalt</span>
+            <span class="kr" id="ut-total">6 610 kr</span>
+          </div>
+          <p class="panel-per" id="ut-per">1 653 kr per person, én gang</p>
+
+          <div class="panel-abo" id="abo" hidden>
+            <b>Påfyll er på.</b> <span id="abo-tekst">Neste sending om to år, anslagsvis 2 480 kr. Belastes ikke nå.</span>
+          </div>
+
+          <button class="knapp" type="button" id="kjop">Legg i kurv<svg aria-hidden="true"><use href="#i-pil"/></svg></button>
+          <p class="panel-kvitt" id="kvittering" role="status"></p>
+          <p class="panel-fot">Sendes innen 1–2 virkedager · 30 dagers åpent kjøp</p>
+        </div>
+      </div>
+
+      <p class="skjult" id="live" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     Tillit
+     ========================================================================== -->
+<section class="tillit" aria-labelledby="tillit-tittel">
+  <div class="side">
+    <div class="tillit-hode">
+      <p class="eyebrow"><span class="strek"></span>Hvorfor du kan stole på esken</p>
+      <h2 id="tillit-tittel">Én voksen avgjørelse, tatt ferdig.</h2>
+    </div>
+
+    <div class="punkter">
+      <article class="punkt">
+        <svg aria-hidden="true"><use href="#i-dokument"/></svg>
+        <div>
+          <h3>Bygget på den offentlige lista</h3>
+          <p>Vi har tatt myndighetenes råd om sju døgns egenberedskap og gjort dem om til
+             varer med strekkode. Ingenting er funnet på her.</p>
+        </div>
+      </article>
+
+      <article class="punkt">
+        <svg aria-hidden="true"><use href="#i-mat"/></svg>
+        <div>
+          <h3>Ekte merkevarer, ikke anonyme poser</h3>
+          <p>Du ser produsent og dato på alt. Vil du heller kjøpe noe selv, står det i
+             innholdslista hva du skal se etter.</p>
+        </div>
+      </article>
+
+      <article class="punkt">
+        <svg aria-hidden="true"><use href="#i-eske"/></svg>
+        <div>
+          <h3>Pakket i Norge, sendt i én eske</h3>
+          <p>Bestiller du før klokka 13 på hverdager, går den samme dag. To til fem
+             virkedager hjem til døra eller til hentested.</p>
+        </div>
+      </article>
+
+      <article class="punkt">
+        <svg aria-hidden="true"><use href="#i-radio"/></svg>
+        <div>
+          <h3>Vi minner deg – én gang, ikke hver uke</h3>
+          <p>Fire uker før noe går ut på dato får du én e-post. Ingen nyhetsbrev,
+             ingen påminnelser om verdens tilstand.</p>
+        </div>
+      </article>
+
+      <article class="punkt">
+        <svg aria-hidden="true"><use href="#i-hjerte"/></svg>
+        <div>
+          <h3>Ingen skremsel</h3>
+          <p>Vi selger ikke gassmasker, kamuflasje eller kurs i å overleve i skogen.
+             Dette er husholdningsvarer, satt i system.</p>
+        </div>
+      </article>
+
+      <article class="punkt">
+        <svg aria-hidden="true"><use href="#i-sjekk"/></svg>
+        <div>
+          <h3>30 dagers åpent kjøp</h3>
+          <p>Ombestemmer du deg, sender du esken uåpnet i retur og vi betaler frakten
+             begge veier. Uten at du må forklare hvorfor.</p>
+        </div>
+      </article>
+    </div>
+
+    <figure class="sitat">
+      <blockquote>Klarer du deg selv i sju døgn, frigjør du hjelp til dem som trenger den mest.</blockquote>
+      <cite>Grunnen til at vi driver med dette</cite>
+    </figure>
+
+    <div class="steg">
+      <div>
+        <p class="steg-nr">1</p>
+        <h3>Du velger</h3>
+        <p>Antall personer og matnivå. Ti minutter, én gang.</p>
+      </div>
+      <div>
+        <p class="steg-nr">2</p>
+        <h3>Vi pakker</h3>
+        <p>Alt kommer i én merket eske med innholdsliste og datooversikt.</p>
+      </div>
+      <div>
+        <p class="steg-nr">3</p>
+        <h3>Du glemmer den</h3>
+        <p>Det er meningen. Vi sier fra når noe må byttes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     Matnivåene
+     ========================================================================== -->
+<section class="mat" id="matnivaa" aria-labelledby="mat-tittel">
+  <div class="side">
+    <div class="mat-hode">
+      <p class="eyebrow"><span class="strek"></span>Det viktigste valget</p>
+      <h2 id="mat-tittel">Butikkmat eller mat som varer i 25 år</h2>
+      <p>
+        Begge deler er riktig beredskap. Forskjellen er hva den koster deg – i kroner
+        én gang, og i oppmerksomhet i årene etterpå. Her er hele forskjellen, uten
+        småskrift.
+      </p>
+    </div>
+
+    <table class="tabell">
+      <caption>Sammenlikning for en husstand på fire personer. Prisene er plassholdere i denne skissen.</caption>
+      <thead>
+        <tr>
+          <th scope="col">Forskjellen</th>
+          <th scope="col">Tørrmat fra butikk</th>
+          <th scope="col">Langtidsmat, frysetørket</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">Holdbarhet</th>
+          <td data-kol="Tørrmat">1–2 år på det meste. Hermetikken litt lenger.</td>
+          <td data-kol="Langtidsmat">Opptil 25 år uåpnet, mørkt og tørt.</td>
+        </tr>
+        <tr>
+          <th scope="row">Pris, 4 personer</th>
+          <td data-kol="Tørrmat">2 760 kr</td>
+          <td data-kol="Langtidsmat">5 960 kr</td>
+        </tr>
+        <tr>
+          <th scope="row">Over ti år</th>
+          <td data-kol="Tørrmat">Rundt fem påfyll. Du kan spise opp det gamle.</td>
+          <td data-kol="Langtidsmat">Ingen påfyll. Esken står urørt.</td>
+        </tr>
+        <tr>
+          <th scope="row">Tilberedning</th>
+          <td data-kol="Tørrmat">Kan spises kald rett fra boksen om du må.</td>
+          <td data-kol="Langtidsmat">Krever kokende vann. Uten varme blir det tørt pulver.</td>
+        </tr>
+        <tr>
+          <th scope="row">Vann det krever</th>
+          <td data-kol="Tørrmat">Bare til drikke.</td>
+          <td data-kol="Langtidsmat">Drikke pluss omtrent en halv liter per måltid.</td>
+        </tr>
+        <tr>
+          <th scope="row">Vekt og plass</th>
+          <td data-kol="Tørrmat">Tyngst. Hermetikk veier.</td>
+          <td data-kol="Langtidsmat">Omtrent halvparten så tungt.</td>
+        </tr>
+        <tr>
+          <th scope="row">Smak</th>
+          <td data-kol="Tørrmat">Kjent mat. Barna spiser den uten diskusjon.</td>
+          <td data-kol="Langtidsmat">Bedre enn ryktet, men fortsatt turmat.</td>
+        </tr>
+        <tr>
+          <th scope="row">Passer for</th>
+          <td data-kol="Tørrmat">Deg som har plass i boden og orker en runde hvert annet år.</td>
+          <td data-kol="Langtidsmat">Deg som vil gjøre dette ferdig én gang.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="mat-rad">
+      <h3>Rådet vårt, hvis du vil ha ett</h3>
+      <p>
+        Har du plass og tåler en halvtimes jobb annethvert år, er butikkmaten billigst
+        og smaker det dere er vant til. Vil du kjøpe deg fri fra oppgaven, er
+        langtidsmaten dyrere én gang – og så er den ferdig. Mange velger langtidsmat
+        til middagene og butikkmat til frokost og pålegg. Det får du til ved å legge
+        inn en komplett pakke nå og et matpåfyll senere.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     Spørsmål
+     ========================================================================== -->
+<section class="faq" id="sporsmal" aria-labelledby="faq-tittel">
+  <div class="side">
+    <div class="faq-grid">
+      <div>
+        <p class="eyebrow"><span class="strek"></span>Spørsmål og svar</p>
+        <h2 id="faq-tittel">Det folk lurer på</h2>
+        <p class="faq-intro">
+          Finner du ikke svaret, kan du sende en e-post til
+          <a href="mailto:hei@nodboks.no">hei@nodboks.no</a>. Vi svarer som regel
+          samme dag, og det er et menneske som svarer.
+        </p>
+      </div>
+
+      <div class="faq-liste">
+        <details>
+          <summary>Er ikke dette litt overdrevent?</summary>
+          <div class="svar">
+            <p>
+              Nei. Anbefalingen om sju døgns egenberedskap er ikke laget for kriser i
+              filmformat, men for det som faktisk skjer: langvarig strømbrudd, uvær som
+              stenger veien, forurenset drikkevann, en uke der butikken er tom.
+            </p>
+            <p>
+              Alt i esken er vanlige husholdningsvarer. Blir det aldri bruk for dem,
+              spiser du opp maten og bytter den. Det er hele risikoen.
+            </p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Jeg har allerede litt av dette. Hva da?</summary>
+          <div class="svar">
+            <p>
+              Velg «Kun matpåfyll» i pakkebyggeren. Da får du mat og vannbehandling i
+              riktig mengde, uten å betale for en lommelykt til.
+            </p>
+            <p>
+              Er du usikker på om utstyret ditt duger, står hele innholdslista åpent på
+              siden. Kryss av mot det du har i boden.
+            </p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Går maten ut på dato mens den står?</summary>
+          <div class="svar">
+            <p>
+              Butikkmaten har ett til to års holdbarhet. Langtidsmaten opptil 25 år.
+              Uansett hva du velger, ligger det en datert innholdsliste i esken, og vi
+              sender deg én e-post fire uker før den første varen går ut.
+            </p>
+            <p>
+              Butikkmaten kan du spise opp som vanlig mat og erstatte. Ingenting
+              trenger å havne i søpla.
+            </p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Hvor mye plass tar esken?</summary>
+          <div class="svar">
+            <p>
+              En eske på 62 liter, omtrent 60 × 40 × 32 cm. Den går under en dobbeltseng,
+              i et garderobeskap eller på en bodhylle. Husstander på fem eller flere får
+              to esker som kan stables.
+            </p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Følger det med nok vann?</summary>
+          <div class="svar">
+            <p>
+              Vi sender sammenleggbare kanner, ikke ferdig fylt vann – vann er tungt å
+              frakte og blir gammelt i plast. Kannene fyller du fra springen den dagen
+              esken kommer, og bytter vannet et par ganger i året.
+            </p>
+            <p>
+              Regnestykket er tre liter per person per døgn til drikke og enkel
+              matlaging. Velger du langtidsmat, legger vi inn ekstra kanner, fordi
+              frysetørret mat krever vann for å bli mat.
+            </p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Har dere jodtabletter?</summary>
+          <div class="svar">
+            <p>
+              Nei. Jodtabletter er apotekvare og anbefales bare for noen grupper, først
+              og fremst barn og unge under 18, gravide og ammende. Vi legger ved et kort
+              som forklarer hvem det gjelder, så kjøper du dem på apoteket hvis det
+              gjelder dere.
+            </p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Kan jeg avslutte påfyllet?</summary>
+          <div class="svar">
+            <p>
+              Ja, med én e-post eller ett klikk i e-posten vi sender. Det er ingen
+              bindingstid, ingen oppsigelsestid, og påfyllet belastes aldri uten at du
+              har svart ja på forhånd.
+            </p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Hva med babymat, medisiner og dyrefôr?</summary>
+          <div class="svar">
+            <p>
+              Det kan vi ikke velge for deg. Vi setter av plass i esken og legger ved en
+              huskeliste med felt for morsmelkerstatning, faste medisiner, briller,
+              bleier og fôr til dyra.
+            </p>
+            <p>
+              Fem minutter med den lista er det mest verdifulle du gjør med esken etter
+              at den kommer.
+            </p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Hvem står bak?</summary>
+          <div class="svar">
+            <p>
+              Nødboks er et lite norsk selskap som pakker og sender fra eget lager. Vi
+              er ikke tilknyttet myndighetene, og vi gir oss ikke ut for å være det – vi
+              følger de offentlige rådene fordi de er fornuftige.
+            </p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ==========================================================================
+     Bunn
+     ========================================================================== -->
+<footer class="bunn">
+  <div class="side bunn-inn">
+    <div>
+      <h2>Nødboks</h2>
+      <p>
+        Ferdigpakket egenberedskap for norske husstander. Sju døgn med mat, vann,
+        lys og varme – i én eske, uten dramatikk.
+      </p>
+    </div>
+    <div>
+      <h3>Produkt</h3>
+      <ul>
+        <li><a href="#bygg">Pakkebyggeren</a></li>
+        <li><a href="#innholdsliste">Innholdsliste</a></li>
+        <li><a href="#matnivaa">Matnivåene</a></li>
+        <li><a href="#bygg">Matpåfyll</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Kunnskap</h3>
+      <ul>
+        <li><a href="#dogn">Sju døgn, dag for dag</a></li>
+        <li><a href="#sporsmal">Spørsmål og svar</a></li>
+        <li><a href="#sporsmal">Vann og oppbevaring</a></li>
+        <li><a href="#sporsmal">Huskeliste for medisiner</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Selskap</h3>
+      <ul>
+        <li><a href="mailto:hei@nodboks.no">hei@nodboks.no</a></li>
+        <li><a href="#">Frakt og retur</a></li>
+        <li><a href="#">Personvern</a></li>
+        <li><a href="#">Vilkår</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="side">
+    <div class="kolofon">
+      <span>© 2026 Nødboks AS</span>
+      <span>Org.nr. 000 000 000</span>
+      <span>Bygget uten sporing og uten informasjonskapsler</span>
+      <span class="plassholder">Designskisse: alle priser og tall er plassholdere</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Fast bunnlinje, kun mobil -->
+<div class="bunnlinje" id="bunnlinje" aria-hidden="true">
+  <div class="bunn-tekst">
+    <div class="bunn-sum tall" id="bunn-sum">6 610 kr</div>
+    <span class="bunn-opp" id="bunn-opp">4 personer · Komplett · Tørrmat</span>
+  </div>
+  <button class="knapp knapp--stille" type="button" id="bunn-se">Detaljer</button>
+  <button class="knapp" type="button" id="bunn-kjop">Kjøp</button>
+</div>
+
+<script>
+/* ==========================================================================
+   Nødboks – skisse «Nordisk redaksjonell»
+   Ingen rammeverk, ingen avhengigheter. Ca. 9 kB ukomprimert.
+   ========================================================================== */
+(function(){
+  'use strict';
+
+  /* ---------- Tema: settes tidlig, lagres lokalt --------------------------- */
+  var rot = document.documentElement;
+  function lesTema(){
+    try { return localStorage.getItem('nodboks-tema') || 'auto'; } catch(e){ return 'auto'; }
+  }
+  function settTema(v){
+    if(v === 'auto'){ rot.removeAttribute('data-theme'); }
+    else { rot.setAttribute('data-theme', v); }
+    try { localStorage.setItem('nodboks-tema', v); } catch(e){}
+  }
+  var startTema = lesTema();
+  settTema(startTema);
+  var temaFelt = document.getElementById('tema');
+  var valgtRadio = temaFelt.querySelector('input[value="' + startTema + '"]');
+  if(valgtRadio){ valgtRadio.checked = true; }
+  temaFelt.addEventListener('change', function(e){
+    if(e.target.name === 'tema'){ settTema(e.target.value); }
+  });
+
+  /* ---------- PLASSHOLDERPRISER -------------------------------------------
+     >>> Alle beløp under er plassholdere for designskissen. <<<
+     ---------------------------------------------------------------------- */
+  var PRIS = {
+    matVanlig:    690,   // kr per person, sju døgn, butikkmat
+    matLang:     1490,   // kr per person, sju døgn, frysetørket
+    utstyrGrunn: 2890,   // kr per husstand, komplett pakke
+    utstyrPerson: 240,   // kr per person, komplett pakke
+    frakt:        149,   // kr under fraktgrensen
+    fraktGrense: 1500,   // kr
+    sjekkepakke:  590    // kr, femårlig sjekkepakke ved langtidsmat
+  };
+
+  var nf = new Intl.NumberFormat('nb-NO');
+  function kr(n){ return nf.format(Math.round(n)) + ' kr'; }
+  function opp(n){ return Math.ceil(n); }
+
+  var ORD = ['', 'én', 'to', 'tre', 'fire', 'fem', 'seks', 'sju', 'åtte'];
+
+  /* ---------- Varekatalog --------------------------------------------------
+     antall: funksjon av tilstanden. vis: når varen er med.
+     ---------------------------------------------------------------------- */
+  var erVanlig = function(s){ return s.mat === 'vanlig'; };
+  var erLang   = function(s){ return s.mat === 'lang'; };
+  var komplett = function(s){ return s.modus === 'komplett'; };
+  var paafyll  = function(s){ return s.modus === 'paafyll'; };
+
+  function kanner(s){
+    return opp(s.p * 1.5) + (s.mat === 'lang' ? opp(s.p / 2) : 0);
+  }
+
+  var KATALOG = [
+    { navn:'Mat og drikke', ikon:'i-mat', varer:[
+      { navn:'Hermetiske middager, 400 g', enhet:'bokser', vis:erVanlig,
+        antall:function(s){ return s.p * 7; },
+        note:'Gryter, kjøttboller og fiskeboller. Kan spises kalde hvis du må.' },
+      { navn:'Makrell i tomat og leverpostei', enhet:'bokser', vis:erVanlig,
+        antall:function(s){ return s.p * 4; },
+        note:'Pålegg som tåler romtemperatur i årevis.' },
+      { navn:'Knekkebrød, 500 g', enhet:'pakker', vis:erVanlig,
+        antall:function(s){ return Math.max(1, opp(s.p * 1.5)); } },
+      { navn:'Havregryn, 750 g', enhet:'pakker', vis:erVanlig,
+        antall:function(s){ return Math.max(1, opp(s.p * 0.7)); },
+        note:'Frokost sju dager. Kan lages med kaldt vann hvis det må.' },
+      { navn:'UHT-melk, 1 liter', enhet:'kartonger', vis:erVanlig,
+        antall:function(s){ return s.p * 2; } },
+      { navn:'Peanøttsmør eller honning, 400 g', enhet:'glass', vis:erVanlig,
+        antall:function(s){ return Math.max(1, opp(s.p / 2)); } },
+      { navn:'Tørket frukt og nøtter, 400 g', enhet:'poser', vis:erVanlig,
+        antall:function(s){ return Math.max(1, opp(s.p * 0.8)); } },
+      { navn:'Kjeks og sjokolade', enhet:'pakker', vis:erVanlig,
+        antall:function(s){ return s.p * 3; },
+        note:'Skal ikke undervurderes. Dette er det barna husker fra uka.' },
+
+      { navn:'Frysetørret middag, porsjonspose', enhet:'poser', vis:erLang,
+        antall:function(s){ return s.p * 7; },
+        note:'Kokende vann rett i posen. Ferdig på ti minutter, ingen oppvask.' },
+      { navn:'Frysetørret frokost, grøt og müsli', enhet:'poser', vis:erLang,
+        antall:function(s){ return s.p * 7; } },
+      { navn:'Kavring og knekkebrød på boks', enhet:'bokser', vis:erLang,
+        antall:function(s){ return Math.max(1, opp(s.p * 1.2)); },
+        note:'Forseglet på boks. Holder i 25 år uåpnet.' },
+      { navn:'Melkepulver, 800 g boks', enhet:'bokser', vis:erLang,
+        antall:function(s){ return Math.max(1, opp(s.p / 2)); } },
+      { navn:'Frysetørret frukt og bær', enhet:'bokser', vis:erLang,
+        antall:function(s){ return Math.max(1, opp(s.p * 0.6)); } },
+      { navn:'Nødrasjon, 2 400 kcal', enhet:'pakker', vis:erLang,
+        antall:function(s){ return s.p; },
+        note:'Én per person, hvis dere må ut døra fort.' },
+
+      { navn:'Kaffe, te og sukker', enhet:'sett',
+        antall:function(s){ return 1 + Math.floor((s.p - 1) / 4); },
+        note:'Ikke næring. Men det er dette som gjør en kald morgen til en vanlig morgen.' },
+      { navn:'Salt, buljong og krydder', enhet:'sett',
+        antall:function(){ return 1; } }
+    ]},
+
+    { navn:'Vann', ikon:'i-vann', varer:[
+      { navn:'Sammenleggbar vannkanne, 10 liter', enhet:'stk', vis:komplett,
+        antall:kanner,
+        note:function(s){
+          var l = kanner(s) * 10;
+          return s.mat === 'lang'
+            ? 'Til sammen ' + l + ' liter. Frysetørret mat krever vann, derfor ' +
+              opp(s.p / 2) + ' kanner ekstra.'
+            : 'Til sammen ' + l + ' liter. Fyll dem fra springen den dagen esken kommer.';
+        } },
+      { navn:'Vannrensetabletter, 50 stk', enhet:'pakker',
+        antall:function(s){ return Math.max(1, opp(s.p / 4)); },
+        note:'Til vann du er usikker på. Tablettene har egen utløpsdato.' },
+      { navn:'Vannkanne til påfyll, 10 liter', enhet:'stk', vis:function(s){ return paafyll(s) && erLang(s); },
+        antall:function(s){ return opp(s.p / 2); },
+        note:'Langtidsmat trenger mer vann enn du har i dag. Disse legger vi ved.' }
+    ]},
+
+    { navn:'Lys og strøm', ikon:'i-lys', vis:komplett, varer:[
+      { navn:'Hodelykt med batterier', enhet:'stk', vis:komplett,
+        antall:function(s){ return s.p; },
+        note:'Én til hver. Den viktigste tingen i esken, og den folk glemmer å ha nok av.' },
+      { navn:'Lommelykt, LED', enhet:'stk', vis:komplett,
+        antall:function(s){ return Math.max(2, opp(s.p / 2)); } },
+      { navn:'Nødradio med sveiv og solcelle', enhet:'stk', vis:komplett,
+        antall:function(){ return 1; },
+        note:'DAB+ og FM. Lader også telefonen, om enn langsomt.' },
+      { navn:'Powerbank, 20 000 mAh', enhet:'stk', vis:komplett,
+        antall:function(s){ return Math.max(1, opp(s.p / 3)); } },
+      { navn:'Batterier, AA og AAA', enhet:'pakker', vis:komplett,
+        antall:function(s){ return Math.max(2, opp(s.p / 2) + 1); } },
+      { navn:'Stearinlys, 8 timer', enhet:'stk', vis:komplett,
+        antall:function(s){ return Math.max(4, s.p * 3); } },
+      { navn:'Fyrstikker i fuktsikker boks', enhet:'stk', vis:komplett,
+        antall:function(){ return 2; } }
+    ]},
+
+    { navn:'Varme og matlaging', ikon:'i-varme', vis:komplett, varer:[
+      { navn:'Stormkjøkken med gassbrenner', enhet:'stk', vis:komplett,
+        antall:function(){ return 1; },
+        note:'Brukes ute eller med vinduet på gløtt. Aldri i et lukket rom.' },
+      { navn:'Gassboks, 230 g', enhet:'stk', vis:komplett,
+        antall:function(s){ return opp(s.p / 2) + 1; } },
+      { navn:'Kokekar, kopper og bestikk', enhet:'sett', vis:komplett,
+        antall:function(s){ return s.p; } },
+      { navn:'Ullteppe', enhet:'stk', vis:komplett,
+        antall:function(s){ return opp(s.p / 2); },
+        note:'Ull varmer også når det er fuktig. Derfor ull og ikke fleece.' },
+      { navn:'Nødpose i folie', enhet:'stk', vis:komplett,
+        antall:function(s){ return s.p; } },
+      { navn:'Boksåpner og multiverktøy', enhet:'stk', vis:komplett,
+        antall:function(){ return 1; },
+        note:'Hermetikk uten åpner er en klassisk og bitter erfaring.' }
+    ]},
+
+    { navn:'Helse og hygiene', ikon:'i-helse', vis:komplett, varer:[
+      { navn:'Førstehjelpspakke', enhet:'stk', vis:komplett,
+        antall:function(){ return 1; },
+        note:function(s){ return s.p <= 2 ? 'Liten pakke, tilpasset én til to personer.'
+                                          : (s.p <= 5 ? 'Mellomstor pakke for husstand.'
+                                                      : 'Stor pakke, for husstander på seks eller flere.'); } },
+      { navn:'Ekstra plaster og kompresser', enhet:'pakker', vis:komplett,
+        antall:function(s){ return Math.max(1, opp(s.p / 3)); } },
+      { navn:'Håndsprit, 250 ml', enhet:'flasker', vis:komplett,
+        antall:function(s){ return Math.max(2, opp(s.p / 2)); } },
+      { navn:'Våtservietter', enhet:'pakker', vis:komplett,
+        antall:function(s){ return Math.max(2, s.p); },
+        note:'Når vannet er for dyrebart til å vaske seg i.' },
+      { navn:'Toalettposer med gel, 20 stk', enhet:'pakker', vis:komplett,
+        antall:function(s){ return Math.max(1, opp(s.p * 7 / 20)); },
+        note:'Uten vann i springen virker ikke toalettet. Det pleier å komme overraskende.' },
+      { navn:'Søppelsekker og tørkepapir', enhet:'sett', vis:komplett,
+        antall:function(){ return 1; } }
+    ]},
+
+    { navn:'Esken og papirene', ikon:'i-eske', varer:[
+      { navn:'Stablebar eske med lokk, 62 liter', enhet:'stk', vis:komplett,
+        antall:function(s){ return opp(s.p / 4); },
+        note:function(s){ return opp(s.p / 4) > 1
+          ? 'To esker som stables. 60 × 40 × 32 cm hver.'
+          : 'Går under en dobbeltseng. 60 × 40 × 32 cm.'; } },
+      { navn:'Pappeske til påfyll', enhet:'stk', vis:paafyll,
+        antall:function(s){ return opp(s.p / 5); },
+        note:'Du beholder boksen du allerede har. Denne kan resirkuleres.' },
+      { navn:'Datert innholdsliste', enhet:'stk',
+        antall:function(){ return 1; },
+        note:'Hva som er i esken, og nøyaktig når hver ting må byttes.' },
+      { navn:'Beredskapskort til kjøleskapet', enhet:'stk',
+        antall:function(){ return 1; },
+        note:'Nødnumre, møtested og hva dere gjør de første timene.' },
+      { navn:'Huskeliste for medisiner og babymat', enhet:'stk',
+        antall:function(){ return 1; },
+        note:'Feltene fyller du ut selv. Det er de fem viktigste minuttene.' },
+      { navn:'Konvolutt for kontanter', enhet:'stk', vis:komplett,
+        antall:function(){ return 1; },
+        note:'Tom. Legg i noen hundrelapper selv – kortterminaler trenger strøm.' }
+    ]}
+  ];
+
+  /* ---------- Tilstand ----------------------------------------------------- */
+  var s = { p:4, mat:'vanlig', modus:'komplett', paafyll:false };
+
+  /* ---------- Bygg listen én gang ------------------------------------------ */
+  var grupper = document.getElementById('grupper');
+  var noder = [];   // {el, ant, note, def}
+
+  KATALOG.forEach(function(g){
+    var sek = document.createElement('section');
+    sek.className = 'gruppe';
+    var h = document.createElement('div');
+    h.className = 'gruppe-hode';
+    h.innerHTML = '<svg aria-hidden="true"><use href="#' + g.ikon + '"/></svg><h4>' + g.navn + '</h4>';
+    var ul = document.createElement('ul');
+    ul.className = 'vareliste';
+
+    var gVarer = [];
+    g.varer.forEach(function(v){
+      var li = document.createElement('li');
+      li.className = 'vare';
+      var rad = document.createElement('div');
+      rad.className = 'vare-rad';
+      var navn = document.createElement('span');
+      navn.className = 'vare-navn';
+      navn.textContent = v.navn;
+      var prikker = document.createElement('span');
+      prikker.className = 'prikker';
+      prikker.setAttribute('aria-hidden','true');
+      var ant = document.createElement('span');
+      ant.className = 'vare-ant tall';
+      rad.appendChild(navn); rad.appendChild(prikker); rad.appendChild(ant);
+      li.appendChild(rad);
+      var note = document.createElement('p');
+      note.className = 'vare-note';
+      li.appendChild(note);
+      ul.appendChild(li);
+      var n = { el:li, ant:ant, note:note, def:v };
+      noder.push(n); gVarer.push(n);
+    });
+
+    sek.appendChild(h); sek.appendChild(ul);
+    grupper.appendChild(sek);
+    sek._varer = gVarer;
+  });
+
+  /* ---------- Referanser --------------------------------------------------- */
+  var el = {
+    antall:    document.getElementById('ut-antall'),
+    antallOrd: document.getElementById('ut-antall-ord'),
+    figurer:   document.getElementById('figurer'),
+    hakk:      document.getElementById('hakk'),
+    svar:      document.getElementById('slider-svar'),
+    vekt2:     document.getElementById('ut-vekt-2'),
+    varer:     document.getElementById('ut-varer'),
+    total:     document.getElementById('ut-total'),
+    per:       document.getElementById('ut-per'),
+    radMat:    document.getElementById('rad-mat'),
+    radMatU:   document.getElementById('rad-mat-under'),
+    radMatS:   document.getElementById('rad-mat-sum'),
+    radGrunn:  document.getElementById('rad-grunn'),
+    radGrunnS: document.getElementById('rad-grunn-sum'),
+    radPers:   document.getElementById('rad-person'),
+    radPersU:  document.getElementById('rad-person-under'),
+    radPersS:  document.getElementById('rad-person-sum'),
+    radFraktU: document.getElementById('rad-frakt-under'),
+    radFraktS: document.getElementById('rad-frakt-sum'),
+    abo:       document.getElementById('abo'),
+    aboTekst:  document.getElementById('abo-tekst'),
+    prisVanlig:document.getElementById('pris-vanlig'),
+    prisLang:  document.getElementById('pris-lang'),
+    paafyllDet:document.getElementById('paafyll-detalj'),
+    bunnSum:   document.getElementById('bunn-sum'),
+    bunnOpp:   document.getElementById('bunn-opp'),
+    live:      document.getElementById('live'),
+    kvitt:     document.getElementById('kvittering')
+  };
+
+  /* Persongfigurer, tegnet én gang */
+  for(var i = 0; i < 8; i++){
+    el.figurer.insertAdjacentHTML('beforeend',
+      '<svg viewBox="0 0 24 24"><use href="#i-person"/></svg>');
+  }
+  var figurer = el.figurer.querySelectorAll('svg');
+  var hakkTall = el.hakk.querySelectorAll('span');
+
+  var range = document.getElementById('personer');
+
+  /* ---------- Utregninger --------------------------------------------------- */
+  function beregn(){
+    var mat = s.p * (s.mat === 'lang' ? PRIS.matLang : PRIS.matVanlig);
+    var grunn = s.modus === 'komplett' ? PRIS.utstyrGrunn : 0;
+    var perPers = s.modus === 'komplett' ? s.p * PRIS.utstyrPerson : 0;
+    var sum = mat + grunn + perPers;
+    var frakt = sum >= PRIS.fraktGrense ? 0 : PRIS.frakt;
+    return { mat:mat, grunn:grunn, perPers:perPers, frakt:frakt, total:sum + frakt };
+  }
+
+  function vekt(){
+    if(s.modus === 'komplett'){
+      return Math.round(s.mat === 'lang' ? 8 + s.p * 3.2 : 9 + s.p * 5.5);
+    }
+    return Math.round(s.mat === 'lang' ? s.p * 2.6 : s.p * 5.0);
+  }
+
+  /* ---------- Oppdatering ---------------------------------------------------- */
+  var reduser = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var forste = true;
+
+  function oppdater(){
+    var t = beregn();
+
+    /* Slider-visning */
+    el.antall.textContent = s.p;
+    el.antallOrd.textContent = s.p === 1 ? 'person i husstanden' : 'personer i husstanden';
+    range.style.setProperty('--pct', ((s.p - 1) / 7 * 100) + '%');
+    range.setAttribute('aria-valuetext', s.p === 1 ? 'én person' : s.p + ' personer');
+    for(var i = 0; i < 8; i++){
+      figurer[i].classList.toggle('pa', i < s.p);
+      hakkTall[i].classList.toggle('pa', i === s.p - 1);
+    }
+
+    /* Setningen under slideren – formuleres etter hvilken modus du står i */
+    var antEsker = s.modus === 'komplett' ? opp(s.p / 4) : opp(s.p / 5);
+    var eskeOrd = antEsker === 1
+      ? (s.modus === 'komplett' ? 'én eske' : 'én pappeske')
+      : ORD[antEsker] + (s.modus === 'komplett' ? ' esker' : ' pappesker');
+    el.svar.innerHTML = s.modus === 'komplett'
+      ? 'Det gir <b>' + (s.p * 14) + ' måltider</b>, <b>' + (kanner(s) * 10) +
+        ' liter vannkapasitet</b> og <b>' + eskeOrd + '</b> på rundt ' + vekt() + ' kg.'
+      : 'Det gir <b>' + (s.p * 14) + ' måltider</b> til påfyll, i <b>' + eskeOrd +
+        '</b> på rundt ' + vekt() + ' kg. Utstyret beholder du.';
+    el.vekt2.textContent = vekt();
+
+    /* Innholdslisten */
+    var antVarer = 0;
+    noder.forEach(function(n){
+      var med = n.def.vis ? n.def.vis(s) : true;
+      n.el.hidden = !med;
+      if(!med){ return; }
+      var a = n.def.antall(s);
+      antVarer += a;
+      var tekst = a + ' ' + n.def.enhet;
+      if(n.ant.textContent !== tekst){
+        if(!forste && !reduser){
+          n.ant.classList.remove('endret');
+          void n.ant.offsetWidth;
+          n.ant.classList.add('endret');
+        }
+        n.ant.textContent = tekst;
+      }
+      var note = typeof n.def.note === 'function' ? n.def.note(s) : (n.def.note || '');
+      if(n.note.textContent !== note){ n.note.textContent = note; }
+      n.note.hidden = !note;
+    });
+    Array.prototype.forEach.call(grupper.children, function(sek){
+      sek.hidden = !sek._varer.some(function(n){ return !n.el.hidden; });
+    });
+    el.varer.textContent = antVarer;
+
+    /* Kortpriser */
+    el.prisVanlig.textContent = kr(PRIS.matVanlig) + ' per person · ' + kr(s.p * PRIS.matVanlig) + ' for dere';
+    el.prisLang.textContent   = kr(PRIS.matLang) + ' per person · ' + kr(s.p * PRIS.matLang) + ' for dere';
+
+    /* Prispanel */
+    el.radMatU.textContent = s.p + ' ' + (s.p === 1 ? 'person' : 'personer') + ' × ' +
+      kr(s.mat === 'lang' ? PRIS.matLang : PRIS.matVanlig) +
+      (s.mat === 'lang' ? ' (langtidsmat)' : ' (butikkmat)');
+    el.radMatS.textContent = kr(t.mat);
+    el.radGrunn.hidden = t.grunn === 0;
+    el.radGrunnS.textContent = kr(t.grunn);
+    el.radPers.hidden = t.perPers === 0;
+    el.radPersU.textContent = s.p + ' × ' + kr(PRIS.utstyrPerson);
+    el.radPersS.textContent = kr(t.perPers);
+    el.radFraktS.textContent = t.frakt === 0 ? 'Fri' : kr(t.frakt);
+    el.radFraktU.textContent = t.frakt === 0 ? 'Fri frakt over ' + kr(PRIS.fraktGrense)
+                                             : 'Under grensen på ' + kr(PRIS.fraktGrense);
+    el.total.textContent = kr(t.total);
+    el.per.textContent = kr(t.total / s.p) + ' per person, én gang';
+
+    /* Påfyll */
+    var langtid = s.mat === 'lang';
+    var nesteSum = langtid ? PRIS.sjekkepakke : Math.round(t.mat * 0.9 / 10) * 10;
+    var nesteTid = langtid ? 'fem år' : 'to år';
+    el.abo.hidden = !s.paafyll;
+    el.aboTekst.textContent = langtid
+      ? 'Sjekkepakke om fem år: vanntabletter, batterier og førstehjelp, anslagsvis ' +
+        kr(nesteSum) + '. Belastes ikke nå.'
+      : 'Neste matpåfyll om to år, anslagsvis ' + kr(nesteSum) +
+        ' med 10 % påfyllsrabatt. Belastes ikke nå.';
+    el.paafyllDet.textContent = langtid
+      ? 'Langtidsmaten holder i opptil 25 år. Derfor gjelder påminnelsen først og fremst ' +
+        'vanntabletter, batterier og førstehjelp – en liten sjekkepakke om fem år. ' +
+        'Du kan slutte når som helst.'
+      : 'Butikkmaten varer i to år, så neste gang blir om lag da. Du betaler ingenting nå, ' +
+        'og du kan slutte når som helst med én e-post.';
+
+    /* Mobil bunnlinje */
+    el.bunnSum.textContent = kr(t.total);
+    el.bunnOpp.textContent = s.p + ' pers · ' +
+      (s.modus === 'komplett' ? 'Komplett' : 'Matpåfyll') + ' · ' +
+      (langtid ? 'Langtid' : 'Butikk') + (s.paafyll ? ' · Påfyll' : '');
+
+    if(!forste){
+      el.live.textContent = s.p + ' personer, ' +
+        (s.modus === 'komplett' ? 'komplett pakke' : 'kun matpåfyll') + ', ' +
+        (langtid ? 'langtidsmat' : 'tørrmat fra butikk') + '. Totalt ' + kr(t.total) + '.';
+    }
+    forste = false;
+  }
+
+  /* ---------- Hendelser ------------------------------------------------------ */
+  range.addEventListener('input', function(){
+    s.p = parseInt(range.value, 10);
+    oppdater();
+  });
+  document.getElementById('minus').addEventListener('click', function(){
+    range.stepDown(); range.dispatchEvent(new Event('input'));
+  });
+  document.getElementById('pluss').addEventListener('click', function(){
+    range.stepUp(); range.dispatchEvent(new Event('input'));
+  });
+  function stegKnapper(){
+    document.getElementById('minus').disabled = s.p <= 1;
+    document.getElementById('pluss').disabled = s.p >= 8;
+  }
+
+  document.getElementById('skjema').addEventListener('change', function(e){
+    if(e.target.name === 'matniva'){ s.mat = e.target.value; }
+    if(e.target.name === 'modus'){ s.modus = e.target.value; }
+    if(e.target.id === 'paafyll'){ s.paafyll = e.target.checked; }
+    oppdater(); stegKnapper();
+  });
+  range.addEventListener('input', stegKnapper);
+
+  /* Kjøpsknapper – skissen har ingen kasse */
+  function kvitter(){
+    el.kvitt.textContent = 'Dette er en designskisse. Kassen er ikke koblet til ennå.';
+    if(window.clearTimeout){ window.setTimeout(function(){ el.kvitt.textContent = ''; }, 5000); }
+  }
+  document.getElementById('kjop').addEventListener('click', kvitter);
+  document.getElementById('bunn-kjop').addEventListener('click', function(){
+    document.getElementById('panel').scrollIntoView({ block:'center' });
+    kvitter();
+  });
+  document.getElementById('bunn-se').addEventListener('click', function(){
+    document.getElementById('panel').scrollIntoView({ block:'center' });
+  });
+
+  /* Fast bunnlinje vises bare mens pakkebyggeren er i bildet */
+  var bunnlinje = document.getElementById('bunnlinje');
+  var bygger = document.getElementById('bygg');
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(poster){
+      poster.forEach(function(p){
+        var vis = p.isIntersecting;
+        bunnlinje.classList.toggle('vis', vis);
+        bunnlinje.setAttribute('aria-hidden', vis ? 'false' : 'true');
+      });
+    }, { rootMargin:'-20% 0px -10% 0px' }).observe(bygger);
+  }
+
+  oppdater();
+  stegKnapper();
+})();
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://nodboks.no/#org",
+      "name": "Nødboks",
+      "url": "https://nodboks.no/",
+      "email": "hei@nodboks.no",
+      "areaServed": "NO",
+      "description": "Ferdigpakkede beredskapsbokser for norske husstander, bygget på rådet om sju døgns egenberedskap."
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://nodboks.no/#nettsted",
+      "url": "https://nodboks.no/",
+      "name": "Nødboks",
+      "inLanguage": "nb-NO",
+      "publisher": { "@id": "https://nodboks.no/#org" }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Er ikke dette litt overdrevent?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Nei. Anbefalingen om sju døgns egenberedskap er laget for langvarig strømbrudd, uvær som stenger veien, forurenset drikkevann og uker der butikken er tom. Alt i esken er vanlige husholdningsvarer."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Jeg har allerede litt av dette. Hva da?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Velg «Kun matpåfyll» i pakkebyggeren. Da får du mat og vannbehandling i riktig mengde for husstanden, uten å betale for utstyr du allerede eier."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Går maten ut på dato mens den står?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Butikkmaten har ett til to års holdbarhet, langtidsmaten opptil 25 år. Det ligger en datert innholdsliste i esken, og vi sender én e-post fire uker før første vare går ut."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Hvor mye plass tar esken?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "En eske på 62 liter, omtrent 60 × 40 × 32 cm. Husstander på fem eller flere får to esker som kan stables."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Følger det med nok vann?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Vi sender sammenleggbare kanner som du fyller fra springen. Regnestykket er tre liter per person per døgn. Velger du langtidsmat, legger vi inn ekstra kanner fordi frysetørret mat krever vann."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Har dere jodtabletter?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Nei. Jodtabletter er apotekvare og anbefales bare for enkelte grupper. Vi legger ved et kort som forklarer hvem det gjelder."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Kan jeg avslutte påfyllet?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ja. Ingen bindingstid og ingen oppsigelsestid, og påfyll belastes aldri uten at du har svart ja på forhånd."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+</body>
+</html>

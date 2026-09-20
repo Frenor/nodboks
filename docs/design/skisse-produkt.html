@@ -1,0 +1,1865 @@
+<!DOCTYPE html>
+<html lang="nb" data-theme="auto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nødboks – ferdigpakket beredskap for sju døgn</title>
+<meta name="description" content="Nødboks pakker sju døgns beredskap for husstanden din: mat, vann, lys, varme og radio i én eske. Velg antall personer, velg matnivå, ferdig på ti minutter.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#F5F2ED" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121110" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://nodboks.no/">
+<meta property="og:locale" content="nb_NO">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Nødboks – ferdigpakket beredskap for sju døgn">
+<meta property="og:description" content="Én voksen avgjørelse, ferdig på ti minutter. Sju døgns mat, vann, lys og varme – pakket i Norge.">
+
+<!--
+  ============================================================================
+  SKISSE – designretning «Produktet i sentrum» for nodboks.no
+  Alle priser i denne filen er PLASSHOLDERE og skal erstattes før lansering.
+  Plassholderprisene er samlet i PRIS-objektet i skriptet nederst:
+    utstyrBasis 1490, utstyrPerPerson 230, matVanligPerPerson 640,
+    matLangtidPerPerson 1290, abonnementsrabatt 8 %.
+  Også plassholdere: org.nr., leveringstider, kundetall og omtaler i bunnen.
+  ============================================================================
+-->
+
+<style>
+/* ===========================================================================
+   1. TOKENS
+   Lys modus: varm kalkhvit og nær-svart blekk. Mørk modus er ikke invertert –
+   den er en egen, varmere og mørkere scene bygget rundt det samme lyset.
+   Heltseksjonen (hero og produktscenen) er filmatisk mørk i BEGGE modi:
+   det er produktet som skal lyse, ikke siden.
+   =========================================================================== */
+:root {
+  color-scheme: light;
+
+  --bg:          #F5F2ED;
+  --bg-2:        #EDE8E0;
+  --surface:     #FFFFFF;
+  --surface-2:   #F7F4EF;
+  --line:        #E1D9CE;
+  --line-strong: #CCC1B2;
+
+  --ink:         #171512;
+  --ink-2:       #575047;
+  --ink-3:       #6E655A;
+
+  --accent:      #AC4F16;   /* ravgul lykt – fylte knapper, 5.3:1 mot hvit */
+  --accent-text: #984410;   /* lenker og tall på lys flate */
+  --accent-ink:  #FFFFFF;
+  --accent-soft: #F7EADD;
+  --accent-line: #E8CFB4;
+
+  --green:       #1F5A46;
+  --green-soft:  #E4EFE9;
+  --focus:       #1B5673;
+
+  --stage-bg:    #14130F;   /* filmatisk scene – lik i begge modi */
+  --stage-bg-2:  #201C15;
+  --stage-ink:   #F3EEE4;
+  --stage-ink-2: #B3A896;
+  --stage-line:  #34302A;
+
+  --shadow-s: 0 1px 2px rgb(23 21 18 / .06), 0 2px 6px rgb(23 21 18 / .05);
+  --shadow-m: 0 2px 6px rgb(23 21 18 / .05), 0 14px 32px rgb(23 21 18 / .10);
+  --shadow-l: 0 4px 10px rgb(23 21 18 / .06), 0 28px 60px rgb(23 21 18 / .14);
+
+  /* Esken – pappfarger */
+  --box-front:   #C9A97C;
+  --box-front-2: #B8945F;
+  --box-top:     #DCC299;
+  --box-side:    #A88453;
+  --box-in:      #3A2D1D;
+  --box-edge:    #8C6B3E;
+  --glow:        #FFB259;
+
+  --radius-s: 8px;
+  --radius-m: 14px;
+  --radius-l: 22px;
+
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  --maxw: 1200px;
+  --gutter: 16px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --bg:          #121110;
+    --bg-2:        #191714;
+    --surface:     #1C1A16;
+    --surface-2:   #232019;
+    --line:        #322D26;
+    --line-strong: #4A4238;
+
+    --ink:         #F2EDE3;
+    --ink-2:       #B0A695;
+    --ink-3:       #8B8272;
+
+    --accent:      #E79A4E;
+    --accent-text: #F0B173;
+    --accent-ink:  #1A1610;
+    --accent-soft: #2A2117;
+    --accent-line: #4B3A25;
+
+    --green:       #6FBE99;
+    --green-soft:  #17261F;
+    --focus:       #7FC3E6;
+
+    --stage-bg:    #0D0C0A;
+    --stage-bg-2:  #171410;
+    --stage-line:  #2C2822;
+
+    --shadow-s: 0 1px 2px rgb(0 0 0 / .5);
+    --shadow-m: 0 2px 6px rgb(0 0 0 / .45), 0 14px 32px rgb(0 0 0 / .5);
+    --shadow-l: 0 4px 10px rgb(0 0 0 / .4), 0 28px 60px rgb(0 0 0 / .6);
+
+    --box-front:   #B5945F;
+    --box-front-2: #9C7A47;
+    --box-top:     #CBAE7F;
+    --box-side:    #8A6B3D;
+    --box-in:      #2A2013;
+    --box-edge:    #6E5330;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg:          #121110;
+  --bg-2:        #191714;
+  --surface:     #1C1A16;
+  --surface-2:   #232019;
+  --line:        #322D26;
+  --line-strong: #4A4238;
+  --ink:         #F2EDE3;
+  --ink-2:       #B0A695;
+  --ink-3:       #8B8272;
+  --accent:      #E79A4E;
+  --accent-text: #F0B173;
+  --accent-ink:  #1A1610;
+  --accent-soft: #2A2117;
+  --accent-line: #4B3A25;
+  --green:       #6FBE99;
+  --green-soft:  #17261F;
+  --focus:       #7FC3E6;
+  --stage-bg:    #0D0C0A;
+  --stage-bg-2:  #171410;
+  --stage-line:  #2C2822;
+  --shadow-s: 0 1px 2px rgb(0 0 0 / .5);
+  --shadow-m: 0 2px 6px rgb(0 0 0 / .45), 0 14px 32px rgb(0 0 0 / .5);
+  --shadow-l: 0 4px 10px rgb(0 0 0 / .4), 0 28px 60px rgb(0 0 0 / .6);
+  --box-front:   #B5945F;
+  --box-front-2: #9C7A47;
+  --box-top:     #CBAE7F;
+  --box-side:    #8A6B3D;
+  --box-in:      #2A2013;
+  --box-edge:    #6E5330;
+}
+
+/* ===========================================================================
+   2. GRUNNLAG
+   =========================================================================== */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 96px; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-wrap: break-word;
+}
+
+h1, h2, h3, h4 {
+  margin: 0 0 .6em;
+  line-height: 1.08;
+  letter-spacing: -0.028em;
+  font-weight: 680;
+  text-wrap: balance;
+}
+h1 { font-size: clamp(2.15rem, 1.5rem + 3.1vw, 4.1rem); letter-spacing: -0.038em; }
+h2 { font-size: clamp(1.65rem, 1.25rem + 1.9vw, 2.6rem); letter-spacing: -0.032em; }
+h3 { font-size: clamp(1.12rem, 1.02rem + .45vw, 1.35rem); }
+h4 { font-size: 1rem; letter-spacing: -0.012em; }
+
+p { margin: 0 0 1em; text-wrap: pretty; }
+ul, ol { margin: 0 0 1em; padding-left: 1.2em; }
+
+a { color: var(--accent-text); text-underline-offset: .2em; text-decoration-thickness: 1px; }
+
+:focus-visible {
+  outline: 2.5px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+:focus:not(:focus-visible) { outline: none; }
+
+::selection { background: var(--accent-soft); color: var(--ink); }
+
+.wrap { width: 100%; max-width: var(--maxw); margin-inline: auto; padding-inline: var(--gutter); }
+.sr { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+.skip {
+  position: absolute; left: 12px; top: -60px; z-index: 100;
+  background: var(--accent); color: var(--accent-ink);
+  padding: 10px 16px; border-radius: 10px; font-weight: 640; text-decoration: none;
+  transition: top .15s ease;
+}
+.skip:focus { top: 12px; }
+
+.eyebrow {
+  font-size: .72rem; font-weight: 700; letter-spacing: .13em;
+  text-transform: uppercase; color: var(--ink-3); margin: 0 0 .9rem;
+}
+.eyebrow--stage { color: var(--stage-ink-2); }
+
+.lede { font-size: clamp(1.02rem, .97rem + .35vw, 1.2rem); color: var(--ink-2); max-width: 60ch; }
+
+/* ===========================================================================
+   3. KNAPPER OG SMÅDELER
+   =========================================================================== */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .55em;
+  font: inherit; font-weight: 640; letter-spacing: -.01em;
+  border: 1px solid transparent; border-radius: 12px;
+  padding: 14px 22px; min-height: 48px;
+  cursor: pointer; text-decoration: none;
+  transition: transform .12s ease, background-color .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+.btn:active { transform: translateY(1px); }
+.btn--primary { background: var(--accent); color: var(--accent-ink); box-shadow: var(--shadow-s); }
+.btn--primary:hover { background: color-mix(in srgb, var(--accent) 88%, #000); color: var(--accent-ink); }
+.btn--ghost { background: transparent; color: var(--ink); border-color: var(--line-strong); }
+.btn--ghost:hover { background: var(--surface-2); color: var(--ink); }
+.btn--onstage { background: transparent; color: var(--stage-ink); border-color: #4A4339; }
+.btn--onstage:hover { background: #221E18; color: var(--stage-ink); }
+.btn--block { width: 100%; }
+.btn--lg { padding: 17px 28px; min-height: 56px; font-size: 1.05rem; }
+
+.chip {
+  display: inline-flex; align-items: center; gap: .45em;
+  font-size: .78rem; font-weight: 620; letter-spacing: .01em;
+  padding: 5px 11px; border-radius: 999px;
+  background: var(--surface-2); color: var(--ink-2); border: 1px solid var(--line);
+}
+.chip--accent { background: var(--accent-soft); color: var(--accent-text); border-color: var(--accent-line); }
+.chip--stage { background: #1E1A14; color: var(--stage-ink-2); border-color: var(--stage-line); }
+
+.num { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
+
+/* ===========================================================================
+   4. TOPPLINJE
+   =========================================================================== */
+.top {
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+  position: relative; z-index: 40;
+}
+.top__in { display: flex; align-items: center; gap: 14px; height: 64px; }
+.logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); font-weight: 700; letter-spacing: -.03em; font-size: 1.12rem; }
+.logo svg { width: 28px; height: 28px; flex: none; }
+.top__nav { display: none; margin-left: auto; gap: 26px; }
+.top__nav a { color: var(--ink-2); text-decoration: none; font-size: .93rem; font-weight: 550; }
+.top__nav a:hover { color: var(--ink); }
+.top__end { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.top__nav + .top__end { margin-left: 26px; }
+
+.themebtn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 42px; height: 42px; border-radius: 11px;
+  background: transparent; border: 1px solid var(--line); color: var(--ink-2);
+  cursor: pointer;
+}
+.themebtn:hover { background: var(--surface-2); color: var(--ink); }
+.themebtn svg { width: 19px; height: 19px; }
+.themebtn .i-dark, .themebtn .i-auto { display: none; }
+:root[data-theme="dark"] .themebtn .i-light,
+:root[data-theme="light"] .themebtn .i-light { display: block; }
+:root[data-theme="dark"] .themebtn .i-light { display: none; }
+:root[data-theme="dark"] .themebtn .i-dark { display: block; }
+:root[data-theme="auto"] .themebtn .i-light { display: none; }
+:root[data-theme="auto"] .themebtn .i-auto { display: block; }
+
+.top__cta { display: none; }
+
+@media (min-width: 900px) {
+  .top { position: sticky; top: 0; background: var(--bg); }
+  .top__in { height: 76px; }
+  .top__nav { display: flex; }
+  .top__cta { display: inline-flex; }
+}
+
+/* ===========================================================================
+   5. HERO – filmatisk, mørk i begge modi
+   =========================================================================== */
+.hero {
+  position: relative;
+  background:
+    radial-gradient(110% 80% at 72% 18%, rgba(255,178,89,.16), transparent 58%),
+    radial-gradient(75% 60% at 20% 100%, rgba(255,178,89,.07), transparent 60%),
+    linear-gradient(170deg, var(--stage-bg-2), var(--stage-bg) 58%);
+  color: var(--stage-ink);
+  overflow: hidden;
+  isolation: isolate;
+}
+.hero::after {
+  /* fint filmkorn, rent CSS – ingen blend-modus, ingen ekstra lag å rastrere */
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 2;
+  background-image: radial-gradient(rgba(255,244,228,.05) 1px, transparent 1.4px);
+  background-size: 3px 3px;
+}
+.hero__in { padding-block: 34px 0; }
+.hero__copy { max-width: 34ch; }
+.hero h1 { color: var(--stage-ink); }
+.hero h1 em { font-style: normal; color: var(--glow); }
+.hero__lede { color: var(--stage-ink-2); font-size: clamp(1.02rem, .97rem + .4vw, 1.22rem); max-width: 46ch; }
+.hero__cta { display: flex; flex-wrap: wrap; gap: 12px; margin: 22px 0 18px; }
+.hero__facts { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 24px; padding: 0; list-style: none; }
+
+.hero__stage { position: relative; margin: 0 calc(var(--gutter) * -1); padding: 0 var(--gutter) 34px; }
+.hero__stage svg { width: 100%; height: auto; display: block; max-height: 46vh; }
+.hero__caption {
+  text-align: center; color: var(--stage-ink-2);
+  font-size: .82rem; letter-spacing: .01em; margin: -4px 0 0; max-width: none;
+}
+.hero__caption b { color: var(--stage-ink); font-weight: 620; }
+
+@media (min-width: 900px) {
+  .hero__in {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    align-items: center; gap: 40px; padding-block: 76px 84px;
+  }
+  .hero__stage { margin: 0; padding: 0; }
+  .hero__stage svg { max-height: none; }
+  .hero__facts { margin-bottom: 0; }
+}
+
+/* ===========================================================================
+   6. PAKKEBYGGEREN
+   =========================================================================== */
+.builder { background: var(--bg); padding: 0 0 40px; }
+
+/* -- klebrig konfigurasjonsstripe (kun mobil) ----------------------------- */
+.strip {
+  position: sticky; top: 0; z-index: 30;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  transform: translateY(-101%);
+  transition: transform .22s ease;
+  margin: 0 calc(var(--gutter) * -1);
+  padding: 0 var(--gutter);
+}
+.strip.is-on { transform: translateY(0); }
+.strip__in { display: flex; align-items: center; gap: 10px; height: 56px; }
+.strip__box { width: 34px; height: 34px; flex: none; }
+.strip__txt { min-width: 0; line-height: 1.25; }
+.strip__txt b { display: block; font-size: .88rem; letter-spacing: -.01em; }
+.strip__txt span { display: block; font-size: .74rem; color: var(--ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.strip__price { margin-left: auto; font-weight: 700; font-size: 1rem; letter-spacing: -.02em; }
+@media (min-width: 980px) { .strip { display: none; } }
+
+.builder__head { padding: 40px 0 20px; }
+.builder__head h2 { margin-bottom: .35em; }
+
+.grid2 { display: grid; gap: 22px; }
+@media (min-width: 980px) {
+  .grid2 {
+    grid-template-columns: minmax(0, 1.12fr) minmax(370px, .88fr);
+    gap: 34px; align-items: start;
+  }
+}
+
+/* -- produktscenen -------------------------------------------------------- */
+.stage {
+  position: relative;
+  border-radius: var(--radius-l);
+  background:
+    radial-gradient(70% 58% at 50% 34%, rgba(255,178,89,.17), transparent 62%),
+    linear-gradient(168deg, var(--stage-bg-2), var(--stage-bg));
+  border: 1px solid var(--stage-line);
+  padding: 14px 14px 10px;
+  overflow: hidden;
+}
+.stage__meta {
+  position: absolute; left: 16px; top: 14px; right: 16px; z-index: 3;
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;
+  pointer-events: none;
+}
+.stage__tier { color: var(--stage-ink); font-weight: 650; font-size: .92rem; letter-spacing: -.015em; }
+.stage__tier span { display: block; color: var(--stage-ink-2); font-weight: 450; font-size: .76rem; letter-spacing: 0; }
+.stage svg.boxart { width: 100%; height: auto; display: block; }
+.stage__foot {
+  display: flex; gap: 6px; flex-wrap: wrap; justify-content: center;
+  padding: 2px 0 6px;
+}
+
+/* -- kontrollene ---------------------------------------------------------- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-m);
+  padding: 18px 16px;
+}
+.card + .card { margin-top: 14px; }
+.card__head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 4px; }
+.card__head h3 { margin: 0; font-size: 1.06rem; }
+.card__note { font-size: .86rem; color: var(--ink-2); margin: 0 0 14px; }
+
+/* Slider */
+.people__row { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+.people__val { font-size: 2.4rem; font-weight: 700; letter-spacing: -.045em; line-height: 1; }
+.people__unit { color: var(--ink-2); font-size: .95rem; align-self: flex-end; padding-bottom: 5px; }
+.stepper { margin-left: auto; display: flex; gap: 6px; }
+.stepper button {
+  width: 44px; height: 44px; border-radius: 11px;
+  border: 1px solid var(--line-strong); background: var(--surface);
+  color: var(--ink); font-size: 1.3rem; line-height: 1; cursor: pointer;
+}
+.stepper button:hover:not(:disabled) { background: var(--surface-2); }
+.stepper button:disabled { opacity: .38; cursor: default; }
+
+.pips { display: flex; gap: 5px; align-items: flex-end; height: 30px; margin: 4px 0 2px; }
+.pip { width: 13px; color: var(--line-strong); transition: color .2s ease, transform .2s ease; }
+.pip.on { color: var(--accent); }
+.pip.on.kid { color: color-mix(in srgb, var(--accent) 62%, var(--ink-3)); }
+
+input[type="range"] {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 44px; margin: 0; background: transparent; cursor: pointer; display: block;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 10px; border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent) var(--fill, 50%), var(--bg-2) var(--fill, 50%));
+  border: 1px solid var(--line);
+}
+input[type="range"]::-moz-range-track {
+  height: 10px; border-radius: 999px; background: var(--bg-2); border: 1px solid var(--line);
+}
+input[type="range"]::-moz-range-progress { height: 10px; border-radius: 999px; background: var(--accent); }
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 32px; height: 32px; margin-top: -12px; border-radius: 50%;
+  background: var(--surface); border: 2px solid var(--accent);
+  box-shadow: var(--shadow-m);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--surface); border: 2px solid var(--accent); box-shadow: var(--shadow-m);
+}
+input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 4px color-mix(in srgb, var(--focus) 45%, transparent); }
+input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 4px color-mix(in srgb, var(--focus) 45%, transparent); }
+
+.ticks { display: flex; justify-content: space-between; font-size: .74rem; color: var(--ink-3); padding: 0 2px; }
+.ticks span { width: 1.4em; text-align: center; }
+
+/* Segmentert valg (modus) */
+.seg { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; background: var(--bg-2); padding: 5px; border-radius: 13px; border: 1px solid var(--line); }
+.seg label {
+  position: relative; display: flex; flex-direction: column; justify-content: center;
+  text-align: center; padding: 11px 8px; border-radius: 9px; cursor: pointer;
+  font-weight: 620; font-size: .93rem; letter-spacing: -.012em; color: var(--ink-2);
+  transition: background .15s ease, color .15s ease, box-shadow .15s ease;
+}
+.seg label small { display: block; font-weight: 450; font-size: .74rem; color: var(--ink-3); margin-top: 1px; }
+.seg input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.seg input:checked + .seg__txt { color: var(--ink); }
+.seg label:has(input:checked) { background: var(--surface); box-shadow: var(--shadow-s); color: var(--ink); }
+.seg label:has(input:checked) small { color: var(--ink-2); }
+.seg label:has(input:focus-visible) { outline: 2.5px solid var(--focus); outline-offset: 1px; }
+
+/* Matnivå – to store kort */
+.foods { display: grid; gap: 10px; }
+.food {
+  position: relative; display: block; cursor: pointer;
+  border: 1.5px solid var(--line); border-radius: var(--radius-m);
+  background: var(--surface-2); padding: 14px 14px 13px;
+  transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
+}
+.food:hover { border-color: var(--line-strong); }
+.food:has(input:checked) {
+  border-color: var(--accent); background: var(--accent-soft); box-shadow: var(--shadow-s);
+}
+.food:has(input:focus-visible) { outline: 2.5px solid var(--focus); outline-offset: 2px; }
+.food input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.food__top { display: flex; align-items: flex-start; gap: 11px; }
+.food__mark {
+  flex: none; width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid var(--line-strong); background: var(--surface); margin-top: 2px;
+  display: grid; place-items: center;
+}
+.food:has(input:checked) .food__mark { border-color: var(--accent); background: var(--accent); }
+.food__mark::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent-ink); opacity: 0; }
+.food:has(input:checked) .food__mark::after { opacity: 1; }
+.food__name { font-weight: 660; letter-spacing: -.015em; font-size: 1.02rem; }
+.food__price { margin-left: auto; font-weight: 660; white-space: nowrap; font-size: .95rem; }
+.food__price small { display: block; font-weight: 450; font-size: .72rem; color: var(--ink-3); text-align: right; }
+.food__desc { display: block; margin: 8px 0 12px 33px; font-size: .87rem; color: var(--ink-2); }
+.food__desc b { color: var(--ink); font-weight: 620; }
+
+/* holdbarhetslinjal */
+.life { display: block; margin-left: 33px; }
+.life__bar { display: block; height: 8px; border-radius: 999px; background: var(--bg-2); overflow: hidden; border: 1px solid var(--line); }
+.life__fill { display: block; height: 100%; border-radius: 999px; background: var(--accent); }
+.life__lbl { display: flex; justify-content: space-between; font-size: .72rem; color: var(--ink-3); margin-top: 5px; }
+
+/* Abonnement */
+.sub {
+  display: flex; gap: 12px; align-items: flex-start; cursor: pointer;
+  border: 1.5px solid var(--line); border-radius: var(--radius-m);
+  padding: 14px; background: var(--surface-2);
+  transition: border-color .15s ease, background .15s ease;
+}
+.sub:has(input:checked) { border-color: var(--green); background: var(--green-soft); }
+.sub:has(input:focus-visible) { outline: 2.5px solid var(--focus); outline-offset: 2px; }
+.sub input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.sub__box {
+  flex: none; width: 24px; height: 24px; border-radius: 7px; margin-top: 1px;
+  border: 2px solid var(--line-strong); background: var(--surface); display: grid; place-items: center;
+}
+.sub:has(input:checked) .sub__box { background: var(--green); border-color: var(--green); }
+.sub__box svg { width: 14px; height: 14px; opacity: 0; color: #FFFFFF; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .sub__box svg { color: #0E1A14; } }
+:root[data-theme="dark"] .sub__box svg { color: #0E1A14; }
+.sub:has(input:checked) .sub__box svg { opacity: 1; }
+.sub__txt { font-size: .9rem; color: var(--ink-2); }
+.sub__txt b { display: block; color: var(--ink); font-size: 1rem; font-weight: 640; letter-spacing: -.015em; margin-bottom: 2px; }
+
+/* -- prispanel ------------------------------------------------------------ */
+.buy {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius-m); padding: 18px 16px;
+}
+.buy__total { display: flex; align-items: flex-end; gap: 10px; flex-wrap: wrap; }
+.buy__sum { font-size: clamp(2.1rem, 1.7rem + 1.6vw, 2.8rem); font-weight: 700; letter-spacing: -.045em; line-height: 1; }
+.buy__per { color: var(--ink-2); font-size: .88rem; padding-bottom: 4px; }
+.buy__lines { list-style: none; margin: 16px 0 12px; padding: 0; font-size: .9rem; }
+.buy__lines li { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px dashed var(--line); color: var(--ink-2); }
+.buy__lines li span:last-child { color: var(--ink); font-weight: 600; white-space: nowrap; }
+.buy__lines li.is-save span:last-child { color: var(--green); }
+.buy__lines li:last-child { border-bottom: 0; }
+.buy__ship { font-size: .84rem; color: var(--ink-2); margin: 10px 0 0; display: flex; align-items: center; gap: 7px; }
+.buy__ship svg { width: 15px; height: 15px; color: var(--green); flex: none; }
+.buy__reassure { margin: 12px 0 0; font-size: .8rem; color: var(--ink-3); text-align: center; }
+
+/* -- innholdslisten ------------------------------------------------------- */
+.contents { margin-top: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-m); overflow: hidden; }
+.contents > summary {
+  list-style: none; cursor: pointer; padding: 15px 16px;
+  display: flex; align-items: center; gap: 10px; font-weight: 640; letter-spacing: -.015em;
+}
+.contents > summary::-webkit-details-marker { display: none; }
+.contents > summary .chev { margin-left: auto; transition: transform .2s ease; color: var(--ink-3); }
+.contents[open] > summary .chev { transform: rotate(180deg); }
+.contents > summary .cnt { font-weight: 450; color: var(--ink-2); font-size: .9rem; }
+.contents__body { border-top: 1px solid var(--line); padding: 4px 16px 14px; }
+
+/* Klebrig kjøpspanel på store skjermer: pris og innholdsliste følger med
+   mens du justerer valgene i venstre kolonne. Listen får sin egen rulling. */
+@media (min-width: 980px) {
+  .side {
+    position: sticky; top: 90px;
+    max-height: calc(100vh - 106px);
+    display: flex; flex-direction: column;
+  }
+  .buy { flex: none; }
+  .contents { display: flex; flex-direction: column; min-height: 0; }
+  .contents__body { overflow: auto; overscroll-behavior: contain; flex: 1 1 auto; min-height: 130px; }
+}
+
+.grp { margin-top: 14px; }
+.grp__h {
+  font-size: .71rem; text-transform: uppercase; letter-spacing: .12em; font-weight: 700;
+  color: var(--ink-3); margin: 0 0 6px; display: flex; align-items: center; gap: 8px;
+}
+.grp__h::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.items { list-style: none; margin: 0; padding: 0; }
+.items li { display: flex; gap: 10px; align-items: baseline; padding: 6px 0; border-bottom: 1px solid color-mix(in srgb, var(--line) 55%, transparent); font-size: .9rem; }
+.items li:last-child { border-bottom: 0; }
+.items .q {
+  flex: none; min-width: 3.1em; font-weight: 680; font-variant-numeric: tabular-nums;
+  color: var(--ink); border-radius: 5px; padding: 0 2px;
+}
+.items .q.flash { animation: flash .5s ease; }
+@keyframes flash { 0% { background: var(--accent-soft); color: var(--accent-text); } 100% { background: transparent; } }
+.items .n { color: var(--ink); }
+.items .note { display: block; color: var(--ink-3); font-size: .78rem; }
+.contents__foot { margin-top: 14px; font-size: .82rem; color: var(--ink-3); border-top: 1px solid var(--line); padding-top: 12px; }
+
+/* -- klebrig kjøpslinje (mobil) ------------------------------------------- */
+.bar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 35;
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  padding: 10px var(--gutter) calc(10px + env(safe-area-inset-bottom));
+  box-shadow: 0 -8px 26px rgb(0 0 0 / .10);
+  transform: translateY(105%);
+  transition: transform .24s ease;
+}
+.bar.is-on { transform: translateY(0); }
+.bar__in { display: flex; align-items: center; gap: 12px; max-width: 560px; margin-inline: auto; }
+.bar__price { line-height: 1.15; flex: 1 1 auto; min-width: 0; }
+.bar__price b { display: block; font-size: 1.22rem; font-weight: 700; letter-spacing: -.035em; }
+.bar__price span {
+  display: block; font-size: .73rem; color: var(--ink-3);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.bar .btn { flex: 0 0 auto; white-space: nowrap; }
+@media (min-width: 980px) { .bar { display: none; } }
+
+/* ===========================================================================
+   7. TILLIT
+   =========================================================================== */
+.trust { background: var(--bg-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 54px 0; }
+.trust__grid { display: grid; gap: 14px; margin-top: 26px; }
+@media (min-width: 720px) { .trust__grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1000px) { .trust__grid { grid-template-columns: repeat(4, 1fr); } }
+.tcard { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-m); padding: 20px 18px; }
+.tcard__ico { width: 34px; height: 34px; color: var(--accent-text); margin-bottom: 12px; }
+.tcard h3 { font-size: 1.03rem; margin-bottom: .35em; }
+.tcard p { font-size: .9rem; color: var(--ink-2); margin: 0; }
+
+.steps { display: grid; gap: 0; margin-top: 34px; counter-reset: s; }
+@media (min-width: 760px) { .steps { grid-template-columns: repeat(3, 1fr); gap: 20px; } }
+.step { position: relative; padding: 16px 0 16px 52px; }
+@media (min-width: 760px) { .step { padding: 0 0 0 52px; } }
+.step::before {
+  counter-increment: s; content: counter(s);
+  position: absolute; left: 0; top: 14px;
+  width: 34px; height: 34px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--accent-soft); color: var(--accent-text);
+  border: 1px solid var(--accent-line); font-weight: 700; font-size: .95rem;
+}
+@media (min-width: 760px) { .step::before { top: 0; } }
+.step h4 { margin: 0 0 .25em; }
+.step p { font-size: .88rem; color: var(--ink-2); margin: 0; }
+
+/* ===========================================================================
+   8. MATNIVÅ-SEKSJON
+   =========================================================================== */
+.food-sec { padding: 58px 0; }
+.compare { display: grid; gap: 16px; margin-top: 28px; }
+@media (min-width: 860px) { .compare { grid-template-columns: 1fr 1fr; gap: 20px; } }
+.ccard { border: 1px solid var(--line); border-radius: var(--radius-l); background: var(--surface); padding: 22px 20px; }
+.ccard--hi { border-color: var(--accent-line); background: linear-gradient(180deg, var(--accent-soft), var(--surface) 40%); }
+.ccard h3 { margin-bottom: .2em; }
+.ccard__sub { color: var(--ink-2); font-size: .9rem; margin: 0 0 16px; }
+.ccard dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 9px 14px; font-size: .9rem; }
+.ccard dt { color: var(--ink-3); }
+.ccard dd { margin: 0; color: var(--ink); font-weight: 560; }
+.ccard ul { margin: 16px 0 0; padding: 0; list-style: none; font-size: .89rem; }
+.ccard li { display: flex; gap: 9px; padding: 5px 0; color: var(--ink-2); }
+.ccard li svg { width: 17px; height: 17px; flex: none; margin-top: 3px; }
+.ok { color: var(--green); }
+.no { color: var(--ink-3); }
+
+.mathbox {
+  margin-top: 24px; border: 1px solid var(--line); border-radius: var(--radius-m);
+  background: var(--surface-2); padding: 20px 18px;
+}
+.mathbox h3 { font-size: 1.05rem; }
+.mathbox p { font-size: .9rem; color: var(--ink-2); margin-bottom: 14px; }
+.mrow { margin-bottom: 16px; }
+.mrow__top {
+  display: flex; justify-content: space-between; align-items: baseline;
+  gap: 12px; margin-bottom: 6px; font-size: .88rem;
+}
+.mrow__top b { font-weight: 640; }
+.mrow__top span { color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.mline__bar { height: 28px; border-radius: 8px; background: var(--bg-2); overflow: hidden; display: flex; border: 1px solid var(--line); }
+.mline__seg { height: 100%; border-right: 2px solid var(--surface-2); flex: 1; background: var(--accent); opacity: .9; }
+.mline__seg:last-child { border-right: 0; }
+.mline__seg--one { background: var(--green); opacity: 1; }
+.mathbox small { color: var(--ink-3); display: block; margin-top: 6px; }
+
+/* ===========================================================================
+   9. FAQ + BUNN
+   =========================================================================== */
+.faq { padding: 10px 0 64px; }
+.faq__list { margin-top: 22px; border-top: 1px solid var(--line); max-width: 760px; }
+.faq details { border-bottom: 1px solid var(--line); }
+.faq summary {
+  list-style: none; cursor: pointer; padding: 17px 36px 17px 0; position: relative;
+  font-weight: 620; letter-spacing: -.015em; font-size: 1.02rem;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+  content: ""; position: absolute; right: 8px; top: 25px;
+  width: 11px; height: 11px; border-right: 2px solid var(--ink-3); border-bottom: 2px solid var(--ink-3);
+  transform: rotate(45deg); transition: transform .2s ease;
+}
+.faq details[open] summary::after { transform: rotate(-135deg); top: 28px; }
+.faq details p { font-size: .93rem; color: var(--ink-2); margin: 0 0 16px; max-width: 68ch; }
+
+.foot { background: var(--stage-bg); color: var(--stage-ink-2); padding: 46px 0 34px; }
+.foot a { color: var(--stage-ink-2); text-decoration: none; }
+.foot a:hover { color: var(--stage-ink); text-decoration: underline; }
+.foot__grid { display: grid; gap: 28px; }
+@media (min-width: 760px) { .foot__grid { grid-template-columns: 1.4fr 1fr 1fr 1fr; } }
+.foot h4 { color: var(--stage-ink); font-size: .74rem; text-transform: uppercase; letter-spacing: .12em; margin-bottom: 12px; }
+.foot ul { list-style: none; margin: 0; padding: 0; font-size: .9rem; }
+.foot li { padding: 4px 0; }
+.foot__logo { display: inline-flex; align-items: center; gap: 10px; color: var(--stage-ink); font-weight: 700; font-size: 1.1rem; letter-spacing: -.03em; margin-bottom: 12px; }
+.foot__logo svg { width: 28px; height: 28px; }
+.foot__note { font-size: .84rem; max-width: 40ch; }
+.foot__bottom { margin-top: 34px; padding-top: 18px; border-top: 1px solid var(--stage-line); font-size: .8rem; display: flex; flex-wrap: wrap; gap: 8px 20px; }
+
+/* ===========================================================================
+   10. ANIMASJON / REDUSERT BEVEGELSE
+   =========================================================================== */
+.boxart .grow { transition: transform .45s cubic-bezier(.2,.8,.25,1); }
+.boxart .slot { transition: opacity .3s ease, transform .35s cubic-bezier(.2,.8,.25,1); }
+.boxart .glowring { transition: opacity .4s ease; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .001ms !important; animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important; scroll-behavior: auto !important;
+  }
+}
+
+@media (max-width: 400px) { :root { --gutter: 14px; } }
+</style>
+</head>
+
+<body>
+<a class="skip" href="#bygg">Hopp til pakkebyggeren</a>
+
+<!-- =====================================================  TOPPLINJE  ==== -->
+<header class="top">
+  <div class="wrap top__in">
+    <a class="logo" href="#" aria-label="Nødboks – forsiden">
+      <svg viewBox="0 0 32 32" aria-hidden="true">
+        <rect width="32" height="32" rx="7" fill="currentColor" opacity=".08"/>
+        <g fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="6.5" y="9.5" width="19" height="15.5" rx="2.8"/>
+          <path d="M6.5 14.6h19"/>
+        </g>
+        <circle cx="16" cy="19.8" r="2.6" fill="#E79A4E"/>
+      </svg>
+      Nødboks
+    </a>
+    <nav class="top__nav" aria-label="Hovedmeny">
+      <a href="#bygg">Bygg pakken</a>
+      <a href="#mat">Vanlig eller langtidsmat</a>
+      <a href="#tillit">Slik jobber vi</a>
+      <a href="#faq">Spørsmål</a>
+    </nav>
+    <div class="top__end">
+      <button class="themebtn" id="themeBtn" type="button" aria-label="Bytt fargemodus" title="Fargemodus: følger systemet">
+        <svg class="i-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4v16" /><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor" stroke="none"/></svg>
+        <svg class="i-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.4"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></svg>
+        <svg class="i-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.3A8.4 8.4 0 0 1 9.7 4a8.4 8.4 0 1 0 10.3 10.3z"/></svg>
+      </button>
+      <a class="btn btn--primary top__cta" href="#bygg">Bygg pakken din</a>
+    </div>
+  </div>
+</header>
+
+<main id="hoved">
+
+<!-- ==========================================================  HERO  ==== -->
+<section class="hero">
+  <div class="wrap hero__in">
+    <div class="hero__copy">
+      <p class="eyebrow eyebrow--stage">Sju døgn · pakket i Norge</p>
+      <h1>Esken du håper du aldri må <em>åpne</em>.</h1>
+      <p class="hero__lede">
+        Myndighetene ber hver husstand klare seg selv i sju døgn ved strømbrudd,
+        vannstans eller uvær. Vi har pakket alt som skal til i én eske – med dato på
+        hver vare, så du slipper å holde styr på det.
+      </p>
+      <div class="hero__cta">
+        <a class="btn btn--primary btn--lg" href="#bygg">Bygg pakken din</a>
+        <a class="btn btn--onstage btn--lg" href="#innhold-anker">Se hva som ligger i esken</a>
+      </div>
+      <ul class="hero__facts">
+        <li><span class="chip chip--stage">Ferdig på ti minutter</span></li>
+        <li><span class="chip chip--stage">Fri frakt i hele Norge</span></li>
+        <li><span class="chip chip--stage">Varsel før maten går ut</span></li>
+      </ul>
+    </div>
+
+    <div class="hero__stage" aria-hidden="true">
+      <!-- Helten: den store esken. Samme tegning som i pakkebyggeren,
+           men i statisk «full» tilstand. Alt er SVG – ingen bildefiler. -->
+      <svg viewBox="0 0 440 340" role="presentation" focusable="false">
+        <defs>
+          <radialGradient id="heroGlow" cx="50%" cy="38%" r="55%">
+            <stop offset="0%" stop-color="#FFB259" stop-opacity=".55"/>
+            <stop offset="55%" stop-color="#FFB259" stop-opacity=".10"/>
+            <stop offset="100%" stop-color="#FFB259" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="heroFront" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#C9A97C"/><stop offset="100%" stop-color="#9F7C48"/>
+          </linearGradient>
+          <linearGradient id="heroFloor" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#FFB259" stop-opacity="0"/>
+            <stop offset="50%" stop-color="#FFB259" stop-opacity=".22"/>
+            <stop offset="100%" stop-color="#FFB259" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <ellipse cx="220" cy="286" rx="178" ry="22" fill="url(#heroGlow)"/>
+        <rect x="46" y="283" width="348" height="1.6" fill="url(#heroFloor)"/>
+        <g transform="translate(10,4)">
+          <!-- kantflatene på veggene -->
+          <path d="M104 153 L136 125 L334 125 L302 153 Z" fill="#D3B88C"/>
+          <!-- innside -->
+          <path d="M118 150 L146 128 L320 128 L292 150 Z" fill="#2E2416"/>
+          <!-- innhold -->
+          <g>
+            <rect x="130" y="102" width="26" height="41" rx="5" fill="#E3D6BC"/>
+            <rect x="158" y="101" width="26" height="42" rx="5" fill="#D98A3C"/>
+            <rect x="187" y="104" width="26" height="39" rx="5" fill="#2F5D4B"/>
+            <rect x="215" y="100" width="26" height="42" rx="5" fill="#EFE6D6"/>
+            <rect x="244" y="103" width="26" height="40" rx="5" fill="#B4551A"/>
+            <rect x="151" y="90"  width="25" height="39" rx="5" fill="#C7B896"/>
+            <rect x="179" y="88"  width="25" height="41" rx="5" fill="#3E6B58"/>
+            <rect x="208" y="91"  width="25" height="38" rx="5" fill="#E0A95F"/>
+            <rect x="236" y="89"  width="25" height="40" rx="5" fill="#DCD2BC"/>
+          </g>
+          <!-- fremre kantflate, tegnet over innholdet -->
+          <path d="M104 153 L302 153 L292 150 L118 150 Z" fill="#D3B88C"/>
+          <!-- sidevegg -->
+          <path d="M302 153 L334 125 L334 249 L302 277 Z" fill="#A88453"/>
+          <!-- front -->
+          <path d="M104 153 L302 153 L302 277 L104 277 Z" fill="url(#heroFront)"/>
+          <!-- tapebånd -->
+          <rect x="104" y="196" width="198" height="16" fill="#8C6B3E" opacity=".38"/>
+          <!-- merke -->
+          <g transform="translate(124,218)">
+            <rect x="0" y="0" width="92" height="35" rx="6" fill="#14130F" opacity=".82"/>
+            <text x="11" y="15" font-family="system-ui, sans-serif" font-size="11" font-weight="700" letter-spacing="1.4" fill="#F3EEE4">NØDBOKS</text>
+            <text x="11" y="28" font-family="system-ui, sans-serif" font-size="8.4" fill="#B3A896">7 DØGN · 4 PERSONER</text>
+          </g>
+          <!-- lys fra åpningen -->
+          <path d="M146 128 L320 128 L292 150 L118 150 Z" fill="#FFB259" opacity=".12"/>
+        </g>
+      </svg>
+      <p class="hero__caption"><b>Nødboks Komplett</b> — illustrasjon av pakken for fire personer</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================================================  PAKKEBYGGER  ==== -->
+<section class="builder" id="bygg">
+  <div class="wrap">
+
+    <!-- Mobil: klebrig stripe som viser valgt konfigurasjon når scenen ruller ut av bildet -->
+    <div class="strip" id="strip" aria-hidden="true">
+      <div class="strip__in">
+        <svg class="strip__box" viewBox="0 0 40 40" aria-hidden="true">
+          <path d="M6 14 L12 8 L34 8 L28 14 Z" fill="var(--box-top)"/>
+          <path d="M28 14 L34 8 L34 30 L28 36 Z" fill="var(--box-side)"/>
+          <path d="M6 14 L28 14 L28 36 L6 36 Z" fill="var(--box-front)"/>
+          <rect id="stripFill" x="8" y="18" width="18" height="16" rx="2" fill="var(--accent)" opacity=".85"/>
+        </svg>
+        <div class="strip__txt">
+          <b id="stripTitle">4 personer · Komplett</b>
+          <span id="stripSub">Vanlig tørrmat · 162 varer</span>
+        </div>
+        <div class="strip__price num" id="stripPrice">4 740 kr</div>
+      </div>
+    </div>
+
+    <div class="builder__head">
+      <p class="eyebrow">Pakkebyggeren</p>
+      <h2>Dra i én knapp. Vi regner ut resten.</h2>
+      <p class="lede">
+        Fortell oss hvor mange dere er hjemme. Da vet vi hvor mye mat, vann, lys og varme
+        som skal til for sju døgn – og hvor stor esken blir. Alt oppdateres mens du drar.
+      </p>
+    </div>
+
+    <div class="grid2">
+
+      <!-- ===== Venstre: scene + valg ===== -->
+      <div>
+        <div class="stage">
+          <div class="stage__meta">
+            <div class="stage__tier">
+              <span id="boxTierLbl">Eskestørrelse</span>
+              <strong id="boxTier">Nødboks M · 90 liter</strong>
+            </div>
+            <div class="stage__tier" style="text-align:right">
+              <span>Samlet vekt</span>
+              <strong id="boxWeight">ca. 38 kg</strong>
+            </div>
+          </div>
+
+          <!-- Produktet. Skalerer og fylles når slideren endres. -->
+          <svg class="boxart" id="boxart" viewBox="0 0 440 318" role="img" aria-labelledby="boxartTitle">
+            <title id="boxartTitle">Illustrasjon av nødboksen. Esken vokser og fylles opp etter hvor mange personer du velger.</title>
+            <defs>
+              <radialGradient id="bGlow" cx="50%" cy="36%" r="52%">
+                <stop offset="0%" stop-color="var(--glow)" stop-opacity=".5"/>
+                <stop offset="60%" stop-color="var(--glow)" stop-opacity=".08"/>
+                <stop offset="100%" stop-color="var(--glow)" stop-opacity="0"/>
+              </radialGradient>
+              <linearGradient id="bFront" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="var(--box-front)"/>
+                <stop offset="100%" stop-color="var(--box-front-2)"/>
+              </linearGradient>
+              <linearGradient id="bFloor" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="var(--glow)" stop-opacity="0"/>
+                <stop offset="50%" stop-color="var(--glow)" stop-opacity=".25"/>
+                <stop offset="100%" stop-color="var(--glow)" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+
+            <ellipse class="glowring" cx="220" cy="280" rx="176" ry="21" fill="url(#bGlow)"/>
+            <rect x="52" y="277" width="336" height="1.6" fill="url(#bFloor)"/>
+
+            <!-- ekstra eske for store husstander -->
+            <g id="boxExtra" opacity="0" style="transform-origin:220px 277px">
+              <path d="M104 153 L136 125 L334 125 L302 153 Z" fill="var(--box-side)"/>
+              <path d="M302 153 L334 125 L334 249 L302 277 Z" fill="var(--box-side)"/>
+              <path d="M104 153 L302 153 L302 277 L104 277 Z" fill="var(--box-front-2)"/>
+              <rect x="104" y="196" width="198" height="14" fill="var(--box-edge)" opacity=".4"/>
+            </g>
+
+            <!-- hovedesken -->
+            <g class="grow" id="boxGroup" style="transform-origin:220px 277px">
+              <!-- kantflatene på veggene -->
+              <path d="M104 153 L136 125 L334 125 L302 153 Z" fill="var(--box-top)"/>
+              <!-- innside -->
+              <path d="M118 150 L146 128 L320 128 L292 150 Z" fill="var(--box-in)"/>
+              <!-- innhold -->
+              <g id="slots"></g>
+              <!-- fremre kantflate, over innholdet -->
+              <path d="M104 153 L302 153 L292 150 L118 150 Z" fill="var(--box-top)"/>
+              <!-- side -->
+              <path d="M302 153 L334 125 L334 249 L302 277 Z" fill="var(--box-side)"/>
+              <!-- front -->
+              <path d="M104 153 L302 153 L302 277 L104 277 Z" fill="url(#bFront)"/>
+              <rect x="104" y="198" width="198" height="15" fill="var(--box-edge)" opacity=".35"/>
+              <!-- etikett -->
+              <g transform="translate(122,218)">
+                <rect x="0" y="0" width="100" height="38" rx="6" fill="#14130F" opacity=".85"/>
+                <text x="12" y="16" font-family="system-ui, sans-serif" font-size="11.5" font-weight="700" letter-spacing="1.5" fill="#F3EEE4">NØDBOKS</text>
+                <text id="boxLabel" x="12" y="29" font-family="system-ui, sans-serif" font-size="8.6" fill="#B3A896">7 DØGN · 4 PERSONER</text>
+              </g>
+              <!-- lysskjær i åpningen -->
+              <path d="M146 128 L320 128 L292 150 L118 150 Z" fill="var(--glow)" opacity=".13"/>
+            </g>
+          </svg>
+
+          <div class="stage__foot">
+            <span class="chip chip--stage" id="chipDays">7 døgn dekket</span>
+            <span class="chip chip--stage" id="chipMeals">84 måltider</span>
+            <span class="chip chip--stage" id="chipWater">60 liter vann</span>
+          </div>
+        </div>
+
+        <!-- --- Husstand --- -->
+        <div class="card" style="margin-top:14px">
+          <div class="card__head">
+            <h3><label for="people">Hvor mange bor hjemme?</label></h3>
+          </div>
+          <p class="card__note">Barn regnes som personer – vi justerer porsjonsstørrelsen for husstander med barn under ti år i kassen.</p>
+
+          <div class="people__row">
+            <div class="people__val num" id="peopleVal">4</div>
+            <div class="people__unit" id="peopleUnit">personer</div>
+            <div class="stepper">
+              <button type="button" id="minus" aria-label="Én person færre">−</button>
+              <button type="button" id="plus" aria-label="Én person til">+</button>
+            </div>
+          </div>
+
+          <div class="pips" id="pips" aria-hidden="true"></div>
+
+          <input type="range" id="people" min="1" max="8" step="1" value="4"
+                 aria-describedby="peopleHelp" list="peopleTicks">
+          <datalist id="peopleTicks">
+            <option value="1"></option><option value="2"></option><option value="3"></option>
+            <option value="4"></option><option value="5"></option><option value="6"></option>
+            <option value="7"></option><option value="8"></option>
+          </datalist>
+          <div class="ticks" aria-hidden="true">
+            <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span>
+          </div>
+          <p class="sr" id="peopleHelp">Velg mellom én og åtte personer. Innholdslisten og prisen oppdateres automatisk.</p>
+        </div>
+
+        <!-- --- Modus --- -->
+        <div class="card">
+          <div class="card__head"><h3>Hva trenger du?</h3></div>
+          <p class="card__note">Har du allerede lykt, radio og primus? Da bytter du bare maten.</p>
+          <div class="seg" role="radiogroup" aria-label="Type pakke">
+            <label>
+              <input type="radio" name="modus" value="komplett" checked>
+              <span class="seg__txt">Komplett pakke<small>Mat, vann, lys, varme, radio</small></span>
+            </label>
+            <label>
+              <input type="radio" name="modus" value="mat">
+              <span class="seg__txt">Kun matpåfyll<small>Du har utstyret fra før</small></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- --- Matnivå --- -->
+        <div class="card" id="mat-valg">
+          <div class="card__head"><h3>Hvilken type mat?</h3></div>
+          <p class="card__note">Dette er det valget som betyr mest – både for prisen og for hvor ofte du må tenke på esken igjen.</p>
+
+          <div class="foods" role="radiogroup" aria-label="Type mat">
+            <label class="food">
+              <input type="radio" name="mat" value="vanlig" checked>
+              <span class="food__top">
+                <span class="food__mark" aria-hidden="true"></span>
+                <span class="food__name">Vanlig tørrmat fra butikk</span>
+                <span class="food__price num" id="priceVanlig">640 kr<small>per person</small></span>
+              </span>
+              <span class="food__desc">
+                Havregryn, knekkebrød, hermetikk, tørrsuppe – mat familien faktisk spiser.
+                <b>Holder i ett til to år</b>, så den må byttes ut med jevne mellomrom.
+                Billigst i innkjøp, mest arbeid over tid.
+              </span>
+              <span class="life" aria-hidden="true">
+                <span class="life__bar"><span class="life__fill" style="width:8%"></span></span>
+                <span class="life__lbl"><span>Holdbarhet: 1–2 år</span><span>25 år</span></span>
+              </span>
+            </label>
+
+            <label class="food">
+              <input type="radio" name="mat" value="lang">
+              <span class="food__top">
+                <span class="food__mark" aria-hidden="true"></span>
+                <span class="food__name">Langtidsmat, frysetørket</span>
+                <span class="food__price num" id="priceLang">1 290 kr<small>per person</small></span>
+              </span>
+              <span class="food__desc">
+                Ferdige frysetørkede måltider i forseglet pose – tilsett kokende vann.
+                <b>Holder i opptil 25 år</b>. Dyrere nå, men du pakker esken én gang og
+                lar den stå. Krever at du har vann og noe å koke på.
+              </span>
+              <span class="life" aria-hidden="true">
+                <span class="life__bar"><span class="life__fill" style="width:100%"></span></span>
+                <span class="life__lbl"><span>Holdbarhet: 25 år</span><span>25 år</span></span>
+              </span>
+            </label>
+          </div>
+
+          <p class="card__note" style="margin:14px 0 0">
+            Usikker? <a href="#mat">Se hva forskjellen koster over tid</a> – for mange husstander
+            er vanlig tørrmat dyrest i lengden.
+          </p>
+        </div>
+
+        <!-- --- Abonnement --- -->
+        <div class="card">
+          <div class="card__head"><h3>Skal vi holde esken fersk?</h3></div>
+          <p class="card__note">Det vanligste er ikke at folk lar være å kjøpe beredskap. Det er at maten går ut på dato uten at noen oppdager det.</p>
+          <label class="sub">
+            <input type="checkbox" id="abo">
+            <span class="sub__box" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5 10-11"/></svg>
+            </span>
+            <span class="sub__txt">
+              <b>Ja, send påfyll når maten nærmer seg utløp</b>
+              Vi varsler deg <span id="aboNaar">to måneder</span> før, du kan utsette eller avlyse i appen,
+              og du får <strong>8&nbsp;% rabatt</strong> på alt påfyll. Ingen binding.
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <!-- ===== Høyre: pris + innhold ===== -->
+      <div class="side">
+        <div class="buy" id="buy">
+          <p class="eyebrow" style="margin-bottom:.5rem">Din pakke</p>
+          <div class="buy__total">
+            <div class="buy__sum num" id="total">4 740 kr</div>
+            <div class="buy__per num" id="perPerson">169 kr per person per døgn</div>
+          </div>
+
+          <ul class="buy__lines" id="lines"></ul>
+
+          <a class="btn btn--primary btn--block btn--lg" href="#kasse" id="cta">Legg i kurven</a>
+
+          <p class="buy__ship">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg>
+            <span id="shipTxt">Fri frakt · sendes innen to virkedager</span>
+          </p>
+          <p class="buy__reassure">30 dagers åpent kjøp · Vipps, kort eller faktura</p>
+        </div>
+
+        <!-- Innholdslisten -->
+        <details class="contents" id="innhold" open>
+          <summary id="innhold-anker">
+            Dette ligger i esken
+            <span class="cnt num" id="itemCount">162 varer</span>
+            <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="contents__body">
+            <div id="groups"></div>
+            <p class="contents__foot" id="contentsFoot"></p>
+          </div>
+        </details>
+
+        <p class="sr" id="liveSummary" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =======================================================  TILLIT  ==== -->
+<section class="trust" id="tillit">
+  <div class="wrap">
+    <p class="eyebrow">Slik jobber vi</p>
+    <h2>Beredskap er kjedelig arbeid. Det er hele poenget.</h2>
+    <p class="lede">
+      Vi selger ikke frykt, og vi selger ikke utstyr du aldri kommer til å bruke.
+      Vi pakker det myndighetene faktisk anbefaler, merker det med dato, og minner deg
+      på når noe må byttes.
+    </p>
+
+    <div class="trust__grid">
+      <div class="tcard">
+        <svg class="tcard__ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M16 3l11 4v9c0 7-4.6 11.4-11 13C9.6 27.4 5 23 5 16V7z"/><path d="M11.5 16l3 3 6-6.5"/>
+        </svg>
+        <h3>Bygget på DSBs liste</h3>
+        <p>Innholdet følger myndighetenes anbefaling om sju døgns egenberedskap – ikke vår egen fantasi om hva som kan skje.</p>
+      </div>
+      <div class="tcard">
+        <svg class="tcard__ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="5" y="7" width="22" height="20" rx="3"/><path d="M5 13h22M11 4v5M21 4v5M12 19h8"/>
+        </svg>
+        <h3>Dato på hver eneste vare</h3>
+        <p>Innholdslisten som følger med er ferdig utfylt med utløpsdato. Du får varsel før noe går ut – på e-post eller SMS, som du vil.</p>
+      </div>
+      <div class="tcard">
+        <svg class="tcard__ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 12l12-6 12 6-12 6z"/><path d="M4 12v9l12 6 12-6v-9"/><path d="M16 18v9"/>
+        </svg>
+        <h3>Pakket i Norge</h3>
+        <p>Vi pakker esken på lageret vårt utenfor Hamar. Kjente merkevarer, norsk matsikkerhet, og ingen deler som må bestilles fra andre siden av jorda.</p>
+      </div>
+      <div class="tcard">
+        <svg class="tcard__ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M16 4v24M9 9.5h11a4 4 0 0 1 0 8H12a4 4 0 0 0 0 8h11"/>
+        </svg>
+        <h3>Prisen er hele prisen</h3>
+        <p>Fri frakt, ingen skjulte gebyrer, og du kan si opp påfyllet når du vil. Vi tjener på at du blir værende, ikke på at du glemmer å avbestille.</p>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <h4>Du velger på ti minutter</h4>
+        <p>Antall personer, komplett eller kun mat, vanlig eller langtidsmat. Tre valg, så er du ferdig.</p>
+      </div>
+      <div class="step">
+        <h4>Esken kommer ferdig pakket</h4>
+        <p>Sendes innen to virkedager, rett hjem eller til hentested. Ingen montering, ingen liste å handle etter.</p>
+      </div>
+      <div class="step">
+        <h4>Du setter den i boden og glemmer den</h4>
+        <p>Vi holder rede på datoene. Når noe nærmer seg utløp, hører du fra oss – i god tid.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================  MATNIVÅ  ==== -->
+<section class="food-sec" id="mat">
+  <div class="wrap">
+    <p class="eyebrow">Vanlig tørrmat eller langtidsmat</p>
+    <h2>Det ene er billigst i dag. Det andre er billigst i lengden.</h2>
+    <p class="lede">
+      Forskjellen er ikke smak eller kvalitet – det er holdbarhet. Her er hele regnestykket,
+      uten salgstriks.
+    </p>
+
+    <div class="compare">
+      <div class="ccard">
+        <h3>Vanlig tørrmat fra butikk</h3>
+        <p class="ccard__sub">Mat du kjenner igjen, og kan spise til hverdags.</p>
+        <dl>
+          <dt>Holdbarhet</dt><dd>1–2 år</dd>
+          <dt>Pris per person</dt><dd class="num">640 kr</dd>
+          <dt>Må byttes</dt><dd>ca. hvert andre år</dd>
+          <dt>Tilberedning</dt><dd>Noe kan spises kaldt</dd>
+        </dl>
+        <ul>
+          <li><svg class="ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg> Lavest pris i dag</li>
+          <li><svg class="ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg> Kan roteres inn i vanlig matlaging</li>
+          <li><svg class="no" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg> Krever at noen husker å bytte</li>
+          <li><svg class="no" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg> Tyngre og tar mer plass</li>
+        </ul>
+      </div>
+
+      <div class="ccard ccard--hi">
+        <h3>Langtidsmat, frysetørket</h3>
+        <p class="ccard__sub">Pakk én gang, la esken stå.</p>
+        <dl>
+          <dt>Holdbarhet</dt><dd>opptil 25 år</dd>
+          <dt>Pris per person</dt><dd class="num">1 290 kr</dd>
+          <dt>Må byttes</dt><dd>en gang i livet</dd>
+          <dt>Tilberedning</dt><dd>Krever kokende vann</dd>
+        </dl>
+        <ul>
+          <li><svg class="ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg> Ingenting å holde styr på</li>
+          <li><svg class="ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg> Lett – rundt en tredel av vekten</li>
+          <li><svg class="ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg> Billigst per år over tid</li>
+          <li><svg class="no" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg> Dyrere i dag</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mathbox">
+      <h3>Regnestykket over 25 år, for en familie på fire</h3>
+      <p>Hvert felt er ett innkjøp av mat. Vanlig tørrmat må byttes omtrent hvert andre år.</p>
+
+      <div class="mrow">
+        <p class="mrow__top"><b>Vanlig tørrmat</b> <span>12 innkjøp · ca. 30 720 kr</span></p>
+        <div class="mline__bar" id="mlineNormal" aria-hidden="true"></div>
+      </div>
+
+      <div class="mrow">
+        <p class="mrow__top"><b>Langtidsmat</b> <span>1 innkjøp · ca. 5 160 kr</span></p>
+        <div class="mline__bar" aria-hidden="true"><div class="mline__seg mline__seg--one" style="flex:0 0 100%"></div></div>
+      </div>
+
+      <small>
+        Plassholdertall til skissen. Beregningen forutsetter dagens priser og at vanlig
+        tørrmat byttes hvert andre år. Roterer du maten inn i vanlig matlaging i stedet for
+        å kaste den, blir bildet et annet – og det er helt legitimt.
+      </small>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================  FAQ  ==== -->
+<section class="faq" id="faq">
+  <div class="wrap">
+    <p class="eyebrow">Spørsmål vi får</p>
+    <h2>Det du lurer på før du bestemmer deg</h2>
+
+    <div class="faq__list">
+      <details>
+        <summary>Er dette noe jeg egentlig trenger?</summary>
+        <p>
+          Myndighetene ber alle husstander klare seg selv i sju døgn ved lengre strømbrudd,
+          vannstans eller uvær. De fleste av oss har mat til to–tre dager i skapet og ingen
+          måte å koke den på uten strøm. Nødboks er ikke en forberedelse på verdens undergang –
+          det er det samme som å ha brannslukker: du håper det er bortkastede penger.
+        </p>
+      </details>
+      <details>
+        <summary>Hvor mye plass tar esken?</summary>
+        <p>
+          Pakken for fire personer er én eske på rundt 90 liter – omtrent som en stor
+          flyttekasse. Den står fint i en bod, et klesskap eller under en seng. For husstander
+          på fem eller flere deler vi innholdet på to esker, så ingen av dem blir for tunge å bære.
+        </p>
+      </details>
+      <details>
+        <summary>Hva skjer når maten går ut på dato?</summary>
+        <p>
+          Du får beskjed i god tid – to måneder før første vare utløper. Har du valgt påfyll,
+          sender vi ny mat automatisk, og du returnerer ingenting: den gamle maten er fortsatt
+          spiselig og kan brukes opp i vanlig matlaging. Har du ikke påfyll, får du varselet
+          likevel og kan bestille når det passer.
+        </p>
+      </details>
+      <details>
+        <summary>Kan jeg bytte ut enkeltvarer?</summary>
+        <p>
+          Ja. Etter at du har lagt pakken i kurven kan du justere antall av hver vare, fjerne
+          det du har fra før, og legge til ekstra – for eksempel barnemat, dyrefôr eller
+          reservemedisiner. Vi holder oversikt over at totalen fortsatt dekker sju døgn.
+        </p>
+      </details>
+      <details>
+        <summary>Hvorfor er ikke gassmaske og den slags med?</summary>
+        <p>
+          Fordi det ikke står på listen, og fordi det ikke hjelper i de situasjonene som faktisk
+          rammer norske husstander. Vi pakker for strømbrudd, vannstans og uvær. Det er der
+          behovet er, og det er der vi kan gjøre en ærlig jobb.
+        </p>
+      </details>
+      <details>
+        <summary>Hva slags vann følger med?</summary>
+        <p>
+          Vi sender tomme vannkanner og rensetabletter, ikke ferdig vann. Vann er tungt, har
+          begrenset holdbarhet på flaske, og de fleste har tilgang til vann de første timene.
+          Kannene fyller du selv – og bytter du vannet et par ganger i året, er du trygg.
+          Vi minner deg på det, sammen med de andre varslene.
+        </p>
+      </details>
+      <details>
+        <summary>Kan jeg betale over tid?</summary>
+        <p>
+          Du kan velge faktura med 14 dagers betalingsfrist, eller dele opp beløpet over tre
+          måneder uten renter. Vi bruker Vipps og de vanlige kortene. Full oversikt over
+          betalingsvilkårene finner du i kassen før du bekrefter.
+        </p>
+      </details>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ========================================================  BUNN  ==== -->
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__grid">
+      <div>
+        <span class="foot__logo">
+          <svg viewBox="0 0 32 32" aria-hidden="true">
+            <rect width="32" height="32" rx="7" fill="#1E1A14"/>
+            <g fill="none" stroke="#F3EEE4" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="6.5" y="9.5" width="19" height="15.5" rx="2.8"/><path d="M6.5 14.6h19"/>
+            </g>
+            <circle cx="16" cy="19.8" r="2.6" fill="#E79A4E"/>
+          </svg>
+          Nødboks
+        </span>
+        <p class="foot__note">
+          Ferdigpakket egenberedskap for norske husstander. Pakket utenfor Hamar,
+          sendt over hele landet.
+        </p>
+      </div>
+      <div>
+        <h4>Produkt</h4>
+        <ul>
+          <li><a href="#bygg">Bygg pakken din</a></li>
+          <li><a href="#innhold-anker">Innholdsliste</a></li>
+          <li><a href="#mat">Vanlig eller langtidsmat</a></li>
+          <li><a href="#bygg">Påfyllsabonnement</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Hjelp</h4>
+        <ul>
+          <li><a href="#faq">Spørsmål og svar</a></li>
+          <li><a href="#">Frakt og levering</a></li>
+          <li><a href="#">Retur og åpent kjøp</a></li>
+          <li><a href="#">Kontakt oss</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Om beredskap</h4>
+        <ul>
+          <li><a href="#">DSBs råd om egenberedskap</a></li>
+          <li><a href="#">Slik lager du en husstandsplan</a></li>
+          <li><a href="#">Vann: hvor mye trenger dere?</a></li>
+          <li><a href="#">Beredskap i leilighet</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot__bottom">
+      <span>© 2026 Nødboks AS</span>
+      <span>Org.nr. 000 000 000 MVA (plassholder)</span>
+      <a href="#">Personvern</a>
+      <a href="#">Vilkår</a>
+      <a href="#">Informasjonskapsler</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Klebrig kjøpslinje for mobil -->
+<div class="bar" id="bar">
+  <div class="bar__in">
+    <div class="bar__price">
+      <b class="num" id="barPrice">4 740 kr</b>
+      <span id="barMeta">4 personer · komplett</span>
+    </div>
+    <a class="btn btn--primary" href="#kasse" id="barCta">Legg i kurven</a>
+  </div>
+</div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Nødboks Komplett – sju døgns beredskap",
+  "description": "Ferdigpakket beredskapseske med mat, vann, lys, varme, radio og førstehjelp for sju døgn, tilpasset antall personer i husstanden.",
+  "brand": { "@type": "Brand", "name": "Nødboks" },
+  "offers": {
+    "@type": "AggregateOffer",
+    "priceCurrency": "NOK",
+    "lowPrice": "640",
+    "highPrice": "13820",
+    "availability": "https://schema.org/InStock"
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Er dette noe jeg egentlig trenger?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Myndighetene ber alle husstander klare seg selv i sju døgn ved lengre strømbrudd, vannstans eller uvær. De fleste har mat til to–tre dager og ingen måte å koke den på uten strøm." }
+    },
+    {
+      "@type": "Question",
+      "name": "Hvor mye plass tar esken?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Pakken for fire personer er én eske på rundt 90 liter. For husstander på fem eller flere deler vi innholdet på to esker." }
+    },
+    {
+      "@type": "Question",
+      "name": "Hva skjer når maten går ut på dato?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Du får varsel to måneder før første vare utløper. Med påfyllsabonnement sender vi ny mat automatisk, og den gamle maten kan brukes opp i vanlig matlaging." }
+    },
+    {
+      "@type": "Question",
+      "name": "Hva er forskjellen på vanlig tørrmat og langtidsmat?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Vanlig tørrmat holder i ett til to år og er billigst i innkjøp. Frysetørket langtidsmat holder i opptil 25 år, er lettere, men koster mer i dag og krever kokende vann." }
+    },
+    {
+      "@type": "Question",
+      "name": "Hva slags vann følger med?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Vi sender tomme vannkanner og rensetabletter, ikke ferdig vann. Kannene fyller du selv, og vi minner deg på å bytte vannet et par ganger i året." }
+    }
+  ]
+}
+</script>
+
+<script>
+/* ===========================================================================
+   NØDBOKS – pakkebygger (skisse)
+   Ingen rammeverk, ingen byggsteg. Ren DOM.
+   =========================================================================== */
+(function () {
+  "use strict";
+
+  /* --- Tema ------------------------------------------------------------- */
+  var root = document.documentElement;
+  var themeBtn = document.getElementById("themeBtn");
+  var modes = ["auto", "light", "dark"];
+  var labels = { auto: "følger systemet", light: "lys", dark: "mørk" };
+
+  function readTheme() {
+    try { return localStorage.getItem("nodboks-tema") || "auto"; } catch (e) { return "auto"; }
+  }
+  function setTheme(m) {
+    root.setAttribute("data-theme", m);
+    themeBtn.title = "Fargemodus: " + labels[m];
+    themeBtn.setAttribute("aria-label", "Bytt fargemodus (nå: " + labels[m] + ")");
+    try { localStorage.setItem("nodboks-tema", m); } catch (e) {}
+  }
+  setTheme(readTheme());
+  themeBtn.addEventListener("click", function () {
+    var i = modes.indexOf(root.getAttribute("data-theme"));
+    setTheme(modes[(i + 1) % modes.length]);
+  });
+
+  /* --- PLASSHOLDERPRISER ------------------------------------------------ */
+  var PRIS = {
+    utstyrBasis: 1490,          // PLASSHOLDER: utstyr, første person
+    utstyrPerPerson: 230,       // PLASSHOLDER: utstyr, per ekstra person
+    matVanlig: 640,             // PLASSHOLDER: vanlig tørrmat, per person, 7 døgn
+    matLang: 1290,              // PLASSHOLDER: langtidsmat, per person, 7 døgn
+    aboRabatt: 0.08             // PLASSHOLDER: rabatt på mat ved påfyllsabonnement
+  };
+
+  var nf = new Intl.NumberFormat("nb-NO");
+  function kr(n) { return nf.format(Math.round(n)) + " kr"; }
+
+  /* --- Tilstand --------------------------------------------------------- */
+  var state = { p: 4, modus: "komplett", mat: "vanlig", abo: false };
+
+  /* --- Varekatalog ------------------------------------------------------ */
+  // k = kilo per enhet (omtrentlig, for vektanslaget)
+  function katalog(s) {
+    var p = s.p, L = s.mat === "lang", full = s.modus === "komplett";
+    var g = [];
+
+    g.push({
+      t: "Mat for sju døgn",
+      items: [
+        L ? { n: "Frysetørket middag, 500 kcal", q: 7 * p, k: .13, note: "Fire retter i utvalg – fiskegryte, kjøttkaker, pasta, chili" }
+          : { n: "Middagsposer og hermetikk", q: 7 * p, k: .42, note: "Tørrsuppe, gryteretter på boks, pasta og saus" },
+        L ? { n: "Frysetørket frokost", q: 7 * p, k: .09, note: "Havregrøt med bær, eggerøre" }
+          : { n: "Havregryn og müsli, porsjonspakke", q: 7 * p, k: .08 },
+        { n: "Knekkebrød, pakke", q: Math.ceil(p * 7 / 4), k: .3 },
+        { n: "Pålegg på boks og tube", q: Math.ceil(p * 7 / 2), k: .18, note: "Makrell i tomat, leverpostei, kaviar" },
+        { n: "Sjokolade, nøtter og energibar", q: 7 * p, k: .06 },
+        { n: "Kaffe, te og buljong", q: Math.ceil(p * 7 / 2), k: .02 },
+        { n: "Salt, sukker og krydder", q: 1, k: .5 }
+      ]
+    });
+
+    var vann = [];
+    if (full) {
+      vann.push({ n: "Vannkanne, 10 liter (tom)", q: Math.max(2, Math.ceil(p * 1.5)), k: .6, note: "Fylles hjemme – vi sender ikke vann over hele landet" });
+    }
+    vann.push({ n: "Vannrensetabletter, boks", q: Math.max(1, Math.ceil(p / 4)), k: .05, note: full ? "Renser opptil 500 liter" : "Tablettene går ut på dato, så de følger med påfyllet" });
+    g.push({ t: "Vann", items: vann });
+
+    if (full) {
+      g.push({
+        t: "Varme og matlaging",
+        items: [
+          { n: "Stormkjøkken med brenner", q: p <= 4 ? 1 : 2, k: 1.1 },
+          { n: "Gassbeholder, 230 g", q: 2 + p, k: .38 },
+          { n: "Kjele, kopper og bestikk", q: p, k: .35, note: "Sett per person, tåler åpen flamme" },
+          { n: "Fyrstikker og lighter i vanntett boks", q: 1, k: .15 }
+        ]
+      });
+
+      g.push({
+        t: "Lys, strøm og informasjon",
+        items: [
+          { n: "Hodelykt med ekstra batteri", q: p, k: .12 },
+          { n: "Lommelykt", q: Math.max(2, Math.ceil(p / 2)), k: .21 },
+          { n: "Nødradio med sveiv og solcelle", q: p <= 5 ? 1 : 2, k: .48, note: "DAB og FM, lader også telefon" },
+          { n: "Powerbank, 20 000 mAh", q: Math.max(1, Math.ceil(p / 3)), k: .4 },
+          { n: "Batteripakke AA og AAA", q: Math.max(2, Math.ceil(p / 2)), k: .22 },
+          { n: "Telys, pakke à 50", q: Math.max(1, Math.ceil(p / 3)), k: .9 }
+        ]
+      });
+
+      g.push({
+        t: "Helse, varme og hygiene",
+        items: [
+          { n: "Ullteppe", q: p, k: .75 },
+          { n: "Førstehjelpspakke", q: p <= 4 ? 1 : 2, k: .6 },
+          { n: "Jodtabletter", q: p, k: .01, note: "Anbefales for personer under 40 år og gravide" },
+          { n: "Våtservietter og håndsprit", q: Math.max(1, Math.ceil(p / 2)), k: .3 },
+          { n: "Toalettpose, søppelsekk og tape", q: 1, k: 1.2 }
+        ]
+      });
+
+      g.push({
+        t: "Papir og plan",
+        items: [
+          { n: "Beredskapskortet fra DSB", q: 1, k: .02 },
+          { n: "Innholdsliste med utløpsdato", q: 1, k: .02, note: "Ferdig utfylt, med plass til dine egne notater" },
+          { n: "Tom lomme merket «Egne medisiner»", q: 1, k: .05 }
+        ]
+      });
+    }
+
+    return g;
+  }
+
+  /* --- Utregning -------------------------------------------------------- */
+  function beregn(s) {
+    var g = katalog(s);
+    var enheter = 0, vekt = 0;
+    g.forEach(function (gr) {
+      gr.items.forEach(function (it) { enheter += it.q; vekt += it.q * it.k; });
+    });
+
+    var utstyr = s.modus === "komplett" ? PRIS.utstyrBasis + PRIS.utstyrPerPerson * (s.p - 1) : 0;
+    var matPris = (s.mat === "lang" ? PRIS.matLang : PRIS.matVanlig) * s.p;
+    var rabatt = s.abo ? matPris * PRIS.aboRabatt : 0;
+    var sum = Math.round((utstyr + matPris - rabatt) / 10) * 10;
+
+    var esker = s.modus === "mat" ? 1 : (s.p <= 4 ? 1 : 2);
+    var tier;
+    if (s.modus === "mat") tier = s.p <= 3 ? "Matkasse S · 45 liter" : (s.p <= 6 ? "Matkasse M · 70 liter" : "Matkasse L · 100 liter");
+    else if (s.p <= 2) tier = "Nødboks S · 60 liter";
+    else if (s.p <= 4) tier = "Nødboks M · 90 liter";
+    else if (s.p <= 6) tier = "Nødboks M · 2 esker";
+    else tier = "Nødboks L · 2 esker";
+
+    return {
+      grupper: g, enheter: enheter, vekt: vekt, utstyr: utstyr,
+      matPris: matPris, rabatt: rabatt, sum: sum, esker: esker, tier: tier
+    };
+  }
+
+  /* --- Elementer -------------------------------------------------------- */
+  var el = {
+    range: document.getElementById("people"),
+    val: document.getElementById("peopleVal"),
+    unit: document.getElementById("peopleUnit"),
+    pips: document.getElementById("pips"),
+    minus: document.getElementById("minus"),
+    plus: document.getElementById("plus"),
+    total: document.getElementById("total"),
+    per: document.getElementById("perPerson"),
+    lines: document.getElementById("lines"),
+    groups: document.getElementById("groups"),
+    count: document.getElementById("itemCount"),
+    foot: document.getElementById("contentsFoot"),
+    tier: document.getElementById("boxTier"),
+    weight: document.getElementById("boxWeight"),
+    label: document.getElementById("boxLabel"),
+    boxGroup: document.getElementById("boxGroup"),
+    boxExtra: document.getElementById("boxExtra"),
+    slots: document.getElementById("slots"),
+    chipDays: document.getElementById("chipDays"),
+    chipMeals: document.getElementById("chipMeals"),
+    chipWater: document.getElementById("chipWater"),
+    live: document.getElementById("liveSummary"),
+    bar: document.getElementById("bar"),
+    barPrice: document.getElementById("barPrice"),
+    barMeta: document.getElementById("barMeta"),
+    strip: document.getElementById("strip"),
+    stripTitle: document.getElementById("stripTitle"),
+    stripSub: document.getElementById("stripSub"),
+    stripPrice: document.getElementById("stripPrice"),
+    stripFill: document.getElementById("stripFill"),
+    priceVanlig: document.getElementById("priceVanlig"),
+    priceLang: document.getElementById("priceLang"),
+    ship: document.getElementById("shipTxt"),
+    contents: document.getElementById("innhold"),
+    mline: document.getElementById("mlineNormal")
+  };
+
+  /* --- Personfigurer (pips) --------------------------------------------- */
+  var NS = "http://www.w3.org/2000/svg";
+  function lagPips() {
+    for (var i = 1; i <= 8; i++) {
+      var s = document.createElementNS(NS, "svg");
+      s.setAttribute("viewBox", "0 0 14 26");
+      s.setAttribute("class", "pip" + (i > 5 ? " kid" : ""));
+      s.setAttribute("height", i > 5 ? "22" : "26");
+      s.innerHTML = '<circle cx="7" cy="5.4" r="4" fill="currentColor"/>' +
+                    '<path d="M7 11c3.3 0 5.4 2 5.4 5v9H1.6v-9c0-3 2.1-5 5.4-5z" fill="currentColor"/>';
+      el.pips.appendChild(s);
+    }
+  }
+  lagPips();
+  var pipEls = el.pips.querySelectorAll(".pip");
+
+  /* --- Innholdsbrikker i esken ------------------------------------------ */
+  // Åpningen er parallellogrammet med fremre kant (118,150)–(292,150)
+  // og dybderetning (+28,−22).
+  var FARGER = ["#E3D6BC", "#D98A3C", "#2F5D4B", "#EFE6D6", "#B4551A", "#C7B896", "#3E6B58", "#E0A95F", "#DCD2BC", "#A4562A", "#4A7A64", "#D6C39C"];
+  var HOYDER = [41, 43, 39, 42, 40, 38, 41, 39, 42, 40, 43, 39];
+  var slotEls = [];
+
+  function lagSlots() {
+    for (var i = 0; i < 12; i++) {
+      var rad = i < 6 ? 0 : 1;
+      var kol = i % 6;
+      var x = 134 + kol * 28.5;
+      var y = 150;
+      var d = rad === 0 ? 0.34 : 0.74;
+      x += 28 * d; y -= 22 * d;
+      var h = HOYDER[i];
+      var r = document.createElementNS(NS, "rect");
+      r.setAttribute("class", "slot");
+      r.setAttribute("x", (x - 13).toFixed(1));
+      r.setAttribute("y", (y - h).toFixed(1));
+      r.setAttribute("width", "26");
+      r.setAttribute("height", h);
+      r.setAttribute("rx", "5");
+      r.setAttribute("fill", FARGER[i]);
+      r.setAttribute("opacity", "0");
+      r.dataset.base = (y - h).toFixed(1);
+      el.slots.appendChild(r);
+      slotEls.push(r);
+    }
+    // bakerste rad tegnes først
+    var bak = slotEls.slice(6);
+    bak.forEach(function (n) { el.slots.insertBefore(n, el.slots.firstChild); });
+  }
+  lagSlots();
+
+  /* --- 25-årsgrafikken -------------------------------------------------- */
+  (function () {
+    for (var i = 0; i < 12; i++) {
+      var d = document.createElement("div");
+      d.className = "mline__seg";
+      el.mline.appendChild(d);
+    }
+  })();
+
+  /* --- Tegning ---------------------------------------------------------- */
+  var forrige = {};
+  var liveTimer = null;
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function tegn(forsteGang) {
+    var r = beregn(state);
+    var p = state.p;
+
+    /* slider + pips */
+    el.val.textContent = p;
+    el.unit.textContent = p === 1 ? "person" : "personer";
+    el.range.style.setProperty("--fill", ((p - 1) / 7 * 100).toFixed(1) + "%");
+    el.range.setAttribute("aria-valuetext", p + (p === 1 ? " person" : " personer"));
+    el.minus.disabled = p <= 1;
+    el.plus.disabled = p >= 8;
+    for (var i = 0; i < pipEls.length; i++) {
+      pipEls[i].classList.toggle("on", i < p);
+    }
+
+    /* esken */
+    var skala = (state.modus === "mat" ? 0.60 : 0.66) + (p - 1) * 0.046;
+    el.boxGroup.style.transform = "scale(" + skala.toFixed(3) + ")";
+    el.boxExtra.setAttribute("opacity", r.esker > 1 ? "0.92" : "0");
+    el.boxExtra.style.transform = "translate(-74px,0) scale(" + (skala * 0.74).toFixed(3) + ")";
+
+    var maks = state.modus === "mat" ? 120 : 240;
+    var fyll = Math.max(4, Math.min(12, Math.round(4 + (r.enheter / maks) * 8)));
+    for (var j = 0; j < slotEls.length; j++) {
+      var n = slotEls[j];
+      var pa = j < fyll;
+      n.setAttribute("opacity", pa ? "1" : "0");
+      n.style.transform = pa ? "none" : "translateY(14px)";
+    }
+
+    el.tier.textContent = r.tier;
+    el.weight.textContent = "ca. " + Math.round(r.vekt) + " kg";
+    el.label.textContent = "7 DØGN · " + p + (p === 1 ? " PERSON" : " PERSONER");
+
+    /* brikker under scenen */
+    el.chipMeals.textContent = nf.format(p * 7 * 3) + " måltider";
+    el.chipWater.textContent = state.modus === "mat"
+      ? "Bare maten – utstyret beholder du"
+      : nf.format(Math.max(2, Math.ceil(p * 1.5)) * 10) + " liter vannkapasitet";
+
+    /* pris */
+    el.total.textContent = kr(r.sum);
+    el.per.textContent = kr(r.sum / (p * 7)) + " per person per døgn";
+    el.priceVanlig.innerHTML = kr(PRIS.matVanlig) + "<small>per person</small>";
+    el.priceLang.innerHTML = kr(PRIS.matLang) + "<small>per person</small>";
+
+    var L = [];
+    if (r.utstyr) L.push(["Utstyr for " + p + (p === 1 ? " person" : " personer"), kr(r.utstyr), ""]);
+    L.push([(state.mat === "lang" ? "Langtidsmat" : "Vanlig tørrmat") + ", 7 døgn × " + p, kr(r.matPris), ""]);
+    if (r.rabatt) L.push(["Rabatt med påfyll (8 %)", "−" + kr(r.rabatt), "is-save"]);
+    L.push(["Frakt", "0 kr", "is-save"]);
+    L.push([state.mat === "lang" ? "Neste påfyll" : "Neste påfyll", state.mat === "lang" ? "om ca. 25 år" : "om ca. 2 år", ""]);
+    el.lines.innerHTML = L.map(function (x) {
+      return '<li class="' + x[2] + '"><span>' + x[0] + '</span><span class="num">' + x[1] + '</span></li>';
+    }).join("");
+
+    el.ship.textContent = r.esker > 1
+      ? "Fri frakt · " + r.esker + " esker, sendes innen to virkedager"
+      : "Fri frakt · sendes innen to virkedager";
+
+    /* innholdsliste */
+    var html = "";
+    r.grupper.forEach(function (gr) {
+      html += '<div class="grp"><p class="grp__h">' + gr.t + "</p><ul class='items'>";
+      gr.items.forEach(function (it) {
+        var key = it.n;
+        var endret = !forsteGang && forrige[key] !== undefined && forrige[key] !== it.q;
+        forrige[key] = it.q;
+        html += "<li><span class='q num" + (endret && !reduced ? " flash" : "") + "'>" + it.q + "&nbsp;×</span>" +
+                "<span class='n'>" + it.n + (it.note ? "<span class='note'>" + it.note + "</span>" : "") + "</span></li>";
+      });
+      html += "</ul></div>";
+    });
+    el.groups.innerHTML = html;
+    el.count.textContent = nf.format(r.enheter) + " varer";
+
+    el.foot.textContent = state.modus === "mat"
+      ? "Matpåfyll inneholder ikke utstyr. Vi går ut fra at du har primus, lykt, radio og førstehjelp fra før – trenger du å erstatte noe, kan du legge det til i kurven."
+      : "Alt kommer ferdig pakket og merket. Innholdslisten ligger øverst i esken med utløpsdato på hver vare.";
+
+    /* mobil-elementer */
+    el.barPrice.textContent = kr(r.sum);
+    el.barMeta.textContent = p + (p === 1 ? " person · " : " personer · ") +
+      (state.modus === "mat" ? "matpåfyll" : "komplett pakke");
+    el.stripPrice.textContent = kr(r.sum);
+    el.stripTitle.textContent = p + (p === 1 ? " person · " : " personer · ") + (state.modus === "mat" ? "Matpåfyll" : "Komplett");
+    el.stripSub.textContent = (state.mat === "lang" ? "Langtidsmat" : "Vanlig tørrmat") + " · " + nf.format(r.enheter) + " varer";
+    var fh = 4 + (fyll / 12) * 12;
+    el.stripFill.setAttribute("y", (34 - fh).toFixed(1));
+    el.stripFill.setAttribute("height", fh.toFixed(1));
+
+    /* skjermleser: samlet, forsinket oppsummering */
+    if (liveTimer) clearTimeout(liveTimer);
+    liveTimer = setTimeout(function () {
+      el.live.textContent = p + (p === 1 ? " person" : " personer") + ", " +
+        (state.modus === "mat" ? "kun matpåfyll" : "komplett pakke") + ", " +
+        (state.mat === "lang" ? "langtidsmat" : "vanlig tørrmat") + ". " +
+        nf.format(r.enheter) + " varer. Totalt " + kr(r.sum) + ".";
+    }, 700);
+  }
+
+  /* --- Hendelser -------------------------------------------------------- */
+  el.range.addEventListener("input", function () {
+    state.p = parseInt(this.value, 10);
+    tegn();
+  });
+  el.minus.addEventListener("click", function () {
+    if (state.p > 1) { state.p--; el.range.value = state.p; tegn(); }
+  });
+  el.plus.addEventListener("click", function () {
+    if (state.p < 8) { state.p++; el.range.value = state.p; tegn(); }
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll('input[name="modus"]'), function (i) {
+    i.addEventListener("change", function () {
+      state.modus = this.value;
+      tegn();
+    });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('input[name="mat"]'), function (i) {
+    i.addEventListener("change", function () { state.mat = this.value; tegn(); });
+  });
+  document.getElementById("abo").addEventListener("change", function () {
+    state.abo = this.checked; tegn();
+  });
+
+  document.getElementById("cta").addEventListener("click", function (e) { e.preventDefault(); });
+  document.getElementById("barCta").addEventListener("click", function (e) {
+    e.preventDefault();
+    document.getElementById("buy").scrollIntoView({ block: "center" });
+  });
+
+  /* --- Klebrige mobilelementer ------------------------------------------ */
+  var bred = window.matchMedia("(min-width: 980px)");
+  function speilBredde() {
+    // Innholdslisten er alltid åpen på store skjermer, lukket som utgangspunkt på mobil.
+    el.contents.open = bred.matches ? true : false;
+  }
+  speilBredde();
+  if (bred.addEventListener) bred.addEventListener("change", speilBredde);
+
+  // Stripen på toppen viser valgt konfigurasjon når esken er rullet ut av bildet.
+  // Kjøpslinjen nederst viser pris og knapp når prispanelet ikke er synlig.
+  // Begge gjelder bare mobil; på store skjermer er panelet klebrig i stedet.
+  (function () {
+    var stage = document.querySelector(".stage");
+    var buyEl = document.getElementById("buy");
+    var bygg = document.getElementById("bygg");
+    var ventende = false;
+
+    function mal() {
+      ventende = false;
+      if (bred.matches) {
+        el.strip.classList.remove("is-on");
+        el.bar.classList.remove("is-on");
+        return;
+      }
+      var h = window.innerHeight;
+      var b = bygg.getBoundingClientRect();
+      var s = stage.getBoundingClientRect();
+      var k = buyEl.getBoundingClientRect();
+      var iByggeren = b.top < h * 0.4 && b.bottom > 140;
+      el.strip.classList.toggle("is-on", iByggeren && s.top < 0 && s.bottom < 70);
+      el.bar.classList.toggle("is-on", iByggeren && (k.top > h - 60 || k.bottom < 100));
+    }
+    function planlegg() {
+      if (!ventende) { ventende = true; requestAnimationFrame(mal); }
+    }
+    window.addEventListener("scroll", planlegg, { passive: true });
+    window.addEventListener("resize", planlegg);
+    el.contents.addEventListener("toggle", planlegg);
+    mal();
+  })();
+
+  tegn(true);
+})();
+</script>
+</body>
+</html>

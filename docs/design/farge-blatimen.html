@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="nn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blåtimen — fargeark for Nødboks</title>
+<style>
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:#110E17;color:#EFEAF6;
+  font-family:system-ui,-apple-system,"Segoe UI Variable Text","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1320px;margin:0 auto;padding:0 16px 96px}
+.masthead{padding:56px 0 32px;max-width:72ch}
+.kicker{font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:#A19AAC;margin:0 0 14px}
+.masthead h1{font-size:clamp(2rem,1.3rem+3vw,3.1rem);line-height:1.04;letter-spacing:-.025em;
+  margin:0 0 18px;font-weight:650}
+.masthead h1 em{font-style:normal;color:#E8DC59}
+.masthead p{color:#C3BCCE;margin:0 0 12px;font-size:1.06rem}
+
+.derivation{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  margin:36px 0 12px;padding:0;list-style:none}
+.derivation li{background:#1C1624;border:1px solid #352D40;border-radius:12px;padding:18px}
+.derivation .dot{width:34px;height:34px;border-radius:9px;display:block;margin-bottom:12px;
+  border:1px solid rgba(255,255,255,.16)}
+.derivation h3{margin:0 0 6px;font-size:.95rem;letter-spacing:-.01em}
+.derivation p{margin:0;font-size:.85rem;line-height:1.55;color:#A9A2B5}
+.derivation code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:.78rem;color:#D8CCEC}
+
+.rule{margin:30px 0 8px;padding:20px 22px;border-radius:12px;
+  background:linear-gradient(90deg,#241D30,#1C1624);border:1px solid #3A3147;
+  border-left:3px solid #E8DC59}
+.rule b{color:#E8DC59}
+.rule p{margin:0;color:#C3BCCE;font-size:.95rem}
+
+.grid{display:grid;gap:22px;grid-template-columns:1fr;margin-top:40px}
+@media(min-width:1040px){.grid{grid-template-columns:1fr 1fr}}
+
+/* ---------- panel: kvar sin token-blokk ---------- */
+.panel{border-radius:16px;overflow:hidden;border:1px solid #352D40;background:var(--bg);color:var(--text)}
+.mode-lys{
+      --bg: #F6F2FC;
+      --bg-sunken: #EEE9F5;
+      --surface: #FEFDFF;
+      --surface-2: #F2EEF9;
+      --text: #2C223B;
+      --text-muted: #70677F;
+      --border: #8D8699;
+      --hairline: #DFD9E8;
+      --brand: #3D2C53;
+      --brand-ink: #F6F2FE;
+      --accent: #4D3769;
+      --accent-ink: #FAF7FF;
+      --accent-soft: #EFE6FD;
+      --signal: #EADC43;
+      --sel-bg: #3D2C53;
+      --sel-ink: #F6F2FE;
+      --sel-sub: #A19AAD;
+      --sel-border: #3D2C53;
+      --focus: #007A8F;
+      --ok: #50762E;
+      --ok-soft: #E7F3DF;
+      --warn: #766E13;
+      --warn-soft: #F4F1CF;
+      --info: #006679;
+      --info-soft: #DBF4FB;
+}
+.mode-mork{
+      --bg: #1C1624;
+      --bg-sunken: #110C18;
+      --surface: #282132;
+      --surface-2: #352D40;
+      --text: #EFEAF6;
+      --text-muted: #A19AAC;
+      --border: #817A8B;
+      --hairline: #40394A;
+      --brand: #D8CCEC;
+      --brand-ink: #1C1624;
+      --accent: #E8DC59;
+      --accent-ink: #1E142A;
+      --accent-soft: #322F12;
+      --signal: #E8DC59;
+      --sel-bg: #352D40;
+      --sel-ink: #EFEAF6;
+      --sel-sub: #A19AAC;
+      --sel-border: #E8DC59;
+      --focus: #41B0CA;
+      --ok: #A3D678;
+      --ok-soft: #24301A;
+      --warn: #DFD569;
+      --warn-soft: #312F15;
+      --info: #6FCDE5;
+      --info-soft: #112F36;
+}
+.ph{padding:22px 24px;background:var(--bg-sunken);border-bottom:1px solid var(--hairline)}
+.ph h2{margin:0 0 4px;font-size:1.05rem;letter-spacing:-.01em;color:var(--text)}
+.ph p{margin:0;font-size:.85rem;color:var(--text-muted)}
+.pbody{padding:24px}
+.grp{margin:30px 0 12px;font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--text-muted);font-weight:600}
+.grp:first-child{margin-top:0}
+
+.sw-grid{display:grid;gap:8px}
+.sw{display:flex;gap:12px;align-items:center;background:var(--surface);
+  border:1px solid var(--hairline);border-radius:10px;padding:8px 10px}
+.chip{width:42px;height:42px;border-radius:8px;flex:none;border:1px solid var(--hairline);
+  box-shadow:inset 0 0 0 1px rgba(128,128,128,.13)}
+.swb{display:flex;flex-wrap:wrap;gap:2px 10px;align-items:baseline;min-width:0}
+.swb b{font-size:.87rem;font-weight:600;color:var(--text)}
+.swb code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.76rem;
+  color:var(--text-muted)}
+.ct{flex-basis:100%;font-size:.72rem;color:var(--text-muted);font-variant-numeric:tabular-nums}
+.ct.pass::before{content:"✓ ";color:var(--ok);font-weight:700}
+.ct.fail::before{content:"✕ ";color:#D33;font-weight:700}
+
+/* ---------- produktutsnitt ---------- */
+.slice{background:var(--surface);border:1px solid var(--hairline);border-radius:14px;padding:24px}
+.eyebrow{margin:0 0 10px;font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--text-muted);font-weight:600}
+.h-prod{margin:0 0 10px;font-size:1.55rem;line-height:1.14;letter-spacing:-.022em;
+  font-weight:650;color:var(--text)}
+.lede{margin:0 0 22px;color:var(--text-muted);font-size:.97rem;max-width:44ch}
+
+.cards{display:grid;gap:10px;grid-template-columns:1fr 1fr;margin-bottom:22px}
+.card{position:relative;background:var(--surface-2);border:1px solid var(--border);
+  border-radius:11px;padding:13px 14px;display:flex;flex-direction:column;gap:3px;cursor:default}
+.card b{font-size:.94rem;color:var(--text);font-weight:600}
+.card-sub{font-size:.79rem;color:var(--text-muted)}
+.card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.ct-lbl{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted)}
+.pick{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--border);flex:none;
+  display:grid;place-items:center}
+/* Vald kort: flata er ALLTID natt. I lys modus blir kortet mørkt; i mørk modus
+   er det alt mørkt og får i staden ei lysande vindaugskarm. Gulen rører aldri lys flate. */
+.card.sel{background:var(--sel-bg);border-color:var(--sel-border);color:var(--sel-ink)}
+.card.sel b{color:var(--sel-ink)}
+.card.sel .card-sub,.card.sel .ct-lbl{color:var(--sel-sub)}
+.pick.on{border-color:var(--signal)}
+.win{width:8px;height:8px;border-radius:2px;background:var(--signal);display:block;
+  box-shadow:0 0 9px color-mix(in srgb,var(--signal) 70%,transparent)}
+.tag{position:absolute;top:-8px;right:12px;background:var(--signal);color:#1E142A;
+  font-size:.66rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  padding:2px 7px;border-radius:5px}
+
+.price{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:flex-end;
+  padding:18px 0;border-top:1px solid var(--hairline);border-bottom:1px solid var(--hairline);
+  margin-bottom:22px}
+.pnum{font-size:2.7rem;font-weight:670;letter-spacing:-.035em;font-variant-numeric:tabular-nums;
+  color:var(--text);line-height:1}
+.pcur{font-size:1rem;color:var(--text-muted);margin-left:5px;font-weight:600}
+.pnote{font-size:.78rem;color:var(--text-muted);margin-top:5px}
+.pbtns{display:flex;gap:8px;flex-wrap:wrap}
+.btn{font:inherit;font-size:.9rem;font-weight:600;padding:11px 17px;border-radius:9px;
+  border:1px solid transparent;cursor:pointer;transition:filter .15s}
+.btn:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.btn-primary{background:var(--accent);color:var(--accent-ink)}
+.btn-primary:hover{filter:brightness(1.08)}
+.btn-ghost{background:transparent;color:var(--text);border-color:var(--border)}
+.btn-ghost:hover{background:var(--surface-2)}
+
+.cat{margin:0 0 10px;font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--text-muted);font-weight:600;display:flex;align-items:center;gap:9px}
+.cat::after{content:"";height:1px;flex:1;background:var(--hairline)}
+.list{list-style:none;margin:0 0 22px;padding:0}
+.list li{display:flex;justify-content:space-between;gap:12px;padding:9px 0;
+  border-bottom:1px solid var(--hairline);font-size:.91rem;color:var(--text)}
+.list li:last-child{border-bottom:0}
+.qty{color:var(--text-muted);font-variant-numeric:tabular-nums;font-size:.85rem}
+
+.note{display:flex;gap:12px;background:var(--warn-soft);border:1px solid var(--warn);
+  border-radius:11px;padding:14px 15px}
+.note-i{width:17px;height:17px;border-radius:50%;background:var(--warn);flex:none;margin-top:2px}
+.note p{margin:0;font-size:.87rem;color:var(--text);line-height:1.5}
+.note b{font-weight:650}
+
+/* ---------- tabell ---------- */
+.tbl-wrap{margin-top:48px;background:#1C1624;border:1px solid #352D40;border-radius:14px;overflow:hidden}
+.tbl-wrap h2{margin:0;padding:20px 22px 6px;font-size:1.05rem;letter-spacing:-.01em}
+.tbl-wrap .sub{margin:0;padding:0 22px 18px;font-size:.85rem;color:#A19AAC}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.85rem;min-width:520px}
+th,td{text-align:left;padding:9px 22px;border-top:1px solid #2C2438}
+th{font-size:.7rem;letter-spacing:.11em;text-transform:uppercase;color:#A19AAC;font-weight:600}
+td.num{font-variant-numeric:tabular-nums;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+td.ok{color:#A3D678;font-weight:600}
+td.no{color:#FF6B6B;font-weight:700}
+
+.colophon{margin-top:44px;max-width:74ch;color:#A9A2B5;font-size:.9rem}
+.colophon h2{color:#EFEAF6;font-size:1.05rem;margin:0 0 10px;letter-spacing:-.01em}
+.colophon h3{color:#D8CCEC;font-size:.9rem;margin:22px 0 6px}
+.colophon p{margin:0 0 10px}
+.colophon code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.83rem;
+  background:#1C1624;padding:1px 5px;border-radius:4px;color:#D8CCEC}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="masthead">
+  <p class="kicker">Nødboks · fargeark · 20.09.2026</p>
+  <h1>Blåtimen, utleidd frå ozon — og <em>eitt opplyst vindauge</em></h1>
+  <p>Heile paletten er rekna ut frå fire namngjevne fysiske kjelder, ikkje vald på kjensle.
+  Nyansane under er ikkje justerte for hand: kulørtonen kjem frå kjelda, og lysheita er
+  løyst numerisk mot kontrastkravet.</p>
+</div>
+
+<ul class="derivation">
+  <li><span class="dot" style="background:#F6F2FC"></span>
+    <h3>Himmelen: ozon, ikkje Rayleigh</h3>
+    <p>Blåtimen er blå fordi ozon absorberer raudt i Chappuis-bandet. Det dyttar
+    senit <em>av</em> dagslyskurva mot fiolett. Med <code>CCT 15 000 K, Duv ≈ −0,018</code>
+    landar snøen på <code>hue 266</code> — utanfor marinefeltet 195–255.</p></li>
+  <li><span class="dot" style="background:#E8DC59"></span>
+    <h3>Vindauget: kjelde, ikkje flate</h3>
+    <p>2700 K som <em>flate</em> gjev <code>hue 36</code> — rav, det forbodne. Men eit
+    vindauge er ei <em>lyskjelde</em> over adaptasjonsnivået: kanalane klippar og fargen
+    rullar av til <code>hue 55</code>. Fysikken peikar på det einaste ledige feltet.</p></li>
+  <li><span class="dot" style="background:#41B0CA"></span>
+    <h3>Fokus: blåis</h3>
+    <p>Vatn absorberer raudt via O–H-overtonane, minimum ved 418 nm. Fire meter
+    isveg (Pope &amp; Fry 1997) gjev <code>hue 191</code> — maksimalt skilt frå både
+    fiolett og gult, som ein fokusring skal vere.</p></li>
+  <li><span class="dot" style="background:#A3D678"></span>
+    <h3>Klar: nordlysets linje</h3>
+    <p>Grønfargen er ikkje vald, den er ein naturkonstant: den forbodne
+    oksygenovergangen ved <code>557,7 nm</code>. Monokromatisk gjev den
+    <code>hue 92</code> — ei gulgrøn, ikkje apotekgrøn.</p></li>
+</ul>
+
+<div class="rule">
+  <p><b>Den eine regelen som styrer paletten:</b> det varme laget rører aldri ei lys flate.
+  Eit opplyst vindauge finst berre mot ein mørk vegg — så gulen får berre liggje på natt.
+  I mørk modus er det heile sida, og gulen blir primærknappen. I lys modus finst natta
+  berre inne i det valde kortet, og der — og berre der — lyser vindauget.
+  Difor er ikkje mørk modus ein invers: det er same landskapet ein halvtime seinare.</p>
+</div>
+
+<div class="grid">
+<section class="panel mode-lys">
+  <header class="ph"><h2>Lys modus — snøflata</h2><p>Kl. 15.50. Snøen tek imot himmelen; silhuetten er det mørke.</p></header>
+  <div class="pbody">
+    <h4 class="grp">Flater — snøen og fjellet</h4><div class="sw-grid">
+<div class="sw">
+  <div class="chip" style="background:#F6F2FC"></div>
+  <div class="swb"><b>Grunnflate</b><code>#F6F2FC</code></div>
+</div>
+<div class="sw">
+  <div class="chip" style="background:#EEE9F5"></div>
+  <div class="swb"><b>Senka flate</b><code>#EEE9F5</code></div>
+</div>
+<div class="sw">
+  <div class="chip" style="background:#FEFDFF"></div>
+  <div class="swb"><b>Kort</b><code>#FEFDFF</code></div>
+</div>
+<div class="sw">
+  <div class="chip" style="background:#F2EEF9"></div>
+  <div class="swb"><b>Kort, andre nivå</b><code>#F2EEF9</code></div>
+</div>
+<div class="sw">
+  <div class="chip" style="background:#DFD9E8"></div>
+  <div class="swb"><b>Hårstrek (dekor)</b><code>#DFD9E8</code></div>
+</div>
+<div class="sw">
+  <div class="chip" style="background:#8D8699"></div>
+  <div class="swb"><b>Kantlinje (kontroll)</b><code>#8D8699</code><span class="ct pass">3.45:1 mot surface · krav 3.0</span></div>
+</div>
+</div>
+<h4 class="grp">Tekst</h4><div class="sw-grid">
+<div class="sw">
+  <div class="chip" style="background:#2C223B"></div>
+  <div class="swb"><b>Brødtekst</b><code>#2C223B</code><span class="ct pass">13.60:1 mot bg · krav 4.5</span></div>
+</div>
+<div class="sw">
+  <div class="chip" style="background:#70677F"></div>
+  <div class="swb"><b>Dempa tekst</b><code>#70677F</code><span class="ct pass">4.83:1 mot bg · krav 4.5</span></div>
+</div>
+<div class="sw">
+  <div class="chip" style="background:#3D2C53"></div>
+  <div class="swb"><b>Merkeflate</b><code>#3D2C53</code><span class="ct n">seksjonsflate</span></div>
+</div>
+<div class="sw">
+  <div class="chip" style="background:#F6F2FE"></div>
+  <div class="swb"><b>Tekst på merkeflate</b><code>#F6F2FE</code><span class="ct pass">11.32:1 mot brand · krav 4.5</span></div>
+</div>
+</div>
+<h4 class="grp">Handling</h4><div class="sw-grid">
+<div class="sw">
+  <div class="chip" style="background:#4D3769"></div>
+  <div class="swb"><b>Primærflate</b><code>#4D3769</code><span class="ct pass">9.21:1 mot bg · krav 3.0</span></div>
+</div>
+<div class="sw">
+  <div class="chip" style="background:#FAF7FF"></div>
+  <div class="swb"><b>Tekst på primærflate</b><code>#FAF7FF</code><span class="ct pass">9.59:1 mot accent · krav 4.5</span></div>
+</div>
+<div class="sw">
+  <div class="chip" style="background:#EFE6FD"></div>
+  <div class="swb"><b>Svak primærtone</b><code>#EFE6FD</code></div>
+</div>
+<div class="sw">
+  <div class="chip" style="background:#007A8F"></div>
+  <div class="swb"><b>Fokusring — blåis</b><code>#007A8F</code><span class="ct pass">4.55:1 mot bg · krav 3.0</span></div>
+</div>
+</div>
+<h4 class="grp">Det varme punktet</h4><div class="sw-grid">
+<div class="sw">
+  <div class="chip" style="background:#EADC43"></div>
+  <div class="swb"><b>Vindauget</b><code>#EADC43</code><span class="ct pass">8.80:1 mot (mørk flate) · krav 3.0</span></div>
+</div>
+</div>
+<h4 class="grp">Status</h4><div class="sw-grid">
+<div class="sw">
+  <div class="chip" style="background:#50762E"></div>
+  <div class="swb"><b>Klar — nordlysgrønn</b><code>#50762E</code><span class="ct pass">5.21:1 mot surface · krav 4.5</span></div>
+</div>
+<div class="sw">
+  <div class="chip" style="background:#766E13"></div>
+  <div class="swb"><b>Merk — vindaugsgul</b><code>#766E13</code><span class="ct pass">5.16:1 mot surface · krav 4.5</span></div>
+</div>
+<div class="sw">
+  <div class="chip" style="background:#006679"></div>
+  <div class="swb"><b>Info — blåis</b><code>#006679</code><span class="ct pass">6.52:1 mot surface · krav 4.5</span></div>
+</div>
+</div>
+    <h4 class="grp">Eit ekte utsnitt</h4>
+    
+<div class="slice">
+  <p class="eyebrow">Sju døgn · pakka i Noreg</p>
+  <h3 class="h-prod">Boksen du håper du aldri opnar</h3>
+  <p class="lede">Alt DSB tilrår at ein husstand har heime, ferdig pakka og datomerka.
+  Du treng ikkje vite kva du manglar — det er alt i boksen.</p>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-top"><span class="ct-lbl">Husstand</span><span class="pick"></span></div>
+      <b>2 vaksne</b><span class="card-sub">28 kg · 2 kolli</span>
+    </div>
+    <div class="card sel">
+      <div class="card-top"><span class="ct-lbl">Husstand</span><span class="pick on"><span class="win"></span></span></div>
+      <b>2 vaksne + 2 barn</b><span class="card-sub">41 kg · 3 kolli</span>
+      <span class="tag">Vald</span>
+    </div>
+  </div>
+
+  <div class="price">
+    <div><span class="pnum">3&thinsp;290</span><span class="pcur">kr</span>
+      <div class="pnote">eingongskjøp · fri frakt</div></div>
+    <div class="pbtns">
+      <button class="btn btn-primary">Legg i kurva</button>
+      <button class="btn btn-ghost">Sjå heile innhaldet</button>
+    </div>
+  </div>
+
+  <h4 class="cat">Varme og lys</h4>
+  <ul class="list">
+    <li><span>Ullteppe, 2 stk</span><span class="qty">2</span></li>
+    <li><span>Stormlykt med LED, 120 t</span><span class="qty">1</span></li>
+    <li><span>Stearinlys, 8 t brenntid</span><span class="qty">12</span></li>
+    <li><span>Fyrstikker, vasstette</span><span class="qty">2</span></li>
+  </ul>
+
+  <div class="note">
+    <span class="note-i" aria-hidden="true"></span>
+    <p><b>Boksen har ei datomerkt hylle.</b> Vi sender deg ei påminning når noko
+    nærmar seg utløp, og du kan byte berre den delen — ikkje heile boksen.</p>
+  </div>
+</div>
+  </div>
+</section>
+<section class="panel mode-mork">
+  <header class="ph"><h2>Mørk modus — silhuetten</h2><p>Kl. 16.20. Du står i skuggen av fjellet og ser vindauga.</p></header>
+  <div class="pbody">
+    <h4 class="grp">Flater — snøen og fjellet</h4><div class="sw-grid">
+<div class="sw">
+  <div class="chip" style="background:#1C1624"></div>
+  <div class="swb"><b>Grunnflate</b><code>#1C1624</code></div>
+</div>
+<div class="sw">
+  <div class="chip" style="background:#110C18"></div>
+  <div class="swb"><b>Senka flate</b><code>#110C18</code></div>
+</div>
+<div class="sw">
+  <div class="chip" style="background:#282132"></div>
+  <div class="swb"><b>Kort</b><code>#282132</code></div>
+</div>
+<div class="sw">
+  <div class="chip" style="background:#352D40"></div>
+  <div class="swb"><b>Kort, andre nivå</b><code>#352D40</code></div>
+</div>
+<div class="sw">
+  <div class="chip" style="background:#40394A"></div>
+  <div class="swb"><b>Hårstrek (dekor)</b><code>#40394A</code></div>
+</div>
+<div class="sw">
+  <div class="chip" style="background:#817A8B"></div>
+  <div class="swb"><b>Kantlinje (kontroll)</b><code>#817A8B</code><span class="ct pass">3.76:1 mot surface · krav 3.0</span></div>
+</div>
+</div>
+<h4 class="grp">Tekst</h4><div class="sw-grid">
+<div class="sw">
+  <div class="chip" style="background:#EFEAF6"></div>
+  <div class="swb"><b>Brødtekst</b><code>#EFEAF6</code><span class="ct pass">14.94:1 mot bg · krav 4.5</span></div>
+</div>
+<div class="sw">
+  <div class="chip" style="background:#A19AAC"></div>
+  <div class="swb"><b>Dempa tekst</b><code>#A19AAC</code><span class="ct pass">6.50:1 mot bg · krav 4.5</span></div>
+</div>
+<div class="sw">
+  <div class="chip" style="background:#D8CCEC"></div>
+  <div class="swb"><b>Merkeflate</b><code>#D8CCEC</code><span class="ct n">seksjonsflate</span></div>
+</div>
+<div class="sw">
+  <div class="chip" style="background:#1C1624"></div>
+  <div class="swb"><b>Tekst på merkeflate</b><code>#1C1624</code><span class="ct pass">11.57:1 mot brand · krav 4.5</span></div>
+</div>
+</div>
+<h4 class="grp">Handling</h4><div class="sw-grid">
+<div class="sw">
+  <div class="chip" style="background:#E8DC59"></div>
+  <div class="swb"><b>Primærflate</b><code>#E8DC59</code><span class="ct pass">12.45:1 mot bg · krav 3.0</span></div>
+</div>
+<div class="sw">
+  <div class="chip" style="background:#1E142A"></div>
+  <div class="swb"><b>Tekst på primærflate</b><code>#1E142A</code><span class="ct pass">12.46:1 mot accent · krav 4.5</span></div>
+</div>
+<div class="sw">
+  <div class="chip" style="background:#322F12"></div>
+  <div class="swb"><b>Svak primærtone</b><code>#322F12</code></div>
+</div>
+<div class="sw">
+  <div class="chip" style="background:#41B0CA"></div>
+  <div class="swb"><b>Fokusring — blåis</b><code>#41B0CA</code><span class="ct pass">6.97:1 mot bg · krav 3.0</span></div>
+</div>
+</div>
+<h4 class="grp">Det varme punktet</h4><div class="sw-grid">
+<div class="sw">
+  <div class="chip" style="background:#E8DC59"></div>
+  <div class="swb"><b>Vindauget</b><code>#E8DC59</code><span class="ct pass">10.94:1 mot (mørk flate) · krav 3.0</span></div>
+</div>
+</div>
+<h4 class="grp">Status</h4><div class="sw-grid">
+<div class="sw">
+  <div class="chip" style="background:#A3D678"></div>
+  <div class="swb"><b>Klar — nordlysgrønn</b><code>#A3D678</code><span class="ct pass">9.19:1 mot surface · krav 4.5</span></div>
+</div>
+<div class="sw">
+  <div class="chip" style="background:#DFD569"></div>
+  <div class="swb"><b>Merk — vindaugsgul</b><code>#DFD569</code><span class="ct pass">10.24:1 mot surface · krav 4.5</span></div>
+</div>
+<div class="sw">
+  <div class="chip" style="background:#6FCDE5"></div>
+  <div class="swb"><b>Info — blåis</b><code>#6FCDE5</code><span class="ct pass">8.52:1 mot surface · krav 4.5</span></div>
+</div>
+</div>
+    <h4 class="grp">Eit ekte utsnitt</h4>
+    
+<div class="slice">
+  <p class="eyebrow">Sju døgn · pakka i Noreg</p>
+  <h3 class="h-prod">Boksen du håper du aldri opnar</h3>
+  <p class="lede">Alt DSB tilrår at ein husstand har heime, ferdig pakka og datomerka.
+  Du treng ikkje vite kva du manglar — det er alt i boksen.</p>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-top"><span class="ct-lbl">Husstand</span><span class="pick"></span></div>
+      <b>2 vaksne</b><span class="card-sub">28 kg · 2 kolli</span>
+    </div>
+    <div class="card sel">
+      <div class="card-top"><span class="ct-lbl">Husstand</span><span class="pick on"><span class="win"></span></span></div>
+      <b>2 vaksne + 2 barn</b><span class="card-sub">41 kg · 3 kolli</span>
+      <span class="tag">Vald</span>
+    </div>
+  </div>
+
+  <div class="price">
+    <div><span class="pnum">3&thinsp;290</span><span class="pcur">kr</span>
+      <div class="pnote">eingongskjøp · fri frakt</div></div>
+    <div class="pbtns">
+      <button class="btn btn-primary">Legg i kurva</button>
+      <button class="btn btn-ghost">Sjå heile innhaldet</button>
+    </div>
+  </div>
+
+  <h4 class="cat">Varme og lys</h4>
+  <ul class="list">
+    <li><span>Ullteppe, 2 stk</span><span class="qty">2</span></li>
+    <li><span>Stormlykt med LED, 120 t</span><span class="qty">1</span></li>
+    <li><span>Stearinlys, 8 t brenntid</span><span class="qty">12</span></li>
+    <li><span>Fyrstikker, vasstette</span><span class="qty">2</span></li>
+  </ul>
+
+  <div class="note">
+    <span class="note-i" aria-hidden="true"></span>
+    <p><b>Boksen har ei datomerkt hylle.</b> Vi sender deg ei påminning når noko
+    nærmar seg utløp, og du kan byte berre den delen — ikkje heile boksen.</p>
+  </div>
+</div>
+  </div>
+</section>
+</div>
+
+<div class="tbl-wrap">
+  <h2>Målte kontrastforhold</h2>
+  <p class="sub">Rekna med WCAG 2.x-formelen: relativ luminans
+  L = 0,2126R + 0,7152G + 0,0722B på lineariserte kanalar, forhold (L<sub>høg</sub>+0,05)/(L<sub>låg</sub>+0,05).
+  Alle 42 para er rekna ut, ikkje påstått.</p>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>Par</th><th>Målt</th><th>Krav</th><th>Status</th></tr></thead>
+    <tbody><tr><td>lys: text / bg</td><td class="num">13.60:1</td><td class="num">4.5</td><td class="ok">bestått</td></tr>
+<tr><td>lys: text / surface</td><td class="num">14.80:1</td><td class="num">4.5</td><td class="ok">bestått</td></tr>
+<tr><td>lys: textMuted / bg</td><td class="num">4.83:1</td><td class="num">4.5</td><td class="ok">bestått</td></tr>
+<tr><td>lys: accentInk / accent</td><td class="num">9.59:1</td><td class="num">4.5</td><td class="ok">bestått</td></tr>
+<tr><td>lys: accent / bg</td><td class="num">9.21:1</td><td class="num">3.0</td><td class="ok">bestått</td></tr>
+<tr><td>lys: border / surface</td><td class="num">3.45:1</td><td class="num">3.0</td><td class="ok">bestått</td></tr>
+<tr><td>lys: focus / bg</td><td class="num">4.55:1</td><td class="num">3.0</td><td class="ok">bestått</td></tr>
+<tr><td>lys: brandInk / brand</td><td class="num">11.32:1</td><td class="num">4.5</td><td class="ok">bestått</td></tr>
+<tr><td>lys: ok / surface</td><td class="num">5.21:1</td><td class="num">4.5</td><td class="ok">bestått</td></tr>
+<tr><td>lys: warn / surface</td><td class="num">5.16:1</td><td class="num">4.5</td><td class="ok">bestått</td></tr>
+<tr><td>lys: info / surface</td><td class="num">6.52:1</td><td class="num">4.5</td><td class="ok">bestått</td></tr>
+<tr><td>lys: textMuted / surface</td><td class="num">5.26:1</td><td class="num">4.5</td><td class="ok">bestått</td></tr>
+<tr><td>lys: textMuted / surface2</td><td class="num">4.67:1</td><td class="num">4.5</td><td class="ok">bestått</td></tr>
+<tr><td>lys: border / bg</td><td class="num">3.17:1</td><td class="num">3.0</td><td class="ok">bestått</td></tr>
+<tr><td>lys: border / surface2</td><td class="num">3.06:1</td><td class="num">3.0</td><td class="ok">bestått</td></tr>
+<tr><td>lys: focus / surface</td><td class="num">4.95:1</td><td class="num">3.0</td><td class="ok">bestått</td></tr>
+<tr><td>lys: selInk / selBg</td><td class="num">11.32:1</td><td class="num">4.5</td><td class="ok">bestått</td></tr>
+<tr><td>lys: selSub / selBg</td><td class="num">4.60:1</td><td class="num">4.5</td><td class="ok">bestått</td></tr>
+<tr><td>lys: signal / selBg</td><td class="num">8.80:1</td><td class="num">3.0</td><td class="ok">bestått</td></tr>
+<tr><td>lys: selBorder / bg</td><td class="num">11.30:1</td><td class="num">3.0</td><td class="ok">bestått</td></tr>
+<tr><td>lys: signal / morkflate (brand)</td><td class="num">8.80:1</td><td class="num">3.0</td><td class="ok">bestått</td></tr>
+<tr><td>mork: text / bg</td><td class="num">14.94:1</td><td class="num">4.5</td><td class="ok">bestått</td></tr>
+<tr><td>mork: text / surface</td><td class="num">13.13:1</td><td class="num">4.5</td><td class="ok">bestått</td></tr>
+<tr><td>mork: textMuted / bg</td><td class="num">6.50:1</td><td class="num">4.5</td><td class="ok">bestått</td></tr>
+<tr><td>mork: accentInk / accent</td><td class="num">12.46:1</td><td class="num">4.5</td><td class="ok">bestått</td></tr>
+<tr><td>mork: accent / bg</td><td class="num">12.45:1</td><td class="num">3.0</td><td class="ok">bestått</td></tr>
+<tr><td>mork: border / surface</td><td class="num">3.76:1</td><td class="num">3.0</td><td class="ok">bestått</td></tr>
+<tr><td>mork: focus / bg</td><td class="num">6.97:1</td><td class="num">3.0</td><td class="ok">bestått</td></tr>
+<tr><td>mork: brandInk / brand</td><td class="num">11.57:1</td><td class="num">4.5</td><td class="ok">bestått</td></tr>
+<tr><td>mork: ok / surface</td><td class="num">9.19:1</td><td class="num">4.5</td><td class="ok">bestått</td></tr>
+<tr><td>mork: warn / surface</td><td class="num">10.24:1</td><td class="num">4.5</td><td class="ok">bestått</td></tr>
+<tr><td>mork: info / surface</td><td class="num">8.52:1</td><td class="num">4.5</td><td class="ok">bestått</td></tr>
+<tr><td>mork: textMuted / surface</td><td class="num">5.71:1</td><td class="num">4.5</td><td class="ok">bestått</td></tr>
+<tr><td>mork: textMuted / surface2</td><td class="num">4.83:1</td><td class="num">4.5</td><td class="ok">bestått</td></tr>
+<tr><td>mork: border / bg</td><td class="num">4.28:1</td><td class="num">3.0</td><td class="ok">bestått</td></tr>
+<tr><td>mork: border / surface2</td><td class="num">3.18:1</td><td class="num">3.0</td><td class="ok">bestått</td></tr>
+<tr><td>mork: focus / surface</td><td class="num">6.12:1</td><td class="num">3.0</td><td class="ok">bestått</td></tr>
+<tr><td>mork: selInk / selBg</td><td class="num">11.10:1</td><td class="num">4.5</td><td class="ok">bestått</td></tr>
+<tr><td>mork: selSub / selBg</td><td class="num">4.83:1</td><td class="num">4.5</td><td class="ok">bestått</td></tr>
+<tr><td>mork: signal / selBg</td><td class="num">9.25:1</td><td class="num">3.0</td><td class="ok">bestått</td></tr>
+<tr><td>mork: selBorder / bg</td><td class="num">12.45:1</td><td class="num">3.0</td><td class="ok">bestått</td></tr>
+<tr><td>mork: signal / morkflate (surface)</td><td class="num">9.25:1</td><td class="num">3.0</td><td class="ok">bestått</td></tr></tbody>
+  </table>
+  </div>
+</div>
+
+<div class="colophon">
+  <h2>Utleiing, typografi og det svakaste punktet</h2>
+
+  <h3>Frå kjelde til hex</h3>
+  <p>Himmellyset er modellert som CIE-dagslys ved 15 000 K, flytta av kurva mot fiolett
+  for å representere ozonabsorpsjonen. Observatøren er <em>ikkje</em> fullt adaptert —
+  eg reknar med <code>D = 0,70</code>, standardverdien for «average surround» i CIECAM02.
+  Det er nettopp difor snøen framleis ser blå ut og vindauget ser gult ut. Snø er
+  tilnærma flat i reflektans, så snøen arvar himmelens kulørtone. Kulørtonane
+  (266 / 55 / 191 / 92) er så haldne faste, medan lysheita er løyst med binærsøk til
+  kvart par møter kravet sitt. Ingen verdi er nudga etterpå.</p>
+
+  <h3>Typografi</h3>
+  <p>Ingen webfont. LCP på denne sida er nesten sikkert overskrifta, og ein fontfil
+  legg eit ekstra rundturs­kall framfor nettopp det elementet, pluss ombrekking når
+  fonten byter. Ei side som lovar ro har ikkje råd til å blafre når den lastar.
+  Difor systemgrotesken: <code>system-ui</code> med Segoe UI / Roboto / Helvetica i kjeda.
+  Grotesk og ikkje antikva, fordi norsk offentleg formspråk — NRK, Ruter, kommunane,
+  DSB sjølv — har vore grotesk sidan 1960-talet; ei antikva ville lese som
+  livsstilsbutikk. Store tal står i <code>tabular-nums</code> så prisar og mengder
+  står i kolonne. Displaystorleikane har negativ knipe (−0,022 til −0,035 em), fordi
+  systemgroteskar er teikna for brødtekst og gaper i store storleikar.</p>
+
+  <h3>Kva dette ikkje er</h3>
+  <p>Grunnflata er <em>kald</em> (hue 264), ikkje varm krem — det er den eine aksen
+  som skilde den forkasta paletten mest. Det finst ingen marineblå merkeflate; den mørke
+  flata ligg på hue 266, klar av feltet 195–255 der åtte av åtte konkurrentar ligg.
+  Det finst <em>ingen raud</em> i paletten i det heile — heller ikkje for varsel, som
+  i staden ber vindaugsgult. Ei beredskapsside som ropar med varselfargar sel frykt;
+  denne sel at nokon har tenkt på det før deg. Og ingen neon mot taktisk svart:
+  den mørke flata er avmetta fiolett skifer, ikkje #000.</p>
+
+  <h3>Det svakaste punktet — ærleg</h3>
+  <p>To ting. For det første dytta eg ozonskiftet til den <em>sterke</em> enden av det
+  som faktisk er observert (Duv ≈ −0,018). Ein mildare, like realistisk verdi hadde
+  landa på hue 231 — altså rett inn i det forbodne feltet. Kjelda peikar i riktig
+  retning, men det var restriksjonen som valde kor langs kurva eg stoppa, og det skal
+  ein kunne seie høgt. For det andre: ei djup, avmetta fiolett merkeflate kan
+  ved rask lesing kategoriserast som «lilla merkevare», og lilla har fem førekomstar i
+  marknaden. Forsvaret er kroma — dette er skifer med fiolett i seg, ikkje ein
+  lilla — men det er ein smal margin, og den bør testast på folk før den blir trykt.</p>
+</div>
+
+</div>
+</body>
+</html>

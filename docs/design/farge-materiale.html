@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nødboks – fargeretning «materiale»</title>
+<style>
+/* ==========================================================================
+   Fargeark: retning "materiale"  ·  key = materiale
+   Alle farger er utledet fra navngitte, virkelige materialer og pigmenter.
+   Alle kontrasttall i dette dokumentet er regnet ut med WCAG 2.1-formelen
+   (relativ luminans, lineærisert sRGB) og skrevet inn manuelt.
+   ========================================================================== */
+
+/* --- Arkets egne tokens (lys) --- */
+:root{
+  color-scheme: light;
+  --paper:#E9EDEB; --paper-2:#F7F9F8; --ink:#191F1D; --ink-muted:#4F5A56;
+  --rule:#7B8884; --brass:#6F631F;
+  --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--font-ui); font-size:17px; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1180px; margin:0 auto; padding:40px 16px 96px}
+h1,h2,h3{line-height:1.15; letter-spacing:-0.015em; margin:0 0 .4em}
+h1{font-size:clamp(1.9rem,1.3rem+2.4vw,2.9rem); font-weight:700}
+h2{font-size:clamp(1.25rem,1.05rem+.8vw,1.6rem); font-weight:650; margin-top:2.4em}
+h3{font-size:1.05rem; font-weight:650}
+p{margin:0 0 1em; max-width:74ch}
+.lead{font-size:1.15rem; color:var(--ink-muted); max-width:70ch}
+.meta{font-family:var(--font-mono); font-size:.8rem; color:var(--ink-muted); letter-spacing:.02em}
+.label{
+  font-size:.72rem; font-weight:650; text-transform:uppercase; letter-spacing:.15em;
+  color:var(--ink-muted);
+}
+hr{border:0; border-top:1px solid var(--rule); margin:2.5em 0}
+code{font-family:var(--font-mono); font-size:.88em}
+
+/* --- Materialstripe --- */
+.materials{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:2px; margin:24px 0 8px; border:1px solid var(--rule)}
+.materials div{padding:14px 12px; min-height:112px; display:flex; flex-direction:column; justify-content:flex-end; gap:2px}
+.materials b{font-size:.85rem; font-weight:650; letter-spacing:-.01em}
+.materials span{font-family:var(--font-mono); font-size:.72rem; opacity:.85}
+
+/* ==========================================================================
+   Paletten. Hver panel-rot setter hele tokensettet for sin modus.
+   ========================================================================== */
+.panel[data-mode="lys"]{
+  --bg:#E9EDEB; --surface:#F7F9F8; --surface2:#DDE3E0;
+  --text:#191F1D; --text-muted:#4F5A56; --border:#7B8884;
+  --brand:#26302D; --brand-ink:#E9EDEB;
+  --accent:#6F631F; --accent-ink:#F7F9F8; --accent-soft:#E5E5CA;
+  --ok:#2B5E45; --warn:#7A3B22; --info:#2F5058; --focus:#1E6A4C;
+  --shadow: 0 1px 0 rgb(25 31 29 / .05);
+}
+.panel[data-mode="mork"]{
+  --bg:#121614; --surface:#1A201E; --surface2:#232B28;
+  --text:#E6EBE8; --text-muted:#9DA9A5; --border:#69756F;
+  --brand:#CFD8D4; --brand-ink:#121614;
+  --accent:#D2C97A; --accent-ink:#141610; --accent-soft:#2E2D1C;
+  --ok:#7FBFA0; --warn:#C4A085; --info:#96B4BC; --focus:#5CBF92;
+  --shadow: 0 1px 0 rgb(0 0 0 / .5);
+}
+
+.panels{display:grid; grid-template-columns:1fr; gap:28px}
+@media (min-width:900px){ .panels{grid-template-columns:1fr 1fr; gap:24px} }
+
+.panel{
+  background:var(--bg); color:var(--text); border:1px solid var(--border);
+  padding:0; overflow:hidden;
+}
+.panel-head{
+  display:flex; justify-content:space-between; align-items:baseline; gap:12px;
+  padding:14px 18px; border-bottom:1px solid var(--border); background:var(--surface);
+}
+.panel-head .label{color:var(--text-muted)}
+.panel-body{padding:18px}
+
+/* --- Swatch-tabell --- */
+.sw{width:100%; border-collapse:collapse; font-size:.82rem}
+.sw th{
+  text-align:left; font-size:.68rem; text-transform:uppercase; letter-spacing:.13em;
+  font-weight:650; color:var(--text-muted); padding:0 8px 8px 0; border-bottom:1px solid var(--border);
+}
+.sw td{padding:7px 8px 7px 0; border-bottom:1px solid var(--border); vertical-align:middle}
+.sw tr:last-child td{border-bottom:0}
+.chip{width:34px; height:34px; display:block; border:1px solid var(--border)}
+.sw .mono{font-family:var(--font-mono); font-size:.76rem; white-space:nowrap}
+.sw .role{color:var(--text-muted)}
+.ratio{font-family:var(--font-mono); font-size:.76rem; white-space:nowrap}
+.ratio b{font-weight:650}
+
+/* --- Produktutsnittet --- */
+.demo{margin-top:22px; padding-top:22px; border-top:1px solid var(--border)}
+.demo h3.disp{
+  font-size:clamp(1.5rem,1.1rem+1.6vw,2.05rem); font-weight:700; letter-spacing:-.022em;
+  margin:.2em 0 .5em; line-height:1.1;
+}
+.demo p{color:var(--text); max-width:52ch; margin-bottom:1.1em}
+.demo p.muted{color:var(--text-muted)}
+.btnrow{display:flex; flex-wrap:wrap; gap:10px; margin:18px 0 6px}
+.btn{
+  font:inherit; font-size:.95rem; font-weight:650; letter-spacing:.005em;
+  padding:13px 22px; border-radius:2px; border:1px solid transparent; cursor:pointer;
+}
+.btn-primary{background:var(--accent); color:var(--accent-ink); border-color:var(--accent)}
+.btn-secondary{background:transparent; color:var(--text); border-color:var(--border)}
+.btn-focus{outline:3px solid var(--focus); outline-offset:2px}
+.hint{font-size:.78rem; color:var(--text-muted); margin:0 0 2px}
+
+.cards{display:grid; gap:10px; margin:22px 0}
+.card{
+  display:flex; gap:14px; align-items:flex-start;
+  background:var(--surface); border:1px solid var(--border); border-radius:2px;
+  padding:14px 16px; box-shadow:var(--shadow);
+}
+.card .tick{
+  flex:0 0 auto; width:20px; height:20px; margin-top:2px; border-radius:50%;
+  border:1px solid var(--border); background:var(--surface2);
+}
+.card.sel{background:var(--accent-soft); border-color:var(--accent); border-width:2px; padding:13px 15px}
+.card.sel .tick{background:var(--accent); border-color:var(--accent); position:relative}
+.card.sel .tick::after{
+  content:""; position:absolute; left:6px; top:3px; width:5px; height:10px;
+  border:solid var(--accent-ink); border-width:0 2px 2px 0; transform:rotate(45deg);
+}
+.card b{display:block; font-weight:650; font-size:.98rem}
+.card small{display:block; color:var(--text-muted); font-size:.82rem; margin-top:2px}
+.card .pris{margin-left:auto; font-weight:650; font-variant-numeric:tabular-nums; white-space:nowrap}
+
+.price{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin:22px 0 4px}
+.price .big{
+  font-size:clamp(2.3rem,1.6rem+2.6vw,3.2rem); font-weight:650; letter-spacing:-.03em;
+  font-variant-numeric:tabular-nums; line-height:1;
+}
+.price .unit{font-size:.9rem; color:var(--text-muted)}
+.price .badge{
+  font-size:.72rem; font-weight:650; text-transform:uppercase; letter-spacing:.12em;
+  color:var(--ok); border:1px solid currentColor; padding:4px 8px; border-radius:2px;
+}
+
+.contents{margin:26px 0 0; border-top:1px solid var(--border)}
+.contents .cat{
+  font-size:.7rem; font-weight:650; text-transform:uppercase; letter-spacing:.16em;
+  color:var(--text-muted); padding:16px 0 8px;
+}
+.contents ul{list-style:none; margin:0; padding:0}
+.contents li{
+  display:flex; gap:12px; justify-content:space-between; align-items:baseline;
+  padding:9px 0; border-bottom:1px solid var(--border); font-size:.92rem;
+}
+.contents li span.qty{
+  font-family:var(--font-mono); font-size:.78rem; color:var(--text-muted);
+  font-variant-numeric:tabular-nums; white-space:nowrap;
+}
+
+.alert{
+  display:flex; gap:12px; margin:24px 0 0; padding:14px 16px;
+  border:1px solid var(--warn); border-left-width:4px; border-radius:2px; background:var(--surface);
+}
+.alert .ico{color:var(--warn); font-weight:700; line-height:1.4}
+.alert p{margin:0; font-size:.88rem; max-width:none}
+.alert b{color:var(--warn)}
+
+/* --- Revisjonstabell --- */
+.audit{width:100%; border-collapse:collapse; font-size:.84rem; margin-top:14px}
+.audit caption{text-align:left; color:var(--ink-muted); font-size:.82rem; padding-bottom:10px}
+.audit th{
+  text-align:left; font-size:.68rem; text-transform:uppercase; letter-spacing:.13em;
+  font-weight:650; color:var(--ink-muted); border-bottom:1px solid var(--rule); padding:0 10px 8px 0;
+}
+.audit td{padding:8px 10px 8px 0; border-bottom:1px solid #C6CFCB; font-variant-numeric:tabular-nums}
+.audit td.pair{font-family:var(--font-mono); font-size:.78rem}
+.audit td.res{font-weight:650; color:#2B5E45; white-space:nowrap}
+.audit tbody tr:nth-child(odd){background:#DDE3E0}
+
+.notes{display:grid; gap:20px; grid-template-columns:1fr}
+@media (min-width:760px){ .notes{grid-template-columns:1fr 1fr; gap:20px 40px} }
+.notes h3{margin-bottom:.3em}
+.notes p{font-size:.94rem}
+.bans{margin:0; padding:0; list-style:none; counter-reset:b}
+.bans li{
+  counter-increment:b; position:relative; padding:12px 0 12px 42px;
+  border-bottom:1px solid var(--rule); font-size:.94rem; max-width:80ch;
+}
+.bans li::before{
+  content:counter(b); position:absolute; left:0; top:12px;
+  font-family:var(--font-mono); font-size:.8rem; font-weight:650;
+  width:26px; height:26px; display:grid; place-items:center;
+  border:1px solid var(--rule); border-radius:50%;
+}
+.bans li b{font-weight:650}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="meta">NØDBOKS · FARGERETNING · key = materiale · 20.09.2026</p>
+  <h1>Materialer, ikke merkevarefarger</h1>
+  <p class="lead">
+    Paletten er ikke valgt fordi den «føles trygg». Den er målt av de fysiske overflatene
+    produktet faktisk består av: varmforsinket stål, anodisert aluminium, patinert messing,
+    grønt flaskeglass, jernoksidgrunning og ubleket ull. Ingen av fargene er en merkevarefarge.
+    De er overflater.
+  </p>
+
+  <h2>Kilden</h2>
+  <p>
+    Hver token under peker på et navngitt materiale eller et navngitt pigment, ikke på en stemning:
+  </p>
+
+  <div class="materials">
+    <div style="background:#E9EDEB; color:#191F1D">
+      <b>Sinkhvitt</b><span>ZnO · PW4 · #E9EDEB</span>
+    </div>
+    <div style="background:#F7F9F8; color:#191F1D">
+      <b>Anodisert aluminium</b><span>matt plate · #F7F9F8</span>
+    </div>
+    <div style="background:#6F631F; color:#F7F9F8">
+      <b>Patinert messing</b><span>CuZn37 · #6F631F</span>
+    </div>
+    <div style="background:#2B5E45; color:#E9EDEB">
+      <b>Grønt flaskeglass</b><span>Fe²⁺ i sanden · #2B5E45</span>
+    </div>
+    <div style="background:#7A3B22; color:#E9EDEB">
+      <b>Jernoksidrød</b><span>Fe₂O₃ · PR101 · #7A3B22</span>
+    </div>
+    <div style="background:#2F5058; color:#E9EDEB">
+      <b>Otta-skifer</b><span>kvartsitt · #2F5058</span>
+    </div>
+  </div>
+  <p class="meta" style="margin-top:10px">
+    Materialstripen er trykt i de faktiske token-verdiene. Ingen av rutene er justert for å se penere ut.
+  </p>
+
+  <h2>Utledningen, farge for farge</h2>
+  <div class="notes">
+    <div>
+      <h3>Grunnflaten: sinkhvitt, ikke papirhvitt</h3>
+      <p>
+        Varmforsinket stål oksiderer til sinkoksid – «hvitrust» – som også er kunstnerpigmentet
+        <b>sinkhvitt (Pigment White 4)</b>. Sinkhvitt er definert av å være <i>kjølig og svakt
+        grønnstikkende</i>; det er nettopp derfor det ble brukt som motsats til blyhvitt og
+        kritthvitt i malerlærebøkene. Grunnflaten er <code>#E9EDEB</code> = hsl(150, 10 %, 92 %):
+        akkurat nok grønnkulør til å lese som metall, ikke som papir. Dette er det motsatte
+        valget av varm papirhvit.
+      </p>
+      <h3>Aksenten: messing i to tilstander</h3>
+      <p>
+        Lykta i boksen har messingbrenner; hengsel, hasp og nødfløyte er samme legering.
+        Den klassiske kuløren «brass» ligger på hsl(52, 47 %, 48 %). Vi har beholdt kulørtonen
+        og bare tatt bort lyshet: <code>#6F631F</code> = hsl(51, 56 %, 28 %), fordi det er der
+        hvit knappetekst passerer 4,5:1. Dette er messing som har fått patina, ikke messing
+        som er blitt oransje. Kulørtonen 51–54 ligger dessuten i det eneste hue-båndet
+        markedskartet viser som ledig (gul 50–70, én forekomst) – det bekrefter valget,
+        men det er ikke grunnen til det.
+      </p>
+    </div>
+    <div>
+      <h3>Mørk modus er lampelys, ikke inversjon</h3>
+      <p>
+        I mørk modus er premisset fysisk: det er mørkt, og det står én lampe i rommet.
+        Matte flater (sink, aluminium, papp) slukner til nesten svart – <code>#121614</code>.
+        Ulla er det lyseste i rommet fordi den er det eneste som sprer lys diffust –
+        <code>#E6EBE8</code>. Messing er det eneste <i>blanke</i> materialet, og et blankt
+        metall speiler lyskilden: derfor er aksenten den eneste fargen som går <b>opp</b>
+        i lyshet når rommet blir mørkt, fra L 28 % til L 65 %, med kulørtonen intakt (51 → 54).
+        Det er ikke en invertering; det er samme materiale under annen belysning.
+      </p>
+      <h3>Status og signal</h3>
+      <p>
+        <b>Grønt</b> er flaskeglasset – jernet i sanden gjør glass grønt, og lykteglass og
+        norske returflasker har samme kulør. Det brukes til «på lager» og til fokusringen.
+        <b>Rødbrunt</b> er jernoksid (PR101), pigmentet i rustbeskyttende grunning på stål –
+        altså fargen på beskyttelse av metall, ikke på alarm. <b>Grått-blått</b> er Otta-skifer,
+        norsk kvartsittskifer, brukt til rolig informasjon. Ingen av dem er merkevarefarger,
+        og ingen av dem forekommer som flate større enn en melding.
+      </p>
+    </div>
+  </div>
+
+  <h2>Paletten i bruk – begge modi side om side</h2>
+  <p class="meta" style="margin-bottom:18px">
+    Samme markup, to tokensett. Kontrasttallet i hver swatch-rad er målt mot flaten fargen
+    faktisk brukes på, oppgitt i kolonnen «mot».
+  </p>
+
+  <div class="panels">
+
+    <!-- ============================ LYS ============================ -->
+    <section class="panel" data-mode="lys">
+      <div class="panel-head">
+        <strong>Lys modus</strong>
+        <span class="label">dagslys på sink</span>
+      </div>
+      <div class="panel-body">
+
+        <table class="sw">
+          <thead>
+            <tr><th style="width:44px"></th><th>Token / materiale</th><th>Hex</th><th>Mot</th><th>Målt</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="chip" style="background:#E9EDEB"></span></td>
+                <td><b>bg</b><br><span class="role">sinkhvitt, ZnO</span></td>
+                <td class="mono">#E9EDEB<br>hsl(150 10% 92%)</td><td class="role">–</td><td class="ratio">–</td></tr>
+            <tr><td><span class="chip" style="background:#F7F9F8"></span></td>
+                <td><b>surface</b><br><span class="role">anodisert aluminium</span></td>
+                <td class="mono">#F7F9F8<br>hsl(150 14% 97%)</td><td class="role">bg</td><td class="ratio">1,12</td></tr>
+            <tr><td><span class="chip" style="background:#DDE3E0"></span></td>
+                <td><b>surface2</b><br><span class="role">sink i skygge</span></td>
+                <td class="mono">#DDE3E0<br>hsl(150 10% 88%)</td><td class="role">bg</td><td class="ratio">1,10</td></tr>
+            <tr><td><span class="chip" style="background:#191F1D"></span></td>
+                <td><b>text</b><br><span class="role">ubehandlet støpejern</span></td>
+                <td class="mono">#191F1D<br>hsl(160 11% 11%)</td><td class="role">bg / surface</td>
+                <td class="ratio"><b>14,16</b> / <b>15,82</b></td></tr>
+            <tr><td><span class="chip" style="background:#4F5A56"></span></td>
+                <td><b>textMuted</b><br><span class="role">stål, matt slipt</span></td>
+                <td class="mono">#4F5A56<br>hsl(158 7% 33%)</td><td class="role">bg / surface</td>
+                <td class="ratio"><b>6,07</b> / <b>6,78</b></td></tr>
+            <tr><td><span class="chip" style="background:#7B8884"></span></td>
+                <td><b>border</b><br><span class="role">risset linje i sink</span></td>
+                <td class="mono">#7B8884<br>hsl(162 5% 51%)</td><td class="role">surface</td><td class="ratio"><b>3,49</b></td></tr>
+            <tr><td><span class="chip" style="background:#26302D"></span></td>
+                <td><b>brand</b><br><span class="role">brunert stål</span></td>
+                <td class="mono">#26302D<br>hsl(162 12% 17%)</td><td class="role">brandInk</td><td class="ratio"><b>11,52</b></td></tr>
+            <tr><td><span class="chip" style="background:#6F631F"></span></td>
+                <td><b>accent</b><br><span class="role">patinert messing</span></td>
+                <td class="mono">#6F631F<br>hsl(51 56% 28%)</td><td class="role">bg</td><td class="ratio"><b>5,11</b></td></tr>
+            <tr><td><span class="chip" style="background:#F7F9F8"></span></td>
+                <td><b>accentInk</b><br><span class="role">aluminium på messing</span></td>
+                <td class="mono">#F7F9F8</td><td class="role">accent</td><td class="ratio"><b>5,71</b></td></tr>
+            <tr><td><span class="chip" style="background:#E5E5CA"></span></td>
+                <td><b>accentSoft</b><br><span class="role">messingstøv</span></td>
+                <td class="mono">#E5E5CA<br>hsl(60 34% 85%)</td><td class="role">text på flaten</td><td class="ratio"><b>13,06</b></td></tr>
+            <tr><td><span class="chip" style="background:#2B5E45"></span></td>
+                <td><b>ok</b><br><span class="role">grønt flaskeglass</span></td>
+                <td class="mono">#2B5E45<br>hsl(151 37% 27%)</td><td class="role">bg</td><td class="ratio"><b>6,37</b></td></tr>
+            <tr><td><span class="chip" style="background:#7A3B22"></span></td>
+                <td><b>warn</b><br><span class="role">jernoksidgrunning</span></td>
+                <td class="mono">#7A3B22<br>hsl(17 56% 31%)</td><td class="role">bg</td><td class="ratio"><b>7,18</b></td></tr>
+            <tr><td><span class="chip" style="background:#2F5058"></span></td>
+                <td><b>info</b><br><span class="role">Otta-skifer</span></td>
+                <td class="mono">#2F5058<br>hsl(192 30% 26%)</td><td class="role">bg</td><td class="ratio"><b>7,38</b></td></tr>
+            <tr><td><span class="chip" style="background:#1E6A4C"></span></td>
+                <td><b>focus</b><br><span class="role">glass, mettet</span></td>
+                <td class="mono">#1E6A4C<br>hsl(156 56% 27%)</td><td class="role">bg</td><td class="ratio"><b>5,52</b></td></tr>
+          </tbody>
+        </table>
+
+        <!-- ---------- produktutsnitt ---------- -->
+        <div class="demo">
+          <p class="label">Nødboks Hjem · 7 døgn</p>
+          <h3 class="disp">Esken du håper du aldri åpner</h3>
+          <p>
+            Sju døgn med vann, varme, lys og mat til to voksne og to barn, pakket i én kasse
+            som står i boden til den dagen strømmen ikke kommer tilbake. Du trenger ikke vite
+            noe om beredskap for å eie den.
+          </p>
+          <p class="muted">Fri frakt · Bytte i 60 dager · Varsel før noe går ut på dato</p>
+
+          <div class="cards">
+            <div class="card sel">
+              <span class="tick" aria-hidden="true"></span>
+              <span><b>To voksne + to barn</b><small>7 døgn · 23 kg · to kasser</small></span>
+              <span class="pris">3 490 kr</span>
+            </div>
+            <div class="card">
+              <span class="tick" aria-hidden="true"></span>
+              <span><b>To voksne</b><small>7 døgn · 14 kg · én kasse</small></span>
+              <span class="pris">2 190 kr</span>
+            </div>
+          </div>
+
+          <div class="price">
+            <span class="big">3 490 kr</span>
+            <span class="unit">eller 291 kr/mnd i 12 mnd</span>
+            <span class="badge">På lager</span>
+          </div>
+
+          <p class="hint">Sendes innen to virkedager</p>
+          <div class="btnrow">
+            <button class="btn btn-primary" type="button">Legg i kurven</button>
+            <button class="btn btn-secondary btn-focus" type="button">Se hele innholdet</button>
+          </div>
+          <p class="hint">Den sekundære knappen vises med fokusring.</p>
+
+          <div class="contents">
+            <p class="cat">Varme og lys</p>
+            <ul>
+              <li><span>Parafinlykt med messingbrenner</span><span class="qty">1 stk · 40 t</span></li>
+              <li><span>Ullteppe, ubleket spælsau</span><span class="qty">2 stk</span></li>
+              <li><span>Stearinlys med lang brenntid</span><span class="qty">6 stk · 8 t</span></li>
+              <li><span>Hodelykt, sveiv og batteri</span><span class="qty">2 stk</span></li>
+            </ul>
+          </div>
+
+          <div class="alert">
+            <span class="ico" aria-hidden="true">!</span>
+            <p><b>Vannet holder i fire døgn, ikke sju.</b> Kassen inneholder 24 liter.
+              DSB regner tre liter per person per døgn. Vi sier det heller enn å pynte på det –
+              fyll de to tomme dunkene fra springen når du setter kassen bort.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============================ MØRK ============================ -->
+    <section class="panel" data-mode="mork">
+      <div class="panel-head">
+        <strong>Mørk modus</strong>
+        <span class="label">lampelys på messing</span>
+      </div>
+      <div class="panel-body">
+
+        <table class="sw">
+          <thead>
+            <tr><th style="width:44px"></th><th>Token / materiale</th><th>Hex</th><th>Mot</th><th>Målt</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="chip" style="background:#121614"></span></td>
+                <td><b>bg</b><br><span class="role">sink uten lys</span></td>
+                <td class="mono">#121614<br>hsl(150 10% 8%)</td><td class="role">–</td><td class="ratio">–</td></tr>
+            <tr><td><span class="chip" style="background:#1A201E"></span></td>
+                <td><b>surface</b><br><span class="role">ullflate i halvskygge</span></td>
+                <td class="mono">#1A201E<br>hsl(160 10% 11%)</td><td class="role">bg</td><td class="ratio">1,10</td></tr>
+            <tr><td><span class="chip" style="background:#232B28"></span></td>
+                <td><b>surface2</b><br><span class="role">hevet flate</span></td>
+                <td class="mono">#232B28<br>hsl(157 10% 15%)</td><td class="role">bg</td><td class="ratio">1,26</td></tr>
+            <tr><td><span class="chip" style="background:#E6EBE8"></span></td>
+                <td><b>text</b><br><span class="role">ubleket ull</span></td>
+                <td class="mono">#E6EBE8<br>hsl(144 11% 91%)</td><td class="role">bg / surface</td>
+                <td class="ratio"><b>15,13</b> / <b>13,72</b></td></tr>
+            <tr><td><span class="chip" style="background:#9DA9A5"></span></td>
+                <td><b>textMuted</b><br><span class="role">ull i skygge</span></td>
+                <td class="mono">#9DA9A5<br>hsl(160 7% 64%)</td><td class="role">bg / surface</td>
+                <td class="ratio"><b>7,52</b> / <b>6,82</b></td></tr>
+            <tr><td><span class="chip" style="background:#69756F"></span></td>
+                <td><b>border</b><br><span class="role">sinkkant som fanger lys</span></td>
+                <td class="mono">#69756F<br>hsl(150 5% 44%)</td><td class="role">surface</td><td class="ratio"><b>3,45</b></td></tr>
+            <tr><td><span class="chip" style="background:#CFD8D4"></span></td>
+                <td><b>brand</b><br><span class="role">lys sinkflate</span></td>
+                <td class="mono">#CFD8D4<br>hsl(153 10% 83%)</td><td class="role">brandInk</td><td class="ratio"><b>12,54</b></td></tr>
+            <tr><td><span class="chip" style="background:#D2C97A"></span></td>
+                <td><b>accent</b><br><span class="role">messing i flammelys</span></td>
+                <td class="mono">#D2C97A<br>hsl(54 49% 65%)</td><td class="role">bg</td><td class="ratio"><b>10,76</b></td></tr>
+            <tr><td><span class="chip" style="background:#141610"></span></td>
+                <td><b>accentInk</b><br><span class="role">skygge i metallet</span></td>
+                <td class="mono">#141610</td><td class="role">accent</td><td class="ratio"><b>10,74</b></td></tr>
+            <tr><td><span class="chip" style="background:#2E2D1C"></span></td>
+                <td><b>accentSoft</b><br><span class="role">messinggløden mot ull</span></td>
+                <td class="mono">#2E2D1C<br>hsl(57 24% 15%)</td><td class="role">text på flaten</td><td class="ratio"><b>11,54</b></td></tr>
+            <tr><td><span class="chip" style="background:#7FBFA0"></span></td>
+                <td><b>ok</b><br><span class="role">flaskeglass med lys bak</span></td>
+                <td class="mono">#7FBFA0<br>hsl(151 33% 62%)</td><td class="role">bg</td><td class="ratio"><b>8,57</b></td></tr>
+            <tr><td><span class="chip" style="background:#C4A085"></span></td>
+                <td><b>warn</b><br><span class="role">jernoksid, opplyst</span></td>
+                <td class="mono">#C4A085<br>hsl(26 35% 65%)</td><td class="role">bg</td><td class="ratio"><b>7,57</b></td></tr>
+            <tr><td><span class="chip" style="background:#96B4BC"></span></td>
+                <td><b>info</b><br><span class="role">skifer, våt</span></td>
+                <td class="mono">#96B4BC<br>hsl(193 22% 66%)</td><td class="role">bg</td><td class="ratio"><b>8,30</b></td></tr>
+            <tr><td><span class="chip" style="background:#5CBF92"></span></td>
+                <td><b>focus</b><br><span class="role">glass, mettet</span></td>
+                <td class="mono">#5CBF92<br>hsl(153 44% 55%)</td><td class="role">bg</td><td class="ratio"><b>8,10</b></td></tr>
+          </tbody>
+        </table>
+
+        <!-- ---------- produktutsnitt ---------- -->
+        <div class="demo">
+          <p class="label">Nødboks Hjem · 7 døgn</p>
+          <h3 class="disp">Esken du håper du aldri åpner</h3>
+          <p>
+            Sju døgn med vann, varme, lys og mat til to voksne og to barn, pakket i én kasse
+            som står i boden til den dagen strømmen ikke kommer tilbake. Du trenger ikke vite
+            noe om beredskap for å eie den.
+          </p>
+          <p class="muted">Fri frakt · Bytte i 60 dager · Varsel før noe går ut på dato</p>
+
+          <div class="cards">
+            <div class="card sel">
+              <span class="tick" aria-hidden="true"></span>
+              <span><b>To voksne + to barn</b><small>7 døgn · 23 kg · to kasser</small></span>
+              <span class="pris">3 490 kr</span>
+            </div>
+            <div class="card">
+              <span class="tick" aria-hidden="true"></span>
+              <span><b>To voksne</b><small>7 døgn · 14 kg · én kasse</small></span>
+              <span class="pris">2 190 kr</span>
+            </div>
+          </div>
+
+          <div class="price">
+            <span class="big">3 490 kr</span>
+            <span class="unit">eller 291 kr/mnd i 12 mnd</span>
+            <span class="badge">På lager</span>
+          </div>
+
+          <p class="hint">Sendes innen to virkedager</p>
+          <div class="btnrow">
+            <button class="btn btn-primary" type="button">Legg i kurven</button>
+            <button class="btn btn-secondary btn-focus" type="button">Se hele innholdet</button>
+          </div>
+          <p class="hint">Den sekundære knappen vises med fokusring.</p>
+
+          <div class="contents">
+            <p class="cat">Varme og lys</p>
+            <ul>
+              <li><span>Parafinlykt med messingbrenner</span><span class="qty">1 stk · 40 t</span></li>
+              <li><span>Ullteppe, ubleket spælsau</span><span class="qty">2 stk</span></li>
+              <li><span>Stearinlys med lang brenntid</span><span class="qty">6 stk · 8 t</span></li>
+              <li><span>Hodelykt, sveiv og batteri</span><span class="qty">2 stk</span></li>
+            </ul>
+          </div>
+
+          <div class="alert">
+            <span class="ico" aria-hidden="true">!</span>
+            <p><b>Vannet holder i fire døgn, ikke sju.</b> Kassen inneholder 24 liter.
+              DSB regner tre liter per person per døgn. Vi sier det heller enn å pynte på det –
+              fyll de to tomme dunkene fra springen når du setter kassen bort.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <h2>Kontrastrevisjon</h2>
+  <table class="audit">
+    <caption>
+      Alle tall er regnet ut med WCAG 2.1: L = 0,2126·R + 0,7152·G + 0,0722·B over lineærisert
+      sRGB (c/12,92 når c ≤ 0,03928, ellers ((c+0,055)/1,055)^2,4), forhold = (L<sub>høy</sub> + 0,05) / (L<sub>lav</sub> + 0,05).
+      Ingen av tallene er anslag.
+    </caption>
+    <thead>
+      <tr><th>Par</th><th>Lys</th><th>Mørk</th><th>Krav</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="pair">text / bg</td><td>14,16</td><td>15,13</td><td>4,5</td><td class="res">bestått</td></tr>
+      <tr><td class="pair">text / surface</td><td>15,82</td><td>13,72</td><td>4,5</td><td class="res">bestått</td></tr>
+      <tr><td class="pair">text / surface2</td><td>12,86</td><td>12,03</td><td>4,5</td><td class="res">bestått</td></tr>
+      <tr><td class="pair">textMuted / bg</td><td>6,07</td><td>7,52</td><td>4,5</td><td class="res">bestått</td></tr>
+      <tr><td class="pair">textMuted / surface</td><td>6,78</td><td>6,82</td><td>4,5</td><td class="res">bestått</td></tr>
+      <tr><td class="pair">accentInk / accent</td><td>5,71</td><td>10,74</td><td>4,5</td><td class="res">bestått</td></tr>
+      <tr><td class="pair">accent / bg</td><td>5,11</td><td>10,76</td><td>3,0</td><td class="res">bestått</td></tr>
+      <tr><td class="pair">accent / surface</td><td>5,71</td><td>9,75</td><td>3,0</td><td class="res">bestått</td></tr>
+      <tr><td class="pair">border / surface</td><td>3,49</td><td>3,45</td><td>3,0</td><td class="res">bestått</td></tr>
+      <tr><td class="pair">border / bg</td><td>3,12</td><td>3,80</td><td>3,0</td><td class="res">bestått</td></tr>
+      <tr><td class="pair">focus / bg</td><td>5,52</td><td>8,10</td><td>3,0</td><td class="res">bestått</td></tr>
+      <tr><td class="pair">brandInk / brand</td><td>11,52</td><td>12,54</td><td>4,5</td><td class="res">bestått</td></tr>
+      <tr><td class="pair">ok / bg</td><td>6,37</td><td>8,57</td><td>4,5</td><td class="res">bestått</td></tr>
+      <tr><td class="pair">warn / bg</td><td>7,18</td><td>7,57</td><td>4,5</td><td class="res">bestått</td></tr>
+      <tr><td class="pair">info / bg</td><td>7,38</td><td>8,30</td><td>4,5</td><td class="res">bestått</td></tr>
+      <tr><td class="pair">text / accentSoft</td><td>13,06</td><td>11,54</td><td>4,5</td><td class="res">bestått</td></tr>
+    </tbody>
+  </table>
+  <p class="meta" style="margin-top:12px">
+    Merk: border er lagt på 3,49 / 3,45 mot flaten, ikke på en hårstrek rundt 1,3 som er vanlig.
+    Det er et bevisst valg – streken skal være tegnet, som på en teknisk tegning, ikke antydet.
+  </p>
+
+  <h2>Mot forbudene</h2>
+  <ol class="bans">
+    <li>
+      <b>Ikke varm krem/beige grunnflate med brent oransje aksent.</b>
+      Grunnflaten er hsl(150, 10 %, 92 %) – kjølig og grønnstikkende, ikke hue 20–50.
+      Aksenten er hsl(51, 56 %, 28 %): kulørtone 51 er utenfor oransjebåndet, og lysheten 28 %
+      er en mørk metallflate, ikke en glødende terrakotta. Den lyseste gule flaten i settet,
+      accentSoft, ligger på hue 60 og L 85 % – gulgrønn, ikke beige.
+    </li>
+    <li>
+      <b>Ikke marineblå eller indigo som primær merkeflate.</b>
+      Ingen token ligger i hue 195–255. Nærmeste er info på hue 192, og info er en
+      meldingsfarge på skiferbasis som aldri dekker mer enn en boks med tekst.
+      Den mørke merkeflaten er brunert stål, hsl(162, 12 %, 17 %).
+    </li>
+    <li>
+      <b>Ikke Røde Kors-rød eller varselrød/-oransje.</b>
+      Den eneste rødlige tokenen er jernoksid hsl(17, 56 %, 31 %) – mørk, avmettet
+      grunningsrød, altså fargen på rustbeskyttelse. Den brukes kun til varseltekst
+      og strek, aldri som flate.
+    </li>
+    <li>
+      <b>Ikke «taktisk» svart med neon.</b>
+      Det finnes ingen ren svart og ingen mettet signalfarge i settet. Mørk modus er
+      hsl(150, 10 %, 8 %), ikke #000, og den lyseste fargen der er et reflekterende
+      metall på L 65 %, ikke en selvlysende farge.
+    </li>
+    <li>
+      <b>Ingen palett som ikke kan forklares.</b>
+      Hver token over har en materialkilde med navn: ZnO/PW4, CuZn37, Fe₂O₃/PR101,
+      jern i glassand, kvartsittskifer fra Otta, ubleket spælsauull. Begrunnelsen
+      «det ser bra ut» forekommer ikke i dokumentet.
+    </li>
+  </ol>
+
+  <h2>Typografi</h2>
+  <div class="notes">
+    <div>
+      <p>
+        <b>Én familie, systemets egen:</b>
+        <code>system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif</code>,
+        med <code>ui-monospace</code> til varenummer, mengder og brenntid – slik tall er stemplet
+        i stål og trykt på pakninger. Ingen display-serif: den redaksjonelle serifen
+        trekker mot institusjon og avis, mens denne retningen er verksted og teknisk tegning.
+      </p>
+      <p>
+        <b>Forskjellen kommer fra vekt, versaler og knipning, ikke fra en ekstra font.</b>
+        Kategorioverskrifter og etiketter settes 0,70–0,72 rem, 650, versaler,
+        <code>letter-spacing: .15em</code> – sjablongmerkingen på en transportkasse.
+        Overskrifter settes 650–700 med <code>-0.022em</code>. Brødtekst 17 px / 1,6.
+        Priser og mengder bruker <code>font-variant-numeric: tabular-nums</code> og
+        <code>-0.03em</code>, slik at kolonner med tall står rett under hverandre.
+      </p>
+    </div>
+    <div>
+      <p>
+        <b>Skala (1,20 – liten ters):</b> 0,72 · 0,78 · 0,88 · 1,00 · 1,15 · 1,40 · 1,70 · 2,05 · 3,20 rem,
+        flytende mellom 320 og 1280 px. Én skala for begge modi.
+      </p>
+      <p>
+        <b>Hvorfor ingen webfont:</b> LCP-elementet på produktsiden er H1-en. En webfont legger
+        et ekstra kritisk nettverkskall i fontkjeden etter CSS, typisk 25–45 kB per snitt, og
+        gir enten usynlig tekst i opptil 3 s (<code>font-display: block</code>) eller et synlig
+        skifte i akkurat det elementet LCP måles på (<code>swap</code>). Identiteten her bæres av
+        farge, versaler og knipning – ting som koster null byte. Skulle en webfont bli nødvendig
+        senere, er kravet: én variabel font, selvhostet, <code>preload</code>,
+        <code>font-display: swap</code> og en systemfont-fallback med matchet
+        <code>size-adjust</code> slik at skiftet er under 2 % i høyde. Den terskelen er ikke
+        oppfylt av noe vi trenger nå.
+      </p>
+    </div>
+  </div>
+
+  <h2>Hva som er svakest</h2>
+  <p>
+    <b>Kroma.</b> Dette er en palett der nesten alt er under 15 % metning. Den er avhengig av at
+    foto, papirkvalitet i trykk og produktbildene bærer teksturen – ubehandlet tre, sinkplate, ull.
+    Blir bildene grå og flate, faller siden fra «dyr tilbakeholdenhet» til «billig og uferdig»,
+    og paletten kan ikke redde den alene. Det er den reelle risikoen, og den ligger i fotoregien,
+    ikke i hex-verdiene.
+  </p>
+  <p>
+    <b>Aksenten i lys modus er mørk.</b> hsl(51, 56 %, 28 %) er nødvendig for å få 5,71:1 med
+    lys knappetekst, men i små flater – en liten badge, en tynn strek – kan den leses som
+    olivengrønn, og oliven grenser mot militærestetikk. Mottiltak: aksenten brukes kun i flater
+    over ca. 40 × 40 px (knapper, valgt kort), aldri som tynn linje eller ikon; små aksentflater
+    bruker accentSoft med mørk tekst i stedet. Dette bør testes på ekte knapper før lansering.
+  </p>
+  <p>
+    <b>Border på 3:1 er visuelt tungt.</b> Kravet er oppfylt, men grensene blir synlige og
+    tegningsaktige. Det er i tråd med retningen, men det tåler ikke mange rammer per skjerm –
+    komponenter må klare seg med én ramme, ikke ramme inni ramme.
+  </p>
+
+  <hr>
+  <p class="meta">
+    Fargearket er selvstendig: all CSS er inline, ingen eksterne kall, ingen skript.
+    Verdiene her er ennå ikke skrevet inn i assets/css/tokens.css.
+  </p>
+
+</div>
+</body>
+</html>

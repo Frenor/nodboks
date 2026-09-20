@@ -1,0 +1,944 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nødboks – fargeretning «Signal»</title>
+<style>
+/* ===========================================================================
+   FARGEARK – retning «Signal»
+   Selvstendig fil, all CSS inline. Begge modi vises samtidig, side om side,
+   slik at de kan sammenlignes uten å bytte systeminnstilling.
+   Alle kontrasttall i dokumentet er regnet ut med WCAG 2.x relativ luminans
+   (lineærisert sRGB, 0.2126R + 0.7152G + 0.0722B), ikke anslått.
+   =========================================================================== */
+
+/* --- Arkets egen kledning (nøytral, ikke en del av paletten) -------------- */
+:root{
+  --ark-bg:#F6F7F6; --ark-flate:#FFFFFF; --ark-tekst:#16211D; --ark-svak:#5C6A64;
+  --ark-strek:#DCE2DE; --ark-kode:#0E1B17;
+  --ui: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --ark-bg:#121614; --ark-flate:#1A201D; --ark-tekst:#E6EDE9; --ark-svak:#9CAAA4;
+         --ark-strek:#2B342F; --ark-kode:#E6EDE9; color-scheme: dark; }
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--ark-bg); color:var(--ark-tekst);
+  font-family:var(--ui); font-size:16px; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1360px; margin:0 auto; padding:clamp(24px,4vw,56px) clamp(16px,4vw,40px) 120px}
+h1,h2,h3,h4{line-height:1.15; margin:0; font-weight:700; letter-spacing:-0.015em}
+p{margin:0}
+code{font-family:var(--mono); font-size:0.86em; color:var(--ark-kode)}
+
+.ark-topp{border-bottom:2px solid var(--ark-tekst); padding-bottom:20px; margin-bottom:8px}
+.ark-topp h1{font-size:clamp(1.9rem,1.2rem+2.4vw,3rem)}
+.ark-topp .kicker{
+  font-size:0.75rem; text-transform:uppercase; letter-spacing:0.11em;
+  font-weight:650; color:var(--ark-svak); margin-bottom:10px;
+}
+.ark-topp .undertekst{margin-top:12px; max-width:62ch; color:var(--ark-svak); font-size:1.02rem}
+
+.seksjon{margin-top:clamp(40px,6vw,72px)}
+.seksjon > h2{
+  font-size:0.78rem; text-transform:uppercase; letter-spacing:0.12em; font-weight:700;
+  padding-bottom:8px; border-bottom:1px solid var(--ark-strek); margin-bottom:22px;
+}
+.seksjon > h2 span{color:var(--ark-svak); font-weight:600; letter-spacing:0.06em; text-transform:none; margin-left:10px}
+.prosa{max-width:70ch}
+.prosa p + p{margin-top:0.85em}
+.prosa strong{font-weight:650}
+
+/* --- Kildestripe: NVE/MET faregradsskala ---------------------------------- */
+.skala{display:grid; grid-template-columns:repeat(4,1fr); gap:2px; max-width:640px; margin:22px 0 10px;
+       border:2px solid var(--ark-tekst); background:var(--ark-tekst)}
+.skala div{padding:12px 12px 14px; background:#fff; color:#141A0C}
+.skala .n{font-family:var(--mono); font-size:1.5rem; font-weight:700; line-height:1}
+.skala .t{font-size:0.7rem; text-transform:uppercase; letter-spacing:0.09em; font-weight:700; margin-top:8px}
+.skala .r{font-size:0.7rem; margin-top:6px; opacity:.72; line-height:1.35}
+.skala .g1{background:#2E9E5B}
+.skala .g2{background:#F5D42B}
+.skala .g3{background:#E8842A}
+.skala .g4{background:#D3342B; color:#FFF}
+.skala .brukt{outline:none; position:relative}
+.skala .brukt::after{content:"BRUKT"; position:absolute; top:10px; right:10px; font-size:0.6rem;
+  letter-spacing:0.12em; font-weight:800; opacity:.85}
+.skala-note{font-size:0.82rem; color:var(--ark-svak); max-width:70ch}
+
+/* --- To-kolonne oppsett for modi ----------------------------------------- */
+.duo{display:grid; grid-template-columns:1fr 1fr; gap:clamp(14px,2vw,28px); align-items:start}
+@media (max-width:920px){ .duo{grid-template-columns:1fr} }
+.modus-hode{
+  display:flex; align-items:baseline; gap:10px; margin-bottom:10px;
+  font-size:0.74rem; text-transform:uppercase; letter-spacing:0.12em; font-weight:750;
+}
+.modus-hode em{font-style:normal; font-weight:500; letter-spacing:0.02em; text-transform:none; color:var(--ark-svak); font-size:0.82rem}
+
+/* ===========================================================================
+   PALETTEN
+   Tokens defineres på .modus-flatene, ikke på :root, slik at begge modi kan
+   rendres i samme dokument. I produksjon bor de i tokens.css under
+   :root / [data-theme].
+   =========================================================================== */
+.modus{
+  border-radius:14px; overflow:hidden; border:1px solid var(--ark-strek);
+  font-family:var(--font-ui);
+}
+
+.lys{
+  --bg:#EBF0EC; --bg-sunken:#DEE7E1; --surface:#FFFFFF; --surface-2:#F4F8F5;
+  --hairline:#D5DFD9; --border:#75877F;
+  --text:#0E1B17; --text-muted:#495852;
+  --deep:#13322B; --deep-ink:#E4EDE8;
+  --brand:#F5D42B; --brand-ink:#141A0C;
+  --accent:#7B6A0F; --accent-ink:#FFFFFF;
+  --accent-flare:#FAE05C; --accent-flare-ink:#141A0C;
+  --accent-soft:#EDF0D4; --accent-line:#CBD49B;
+  --keyline:#13322B; --brand-line:#13322B;
+  --focus:#0C6A4D;
+  --ok:#16674A; --ok-soft:#DDEDE4;
+  --warn:#A04D08; --warn-soft:#F6E7D6;
+  --info:#234E46; --info-soft:#DFEAE6;
+  --skygge:0 1px 2px rgb(14 27 23 / .06), 0 6px 18px rgb(14 27 23 / .07);
+}
+.mork{
+  --bg:#0D1816; --bg-sunken:#081110; --surface:#14211E; --surface-2:#1B2B27;
+  --hairline:#25332E; --border:#5E736C;
+  --text:#E3EDE8; --text-muted:#98AAA3;
+  --deep:#1A2A24; --deep-ink:#E3EDE8;
+  --brand:#F5D42B; --brand-ink:#141A0C;
+  --accent:#F1CF3A; --accent-ink:#141A0C;
+  --accent-flare:#FBE06A; --accent-flare-ink:#141A0C;
+  --accent-soft:#232916; --accent-line:#414427;
+  --keyline:#8FA39B; --brand-line:#F5D42B;
+  --focus:#3FD79C;
+  --ok:#58C99A; --ok-soft:#0F231B;
+  --warn:#E2A24A; --warn-soft:#241A0E;
+  --info:#8FBFB2; --info-soft:#12211E;
+  --skygge:0 1px 2px rgb(0 0 0 / .5), 0 8px 24px rgb(0 0 0 / .45);
+}
+
+/* --- Typografi som følger paletten (samme i begge modi) ------------------- */
+.modus{
+  --font-ui: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+             "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  --step--1: 0.855rem; --step-0: 1rem; --step-1: 1.2rem; --step-2: 1.45rem;
+  --step-3: 1.85rem; --step-4: 2.35rem; --step-5: 3.05rem;
+}
+
+/* --- Swatch-rutenett ----------------------------------------------------- */
+.swatcher{background:var(--bg); color:var(--text); padding:18px}
+.rutenett{display:grid; grid-template-columns:repeat(auto-fill,minmax(148px,1fr)); gap:10px}
+.sw{
+  border:1px solid var(--hairline); border-radius:10px; overflow:hidden;
+  background:var(--surface);
+}
+.sw .chip{height:56px; display:block; border-bottom:1px solid var(--hairline)}
+.sw .meta{padding:8px 9px 10px}
+.sw .navn{font-size:0.72rem; font-weight:700; letter-spacing:0.02em; line-height:1.25}
+.sw .hex{font-family:var(--font-mono); font-size:0.68rem; color:var(--text-muted); margin-top:2px}
+.sw .mot{font-size:0.66rem; color:var(--text-muted); margin-top:6px; line-height:1.35}
+.sw .mot b{color:var(--text); font-weight:700; font-variant-numeric:tabular-nums}
+.sw .flagg{
+  display:inline-block; font-size:0.6rem; font-weight:800; letter-spacing:0.08em;
+  padding:1px 5px; border-radius:4px; margin-top:6px;
+  background:var(--ok-soft); color:var(--ok);
+}
+.sw .flagg.obs{background:var(--warn-soft); color:var(--warn)}
+
+/* ===========================================================================
+   PRODUKTUTSNITT – ekte grensesnitt, ikke swatch-rekke
+   =========================================================================== */
+.utsnitt{background:var(--bg); color:var(--text); font-family:var(--font-ui);
+         font-size:var(--step-0); line-height:1.62}
+.utsnitt *:focus-visible{outline:3px solid var(--focus); outline-offset:3px; border-radius:6px}
+.utsnitt .pad{padding:clamp(18px,2.4vw,28px)}
+
+/* Topplinje med merket */
+.topplinje{
+  display:flex; align-items:center; justify-content:space-between; gap:14px;
+  padding:12px clamp(18px,2.4vw,28px); background:var(--surface);
+  border-bottom:1px solid var(--hairline);
+}
+.merke{display:flex; align-items:center; gap:9px; font-weight:750; letter-spacing:-0.01em}
+.merke .plate{
+  width:30px; height:30px; border-radius:7px; background:var(--brand);
+  border:2px solid var(--deep); display:grid; place-items:center;
+  color:var(--brand-ink); font-weight:850; font-size:0.95rem; line-height:1;
+}
+.topplinje nav{display:flex; gap:16px; font-size:var(--step--1); color:var(--text-muted)}
+.topplinje nav a{color:inherit; text-decoration:none}
+.topplinje nav a.aktiv{color:var(--text); font-weight:650;
+  text-decoration:underline; text-decoration-color:var(--accent);
+  text-underline-offset:5px; text-decoration-thickness:3px}
+
+/* Etikett – skiltets stemme */
+.etikett{
+  display:inline-flex; align-items:center; gap:7px;
+  font-size:0.7rem; text-transform:uppercase; letter-spacing:0.1em; font-weight:750;
+  color:var(--text-muted);
+}
+.etikett .prikk{width:8px; height:8px; border-radius:2px; background:var(--brand); border:1px solid var(--deep)}
+/* Okerpille: eneste sted okeren bærer tekst. Hvit på oker = 5.37:1. */
+.pille{display:inline-block; background:var(--accent); color:var(--accent-ink);
+  border-radius:4px; padding:3px 8px; font-size:0.68rem; letter-spacing:0.1em;
+  font-weight:800; text-transform:uppercase}
+
+h1.hero{font-size:var(--step-4); letter-spacing:-0.025em; line-height:1.07; margin:14px 0 0; max-width:17ch; font-weight:750}
+.ingress{margin-top:14px; max-width:48ch; color:var(--text-muted); font-size:var(--step-1); line-height:1.5}
+.brodtekst{margin-top:14px; max-width:58ch}
+
+/* Knapper */
+.knapper{display:flex; flex-wrap:wrap; gap:12px; margin-top:22px; align-items:center}
+.btn{
+  font:inherit; font-weight:700; letter-spacing:0.005em; cursor:pointer;
+  border-radius:9px; padding:12px 20px; border:2px solid transparent;
+  transition:background-color .14s ease, color .14s ease, border-color .14s ease;
+}
+/* Primær ER skiltet: gult felt, skiltsvart tekst, mørk keyline. Keylinen er
+   det som gir flaten en grense mot lys bakgrunn (11.99:1) – gulfargen selv
+   klarer det aldri (1.27:1). I mørk modus trengs ingen keyline: der måler
+   skiltgult 12.36:1 mot bakgrunnen helt alene. */
+.btn-primar{background:var(--brand); color:var(--brand-ink); border-color:var(--brand-line)}
+.btn-primar:hover{background:var(--accent-flare); color:var(--accent-flare-ink)}
+/* Sekundær: samme konstruksjon uten fyll */
+.btn-sekundar{background:transparent; color:var(--text); border-color:var(--keyline)}
+.btn-sekundar:hover{background:var(--surface)}
+/* Lenke: teksten beholder tekstfargen, okeren er understrekingen.
+   Oker som tekstfarge blir olivenbrun i store flater – som strek er den gul. */
+.btn-lenke{background:none; border:0; padding:12px 4px; color:var(--text); font-weight:650;
+  text-decoration:underline; text-decoration-color:var(--accent);
+  text-underline-offset:4px; text-decoration-thickness:3px; cursor:pointer}
+.btn-lenke:hover{text-decoration-color:var(--brand)}
+
+/* Valgkort */
+.valg{display:grid; grid-template-columns:repeat(auto-fit,minmax(168px,1fr)); gap:12px; margin-top:16px}
+.kort{
+  position:relative; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; padding:16px 15px 15px; cursor:pointer;
+}
+.kort .rolle{font-size:0.7rem; text-transform:uppercase; letter-spacing:0.1em;
+  font-weight:750; color:var(--text-muted)}
+.kort .navn{font-size:var(--step-1); font-weight:750; margin-top:7px; letter-spacing:-0.012em}
+.kort .detalj{font-size:var(--step--1); color:var(--text-muted); margin-top:5px}
+.kort .pris{font-variant-numeric:tabular-nums lining-nums;
+  font-weight:750; margin-top:12px; font-size:var(--step-1); letter-spacing:-0.01em}
+/* Valgt: skiltfeltet. Skiltgul har 1.27:1 mot lys bakgrunn og kan aldri stå
+   alene – derfor får den valgte kanten alltid skiltets mørke keyline. */
+.kort.valgt{
+  border-color:var(--deep); border-width:2px; padding:15px 14px 14px;
+  background:var(--accent-soft); box-shadow:var(--skygge);
+}
+.kort.valgt::before{
+  content:""; position:absolute; inset:-2px auto -2px -2px; width:9px;
+  background:var(--brand); border:2px solid var(--deep); border-right:0;
+  border-radius:11px 0 0 11px;
+}
+.kort .haket{
+  position:absolute; top:12px; right:12px; width:22px; height:22px; border-radius:5px;
+  background:var(--brand); border:2px solid var(--deep); display:none;
+  place-items:center; color:var(--brand-ink); font-size:0.72rem; font-weight:900; line-height:1;
+}
+.kort.valgt .haket{display:grid}
+.kort.valgt .navn, .kort.valgt .pris{color:var(--text)}
+
+/* Prisvisning */
+.prisrad{
+  display:flex; flex-wrap:wrap; align-items:flex-end; gap:18px;
+  margin-top:24px; padding:20px; border-radius:12px;
+  background:var(--deep); color:var(--deep-ink); border:1px solid var(--hairline);
+  --focus:var(--brand);
+}
+.prisrad .sum{
+  font-variant-numeric:tabular-nums lining-nums;
+  font-size:var(--step-5); font-weight:800; line-height:0.95; letter-spacing:-0.035em;
+  color:var(--brand);
+}
+.prisrad .sum small{font-size:0.34em; letter-spacing:0.02em; font-weight:600; margin-left:6px; vertical-align:0.9em}
+.prisrad .vilkar{font-size:var(--step--1); opacity:.82; max-width:26ch; line-height:1.45}
+.prisrad .btn-kjop{
+  margin-left:auto; background:var(--brand); color:var(--brand-ink);
+  border:2px solid var(--brand); border-radius:9px; padding:13px 22px;
+  font:inherit; font-weight:750; cursor:pointer;
+}
+.prisrad .btn-kjop:hover{background:var(--accent-flare); border-color:var(--deep-ink)}
+
+/* Innholdsliste */
+.innhold{margin-top:26px; background:var(--surface); border:1px solid var(--hairline);
+  border-radius:12px; overflow:hidden}
+.innhold .kat{
+  display:flex; align-items:center; gap:10px;
+  padding:11px 16px; background:var(--surface-2); border-bottom:1px solid var(--hairline);
+  font-size:0.7rem; text-transform:uppercase; letter-spacing:0.11em; font-weight:800;
+}
+.innhold .kat .strek{flex:1; height:2px; background:var(--brand); border-radius:1px;
+  outline:1px solid var(--deep); outline-offset:0}
+.innhold ul{list-style:none; margin:0; padding:0}
+.innhold li{
+  display:flex; align-items:baseline; gap:12px; padding:10px 16px;
+  border-bottom:1px solid var(--hairline); font-size:var(--step--1);
+}
+.innhold li:last-child{border-bottom:0}
+.innhold li .ant{
+  font-family:var(--font-mono); font-variant-numeric:tabular-nums;
+  min-width:3.2ch; text-align:right; font-weight:700; color:var(--text-muted);
+}
+.innhold li .hva{flex:1}
+.innhold li .merk{font-size:0.7rem; color:var(--text-muted)}
+
+/* Meldinger */
+.melding{
+  display:flex; gap:12px; padding:13px 15px; border-radius:10px; margin-top:16px;
+  font-size:var(--step--1); line-height:1.5; border:1px solid var(--hairline);
+}
+.melding .ikon{
+  flex:none; width:22px; height:22px; border-radius:5px; display:grid; place-items:center;
+  font-weight:900; font-size:0.78rem; line-height:1;
+}
+.melding b{display:block; font-weight:750; margin-bottom:2px}
+.melding.varsel{background:var(--surface); border-color:var(--hairline);
+  border-left:4px solid var(--warn); color:var(--text)}
+.melding.varsel .ikon{background:var(--warn); color:var(--warn-soft)}
+.melding.varsel b{color:var(--warn)}
+.melding.nott{background:var(--surface-2); border-color:var(--hairline);
+  border-left:4px solid var(--info); color:var(--text)}
+.melding.nott .ikon{background:var(--info); color:var(--info-soft)}
+.melding.nott b{color:var(--info)}
+
+/* Fokus-demo */
+.fokusdemo{margin-top:20px; display:flex; flex-wrap:wrap; gap:14px; align-items:center}
+.fokusdemo .ring{outline:3px solid var(--focus); outline-offset:3px}
+.fokusdemo .note{font-size:0.72rem; color:var(--text-muted); max-width:30ch}
+
+/* ===========================================================================
+   MÅLETABELL
+   =========================================================================== */
+.tabellramme{overflow-x:auto; border:1px solid var(--ark-strek); border-radius:12px; background:var(--ark-flate)}
+table{border-collapse:collapse; width:100%; min-width:640px; font-size:0.86rem}
+caption{text-align:left; padding:14px 16px 0; font-weight:700; font-size:0.86rem}
+th,td{padding:9px 14px; text-align:left; border-bottom:1px solid var(--ark-strek)}
+thead th{font-size:0.68rem; text-transform:uppercase; letter-spacing:0.09em; color:var(--ark-svak);
+  border-bottom:2px solid var(--ark-strek); white-space:nowrap}
+tbody tr:last-child td{border-bottom:0}
+td.par{font-family:var(--mono); font-size:0.78rem; white-space:nowrap}
+td.tall{font-family:var(--mono); font-variant-numeric:tabular-nums; text-align:right; font-weight:700; white-space:nowrap}
+td.krav{font-family:var(--mono); text-align:right; color:var(--ark-svak); white-space:nowrap}
+td.dom{white-space:nowrap; font-weight:700; font-size:0.76rem; letter-spacing:0.05em}
+td.dom.ja{color:#16674A}
+td.dom.nei{color:#A04D08}
+@media (prefers-color-scheme: dark){ td.dom.ja{color:#58C99A} td.dom.nei{color:#E2A24A} }
+tbody.gruppe th{font-size:0.68rem; text-transform:uppercase; letter-spacing:0.1em;
+  background:var(--ark-bg); color:var(--ark-svak)}
+
+/* Forbud-liste */
+.forbud{list-style:none; margin:0; padding:0; display:grid; gap:12px; max-width:78ch}
+.forbud li{display:grid; grid-template-columns:auto 1fr; gap:12px; padding-bottom:12px;
+  border-bottom:1px solid var(--ark-strek)}
+.forbud li:last-child{border-bottom:0}
+.forbud .nr{font-family:var(--mono); font-weight:700; color:var(--ark-svak)}
+.forbud b{font-weight:700}
+.risiko{border-left:4px solid #A04D08; padding:4px 0 4px 16px; max-width:70ch}
+@media (prefers-color-scheme: dark){ .risiko{border-left-color:#E2A24A} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="ark-topp">
+  <p class="kicker">Nødboks · fargeretning · erstatter forkastet palett</p>
+  <h1>Signal</h1>
+  <p class="undertekst">
+    Utledet fra NVE og Meteorologisk institutts faregradsskala og fra retrorefleksen
+    i norsk skiltmateriale. Begge modi vises samtidig nedenfor. Alle kontrasttall er
+    målt, ikke påstått.
+  </p>
+</header>
+
+<!-- ====================================================================== -->
+<section class="seksjon">
+  <h2>Kilden <span>hvor fargene faktisk kommer fra</span></h2>
+  <div class="prosa">
+    <p>
+      <strong>Kilde 1 – faregradsskalaen.</strong> NVE og Meteorologisk institutt bruker
+      den samme firetrinns faregradsskalaen på varsom.no og yr.no: grønt for nivå 1,
+      gult for nivå 2, oransje for nivå 3, rødt for nivå 4. Det er den
+      fargekonvensjonen en norsk husstand allerede kan lese uten forklaring.
+    </p>
+  </div>
+
+  <div class="skala" role="img" aria-label="Firetrinns faregradsskala: grønt nivå 1, gult nivå 2, oransje nivå 3, rødt nivå 4">
+    <div class="g1 brukt"><p class="n">1</p><p class="t">Grønn</p><p class="r">Ingen særskilt fare. Blir fokusfarge.</p></div>
+    <div class="g2 brukt"><p class="n">2</p><p class="t">Gul</p><p class="r">Vær oppmerksom. Blir merkefarge.</p></div>
+    <div class="g3"><p class="n">3</p><p class="t">Oransje</p><p class="r">Reservert. Kun ekte varsler.</p></div>
+    <div class="g4"><p class="n">4</p><p class="t">Rød</p><p class="r">Brukes ikke i grensesnittet.</p></div>
+  </div>
+  <p class="skala-note">
+    Gjengivelsen over er skalaens trinn slik den leses, ikke en fargeprøve fra et
+    offisielt stilark. Verdiene som brukes videre er avledet, ikke kopiert.
+  </p>
+
+  <div class="prosa" style="margin-top:26px">
+    <p>
+      <strong>Avledningen.</strong> Nødboks er et produkt for husstander som står på
+      <em>nivå 1</em> og forbereder seg på <em>nivå 2</em>. Derfor er det nøyaktig de to
+      nederste trinnene som får bære hele grensesnittet, og de to øverste som holdes
+      utenfor. Grønt – nivå 1, «alt er i orden» – trekkes ned og avmettes til en kald
+      grågrønn som blir struktur: flater, seksjoner, skygger, fokusring. Gult – nivå 2,
+      «vær oppmerksom» – blir merkefargen. Oransje finnes i tokensettet, men er
+      strukturelt reservert: den får bare dukke opp i en faktisk varselmelding. Rødt
+      finnes ikke. Det er ikke en smaksregel, det er samme rangordning som kilden.
+    </p>
+    <p>
+      <strong>Kilde 2 – retrorefleksen.</strong> Norsk fareskilting er gul med mørk
+      innramming, og vesten i bilen er gul. Det avgjørende er ikke gulfargen i seg selv,
+      men at materialet er retroreflekterende: flatt og støvete okergult i dagslys,
+      og skarpt lysende i det øyeblikket en lyskilde treffer det. Det er den samme
+      hendelsen som er produktets emosjonelle midtpunkt – det er mørkt, og så kommer
+      det lys. Derfor er mørk modus ikke en invertert lys modus, den er materialet sett
+      i lyskjegle:
+    </p>
+    <ul style="margin:10px 0 0; padding-left:1.2em; max-width:70ch">
+      <li><strong>Lys modus</strong> har begge tilstandene samtidig, slik dagslyset har
+          det: skiltgult <code>#F5D42B</code> som felt, med skiltets mørke ramme rundt,
+          og sennepsgult <code>#7B6A0F</code> som strek, merkelapp og understreking.
+          Det siste er okeren slik den ser ut i skygge.</li>
+      <li><strong>Mørk modus</strong> er <code>#F1CF3A</code> – samme kulør, hevet lyshet
+          og metning. Fargen har ikke blitt lysere fordi bakgrunnen ble mørk; den har
+          blitt lysere fordi lyset traff den.</li>
+      <li><strong>Hover og aktiv</strong> hever okeren til skiltgult i begge modi.
+          Interaksjonen <em>er</em> refleksen. Den regelen kommer fra materialet, ikke
+          fra en animasjonsmote.</li>
+    </ul>
+    <p>
+      <strong>Hvorfor grågrønn og ikke marineblå.</strong> Markedskartet viser at hver
+      eneste mørke flate i kategorien er marineblå, og at gult i praksis er ubrukt.
+      Den kalde grågrønne (kulør 160–170) er dessuten ikke valgt for stemningens skyld:
+      den er komplementærsonen til det gule, og gir gulfargen maksimal kulørseparasjon
+      uten å måtte skrus opp i metning. Paletten inneholder ingen blåfarge i det hele
+      tatt – heller ikke som informasjonsfarge. Informasjonsmeldinger er strukturelle,
+      ikke signaler, og får derfor den grågrønne.
+    </p>
+  </div>
+</section>
+
+<!-- ====================================================================== -->
+<section class="seksjon">
+  <h2>Paletten <span>navngitte tokens med målt kontrast mot flaten de brukes på</span></h2>
+
+  <div class="duo">
+
+    <!-- ---------- LYS ---------- -->
+    <div>
+      <p class="modus-hode">Lys modus <em>materialet i dagslys</em></p>
+      <div class="modus lys">
+        <div class="swatcher">
+          <div class="rutenett">
+            <div class="sw"><span class="chip" style="background:#EBF0EC"></span><div class="meta">
+              <p class="navn">bg</p><p class="hex">#EBF0EC</p>
+              <p class="mot">text mot denne <b>15.33</b></p><span class="flagg">AA</span></div></div>
+            <div class="sw"><span class="chip" style="background:#DEE7E1"></span><div class="meta">
+              <p class="navn">bg-sunken</p><p class="hex">#DEE7E1</p>
+              <p class="mot">text mot denne <b>14.00</b></p><span class="flagg">AA</span></div></div>
+            <div class="sw"><span class="chip" style="background:#FFFFFF"></span><div class="meta">
+              <p class="navn">surface</p><p class="hex">#FFFFFF</p>
+              <p class="mot">text mot denne <b>17.68</b></p><span class="flagg">AA</span></div></div>
+            <div class="sw"><span class="chip" style="background:#F4F8F5"></span><div class="meta">
+              <p class="navn">surface-2</p><p class="hex">#F4F8F5</p>
+              <p class="mot">text mot denne <b>16.49</b></p><span class="flagg">AA</span></div></div>
+            <div class="sw"><span class="chip" style="background:#13322B"></span><div class="meta">
+              <p class="navn">deep</p><p class="hex">#13322B</p>
+              <p class="mot">mot bg <b>11.99</b> · deep-ink på <b>11.57</b></p><span class="flagg">AA</span></div></div>
+            <div class="sw"><span class="chip" style="background:#0E1B17"></span><div class="meta">
+              <p class="navn">text</p><p class="hex">#0E1B17</p>
+              <p class="mot">mot bg <b>15.33</b></p><span class="flagg">AA</span></div></div>
+            <div class="sw"><span class="chip" style="background:#495852"></span><div class="meta">
+              <p class="navn">text-muted</p><p class="hex">#495852</p>
+              <p class="mot">mot bg <b>6.50</b> · mot surface <b>7.50</b></p><span class="flagg">AA</span></div></div>
+            <div class="sw"><span class="chip" style="background:#75877F"></span><div class="meta">
+              <p class="navn">border</p><p class="hex">#75877F</p>
+              <p class="mot">mot surface <b>3.80</b> · mot bg <b>3.29</b></p><span class="flagg">AA UI</span></div></div>
+            <div class="sw"><span class="chip" style="background:#D5DFD9"></span><div class="meta">
+              <p class="navn">hairline</p><p class="hex">#D5DFD9</p>
+              <p class="mot">mot surface <b>1.36</b> – dekorativ</p><span class="flagg obs">Ikke AA</span></div></div>
+            <div class="sw"><span class="chip" style="background:#F5D42B"></span><div class="meta">
+              <p class="navn">brand · skiltgul</p><p class="hex">#F5D42B</p>
+              <p class="mot">mot deep <b>9.44</b> · mot bg <b>1.27</b></p><span class="flagg obs">Krever keyline</span></div></div>
+            <div class="sw"><span class="chip" style="background:#141A0C"></span><div class="meta">
+              <p class="navn">brand-ink</p><p class="hex">#141A0C</p>
+              <p class="mot">mot brand <b>12.12</b></p><span class="flagg">AA</span></div></div>
+            <div class="sw"><span class="chip" style="background:#7B6A0F"></span><div class="meta">
+              <p class="navn">accent · oker</p><p class="hex">#7B6A0F</p>
+              <p class="mot">mot bg <b>4.66</b> · hvit tekst på <b>5.37</b></p><span class="flagg">AA</span></div></div>
+            <div class="sw"><span class="chip" style="background:#FFFFFF"></span><div class="meta">
+              <p class="navn">accent-ink</p><p class="hex">#FFFFFF</p>
+              <p class="mot">mot accent <b>5.37</b> – merkelappen</p><span class="flagg">AA</span></div></div>
+            <div class="sw"><span class="chip" style="background:#EDF0D4"></span><div class="meta">
+              <p class="navn">accent-soft</p><p class="hex">#EDF0D4</p>
+              <p class="mot">text på <b>15.17</b> · accent på <b>4.61</b></p><span class="flagg">AA</span></div></div>
+            <div class="sw"><span class="chip" style="background:#0C6A4D"></span><div class="meta">
+              <p class="navn">focus</p><p class="hex">#0C6A4D</p>
+              <p class="mot">mot bg <b>5.72</b> · mot surface <b>6.59</b></p><span class="flagg">AA UI</span></div></div>
+            <div class="sw"><span class="chip" style="background:#16674A"></span><div class="meta">
+              <p class="navn">ok</p><p class="hex">#16674A</p>
+              <p class="mot">mot bg <b>5.92</b></p><span class="flagg">AA</span></div></div>
+            <div class="sw"><span class="chip" style="background:#A04D08"></span><div class="meta">
+              <p class="navn">warn · reservert</p><p class="hex">#A04D08</p>
+              <p class="mot">mot bg <b>5.11</b></p><span class="flagg">AA</span></div></div>
+            <div class="sw"><span class="chip" style="background:#234E46"></span><div class="meta">
+              <p class="navn">info</p><p class="hex">#234E46</p>
+              <p class="mot">mot bg <b>8.09</b></p><span class="flagg">AA</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---------- MØRK ---------- -->
+    <div>
+      <p class="modus-hode">Mørk modus <em>materialet i lyskjegle</em></p>
+      <div class="modus mork">
+        <div class="swatcher">
+          <div class="rutenett">
+            <div class="sw"><span class="chip" style="background:#0D1816"></span><div class="meta">
+              <p class="navn">bg</p><p class="hex">#0D1816</p>
+              <p class="mot">text mot denne <b>15.13</b></p><span class="flagg">AA</span></div></div>
+            <div class="sw"><span class="chip" style="background:#081110"></span><div class="meta">
+              <p class="navn">bg-sunken</p><p class="hex">#081110</p>
+              <p class="mot">mot bg <b>1.06</b> – dybde</p><span class="flagg">AA</span></div></div>
+            <div class="sw"><span class="chip" style="background:#14211E"></span><div class="meta">
+              <p class="navn">surface</p><p class="hex">#14211E</p>
+              <p class="mot">text mot denne <b>13.86</b></p><span class="flagg">AA</span></div></div>
+            <div class="sw"><span class="chip" style="background:#1B2B27"></span><div class="meta">
+              <p class="navn">surface-2</p><p class="hex">#1B2B27</p>
+              <p class="mot">text mot denne <b>12.34</b></p><span class="flagg">AA</span></div></div>
+            <div class="sw"><span class="chip" style="background:#0A1412"></span><div class="meta">
+              <p class="navn">deep</p><p class="hex">#1A2A24</p>
+              <p class="mot">mot bg <b>1.21</b> · deep-ink på <b>12.53</b></p><span class="flagg">AA</span></div></div>
+            <div class="sw"><span class="chip" style="background:#E3EDE8"></span><div class="meta">
+              <p class="navn">text</p><p class="hex">#E3EDE8</p>
+              <p class="mot">mot bg <b>15.13</b></p><span class="flagg">AA</span></div></div>
+            <div class="sw"><span class="chip" style="background:#98AAA3"></span><div class="meta">
+              <p class="navn">text-muted</p><p class="hex">#98AAA3</p>
+              <p class="mot">mot bg <b>7.43</b> · mot surface <b>6.80</b></p><span class="flagg">AA</span></div></div>
+            <div class="sw"><span class="chip" style="background:#5E736C"></span><div class="meta">
+              <p class="navn">border</p><p class="hex">#5E736C</p>
+              <p class="mot">mot surface <b>3.27</b> · mot bg <b>3.58</b></p><span class="flagg">AA UI</span></div></div>
+            <div class="sw"><span class="chip" style="background:#25332E"></span><div class="meta">
+              <p class="navn">hairline</p><p class="hex">#25332E</p>
+              <p class="mot">mot surface <b>1.26</b> – dekorativ</p><span class="flagg obs">Ikke AA</span></div></div>
+            <div class="sw"><span class="chip" style="background:#F5D42B"></span><div class="meta">
+              <p class="navn">brand · skiltgul</p><p class="hex">#F5D42B</p>
+              <p class="mot">mot bg <b>12.36</b> · mot deep <b>10.23</b></p><span class="flagg">AA</span></div></div>
+            <div class="sw"><span class="chip" style="background:#141A0C"></span><div class="meta">
+              <p class="navn">brand-ink</p><p class="hex">#141A0C</p>
+              <p class="mot">mot brand <b>12.12</b></p><span class="flagg">AA</span></div></div>
+            <div class="sw"><span class="chip" style="background:#F1CF3A"></span><div class="meta">
+              <p class="navn">accent · lyst opp</p><p class="hex">#F1CF3A</p>
+              <p class="mot">mot bg <b>11.84</b> · mot surface <b>10.84</b></p><span class="flagg">AA</span></div></div>
+            <div class="sw"><span class="chip" style="background:#141A0C"></span><div class="meta">
+              <p class="navn">accent-ink</p><p class="hex">#141A0C</p>
+              <p class="mot">mot accent <b>11.60</b></p><span class="flagg">AA</span></div></div>
+            <div class="sw"><span class="chip" style="background:#252813"></span><div class="meta">
+              <p class="navn">accent-soft</p><p class="hex">#232916</p>
+              <p class="mot">text på <b>12.53</b> · accent på <b>9.80</b></p><span class="flagg">AA</span></div></div>
+            <div class="sw"><span class="chip" style="background:#3FD79C"></span><div class="meta">
+              <p class="navn">focus</p><p class="hex">#3FD79C</p>
+              <p class="mot">mot bg <b>9.84</b> · mot surface <b>9.01</b></p><span class="flagg">AA UI</span></div></div>
+            <div class="sw"><span class="chip" style="background:#58C99A"></span><div class="meta">
+              <p class="navn">ok</p><p class="hex">#58C99A</p>
+              <p class="mot">mot bg <b>8.83</b></p><span class="flagg">AA</span></div></div>
+            <div class="sw"><span class="chip" style="background:#E2A24A"></span><div class="meta">
+              <p class="navn">warn · reservert</p><p class="hex">#E2A24A</p>
+              <p class="mot">mot bg <b>8.19</b></p><span class="flagg">AA</span></div></div>
+            <div class="sw"><span class="chip" style="background:#8FBFB2"></span><div class="meta">
+              <p class="navn">info</p><p class="hex">#8FBFB2</p>
+              <p class="mot">mot bg <b>8.85</b></p><span class="flagg">AA</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ====================================================================== -->
+<section class="seksjon">
+  <h2>Produktutsnitt <span>samme markup, bare tokens byttet</span></h2>
+
+  <div class="duo">
+
+    <!-- ---------- LYS UTSNITT ---------- -->
+    <div>
+      <p class="modus-hode">Lys modus</p>
+      <div class="modus lys">
+        <div class="utsnitt">
+
+          <div class="topplinje">
+            <p class="merke"><span class="plate" aria-hidden="true">N</span> Nødboks</p>
+            <nav aria-label="Eksempelnavigasjon">
+              <a href="#" class="aktiv">Boksene</a><a href="#">Innhold</a><a href="#">Om DSB</a>
+            </nav>
+          </div>
+
+          <div class="pad">
+            <p class="etikett"><span class="pille">Sju døgn</span> DSBs anbefaling</p>
+            <h1 class="hero">Esken du håper du aldri må åpne</h1>
+            <p class="ingress">Ferdigpakket egenberedskap for hele husstanden. Én bestilling, så er det gjort.</p>
+            <p class="brodtekst">
+              Vi har satt sammen det myndighetene anbefaler at du har hjemme i sju døgn:
+              vann, mat som ikke trenger kjøling, varme og lys. Du slipper å lage listen selv.
+            </p>
+
+            <div class="knapper">
+              <button type="button" class="btn btn-primar">Sett sammen boksen min</button>
+              <button type="button" class="btn btn-sekundar">Se hele innholdslisten</button>
+              <button type="button" class="btn-lenke">Hva sier DSB?</button>
+            </div>
+
+            <div class="valg" role="group" aria-label="Velg husstand">
+              <div class="kort">
+                <p class="rolle">Husstand</p><p class="navn">Én voksen</p>
+                <p class="detalj">Sju døgn · 11 kg</p><p class="pris">1 690 kr</p>
+              </div>
+              <div class="kort valgt" aria-current="true">
+                <span class="haket" aria-hidden="true">✓</span>
+                <p class="rolle">Husstand</p><p class="navn">To voksne, to barn</p>
+                <p class="detalj">Sju døgn · 34 kg</p><p class="pris">3 940 kr</p>
+              </div>
+              <div class="kort">
+                <p class="rolle">Husstand</p><p class="navn">Hytta</p>
+                <p class="detalj">Sju døgn · 19 kg</p><p class="pris">2 480 kr</p>
+              </div>
+            </div>
+
+            <div class="prisrad">
+              <div>
+                <p class="etikett" style="color:inherit; opacity:.78">Din boks</p>
+                <p class="sum">3 940<small>kr</small></p>
+              </div>
+              <p class="vilkar">Fri frakt over 1 500 kr. Vi minner deg på holdbarhet én gang i året.</p>
+              <button type="button" class="btn-kjop">Legg i kurv</button>
+            </div>
+
+            <div class="innhold">
+              <p class="kat">Varme og lys <span class="strek" aria-hidden="true"></span></p>
+              <ul>
+                <li><span class="ant">1</span><span class="hva">Stormlykt, LED, 150 timer</span><span class="merk">sveivdrevet</span></li>
+                <li><span class="ant">4</span><span class="hva">Stearinlys, 8 timer</span><span class="merk">i metallboks</span></li>
+                <li><span class="ant">2</span><span class="hva">Ullteppe</span><span class="merk">100 × 140 cm</span></li>
+                <li><span class="ant">1</span><span class="hva">Fyrstikker, vanntett etui</span><span class="merk"></span></li>
+              </ul>
+            </div>
+
+            <div class="melding varsel" role="note">
+              <span class="ikon" aria-hidden="true">!</span>
+              <span><b>Kontroller vanntablettene</b>
+              De har fem års holdbarhet. Vi sender deg en påminnelse før de går ut.</span>
+            </div>
+
+            <div class="melding nott" role="note">
+              <span class="ikon" aria-hidden="true">i</span>
+              <span><b>Leveres på pall til døra</b>
+              Sjåføren ringer én time før. Du trenger ikke være hjemme hele dagen.</span>
+            </div>
+
+            <div class="fokusdemo">
+              <button type="button" class="btn btn-primar ring">Fokusert knapp</button>
+              <p class="note">Ringen legges utenfor flaten med 3 px avstand, fordi grønt mot
+                gult måler 1.23:1. Den måles mot bakgrunnen: 5.72:1.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ---------- MØRK UTSNITT ---------- -->
+    <div>
+      <p class="modus-hode">Mørk modus</p>
+      <div class="modus mork">
+        <div class="utsnitt">
+
+          <div class="topplinje">
+            <p class="merke"><span class="plate" aria-hidden="true">N</span> Nødboks</p>
+            <nav aria-label="Eksempelnavigasjon, mørk">
+              <a href="#" class="aktiv">Boksene</a><a href="#">Innhold</a><a href="#">Om DSB</a>
+            </nav>
+          </div>
+
+          <div class="pad">
+            <p class="etikett"><span class="pille">Sju døgn</span> DSBs anbefaling</p>
+            <h1 class="hero">Esken du håper du aldri må åpne</h1>
+            <p class="ingress">Ferdigpakket egenberedskap for hele husstanden. Én bestilling, så er det gjort.</p>
+            <p class="brodtekst">
+              Vi har satt sammen det myndighetene anbefaler at du har hjemme i sju døgn:
+              vann, mat som ikke trenger kjøling, varme og lys. Du slipper å lage listen selv.
+            </p>
+
+            <div class="knapper">
+              <button type="button" class="btn btn-primar">Sett sammen boksen min</button>
+              <button type="button" class="btn btn-sekundar">Se hele innholdslisten</button>
+              <button type="button" class="btn-lenke">Hva sier DSB?</button>
+            </div>
+
+            <div class="valg" role="group" aria-label="Velg husstand, mørk">
+              <div class="kort">
+                <p class="rolle">Husstand</p><p class="navn">Én voksen</p>
+                <p class="detalj">Sju døgn · 11 kg</p><p class="pris">1 690 kr</p>
+              </div>
+              <div class="kort valgt" aria-current="true">
+                <span class="haket" aria-hidden="true">✓</span>
+                <p class="rolle">Husstand</p><p class="navn">To voksne, to barn</p>
+                <p class="detalj">Sju døgn · 34 kg</p><p class="pris">3 940 kr</p>
+              </div>
+              <div class="kort">
+                <p class="rolle">Husstand</p><p class="navn">Hytta</p>
+                <p class="detalj">Sju døgn · 19 kg</p><p class="pris">2 480 kr</p>
+              </div>
+            </div>
+
+            <div class="prisrad">
+              <div>
+                <p class="etikett" style="color:inherit; opacity:.78">Din boks</p>
+                <p class="sum">3 940<small>kr</small></p>
+              </div>
+              <p class="vilkar">Fri frakt over 1 500 kr. Vi minner deg på holdbarhet én gang i året.</p>
+              <button type="button" class="btn-kjop">Legg i kurv</button>
+            </div>
+
+            <div class="innhold">
+              <p class="kat">Varme og lys <span class="strek" aria-hidden="true"></span></p>
+              <ul>
+                <li><span class="ant">1</span><span class="hva">Stormlykt, LED, 150 timer</span><span class="merk">sveivdrevet</span></li>
+                <li><span class="ant">4</span><span class="hva">Stearinlys, 8 timer</span><span class="merk">i metallboks</span></li>
+                <li><span class="ant">2</span><span class="hva">Ullteppe</span><span class="merk">100 × 140 cm</span></li>
+                <li><span class="ant">1</span><span class="hva">Fyrstikker, vanntett etui</span><span class="merk"></span></li>
+              </ul>
+            </div>
+
+            <div class="melding varsel" role="note">
+              <span class="ikon" aria-hidden="true">!</span>
+              <span><b>Kontroller vanntablettene</b>
+              De har fem års holdbarhet. Vi sender deg en påminnelse før de går ut.</span>
+            </div>
+
+            <div class="melding nott" role="note">
+              <span class="ikon" aria-hidden="true">i</span>
+              <span><b>Leveres på pall til døra</b>
+              Sjåføren ringer én time før. Du trenger ikke være hjemme hele dagen.</span>
+            </div>
+
+            <div class="fokusdemo">
+              <button type="button" class="btn btn-primar ring">Fokusert knapp</button>
+              <p class="note">Samme regel i mørk modus. Ringen måler 9.84:1 mot bakgrunnen,
+                og 1.20:1 mot den gule flaten den omgir.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ====================================================================== -->
+<section class="seksjon">
+  <h2>Gulproblemet <span>løst, ikke skjult</span></h2>
+  <div class="prosa">
+    <p>
+      Skiltgult <code>#F5D42B</code> måler <strong>1.27:1</strong> mot den lyse
+      bakgrunnen. Det er ikke en feil som kan justeres bort – enhver gulfarge som
+      fortsatt leses som gul har for høy luminans til å nå 3:1 mot en lys flate.
+      Å mørkne den til den består, gjør den til brun.
+    </p>
+    <p>
+      Løsningen er hentet fra kilden i stedet: <strong>et norsk fareskilt er aldri
+      et nakent gult felt.</strong> Det har mørk innramming og svart symbol. Derfor
+      gjelder tre regler i denne paletten:
+    </p>
+    <ol style="margin:12px 0 0; padding-left:1.3em; max-width:70ch">
+      <li>Skiltgult brukes aldri som fri flate mot lys bakgrunn. Det får alltid en
+          2 px keyline i <code>deep</code>, som måler <strong>11.99:1</strong> mot
+          bakgrunnen. Grensen er keylinens jobb, ikke gulfargens.</li>
+      <li>Tekst på skiltgult er alltid <code>brand-ink #141A0C</code> –
+          <strong>12.12:1</strong>. Aldri hvit.</li>
+      <li>Okeren <code>#7B6A0F</code> brukes til strek, understreking og små
+          merkelapper: <strong>4.66:1</strong> mot bakgrunn, <strong>5.37:1</strong>
+          med hvit versal. Den brukes <em>ikke</em> som stor knappeflate. Første
+          utkast gjorde nettopp det, og kontrasttallene bestod – men flaten leste
+          som olivenbrun, ikke som gul. Det er grunnen til at dette arket måtte
+          tegnes før tallene ble godtatt.</li>
+    </ol>
+    <p style="margin-top:14px">
+      I mørk modus forsvinner problemet – der måler skiltgult 12.36:1 mot bakgrunnen –
+      og det er nettopp derfor mørk modus får være den lyse gulfargens hjemmebane.
+    </p>
+  </div>
+</section>
+
+<!-- ====================================================================== -->
+<section class="seksjon">
+  <h2>Typografi <span>null webfonter</span></h2>
+  <div class="prosa">
+    <p>
+      <strong>Ingen webfont.</strong> Den forrige retningen brukte en display-serif
+      (Iowan Old Style / Palatino). Den skrotes her av to grunner. Formelt: siden er
+      statisk uten byggsteg, og LCP-elementet er hero-overskriften. En webfont på
+      2–3 snitt koster 40–90 kB og legger en ekstra forespørsel foran den målingen,
+      enten som blokkering eller som layoutskift. Vi har ikke en LCP å gi bort.
+      Innholdsmessig: kilden er skilting, og norsk skiltskrift er en grotesk, ikke en
+      antikva. En serif trekker siden mot redaksjonell institusjon; retningen her skal
+      være instruksjon.
+    </p>
+    <ul style="margin:12px 0 0; padding-left:1.2em; max-width:72ch">
+      <li><strong>Grensesnitt og display</strong> – <code>ui-sans-serif, system-ui,
+          -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
+          sans-serif</code>. Systemets egen grotesk på hver plattform, null nettverkskall.</li>
+      <li><strong>Display-behandling</strong> – vekt 750 og sporing −0.025 em på
+          hero-nivå. Det er sporingen, ikke snittet, som gir skiltets kompakthet.</li>
+      <li><strong>Etikettstemmen</strong> – 0.70 rem, versaler, sporing 0.10 em, vekt 750.
+          Brukes til kategorier og statuslinjer («SJU DØGN · DSBs ANBEFALING»). Dette er
+          skiltteksten, og den bærer mer av karakteren enn noen overskrift gjør.</li>
+      <li><strong>Tall</strong> – regelen er todelt. Sifre som skal sammenlignes
+          loddrett (antall i innholdslisten, hex-verdier, kontrasttall) settes i
+          <code>ui-monospace</code>-stakken. Sifre som leses som del av en setning
+          (priser, vekt) settes i UI-snittet med
+          <code>font-variant-numeric: tabular-nums lining-nums</code>. Prøvde vi mono
+          også på prisene, ble tallene så luftige at de leste som kvittering.</li>
+      <li><strong>Skala</strong> – den flytende clamp-skalaen fra
+          <code>tokens.css</code> beholdes uendret (−1 til 5). Linjehøyde 1.62 for
+          brødtekst, 1.07 for hero.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ====================================================================== -->
+<section class="seksjon">
+  <h2>Kontrastrevisjon <span>målt med WCAG relativ luminans</span></h2>
+  <div class="tabellramme">
+    <table>
+      <caption>Alle tall beregnet fra hex-verdiene i denne filen. Krav 4.5 for brødtekst, 3.0 for stor tekst og UI-flater.</caption>
+      <thead><tr><th>Par</th><th style="text-align:right">Målt</th><th style="text-align:right">Krav</th><th>Bestått</th><th>Merknad</th></tr></thead>
+      <tbody class="gruppe"><tr><th colspan="5">Lys modus</th></tr></tbody>
+      <tbody>
+        <tr><td class="par">text / bg</td><td class="tall">15.33</td><td class="krav">4.5</td><td class="dom ja">JA</td><td>Brødtekst på sideflate</td></tr>
+        <tr><td class="par">text / surface</td><td class="tall">17.68</td><td class="krav">4.5</td><td class="dom ja">JA</td><td>Brødtekst på kort</td></tr>
+        <tr><td class="par">text-muted / bg</td><td class="tall">6.50</td><td class="krav">4.5</td><td class="dom ja">JA</td><td>Ingress, detaljer</td></tr>
+        <tr><td class="par">text-muted / surface</td><td class="tall">7.50</td><td class="krav">4.5</td><td class="dom ja">JA</td><td></td></tr>
+        <tr><td class="par">accent-ink / accent</td><td class="tall">5.37</td><td class="krav">4.5</td><td class="dom ja">JA</td><td>Hvit versal på okerpillen «SJU DØGN»</td></tr>
+        <tr><td class="par">brand-ink / brand</td><td class="tall">12.12</td><td class="krav">4.5</td><td class="dom ja">JA</td><td>Primærknappens tekst – skiltsvart på skiltgult</td></tr>
+        <tr><td class="par">accent / bg</td><td class="tall">4.66</td><td class="krav">3.0</td><td class="dom ja">JA</td><td>Aksent som UI-flate og som 3 px understreking</td></tr>
+        <tr><td class="par">accent / surface</td><td class="tall">5.37</td><td class="krav">3.0</td><td class="dom ja">JA</td><td></td></tr>
+        <tr><td class="par">border / surface</td><td class="tall">3.80</td><td class="krav">3.0</td><td class="dom ja">JA</td><td>Funksjonell kant</td></tr>
+        <tr><td class="par">border / bg</td><td class="tall">3.29</td><td class="krav">3.0</td><td class="dom ja">JA</td><td></td></tr>
+        <tr><td class="par">focus / bg</td><td class="tall">5.72</td><td class="krav">3.0</td><td class="dom ja">JA</td><td>Ring med 3 px avstand utenfor flaten</td></tr>
+        <tr><td class="par">focus / surface</td><td class="tall">6.59</td><td class="krav">3.0</td><td class="dom ja">JA</td><td></td></tr>
+        <tr><td class="par">deep / bg</td><td class="tall">11.99</td><td class="krav">3.0</td><td class="dom ja">JA</td><td>Keylinen som gir skiltgult en grense</td></tr>
+        <tr><td class="par">brand / deep</td><td class="tall">9.44</td><td class="krav">4.5</td><td class="dom ja">JA</td><td>Gul tekst på mørk flate, f.eks. prisen</td></tr>
+        <tr><td class="par">deep-ink / deep</td><td class="tall">11.57</td><td class="krav">4.5</td><td class="dom ja">JA</td><td>Tekst på seksjonsflate</td></tr>
+        <tr><td class="par">accent / accent-soft</td><td class="tall">4.61</td><td class="krav">4.5</td><td class="dom ja">JA</td><td>Valgt kort</td></tr>
+        <tr><td class="par">warn / surface</td><td class="tall">5.90</td><td class="krav">4.5</td><td class="dom ja">JA</td><td>Varselmeldingens overskrift</td></tr>
+        <tr><td class="par">info / surface-2</td><td class="tall">8.71</td><td class="krav">4.5</td><td class="dom ja">JA</td><td>Nøytral melding – ingen blåfarge i paletten</td></tr>
+        <tr><td class="par">warn / warn-soft</td><td class="tall">4.87</td><td class="krav">4.5</td><td class="dom ja">JA</td><td>Merkelapp i palettrutenettet</td></tr>
+        <tr><td class="par">ok / bg</td><td class="tall">5.92</td><td class="krav">4.5</td><td class="dom ja">JA</td><td></td></tr>
+        <tr><td class="par">warn / bg</td><td class="tall">5.11</td><td class="krav">4.5</td><td class="dom ja">JA</td><td></td></tr>
+        <tr><td class="par">info / bg</td><td class="tall">8.09</td><td class="krav">4.5</td><td class="dom ja">JA</td><td></td></tr>
+        <tr><td class="par">brand / bg</td><td class="tall">1.27</td><td class="krav">3.0</td><td class="dom nei">NEI</td><td><strong>Kjent og håndtert.</strong> Skiltgult står aldri uten keyline i lys modus; se «Gulproblemet».</td></tr>
+        <tr><td class="par">hairline / surface</td><td class="tall">1.36</td><td class="krav">–</td><td class="dom">n/a</td><td>Dekorativ skillestrek. Aldri eneste grense rundt et betjeningselement.</td></tr>
+      </tbody>
+      <tbody class="gruppe"><tr><th colspan="5">Mørk modus</th></tr></tbody>
+      <tbody>
+        <tr><td class="par">text / bg</td><td class="tall">15.13</td><td class="krav">4.5</td><td class="dom ja">JA</td><td></td></tr>
+        <tr><td class="par">text / surface</td><td class="tall">13.86</td><td class="krav">4.5</td><td class="dom ja">JA</td><td></td></tr>
+        <tr><td class="par">text-muted / bg</td><td class="tall">7.43</td><td class="krav">4.5</td><td class="dom ja">JA</td><td></td></tr>
+        <tr><td class="par">text-muted / surface</td><td class="tall">6.80</td><td class="krav">4.5</td><td class="dom ja">JA</td><td></td></tr>
+        <tr><td class="par">accent-ink / accent</td><td class="tall">11.60</td><td class="krav">4.5</td><td class="dom ja">JA</td><td>Skiltsvart på gult som er truffet av lys</td></tr>
+        <tr><td class="par">brand-ink / brand</td><td class="tall">12.12</td><td class="krav">4.5</td><td class="dom ja">JA</td><td></td></tr>
+        <tr><td class="par">accent / bg</td><td class="tall">11.84</td><td class="krav">3.0</td><td class="dom ja">JA</td><td></td></tr>
+        <tr><td class="par">accent / surface</td><td class="tall">10.84</td><td class="krav">3.0</td><td class="dom ja">JA</td><td></td></tr>
+        <tr><td class="par">border / surface</td><td class="tall">3.27</td><td class="krav">3.0</td><td class="dom ja">JA</td><td></td></tr>
+        <tr><td class="par">border / bg</td><td class="tall">3.58</td><td class="krav">3.0</td><td class="dom ja">JA</td><td></td></tr>
+        <tr><td class="par">focus / bg</td><td class="tall">9.84</td><td class="krav">3.0</td><td class="dom ja">JA</td><td></td></tr>
+        <tr><td class="par">focus / surface</td><td class="tall">9.01</td><td class="krav">3.0</td><td class="dom ja">JA</td><td></td></tr>
+        <tr><td class="par">brand / deep</td><td class="tall">10.23</td><td class="krav">4.5</td><td class="dom ja">JA</td><td>Prisen på seksjonsflaten</td></tr>
+        <tr><td class="par">deep-ink / deep</td><td class="tall">12.53</td><td class="krav">4.5</td><td class="dom ja">JA</td><td></td></tr>
+        <tr><td class="par">warn / surface</td><td class="tall">7.50</td><td class="krav">4.5</td><td class="dom ja">JA</td><td>Varselmeldingens overskrift</td></tr>
+        <tr><td class="par">info / surface-2</td><td class="tall">7.22</td><td class="krav">4.5</td><td class="dom ja">JA</td><td></td></tr>
+        <tr><td class="par">accent / accent-soft</td><td class="tall">9.80</td><td class="krav">4.5</td><td class="dom ja">JA</td><td>Valgt kort</td></tr>
+        <tr><td class="par">warn / warn-soft</td><td class="tall">7.73</td><td class="krav">4.5</td><td class="dom ja">JA</td><td>Merkelapp i palettrutenettet</td></tr>
+        <tr><td class="par">ok / bg</td><td class="tall">8.83</td><td class="krav">4.5</td><td class="dom ja">JA</td><td></td></tr>
+        <tr><td class="par">warn / bg</td><td class="tall">8.19</td><td class="krav">4.5</td><td class="dom ja">JA</td><td></td></tr>
+        <tr><td class="par">info / bg</td><td class="tall">8.85</td><td class="krav">4.5</td><td class="dom ja">JA</td><td></td></tr>
+        <tr><td class="par">brand / bg</td><td class="tall">12.36</td><td class="krav">3.0</td><td class="dom ja">JA</td><td>Her får skiltgult stå fritt</td></tr>
+        <tr><td class="par">hairline / surface</td><td class="tall">1.26</td><td class="krav">–</td><td class="dom">n/a</td><td>Dekorativ</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ====================================================================== -->
+<section class="seksjon">
+  <h2>Mot forbudene <span>konkret, ikke som forsikring</span></h2>
+  <ol class="forbud">
+    <li><span class="nr">1</span><span>
+      <b>Ikke varm krem pluss brent oransje.</b> Grunnflaten er <code>#EBF0EC</code> –
+      kulør 132, altså kald grågrønn, ikke kulør 20–50. Aksenten er <code>#7B6A0F</code>,
+      kulør 51, som er gul. Den forkastede kombinasjonen var kulør 34 grunnflate og
+      kulør 22 aksent. Begge aksene er flyttet, ikke justert.
+    </span></li>
+    <li><span class="nr">2</span><span>
+      <b>Ingen marineblå eller indigo.</b> Paletten inneholder ingen farge i kulør
+      195–255 i det hele tatt, heller ikke som <code>info</code> eller fokusring.
+      Det er det eneste stedet hele kategorien står samlet, og vi står ikke der.
+    </span></li>
+    <li><span class="nr">3</span><span>
+      <b>Ingen Røde Kors-rød, ingen varselrød.</b> Faregradsskalaens nivå 4 er ikke
+      implementert. Nivå 3, oransje <code>#A04D08</code>, finnes, men er strukturelt
+      låst til <code>.melding.varsel</code> og til 4 px venstrekant – aldri som fyll,
+      aldri som dekor, aldri på en kjøpsknapp.
+    </span></li>
+    <li><span class="nr">4</span><span>
+      <b>Ingen taktisk estetikk.</b> Mørk modus er kulør 169 ved 7 % lyshet –
+      grågrønn, ikke svart – og den lysende fargen er en refleksvestgul, ikke en
+      neon. Der militærestetikken bruker gult som fare, brukes det her som
+      oppmerksomhet, som i kilden.
+    </span></li>
+    <li><span class="nr">5</span><span>
+      <b>Alt kan forklares.</b> Hver kulør peker på et trinn i faregradsskalaen eller
+      på en egenskap ved retrorefleksjonsmaterialet. Hover-tilstanden, at oransje er
+      reservert, at rødt ikke finnes, og at mørk modus er lysere i gult – alle fire er
+      konsekvenser av kilden, ikke av smak.
+    </span></li>
+  </ol>
+</section>
+
+<!-- ====================================================================== -->
+<section class="seksjon">
+  <h2>Risiko <span>det svakeste punktet</span></h2>
+  <div class="prosa risiko">
+    <p>
+      Okeren <code>#7B6A0F</code> i lys modus er paletten sitt svakeste ledd. For å nå
+      4.66:1 mot bakgrunnen må den ned på 27 % lyshet, og der begynner et gult å
+      tippe mot olivenbrunt. På en dårlig kalibrert skjerm, eller ved siden av den
+      skiltgule, kan den leses som «matt brun» snarere enn «gul i dagslys» – og da
+      kollapser hele retrorefleks-fortellingen til to farger som bare er ulike.
+      Den bør testes på en billig kontorskjerm før den låses.
+    </p>
+    <p style="margin-top:0.85em">
+      Sekundærrisiko: den kalde grågrønne flaten kan lese som «helsevesen» framfor
+      «beredskap» hvis fotografiet på siden er kjølig. Bildebehandlingen må være varm
+      for å motvirke det – det er en regel for bildene, ikke for paletten.
+    </p>
+  </div>
+</section>
+
+</div>
+</body>
+</html>

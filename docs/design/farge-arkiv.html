@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nødboks · Fargeark «Arkiv»</title>
+<style>
+/* ==========================================================================
+   NØDBOKS — FARGEARK «ARKIV»
+   Selvstendig dokument. All CSS inline, ingen nettverkskall, ingen webfont.
+   Tokens er definert per panel ([data-mode]) slik at lys og mørk modus kan
+   vises ved siden av hverandre på samme skjerm og sammenliknes direkte.
+   ========================================================================== */
+
+/* --- LYS MODUS ---------------------------------------------------------- */
+[data-mode="lys"] {
+  --bg:         #EFF1EB;  /* arkivpapir, kaldt grønngrått */
+  --surface:    #F8F9F4;  /* nytt ark */
+  --surface2:   #E1E6DA;  /* kartets skogtint */
+  --text:       #16211B;  /* trykksverte med grønnstikk */
+  --textMuted:  #4D584F;
+  --brand:      #1C4634;  /* kartgrønn, full dekning */
+  --brandInk:   #F2F5EE;
+  --accent:     #5E2A7C;  /* stempelfiolett */
+  --accentInk:  #FFFFFF;
+  --accentSoft: #ECE5F2;  /* stempelets avtrykk i papiret */
+  --border:     #818C7E;  /* blyantlinjal */
+  --focus:      #857214;  /* Gule sider-gull */
+  --ok:         #2C6B3E;
+  --warn:       #7B6A0F;  /* samme gull, i tekstvekt */
+  --info:       #3F4A52;  /* grafitt */
+  --gull:       #857214;
+  --gullFlate:  #E9E2B4;  /* markørbånd, gult blekk på papir */
+  --skygge:     0 1px 0 rgb(22 33 27 / .08);
+}
+
+/* --- MØRK MODUS (designet, ikke invertert) ------------------------------- */
+[data-mode="mork"] {
+  --bg:         #101613;  /* linoleum / mørk kontorflate */
+  --surface:    #18211C;
+  --surface2:   #202B25;
+  --text:       #E8EDE4;  /* papir, kaldt */
+  --textMuted:  #A2AFA5;
+  --brand:      #8FC1A4;  /* samme kartgrønn, løftet */
+  --brandInk:   #0F1512;
+  --accent:     #C296D8;  /* stempelfiolett under lampe */
+  --accentInk:  #1A1024;
+  --accentSoft: #2D2039;
+  --border:     #66736A;
+  --focus:      #F0D45C;  /* gullet som lys */
+  --ok:         #6FB884;
+  --warn:       #E3C74A;
+  --info:       #93A6B2;
+  --gull:       #E3C74A;
+  --gullFlate:  #3A3413;
+  --skygge:     0 1px 0 rgb(0 0 0 / .5);
+}
+
+/* --- Ark-typografi ------------------------------------------------------- */
+:root {
+  --ui:  "Helvetica Neue", Helvetica, Arial, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  color-scheme: light dark;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: #d9ded6;
+  font-family: var(--ui);
+  font-size: 16px;
+  line-height: 1.55;
+  color: #16211B;
+}
+@media (prefers-color-scheme: dark) { body { background: #0a0e0c; color: #E8EDE4; } }
+
+.ark { max-width: 1480px; margin: 0 auto; padding: 24px 16px 96px; }
+
+/* --- Dokumenthode -------------------------------------------------------- */
+.hode {
+  border: 1px solid currentColor;
+  padding: 18px 20px;
+  margin-bottom: 24px;
+  background: #F8F9F4;
+  color: #16211B;
+}
+@media (prefers-color-scheme: dark) { .hode { background: #18211C; color: #E8EDE4; } }
+.hode h1 { font-size: 20px; margin: 0 0 4px; letter-spacing: -0.01em; }
+.hode .reg {
+  font-family: var(--mono); font-size: 11px; letter-spacing: .12em;
+  text-transform: uppercase; opacity: .72; margin: 0 0 12px;
+}
+.hode p { margin: 0 0 10px; max-width: 74ch; font-size: 14.5px; }
+.hode p:last-child { margin-bottom: 0; }
+.hode dl { margin: 12px 0 0; display: grid; grid-template-columns: max-content 1fr; gap: 4px 16px; font-size: 14px; max-width: 86ch; }
+@media (max-width: 680px) { .hode dl { grid-template-columns: 1fr; gap: 2px 0; }
+  .hode dd { margin-bottom: 12px; } }
+.hode dt { font-family: var(--mono); font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; opacity: .75; padding-top: 3px; }
+.hode dd { margin: 0; }
+.hode dd b { font-weight: 600; }
+
+.styring { display: flex; gap: 10px; align-items: center; margin: 0 0 18px; flex-wrap: wrap; font-family: var(--mono); font-size: 12px; }
+.styring button {
+  font: inherit; letter-spacing: .08em; text-transform: uppercase;
+  padding: 8px 14px; border: 1px solid currentColor; background: transparent;
+  color: inherit; cursor: pointer;
+}
+.styring button[aria-pressed="true"] { background: #16211B; color: #EFF1EB; }
+@media (prefers-color-scheme: dark) { .styring button[aria-pressed="true"] { background: #E8EDE4; color: #101613; } }
+
+/* --- Panelene ------------------------------------------------------------ */
+.paneler { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+.paneler[data-oppsett="stablet"] { grid-template-columns: 1fr; }
+@media (max-width: 1080px) { .paneler { grid-template-columns: 1fr; } }
+
+.panel {
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 0 0 28px;
+}
+.panel > * { margin-left: 22px; margin-right: 22px; }
+@media (max-width: 520px) { .panel > * { margin-left: 14px; margin-right: 14px; } }
+
+.panelhode {
+  margin: 0 0 22px !important;
+  padding: 12px 22px;
+  background: var(--brand);
+  color: var(--brandInk);
+  display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+  font-family: var(--mono); font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase;
+}
+@media (max-width: 520px) { .panelhode { padding: 12px 14px; } }
+
+h2.seksjon {
+  font-family: var(--mono); font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--textMuted); margin: 34px 22px 10px; padding-bottom: 6px;
+  border-bottom: 1px solid var(--border); font-weight: 600;
+}
+h2.seksjon .nr { color: var(--gull); margin-right: 8px; }
+
+/* --- Produktutsnitt ------------------------------------------------------ */
+.utsnitt { background: var(--surface); border: 1px solid var(--border); padding: 22px; box-shadow: var(--skygge); }
+@media (max-width: 520px) { .utsnitt { padding: 14px; } }
+.kicker { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin: 0 0 8px; }
+.utsnitt h3 { font-size: 27px; line-height: 1.16; letter-spacing: -0.018em; margin: 0 0 10px; color: var(--text); font-weight: 600; }
+.utsnitt p.brod { margin: 0 0 16px; max-width: 46ch; color: var(--textMuted); font-size: 15.5px; }
+.utsnitt p.brod strong { color: var(--text); font-weight: 600; }
+
+.knapper { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
+.knapp {
+  font: inherit; font-size: 15px; font-weight: 600; cursor: pointer;
+  padding: 12px 20px; border: 1px solid transparent; border-radius: 2px;
+  display: inline-flex; align-items: center; gap: 9px;
+}
+.knapp--primar { background: var(--accent); color: var(--accentInk); border-color: var(--accent); }
+.knapp--primar .merke { width: 7px; height: 7px; background: var(--accentInk); display: inline-block; }
+.knapp--sekundar { background: transparent; color: var(--text); border-color: var(--border); }
+.knapp:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.hint { font-family: var(--mono); font-size: 11px; letter-spacing: .06em; color: var(--textMuted); margin: 10px 0 0; }
+
+/* --- Valgkort ------------------------------------------------------------ */
+.kort { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 18px; }
+@media (max-width: 620px) { .kort { grid-template-columns: 1fr; } }
+.valgkort {
+  position: relative; text-align: left; font: inherit; cursor: pointer;
+  background: var(--surface); color: var(--text);
+  border: 1px solid var(--border); border-left: 4px solid var(--border);
+  padding: 14px 16px 16px; border-radius: 2px;
+}
+.valgkort:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.valgkort[aria-pressed="true"] {
+  border-color: var(--accent); border-left-color: var(--gull);
+  background: var(--accentSoft); box-shadow: inset 0 0 0 1px var(--accent);
+}
+.valgkort .navn { font-weight: 600; font-size: 16px; display: block; margin-bottom: 2px; }
+.valgkort .under { font-size: 13.5px; color: var(--textMuted); display: block; }
+.valgkort .stempel {
+  position: absolute; top: 12px; right: 12px;
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--accent); border: 1.5px solid var(--accent); padding: 2px 5px;
+  transform: rotate(-4deg); opacity: 0;
+}
+.valgkort[aria-pressed="true"] .stempel { opacity: 1; }
+
+/* --- Pris ---------------------------------------------------------------- */
+.pris { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); display: flex; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+.pris .tall {
+  font-family: var(--mono); font-variant-numeric: tabular-nums;
+  font-size: 46px; line-height: 1; letter-spacing: -0.03em; font-weight: 600; color: var(--text);
+}
+.pris .tall .tusen { display: inline-block; width: .3em; }
+.pris .tall sup { font-size: 17px; font-weight: 400; vertical-align: super; color: var(--textMuted); letter-spacing: 0; }
+.pris .valuta { font-family: var(--mono); font-size: 13px; color: var(--textMuted); letter-spacing: .1em; }
+.pris .del { font-size: 13px; color: var(--textMuted); padding-bottom: 4px; }
+.pris .del b { color: var(--text); font-weight: 600; }
+.pris .bånd { background: var(--gullFlate); color: var(--text); font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; padding: 4px 9px; margin-bottom: 5px; }
+
+/* --- Innholdsliste ------------------------------------------------------- */
+.liste { margin-top: 22px; }
+.kategori {
+  font-family: var(--mono); font-size: 11px; letter-spacing: .15em; text-transform: uppercase;
+  color: var(--textMuted); display: flex; align-items: center; gap: 10px; margin: 18px 0 8px;
+}
+.kategori::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+.kategori .kode { color: var(--gull); }
+.liste ul { list-style: none; margin: 0; padding: 0; }
+.liste li { display: flex; gap: 12px; align-items: baseline; padding: 7px 0; border-bottom: 1px dotted var(--border); font-size: 15px; }
+.liste li:last-child { border-bottom: 0; }
+.liste .ant { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 13px; color: var(--textMuted); min-width: 3.4em; }
+.liste .navn2 { flex: 1; }
+.liste .kilde { font-family: var(--mono); font-size: 11px; color: var(--info); letter-spacing: .04em; }
+
+/* --- Varselmelding ------------------------------------------------------- */
+.varsel {
+  margin-top: 22px; display: flex; gap: 14px;
+  background: var(--surface2); color: var(--text);
+  border: 1px solid var(--border); border-left: 5px solid var(--warn);
+  padding: 14px 16px;
+}
+.varsel .ikon {
+  font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--warn); border: 1px solid var(--warn); padding: 2px 6px; height: max-content; white-space: nowrap;
+}
+.varsel p { margin: 0; font-size: 14.5px; max-width: 54ch; }
+.varsel p b { font-weight: 600; }
+
+/* --- Swatches ------------------------------------------------------------ */
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 10px; }
+.sw { border: 1px solid var(--border); background: var(--surface); }
+.sw .flate { height: 62px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-end; justify-content: flex-end; }
+.sw .flate span { font-family: var(--mono); font-size: 9.5px; padding: 3px 5px; letter-spacing: .06em; }
+.sw .fot { padding: 8px 10px 10px; }
+.sw .navn3 { font-family: var(--mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--text); }
+.sw .hex { font-family: var(--mono); font-size: 12px; color: var(--textMuted); }
+.sw .maling { font-family: var(--mono); font-size: 10.5px; color: var(--textMuted); margin-top: 5px; line-height: 1.45; }
+.sw .maling b { font-weight: 600; color: var(--text); }
+.sw .kommentar { font-size: 11.5px; color: var(--textMuted); margin-top: 5px; line-height: 1.35; }
+
+/* --- Kontrasttabell ------------------------------------------------------ */
+table.kontrast { width: calc(100% - 44px); border-collapse: collapse; font-family: var(--mono); font-size: 12px; }
+@media (max-width: 520px) { table.kontrast { width: calc(100% - 28px); } }
+table.kontrast th, table.kontrast td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border); }
+table.kontrast th { font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--textMuted); font-weight: 600; }
+table.kontrast td.tall2 { font-variant-numeric: tabular-nums; text-align: right; color: var(--text); }
+table.kontrast td.dom { font-weight: 600; letter-spacing: .06em; }
+table.kontrast td.dom[data-ok="ja"] { color: var(--ok); }
+table.kontrast td.dom[data-ok="nei"] { color: var(--warn); }
+.sum { font-family: var(--mono); font-size: 11.5px; color: var(--textMuted); margin-top: 10px; }
+
+/* --- Bunntekst ----------------------------------------------------------- */
+.bunn { margin-top: 28px; font-family: var(--mono); font-size: 11.5px; letter-spacing: .06em; opacity: .7; }
+</style>
+</head>
+<body>
+<div class="ark">
+
+<header class="hode">
+  <p class="reg">Nødboks · Fargeark · Retning «Arkiv» · Utkast 2 · 20.09.2026</p>
+  <h1>Paletten «Arkiv»: kartgrønn, stempelfiolett og Gule sider-gull</h1>
+
+  <p><b>Hvorfor utkast 1 ble forkastet:</b> varm papirhvit grunnflate med brent
+  rav/terrakotta-aksent er den samme kombinasjonen som Claude bruker, og har i tillegg
+  blitt et standardutseende i AI-genererte grensesnitt. Den er dessuten opptatt i
+  markedet: beredskap24 kjører <code>#fe9103</code> og norberedskap <code>#e8af57</code>.
+  Ingen verdi fra utkast 1 er videreført.</p>
+
+  <p><b>Kilden denne paletten er utledet fra</b> er norsk offentlig trykksaktradisjon,
+  konkretisert i fire navngitte trykkfarger som alle finnes utenfor dette dokumentet:</p>
+
+  <dl>
+    <dt>Kartgrønn</dt>
+    <dd><b>Skogsignaturen på Kartverkets hovedkartserie M711 «Norge 1:50 000».</b>
+    Skog er en flat, mettet grønnflate med gulstikk, trykt under kurvene. I paletten er
+    den ført til full dekning (<code>#1C4634</code>) og brukt som strukturfarge: topptekst,
+    overskrifter, mørke flater. Dette er merkefargen, og den er grønn nettopp fordi
+    <em>hver eneste</em> mørke flate i markedskartet er marineblå.</dd>
+
+    <dt>Stempelfiolett</dt>
+    <dd><b>Metylfiolett (anilinfiolett), pigmentet i stempelputer gjennom hele
+    1900-tallet.</b> Alle norske arkivmapper bærer det: «MOTTATT», «EKSPEDERT», «ARKIVERT».
+    Poenget er ikke at fargen er pen — det er at fiolett i et arkiv <em>betyr en utført
+    handling</em>. Derfor er den aksentfargen: primærknapp, fokusert valg, valgt kort.
+    Avtrykket i papir er dusere enn pigmentet på tuben, og <code>#5E2A7C</code> er trykket,
+    ikke blekket.</dd>
+
+    <dt>Gule sider-gull</dt>
+    <dd><b>Gult blekk på grått avispapir, slik Televerket trykte Gule sider fra 1976.</b>
+    Papiret suger og gråner gulen: den lander på hue 50, ikke på hue 35. Det er
+    forskjellen på dette gullet og ravgul, og det er grunnen til at det ikke bryter
+    forbudet. Markedskartet viser at hue 50–70 er praktisk talt ubebodd — én forekomst
+    mot tretten blå. Gullet bærer den emosjonelle kjernen: det er mørkt og kaldt, og det
+    boksen inneholder er varme og lys. Derfor er gullet fokusfargen. Lyset viser hvor du er.</dd>
+
+    <dt>Grafitt</dt>
+    <dd><b>Blyantstrek og linjal på arkivark.</b> Rammer, skillelinjer og kildehenvisninger
+    er grafitt, ikke svart og ikke blå. Linjene er bevisst synlige (3:1 mot flaten) —
+    et skjema skal se oppmålt ut, ikke svevende.</dd>
+  </dl>
+
+  <p><b>Mørk modus er designet, ikke invertert.</b> Lys modus er arkivarket:
+  grønngrått papir, mørk struktur, fiolett handling. Mørk modus er det samme materialet
+  under én lampe: flatene er linoleumsgrønne (hue 147–150, ikke nøytralt svart og ikke
+  marineblått), fioletten er løftet til det den ser ut som under varmt lys, og gullet
+  går fra dempet trykkfarge til lysende. Rollene snur: i lys modus er grønnfargen
+  strukturen og papiret bakgrunnen; i mørk modus er grønnfargen bakgrunnen og papiret
+  teksten.</p>
+
+  <p><b>Typografi:</b> ingen webfont — null nettverkskall, ingen FOUT, ingen LCP-kostnad.
+  Grensesnittet er satt i en neo-grotesk systemstakk («Helvetica Neue», Helvetica, Arial,
+  system-ui), som er den skriftfamilien norske etater faktisk satte skjemaer i på 70-tallet.
+  Tall, koder, kategorier og priser er satt i systemets monospace med
+  <code>tabular-nums</code>: i et arkiv står tall i kolonne, og tabulære tall er det
+  typografiske uttrykket for «dette kan etterprøves».</p>
+
+  <p><b>Kontrasttallene nedenfor er regnet ut i denne filen</b>, i JavaScript, etter
+  WCAG 2.1: relativ luminans <code>L = 0.2126R + 0.7152G + 0.0722B</code> med kanalene
+  lineærisert, og forhold <code>(Lhøy + 0.05) / (Llav + 0.05)</code>. Endrer du en hex-verdi
+  i CSS-en over, endrer tallet i tabellen seg med den. Ingen tall her er påstått.</p>
+</header>
+
+<div class="styring">
+  <span>Oppsett:</span>
+  <button type="button" id="side" aria-pressed="true">Side om side</button>
+  <button type="button" id="stablet" aria-pressed="false">Stablet</button>
+</div>
+
+<div class="paneler" id="paneler" data-oppsett="side"></div>
+
+<p class="bunn">Nødboks · docs/design/farge-arkiv.html · alle tall målt ved innlasting</p>
+</div>
+
+<script>
+/* ==========================================================================
+   1. WCAG-utregning
+   ========================================================================== */
+function kanal(c) {
+  c = c / 255;
+  return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+}
+function luminans(hex) {
+  const h = hex.replace('#', '');
+  const r = parseInt(h.slice(0, 2), 16), g = parseInt(h.slice(2, 4), 16), b = parseInt(h.slice(4, 6), 16);
+  return 0.2126 * kanal(r) + 0.7152 * kanal(g) + 0.0722 * kanal(b);
+}
+function forhold(a, b) {
+  const la = luminans(a), lb = luminans(b);
+  const hoy = Math.max(la, lb), lav = Math.min(la, lb);
+  return (hoy + 0.05) / (lav + 0.05);
+}
+const r2 = n => Math.round(n * 100) / 100;
+
+/* ==========================================================================
+   2. Paletten (samme verdier som CSS-en over)
+   ========================================================================== */
+const PALETT = {
+  lys: {
+    bg:'#EFF1EB', surface:'#F8F9F4', surface2:'#E1E6DA', text:'#16211B', textMuted:'#4D584F',
+    brand:'#1C4634', brandInk:'#F2F5EE', accent:'#5E2A7C', accentInk:'#FFFFFF', accentSoft:'#ECE5F2',
+    border:'#818C7E', focus:'#857214', ok:'#2C6B3E', warn:'#7B6A0F', info:'#3F4A52'
+  },
+  mork: {
+    bg:'#101613', surface:'#18211C', surface2:'#202B25', text:'#E8EDE4', textMuted:'#A2AFA5',
+    brand:'#8FC1A4', brandInk:'#0F1512', accent:'#C296D8', accentInk:'#1A1024', accentSoft:'#2D2039',
+    border:'#66736A', focus:'#F0D45C', ok:'#6FB884', warn:'#E3C74A', info:'#93A6B2'
+  }
+};
+
+const KILDE = {
+  bg:        ['Arkivpapir',        'Grønngrå, ikke krem. Hue 80, ikke 20–50.'],
+  surface:   ['Nytt ark',          'Kortflate, ett hakk lysere enn arket.'],
+  surface2:  ['Skogtint',          'M711s skogflate i svak dekning.'],
+  text:      ['Trykksverte',       'Svart med grønnstikk, ikke ren #000.'],
+  textMuted: ['Sverte, tynt',      'Samme blekk, mindre dekning.'],
+  brand:     ['Kartgrønn',         'M711 skogsignatur, full dekning.'],
+  brandInk:  ['Papir på grønt',    'Tekst på merkeflaten.'],
+  accent:    ['Stempelfiolett',    'Metylfiolett — handlingen i et arkiv.'],
+  accentInk: ['Tekst på stempel',  'Knappeteksten.'],
+  accentSoft:['Avtrykk',           'Stempelets avsmitting i papiret.'],
+  border:    ['Grafitt, linjal',   'Synlig linje. Skjema, ikke svev.'],
+  focus:     ['Gule sider-gull',   'Lyset. Viser hvor du er.'],
+  ok:        ['Vegetasjon',        'Kartets levende grønt.'],
+  warn:      ['Gull i tekstvekt',  'Merknad. Ikke rødt — arkivet stempler.'],
+  info:      ['Grafitt, kald',     'Blyantnotat i margen.']
+};
+
+/* Flaten hver farge faktisk brukes mot */
+const MOT = {
+  bg:'surface', surface:'bg', surface2:'surface', text:'surface', textMuted:'surface',
+  brand:'bg', brandInk:'brand', accent:'surface', accentInk:'accent', accentSoft:'surface',
+  border:'surface', focus:'bg', ok:'surface', warn:'surface', info:'surface'
+};
+const KRAV = {
+  bg:3, surface:3, surface2:3, text:4.5, textMuted:4.5, brand:3, brandInk:4.5, accent:3,
+  accentInk:4.5, accentSoft:3, border:3, focus:3, ok:4.5, warn:4.5, info:4.5
+};
+/* bg/surface/surface2/accentSoft er flater mot flater — de har ikke et WCAG-krav
+   i seg selv, og merkes derfor «—» i stedet for å få en falsk bestått-dom. */
+const UTEN_KRAV = ['bg', 'surface', 'surface2', 'accentSoft'];
+
+const MÅLINGER = [
+  ['text', 'bg', 4.5, 'Brødtekst på sidebakgrunn'],
+  ['text', 'surface', 4.5, 'Brødtekst på kortflate'],
+  ['textMuted', 'bg', 4.5, 'Dempet tekst på sidebakgrunn'],
+  ['textMuted', 'surface', 4.5, 'Dempet tekst på kortflate'],
+  ['accentInk', 'accent', 4.5, 'Knappetekst på primærknapp'],
+  ['accent', 'bg', 3.0, 'Aksent som UI-flate'],
+  ['accent', 'surface', 3.0, 'Aksent på kortflate'],
+  ['border', 'surface', 3.0, 'Ramme mot kortflate'],
+  ['border', 'bg', 3.0, 'Ramme mot sidebakgrunn'],
+  ['focus', 'bg', 3.0, 'Fokusring mot sidebakgrunn'],
+  ['brandInk', 'brand', 4.5, 'Tekst på merkeflate'],
+  ['brand', 'bg', 3.0, 'Merkeflate mot bakgrunn'],
+  ['text', 'surface2', 4.5, 'Tekst i varselmelding'],
+  ['ok', 'surface', 4.5, 'Statusgrønn som tekst'],
+  ['warn', 'surface', 4.5, 'Merknadsgull som tekst'],
+  ['info', 'surface', 4.5, 'Grafittnotat som tekst']
+];
+
+/* ==========================================================================
+   3. Produktutsnittet
+   ========================================================================== */
+function utsnitt() {
+  return `
+  <section class="utsnitt">
+    <p class="kicker">Sju døgn · DSBs anbefaling</p>
+    <h3>Esken du håper du aldri må åpne</h3>
+    <p class="brod">Vann, varme, lys og mat til husstanden i sju døgn — pakket ferdig,
+    datomerket og med en liste over hva som ligger i den. <strong>Du trenger ikke vite
+    noe om beredskap for å ha den stående.</strong></p>
+
+    <div class="knapper">
+      <button type="button" class="knapp knapp--primar"><span class="merke"></span>Sett sammen boksen</button>
+      <button type="button" class="knapp knapp--sekundar">Se hva som ligger i den</button>
+    </div>
+    <p class="hint">Fri frakt · Bytte i 30 dager · Vi minner deg når noe går ut på dato</p>
+
+    <div class="kort">
+      <button type="button" class="valgkort" aria-pressed="true">
+        <span class="stempel">Valgt</span>
+        <span class="navn">To voksne, to barn</span>
+        <span class="under">42 enheter · 7 døgn · 18,4 kg</span>
+      </button>
+      <button type="button" class="valgkort" aria-pressed="false">
+        <span class="stempel">Valgt</span>
+        <span class="navn">To voksne</span>
+        <span class="under">28 enheter · 7 døgn · 11,9 kg</span>
+      </button>
+    </div>
+
+    <div class="pris">
+      <div>
+        <div class="valuta">Kr</div>
+        <div class="tall">4<span class="tusen"></span>190<sup>,–</sup></div>
+      </div>
+      <div class="bånd">Delbetaling</div>
+      <div class="del">eller <b>349,–</b> i 12 md.<br>Rentefritt</div>
+    </div>
+
+    <div class="liste">
+      <p class="kategori"><span class="kode">G-04</span> Varme og lys</p>
+      <ul>
+        <li><span class="ant">2 stk</span><span class="navn2">Stormlykt, LED, 120 t brenntid</span><span class="kilde">DSB 4.2</span></li>
+        <li><span class="ant">4 stk</span><span class="navn2">Ullteppe, 100 % ull, 1400 g</span><span class="kilde">DSB 4.1</span></li>
+        <li><span class="ant">1 stk</span><span class="navn2">Stormkjøkken med brennstoff, 7 døgn</span><span class="kilde">DSB 3.4</span></li>
+        <li><span class="ant">60 stk</span><span class="navn2">Fyrstikker, stormsikre, i tett boks</span><span class="kilde">DSB 4.3</span></li>
+      </ul>
+    </div>
+
+    <div class="varsel">
+      <span class="ikon">Merknad</span>
+      <p><b>Tre varer i boksen har utløpsdato.</b> Vi sender deg en påminnelse i god tid
+      før den første går ut, og selger erstatningen enkeltvis. Du trenger ikke kjøpe
+      hele boksen på nytt.</p>
+    </div>
+  </section>`;
+}
+
+/* ==========================================================================
+   4. Swatches og tabell
+   ========================================================================== */
+function swatches(t) {
+  return Object.keys(t).map(k => {
+    const motNavn = MOT[k];
+    const f = r2(forhold(t[k], t[motNavn]));
+    const uten = UTEN_KRAV.includes(k);
+    const krav = KRAV[k];
+    const dom = uten ? 'flate mot flate' : (f >= krav ? 'bestått ' + krav : 'UNDER ' + krav);
+    const kant = (k === 'bg' || k === 'surface' || k === 'surface2') ? 'var(--border)' : 'transparent';
+    return `<div class="sw">
+      <div class="flate" style="background:${t[k]};border-bottom-color:${kant}">
+        <span style="color:${forhold(t[k], t.text) >= 4.5 ? 'var(--text)' : (forhold(t[k], t.surface) >= 4.5 ? 'var(--surface)' : 'var(--text)')}">${t[k]}</span>
+      </div>
+      <div class="fot">
+        <div class="navn3">${k}</div>
+        <div class="hex">${KILDE[k][0]}</div>
+        <div class="maling">mot ${motNavn}: <b>${f.toFixed(2)}:1</b><br>${dom}</div>
+        <div class="kommentar">${KILDE[k][1]}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function tabell(t) {
+  let feil = 0;
+  const rader = MÅLINGER.map(([a, b, krav, hva]) => {
+    const f = r2(forhold(t[a], t[b]));
+    const ok = f >= krav;
+    if (!ok) feil++;
+    return `<tr>
+      <td>${a} / ${b}</td>
+      <td>${hva}</td>
+      <td class="tall2">${f.toFixed(2)}</td>
+      <td class="tall2">${krav.toFixed(1)}</td>
+      <td class="dom" data-ok="${ok ? 'ja' : 'nei'}">${ok ? 'BESTÅTT' : 'STRYK'}</td>
+    </tr>`;
+  }).join('');
+  return `<table class="kontrast">
+    <thead><tr><th>Par</th><th>Brukes til</th><th>Målt</th><th>Krav</th><th>Dom</th></tr></thead>
+    <tbody>${rader}</tbody>
+  </table>
+  <p class="sum">${MÅLINGER.length} par målt · ${MÅLINGER.length - feil} bestått · ${feil} stryk</p>`;
+}
+
+/* ==========================================================================
+   5. Bygg panelene
+   ========================================================================== */
+function panel(modus, tittel, undertittel) {
+  const t = PALETT[modus];
+  return `<section class="panel" data-mode="${modus}">
+    <div class="panelhode"><span>${tittel}</span><span>${undertittel}</span></div>
+    <h2 class="seksjon"><span class="nr">01</span> Utsnitt av produktet</h2>
+    ${utsnitt()}
+    <h2 class="seksjon"><span class="nr">02</span> Fargene, med målt kontrast mot flaten de brukes på</h2>
+    <div class="swatches">${swatches(t)}</div>
+    <h2 class="seksjon"><span class="nr">03</span> Kontrastrevisjon</h2>
+    ${tabell(t)}
+  </section>`;
+}
+
+document.getElementById('paneler').innerHTML =
+  panel('lys', 'Lys modus · Arkivarket', 'Papir bærer, grønt strukturerer') +
+  panel('mork', 'Mørk modus · Under lampen', 'Grønt bærer, papir er teksten');
+
+/* Valgkortene skal kunne klikkes, så stempelet kan etterprøves i begge modi */
+document.querySelectorAll('.valgkort').forEach(k => {
+  k.addEventListener('click', () => {
+    k.closest('.kort').querySelectorAll('.valgkort')
+      .forEach(a => a.setAttribute('aria-pressed', String(a === k)));
+  });
+});
+
+/* Oppsettsbryter */
+const paneler = document.getElementById('paneler');
+const bSide = document.getElementById('side'), bStablet = document.getElementById('stablet');
+bSide.addEventListener('click', () => {
+  paneler.dataset.oppsett = 'side';
+  bSide.setAttribute('aria-pressed', 'true'); bStablet.setAttribute('aria-pressed', 'false');
+});
+bStablet.addEventListener('click', () => {
+  paneler.dataset.oppsett = 'stablet';
+  bSide.setAttribute('aria-pressed', 'false'); bStablet.setAttribute('aria-pressed', 'true');
+});
+
+/* Rapport til konsollen, slik at avvik synes uten å måtte lese tabellen */
+['lys', 'mork'].forEach(m => {
+  MÅLINGER.forEach(([a, b, krav]) => {
+    const f = forhold(PALETT[m][a], PALETT[m][b]);
+    if (f < krav) console.warn(`[${m}] ${a}/${b} = ${f.toFixed(2)}, krav ${krav}`);
+  });
+});
+</script>
+</body>
+</html>
