@@ -140,6 +140,7 @@ export function byggPakke(valg) {
       holdbarhetAr: vare.holdbarhetAr ?? null,
       dsb: vare.dsb ?? null,
       kcal: (vare.kcal ?? 0) * antall,
+      kreverVarme: vare.kreverVarme === true,
       liter: (vare.liter ?? 0) * antall,
       vekt: (vare.vektKg ?? 0) * antall,
     })
@@ -219,6 +220,20 @@ export function byggPakke(valg) {
     0
   )
 
+  /*
+   * Hvor lenge maten rekker uten brennstoff.
+   *
+   * Vi sender ikke gass eller rødsprit – det kan ikke fraktes som vanlig pakke.
+   * Da må kunden få vite hva som skjer hvis de aldri får kjøpt det, eller går
+   * tom på døgn fire. Tallet regnes fra maten som kan spises kald, mot samme
+   * energidimensjonering som resten, og er det ærlige svaret på et spørsmål
+   * ingen andre i markedet stiller.
+   */
+  const kaldKcal = linjer.filter((l) => !l.kreverVarme).reduce((n, l) => n + l.kcal, 0)
+  const dognUtenVarme = personer
+    ? Math.floor(kaldKcal / (personer * KONFIG.kcalPerPersonPerDogn))
+    : 0
+
   const kcal = linjer.reduce((n, l) => n + l.kcal, 0)
   const liter = linjer.reduce((n, l) => n + l.liter, 0)
   const vekt = linjer.reduce((n, l) => n + l.vekt, 0)
@@ -269,6 +284,8 @@ export function byggPakke(valg) {
     prisPerPerson: Math.round(sum / personer),
     prisPerPersonPerDogn: Math.round(sum / personer / KONFIG.dogn),
     kcal,
+    kaldKcal,
+    dognUtenVarme: Math.min(dognUtenVarme, KONFIG.dogn),
     kcalBehov,
     kcalDekning: kcalBehov ? kcal / kcalBehov : 0,
     liter,
@@ -276,7 +293,7 @@ export function byggPakke(valg) {
     vanndekning: vannBehov ? liter / vannBehov : 0,
     vekt: Math.round(vekt * 10) / 10,
     holdbarhetAr: korteste(linjer),
-    varsler: varsler({ personer, matniva, modus, kcal, kcalBehov, liter, vannBehov }),
+    varsler: varsler({ personer, matniva, modus, kcal, kcalBehov, liter, vannBehov, dognUtenVarme }),
   }
 }
 
@@ -306,7 +323,7 @@ function korteste(linjer) {
   return år.length ? Math.min(...år) : null
 }
 
-function varsler({ personer, matniva, modus, kcal, kcalBehov, liter, vannBehov }) {
+function varsler({ personer, matniva, modus, kcal, kcalBehov, liter, vannBehov, dognUtenVarme }) {
   const ut = []
   if (modus.id === 'matpafyll') {
     ut.push({
@@ -329,6 +346,14 @@ function varsler({ personer, matniva, modus, kcal, kcalBehov, liter, vannBehov }
       tekst:
         `Kannene rommer ${liter} liter. DSB anbefaler ${vannBehov} liter for ` +
         `${personer} ${personer === 1 ? 'person' : 'personer'} – fyll dem før du trenger dem.`,
+    })
+  }
+  if (dognUtenVarme < KONFIG.dogn) {
+    ut.push({
+      type: 'info',
+      tekst:
+        `Maten rekker ${dognUtenVarme} døgn uten varme. Resten krever kokende vann, ` +
+        `og brennstoff sendes ikke med – se hva du skal kjøpe under «dette selger vi ikke».`,
     })
   }
   if (matniva.id === 'torrmat') {

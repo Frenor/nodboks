@@ -57,11 +57,13 @@ skriptet i `leverandorer.md` blander `sum` (inkl. mva) med `innkjøp` (eks.
 mva), er det en enhetsfeil som overvurderer dekningsgraden med 13–14
 prosentpoeng. Dette dokumentet gjør ikke den feilen.
 
-**Innkjøpstallene er, uten unntak, 0,6 × observert detaljpris** — en
-arbeidshypotese, ikke en kjent kostnad. Ingen leverandør i sourcingen har gitt
-oss en reell B2B-pris. Det er den enkeltfaktoren som betyr mest i hele dette
-dokumentet, og den har sitt eget avsnitt i punkt 2 og sin egen
-følsomhetsanalyse i punkt 3.
+**Innkjøpstallene er en arbeidshypotese, ikke en kjent kostnad, og de er ikke
+én ensartet faktor.** Sjekket linje for linje: mat og CO-varsleren ligger på
+≈ 0,60 × observert detaljpris, mens så godt som alt annet utstyr ligger på
+0,65–0,72 ×. Ingen leverandør i sourcingen har gitt oss en reell B2B-pris.
+Det er den enkeltfaktoren som betyr mest i hele dette dokumentet, og den har
+sitt eget avsnitt i punkt 2 og sin egen følsomhetsanalyse i punkt 3 — nå med
+én faktor per varegruppe, ikke én global faktor for hele pakken.
 
 ---
 
@@ -89,9 +91,51 @@ med.
 
 Her er det ubehagelige tallet, beregnet direkte fra katalogen (før noen
 prisjustering i det hele tatt, altså dagens priser): en komplett tørrmatboks
-til 4 personer koster i dag 6 172 kr og gir **252 kr per person per døgn**.
-Til sammenligning (fra konkurrentanalysens egen tabell, 4 personer, inkl.
-mva.):
+til 4 personer koster i dag 6 172 kr, som gir **220 kr per person per døgn**
+(6 172 / 4 / 7 = 220,4 kr — samme metode som brukt på alle konkurrenttallene
+under). Til sammenligning (fra konkurrentanalysens egen tabell, 4 personer,
+inkl. mva.):
+
+| Butikk | kr/person/døgn | Matnivå |
+| --- | ---: | --- |
+| hjemmeberedt.no | 166 | vanlig butikkmat |
+| sikkerheten-selv.no | 179 | uoppgitt |
+| norberedt.no | 214 | uoppgitt |
+| **Nødboks tørrmat (i dag)** | **220** | vanlig butikkmat |
+| krisesikker.no | 225 | nødrasjon |
+| beredskap1.no | 250 | nødrasjon |
+| beredskap24.org | 273 | frysetørket |
+
+Vi ligger i dag **midt i feltet, mellom norberedt og krisesikker** — ikke
+øverst, slik en tidligere feilregning i denne teksten ga inntrykk av (6 172
+delt på 4 personer og 7 døgn gir 220 kr, ikke 252 kr; 252 kr er derimot
+nesten nøyaktig tallet vi lander på *etter* den foreslåtte prisøkningen i
+punkt 3 — se eget avsnitt under). Det er likevel ikke et argument for å
+holde prisen lav: selv midt i feltet, uten en eneste krone i prisøkning,
+selger vi den billigste matkategorien i markedet (vanlig tørrmat) og ligger
+allerede foran to av tre nødrasjon-selgere (krisesikker og beredskap1 ligger
+på 225 og 250 — vi passerer krisesikker allerede i dag). Den eneste
+sammenlignbare aktøren, hjemmeberedt.no, ligger 24,7 % under oss allerede i
+dag, uten prisøkning. Det er fordi hjemmeberedt selger mat og vann alene —
+ingen skalert utstyr, ingen radio, intet stormkjøkken, ingen CO-varsler,
+ingen dokumentmappe. De to postene er ikke sammenlignbare produkter, og vi
+skal si det høyt i markedsføringen: vi er dyrere enn hjemmeberedt fordi vi
+selger mer enn mat, ikke fordi maten er dyrere.
+
+**Konklusjonen for posisjonen, i dag:** vi legger oss et sted mellom «vanlig
+bekvemmelighetspakke» (norberedt) og de nødrasjon-priste konkurrentene
+(krisesikker, beredskap1) — ikke ennå oppe hos «premium merkevare»
+(beredskap24). Det endrer seg med den foreslåtte prisøkningen, se neste
+avsnitt, men posisjonen i dag er mer forsiktig enn den tidligere feilregningen
+ga inntrykk av.
+
+### Etter justeringen: er den nye prisen fortsatt forsvarlig mot krisesikker?
+
+Med de foreslåtte prisene i punkt 3 (7 070 kr for komplett tørrmat, 4
+personer) flytter vi oss fra midtfeltet til nær toppen: **253 kr per person
+per døgn** (7 070 / 4 / 7 = 252,5 kr) — mellom beredskap1 og beredskap24. Det
+er nøyaktig den posisjonen som tidligere, feilaktig, ble oppgitt for dagens
+pris:
 
 | Butikk | kr/person/døgn | Matnivå |
 | --- | ---: | --- |
@@ -100,27 +144,39 @@ mva.):
 | norberedt.no | 214 | uoppgitt |
 | krisesikker.no | 225 | nødrasjon |
 | beredskap1.no | 250 | nødrasjon |
-| **Nødboks tørrmat (i dag)** | **252** | vanlig butikkmat |
+| **Nødboks tørrmat (foreslått)** | **253** | vanlig butikkmat |
 | beredskap24.org | 273 | frysetørket |
 
-Vi ligger allerede **mellom beredskap1 og beredskap24 på pris**, selv om vi
-selger den billigste matkategorien i markedet (vanlig tørrmat) og selv om vi
-ikke har hevet en eneste krone ennå. Det er ikke et argument for å holde
-prisen lav — det er beviset på at «vanlig norsk mat» aldri var en
-lavprisposisjon for oss. Den eneste sammenlignbare aktøren, hjemmeberedt.no,
-ligger 34 % under oss allerede i dag, uten prisøkning. Det er fordi
-hjemmeberedt selger mat og vann alene — ingen skalert utstyr, ingen radio,
-intet stormkjøkken, ingen CO-varsler, ingen dokumentmappe. De to postene er
-ikke sammenlignbare produkter, og vi skal si det høyt i markedsføringen: vi er
-dyrere enn hjemmeberedt fordi vi selger mer enn mat, ikke fordi maten er
-dyrere.
+Det konkrete spørsmålet er om 7 070 kr er forsvarlig mot krisesikkers 6 299 kr
+for fire personer, gitt at vi leverer mer utstyr. Svaret er ja, men det er
+ikke gratis, og det skal sies rett ut — ikke gjemmes bak
+dekningsgradregnestykket i punkt 3:
 
-**Konklusjonen for posisjonen:** vi legger oss et sted mellom «vanlig
-bekvemmelighetspakke» (norberedt, beredskap1) og «premium merkevare»
-(beredskap24), men vi eier et argument ingen av dem har: alt i esken skalerer
-med husstanden, dokumentert vare for vare. Det er derfor vi kan forsvare en
-pris nær toppen av markedet uten å selge nødrasjon eller skjule
-holdbarhetstall.
+1. **Prisavstanden er reell: 771 kr, 12,2 % mer** enn krisesikker (7 070 mot
+   6 299 kr). Det er ikke en avrundingsforskjell, og vi skal ikke late som
+   den ikke er der.
+2. **Krisesikker selger nødrasjon** (samme kategori som Seven
+   Oceans/BP-ER-selgerne beredskap1 og norberedt); vi selger vanlig
+   butikkmat barna faktisk spiser. Det er en reell kostnadsforskjell i
+   innkjøp, ikke bare en posisjoneringsforskjell — se avsnittet over og
+   punkt 1s første avsnitt om nødrasjon.
+3. **Krisesikkers 6 299 kr inkluderer trolig frakt** (de tilbyr fri frakt
+   over 1 000 kr, jf. konkurrentanalysens funn i punkt 7), mens vår 7 070 kr
+   er uten frakt — kunden betaler den separat i kassen (anslagsvis 450–800 kr
+   for en firepersonersboks, se punkt 7). Regnet med frakt lagt til begge er
+   den reelle avstanden trolig større enn 771 kr, ikke mindre. Det skal ikke
+   pyntes bort.
+4. **Utstyret skalerer med husstanden** hos oss (hodelykt, nødteppe,
+   vannkanne per person) og inkluderer en CO-varsler ingen konkurrent har
+   (se under). Det er ikke dokumentert at krisesikkers pakke gjør noen av
+   delene.
+
+Konklusjonen er derfor betinget, ikke automatisk: **7 070 kr er forsvarlig
+fordi kunden får mer, ikke fordi pakken er billigere.** Hvis avstanden viser
+seg for stor i praksis — lav konvertering ved lansering er det første
+varselet — er 4-personerspunktet i prisstigen (punkt 3) det første stedet å
+teste en lavere måldekningsgrad, ikke et sted å late som avstanden ikke
+finnes.
 
 ### Beredskap24 — det ene stedet vi bevisst går over dem, og hvorfor
 
@@ -163,18 +219,27 @@ knapt merkes), holder vi prisen tettere på dem — se punkt 3.
 `docs/innkjopsliste.md` sier det rett ut, og sourcingen bekrefter det
 varegruppe for varegruppe: hver kjede endte i en innloggingsside eller en
 kundeavtale (Drytechs `shop.drytech.no`, ASKO, Orkla Storhusholdning, Ahlsell,
-Biltema Bedrift, Orthex Norway). Alle `innkjop`-tall i katalogen er derfor
-**0,6 × observert detaljpris** — «en arbeidshypotese, ikke et tilbud», som det
-står i katalogens egen kildekommentar. Det eneste ekte kostnadstallet i hele
-sortimentet er beredskapspermen, vår egen trykksak (49 kr, basert på
-trykkeanslag ved 500 eksemplarer).
+Biltema Bedrift, Orthex Norway). Men `innkjop`-tallene i katalogen er **ikke
+én ensartet faktor** — sjekket linje for linje mot faktisk innkjøp/pris-forhold:
 
-Det finnes ett unntak fra 0,6-regelen som ikke er en detaljpris i det hele
-tatt: **CO-varsleren**. Den har ingen valgt leverandør, ingen observert pris i
-det hele tatt — katalogens `pris: 349 / innkjop: 209` er et rent anslag satt
-fordi varen må ha et tall for at konfiguratoren skal fungere, ikke fordi noen
-har sett en CO-varsler til den prisen. Se punkt 3 for hvordan den likevel
-brukes i prisstrategien.
+| Varegruppe | Innkjøpsfaktor | Eksempler |
+| --- | ---: | --- |
+| Mat og CO-varsleren | ≈ 0,60 × | knekkebrød 0,598×, kaviar 0,603×, CO-varsler 0,599× |
+| Øvrig utstyr | 0,65–0,72 × | kokeapparat 0,650×, hodelykt 0,711×, nødteppe 0,718×, vannkanne 0,705× |
+
+Det eneste ekte kostnadstallet i hele sortimentet er beredskapspermen, vår
+egen trykksak (49 kr, basert på trykkeanslag ved 500 eksemplarer) — den
+følger ingen av faktorene over, fordi den ikke er utledet fra en observert
+detaljpris i det hele tatt (forholdet 49/199 = 0,246 er en tilfeldighet, ikke
+en tredje faktor).
+
+**CO-varsleren** er tallmessig i mat-gruppen (0,599×), men det er en
+tilfeldighet, ikke en bekreftelse: den har ingen valgt leverandør, ingen
+observert pris i det hele tatt — katalogens `pris: 349 / innkjop: 209` er et
+rent anslag satt fordi varen må ha et tall for at konfiguratoren skal
+fungere, ikke fordi noen har sett en CO-varsler til den prisen. Se punkt 3
+for hvordan den likevel brukes, og hvordan den skal kommuniseres, i
+prisstrategien.
 
 ### Vareforbruk per husstandsstørrelse — beregnet, ikke antatt
 
@@ -185,17 +250,28 @@ justeringen i punkt 3):
 
 | Personer | Vekt totalt | Kaloridekning | Vanndekning |
 | ---: | ---: | ---: | ---: |
-| 1 | 19,1 kg | ≥ 100 % | 100 % |
-| 2 | 25,7 kg | ≥ 100 % | 100 % |
-| 4 | 42,6 kg | ≥ 100 % | 100 % |
-| 6 | 64,7 kg | ≥ 100 % | 100 % |
-| 8 | 79,9 kg | ≥ 100 % | 100 % |
+| 1 | 19,1 kg | 157,7 % | 100 % |
+| 2 | 25,7 kg | 110,3 % | 100 % |
+| 4 | 42,6 kg | 98,8 % | 100 % |
+| 6 | 64,7 kg | 100,4 % | 100 % |
+| 8 | 79,9 kg | 95,8 % | 100 % |
 
 (Kaloridekningen skal alltid presenteres som **vår egen dimensjonering** —
 2 200 kcal per person per døgn — aldri som et DSB-tall. DSB tallfester
 ingenting utover de 20 literne vann per person, og det står trykt i
 `konfigurator.js` sin egen kildekommentar nettopp for å hindre at noen glemmer
 det.)
+
+**Merk, og dette er ikke et pyntetall:** 2 200 kcal/person/døgn er et mål vi
+har satt oss, ikke en garanti katalogen faktisk holder ved alle
+husstandsstørrelser. Med dagens `ceil()`-avrunding i `vare.antall(personer)`
+ruller dekningen noen ganger under 100 % i stedet for over — beregnet direkte
+fra katalogen for alle åtte husstandsstørrelser: 157,7 % (1 person), 110,3 %
+(2), 114,2 % (3), **98,8 % (4)**, **98,1 % (5)**, 100,4 % (6), **97,2 % (7)**
+og **95,8 % (8)**. Ved 4, 5, 7 og 8 personer dekker menyen altså *under* eget
+mål, ikke over. Det er samme `ceil()`-mekanikk som gir prishoppene i punkt 4,
+og det er en produktforbedring å ta videre der — ikke noe denne
+prisstrategien løser, men noe den ikke skal late som er løst.
 
 Vekttallene forklarer hvorfor esken må være flere kasser, ikke én stor boks:
 80 kg vann og mat til en firepersonershusstand kan ikke bæres av én person i
@@ -204,7 +280,7 @@ i produktprisen slik markedet gjør.
 
 ### Innkjøpsanslagene i tall — hva 4-personersboksen faktisk koster oss
 
-| Modus × matnivå (4 personer) | Netto salg (dagens pris) | Innkjøpskost (0,6×anslag) | Dekningsgrad i dag |
+| Modus × matnivå (4 personer) | Netto salg (dagens pris) | Innkjøpskost (mat ≈0,6×, utstyr 0,65–0,72×) | Dekningsgrad i dag |
 | --- | ---: | ---: | ---: |
 | Komplett · tørrmat | 5 082 kr | 4 190 kr | **17,5 %** |
 | Komplett · langtidsmat | 8 081 kr | 6 388 kr | **21,0 %** |
@@ -263,6 +339,25 @@ under** deres pris (se `sourcing.txt`, varegruppe «meny»). Jeg bruker samme
 logikk for alle størrelser: liten økning ved 1–2 personer (der marginen på
 avstand til 999/1 799 kr er knappest), større ved 4 personer og oppover (der
 avstanden til 3 299/4 299 kr er god).
+
+### CO-varsleren: inkludert selvfølge, ikke tillegg
+
+CO-varslerens anslåtte innkjøpskost (209 kr eks. mva, punkt 2) ligger allerede
+inne i hver eneste pris i tabellene under for komplett-pakken — den er ikke
+lagt på som en egen linje noe sted i dette regnestykket. Det skal den heller
+aldri være i grensesnittet: **CO-varsleren skal aldri vises som et tilvalg
+eller en tilleggskostnad på produktsiden eller i kassen.** Den skal opptre
+nøyaktig som kokeapparatet eller radioen — en usynlig, inkludert del av
+komplett-prisen, ikke en avkrysningsboks kunden kan spare penger ved å fjerne.
+
+Grunnen er ikke bare markedsføring. Verken gass eller rødsprit er godkjent
+for lukket rom, men folk kommer til å koke inne når det er kaldt og mørkt —
+det er nøyaktig den situasjonen boksen er dimensjonert for. Karbonmonoksid er
+luktfritt. En avkrysningsboks ville invitert kunden til å velge bort akkurat
+den sikkerhetsmarginen som er vårt sterkeste og mest dokumenterte
+differensieringspunkt (ingen konkurrent har den, se konkurrentanalysen). Å
+gjøre den valgfri for å spare 349 kr på fakturaen ville vært det motsatte av
+den ærligheten hele denne strategien er bygget på (jf. punkt 8).
 
 ### Komplett pakke, tørrmat
 
@@ -335,24 +430,44 @@ falle under 20 % netto — se regnestykket i punkt 5.
 
 ### Følsomhet: hva som skjer hvis innkjøpsanslaget bommer
 
-Alle tallene over hviler på 0,6 × detaljpris. Her er hva som skjer med
-dekningsgraden ved de foreslåtte prisene (4 personer) dersom den reelle
-B2B-prisen viser seg å være en annen brøk av detaljprisen:
+Tallene over hviler **ikke** på én global faktor — punkt 2 viser at mat og
+CO-varsleren ligger på ≈ 0,60 × detaljpris mens øvrig utstyr ligger på
+0,65–0,72 ×. Følsomhetsanalysen under flytter derfor begge faktorene sammen,
+hver fra sin egen, faktiske utgangsverdi, i stedet for å late som hele pakken
+er én vare. Utstyrsdelen har ulik sammensetning i komplett-pakken (radio,
+kokeapparat, lykter osv., utgangsfaktor 0,68) og i matpåfyllet (bare
+vannrensetabletter, utgangsfaktor 0,70), så tabellene er delt i to:
 
-| Innkjøpsfaktor | Komplett tørrmat | Komplett langtidsmat | Matpåfyll tørrmat | Matpåfyll langtidsmat |
-| --- | ---: | ---: | ---: | ---: |
-| 0,70 (verre enn antatt) | 16,1 % | 16,0 % | 27,0 % | 26,5 % |
-| 0,60 (samme som i dag) | 28,0 % | 28,0 % | 37,5 % | 37,0 % |
-| 0,55 | 34,0 % | 34,0 % | 42,7 % | 42,3 % |
-| 0,50 | 40,0 % | 40,0 % | 47,9 % | 47,5 % |
-| 0,45 (best mulig forhandling) | 46,0 % | 46,0 % | 53,1 % | 52,8 % |
+**Komplett-pakken** (utstyr: radio, kokeapparat, lykter, kanner, CO-varsler m.m.):
 
-Med de nye prispunktene tåler vi at innkjøpsfaktoren blir *verre* enn dagens
-anslag (0,70) og fortsatt lander over 16 % på komplett-pakken — mot
-katastrofen i `docs/innkjopsliste.md` sin egen tabell, der 0,70 på **dagens**
-priser ga 3 %. Det er selve poenget med å prise etter mål i stedet for å prise
-etter kost pluss et fast påslag: prisstigen gir en buffer mot at anslaget er
-feil, ikke bare mot at det stemmer.
+| Matfaktor | Utstyrfaktor | Komplett tørrmat | Komplett langtidsmat |
+| --- | ---: | ---: | ---: |
+| 0,70 (verre enn antatt) | 0,78 | 17,1 % | 16,7 % |
+| 0,60 (samme som i dag) | 0,68 | 28,0 % | 28,0 % |
+| 0,55 | 0,63 | 33,5 % | 33,7 % |
+| 0,50 | 0,58 | 39,0 % | 39,3 % |
+| 0,45 (best mulig forhandling) | 0,53 | 44,4 % | 45,0 % |
+
+**Matpåfyll** (utstyr er i praksis bare vannrensetabletter — under 6 % av
+innkjøpskosten — så matfaktoren dominerer dekningsgraden nesten alene):
+
+| Matfaktor | Utstyrfaktor | Matpåfyll tørrmat | Matpåfyll langtidsmat |
+| --- | ---: | ---: | ---: |
+| 0,70 (verre enn antatt) | 0,80 | 27,2 % | 26,6 % |
+| 0,60 (samme som i dag) | 0,70 | 37,5 % | 37,0 % |
+| 0,55 | 0,65 | 42,6 % | 42,3 % |
+| 0,50 | 0,60 | 47,8 % | 47,5 % |
+| 0,45 (best mulig forhandling) | 0,55 | 52,9 % | 52,7 % |
+
+Raden «0,60 (samme som i dag)» gir nøyaktig de samme dekningsgradene som
+tabellen i punkt 2 (28,0 %, 28,0 %, 37,5 %, 37,0 %) — det bekrefter at det
+todelte oppsettet er konsistent med hvordan tallene faktisk er beregnet, ikke
+en ny metode. Med de nye prispunktene tåler vi fortsatt at begge faktorene
+blir *verre* enn dagens anslag (0,70/0,78) og lander over 17 % på
+komplett-pakken — mot katastrofen i `docs/innkjopsliste.md` sin egen tabell,
+der 0,70 på **dagens** priser ga 3 %. Det er selve poenget med å prise etter
+mål i stedet for å prise etter kost pluss et fast påslag: prisstigen gir en
+buffer mot at anslaget er feil, ikke bare mot at det stemmer.
 
 ---
 
@@ -687,10 +802,10 @@ når vi faktisk endrer dem — ikke pyntes med en strøket linje ved siden av.
 
 ## Prioritert liste over det som må skje før disse tallene kan brukes i produksjon
 
-1. **Reell B2B-pris fra Drytech/REAL Turmat**, ikke 0,6×-anslaget. Dette er
-   den enkeltendringen som betyr mest, fordi REAL Turmat er 44 % av
-   innkjøpskosten på den ene pakken (langtidsmat, 1–2 personer) der marginen
-   i dag er under 20 %-kravet.
+1. **Reell B2B-pris fra Drytech/REAL Turmat**, ikke 0,6×-anslaget som resten
+   av matgruppen bruker. Dette er den enkeltendringen som betyr mest, fordi
+   REAL Turmat er 44 % av innkjøpskosten på den ene pakken (langtidsmat,
+   1–2 personer) der marginen i dag er under 20 %-kravet.
 2. **Reelle fraktpriser** fra Bring og/eller PostNord bedriftsavtale — punkt
    7s tall er anslag, og fraktkalkylen i kassen kan ikke bygges på et anslag.
 3. **Rett `ui/bygger.js`** slik at prispanelets mva-oppdeling faktisk viser
@@ -701,7 +816,14 @@ når vi faktisk endrer dem — ikke pyntes med en strøket linje ved siden av.
    samme problem menyen allerede løste for maten.
 5. **Legg til et «annethvert år»-nivå i `PAFYLL`** for tørrmatkunder med
    lavere forpliktelsesvilje enn årlig (punkt 5).
+6. **Se på kaloridekningen ved 4, 5, 7 og 8 personer** (punkt 2) — den
+   kommer i dag under det egendefinerte målet på 2 200 kcal/person/døgn
+   (ned til 95,8 % ved 8 personer), fordi `ceil()`-avrundingen i
+   `vare.antall(personer)` noen ganger ruller feil vei. Enten justeres
+   avrundingen, eller så skal innholdslisten si eksplisitt at dekningen kan
+   ligge noen prosent under målet ved enkelte husstandsstørrelser — vi skal
+   ikke skrive «≥ 100 %» når koden ikke holder det.
 
-Disse fem er produkt- og innkjøpsarbeid, ikke prisarbeid — men prisstrategien
+Disse seks er produkt- og innkjøpsarbeid, ikke prisarbeid — men prisstrategien
 over holder kun så lenge disse forutsetningene enten stemmer eller blir
 rettet.

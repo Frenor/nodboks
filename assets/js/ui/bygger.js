@@ -203,8 +203,12 @@ function tegnSvar(rot, pakke) {
   if (mat) deler.push(`<b>${tall(mat)}</b> matvarer`)
   if (pakke.liter) deler.push(`<b>${tall(pakke.liter)} liter</b> vannkapasitet`)
   if (pakke.eske) deler.push(`${pakke.eske.navn.toLowerCase().startsWith('nødboks') ? pakke.eske.navn.split('–')[1]?.trim() ?? 'esken' : 'esken'} på til sammen <b>${tall(pakke.vekt, 0)} kg</b>`)
+  const kaldt =
+    pakke.dognUtenVarme >= KONFIG.dogn
+      ? `Hele uka kan spises kald hvis brennstoffet tar slutt.`
+      : `Uten brennstoff rekker maten <b>${pakke.dognUtenVarme} døgn</b> – resten krever kokende vann.`
   el.innerHTML = `<p>Det gir ${deler.join(', ')} – nok til ${personer(pakke.valg.personer)}
-    i ${KONFIG.dogn} døgn.</p>`
+    i ${KONFIG.dogn} døgn.</p><p style="margin-top:var(--sp-2)">${kaldt}</p>`
 }
 
 /** Holdbarhetslinjalen skalerer mot det lengstholdbare nivået i katalogen. */

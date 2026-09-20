@@ -708,6 +708,9 @@ export const VARER = [
     holdbarhetAr: 5,
     kcal: 702,
     vektKg: 0.15,
+    // Krever 3,7 dl kokende vann per pose. Uten brennstoff er den uspiselig,
+    // og derfor teller den ikke med i «døgn uten varme» i konfiguratoren.
+    kreverVarme: true,
     dsb: 'Mat: frysetørket mat',
     produkt: {
       merke: 'REAL Turmat / Drytech AS, Tromsø',
@@ -736,6 +739,9 @@ export const VARER = [
     holdbarhetAr: 5,
     kcal: 450,
     vektKg: 0.1,
+    // Krever 3,7 dl kokende vann per pose. Uten brennstoff er den uspiselig,
+    // og derfor teller den ikke med i «døgn uten varme» i konfiguratoren.
+    kreverVarme: true,
     dsb: 'Mat: frysetørket mat',
     produkt: {
       merke: 'REAL Turmat / Drytech AS, Tromsø',

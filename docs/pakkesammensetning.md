@@ -4,7 +4,11 @@ Dette dokumentet definerer hva som faktisk ligger i en Nødboks: hvilke varer,
 i hvilket antall, etter hvilken skaleringsregel, og hvorfor. Det er skrevet
 til å kunne mates rett inn i `assets/js/data/katalog.js` – kolonnen
 «Skaleringsregel» under hver vare er skrevet i samme form som
-`antall: (personer) => …` i konfiguratoren.
+`antall: (personer) => …` i konfiguratoren. **Ett unntak: esken.** Den er
+ikke en `VARER`-linje med en `antall()`-funksjon, men ett av seks ferdige
+`ESKER`-sett (tre husstandsstørrelser × to materialer) som konfiguratorens
+`velgEske(personer, eskeType)` plukker basert på en `maksPersoner`-terskel –
+se avsnitt 3.
 
 **Kilder.** DSBs egenberedskapsbrosjyre (bokmål) og DSBs sjekkliste for
 egenberedskap er grunnlaget for hvert DSB-punkt som siteres under. Produkter,
@@ -150,13 +154,19 @@ avsnitt 3–4 for produkt, pris og skaleringsregel per vare.
 
 ### Hva det betyr for totalkostnaden over ti år (eksempel: 4 personer, tørrmat, komplett pakke)
 
-Engangsutstyret koster ca. **6 190 kr**, betalt én gang: esken (3 kasser,
-897 kr), vannkanner (8 stk, 479 kr), kokeapparat – Trangia + gassbrenner,
-uten brennstoff (1 298 kr), CO-varsler (349 kr, vår egen utsalgspris – ikke
-en observert konkurrentpris, se avsnitt 3), nødradio (530 kr), powerbank
+Engangsutstyret koster ca. **5 891 kr**, betalt én gang: esken (Nødboks
+Mellom, 2 kasser, 598 kr – riktig sett for 4 personer, se avsnitt 3),
+vannkanner (8 stk, 479 kr), kokeapparat – Trangia + gassbrenner, uten
+brennstoff (1 298 kr), CO-varsler (349 kr, vår egen utsalgspris – ikke en
+observert konkurrentpris, se avsnitt 3), nødradio (530 kr), powerbank
 (659 kr), brannteppe (350 kr), gaffateip (192 kr), multiverktøy (250 kr),
 hodelykter og campinglykter (558 kr), bøttetoalett (399 kr), dokumentmappe
 (229 kr).
+
+*(Esken over er rettet til den faktiske `ESKER`-modellen. De øvrige
+enhetsprisene i dette regnestykket er ikke kontrollert på nytt mot gjeldende
+`katalog.js` og bør oppdateres når det er avklart hvilken katalogversjon som
+er riktig for lansering.)*
 
 Forbruksvarene koster i snitt ca. **2 740 kr per år** over ti år, og maten
 er over 90 % av det tallet: ca. 2 491 kr i mat hvert år (se avsnitt 5),
@@ -167,8 +177,8 @@ Brennstoff er ikke med i dette regnestykket i det hele tatt – kunden kjøper
 gass eller rødsprit selv, lokalt, etter behov (se avsnitt 3), og det er en
 kostnad og et kjøp som aldri går gjennom oss.
 
-Ti år totalt blir da grovt **6 190 kr i engangsutstyr + ca. 27 400 kr i
-forbruk = rundt 33 600 kr**, mot en kunde som i stedet kjøper en helt ny
+Ti år totalt blir da grovt **5 891 kr i engangsutstyr + ca. 27 400 kr i
+forbruk = rundt 33 300 kr**, mot en kunde som i stedet kjøper en helt ny
 komplett pakke hos en konkurrent hvert femte år fordi ingen sier fra at
 maten er gått ut (2 × 6 999 kr hos beredskap1 for en firepersonspakke =
 13 998 kr for to bokser – og fortsatt uten garanti for at noen faktisk
@@ -188,9 +198,27 @@ datoen sin. Esken listes derfor for seg, før de fire DSB-overskriftene.
 
 ### Esken
 
-| Vare | Produkt | Enhet | Mengde | Skaleringsregel | Holdbarhet | Hvorfor |
-| --- | --- | --- | --- | --- | --- | --- |
-| Stablekasse 55 l | SmartStore Dry 45 (Orthex), 60×40×35 cm, 299 kr, Europris | stk | 1–5 per husstand | `personer <= 2 ? personer : personer <= 4 ? 3 : personer <= 6 ? 4 : 5` | – | Én eskestørrelse i hele sortimentet, skalert på antall i stedet for volum. Næringsmiddelgodkjent, IP44-tett, tåler −40 °C, ti års garanti – de fire egenskapene som gjør at maten faktisk lever til holdbarhetsdatoen i en norsk bod, og at esken selv lever like lenge som abonnementet. Merkes med innholdsliste og eldste utløpsdato på lokket. |
+Esken er ikke én kassestørrelse skalert i antall – sju døgns mat og vann til
+fire personer veier rundt 36 kg, og det får ikke plass i én bærbar kasse for
+en større husstand. Kunden får i stedet **ett ferdig eskesett**, valgt av
+`velgEske(personer, eskeType)` i konfiguratoren: den plukker det minste av
+tre `ESKER`-sett der husstanden er innenfor settets `maksPersoner`, og
+`antall` for den valgte linjen er alltid `1` – aldri flere enkeltkasser lagt
+sammen. Standardmaterialet er plast (`SmartStore Dry 45` fra Orthex); en
+aluminiumsversjon (Zarges Eurobox til utstyret) finnes som eget valg i
+konfiguratoren, men er en tilvalgspris utenfor denne stykklisten.
+
+| Sett | Personer | Kasser (SmartStore Dry 45, 60×40×35 cm) | Volum | Pris | Terskel (`maksPersoner`) | Hvorfor |
+| --- | --- | ---: | ---: | ---: | ---: | --- |
+| Nødboks Liten | 1–2 | 1 | 45 l | 299 kr | 2 | Én kasse tar mat, vann og utstyr til én eller to personer, og kan bæres av én person ned i boden uten hjelp. |
+| Nødboks Mellom | 3–5 | 2 | 90 l | 598 kr | 5 | Maten til en familie på fire veier rundt 36 kg. Delt på to kasser kan hver av dem faktisk løftes, og du slipper å tømme hele boksen for å finne lommelykten. |
+| Nødboks Stor | 6–8 | 3 | 135 l | 897 kr | 8 | Over fem personer blir én kasse per kategori (mat, vann, utstyr) det eneste som lar seg løfte. |
+
+Alle tre bruker samme kasse – næringsmiddelgodkjent, IP44-tett, tåler
+−40 til +70 °C, ti års garanti – de egenskapene som gjør at maten faktisk
+lever til holdbarhetsdatoen i en norsk bod, og at esken selv lever like
+lenge som abonnementet. Merkes med innholdsliste og eldste utløpsdato på
+lokket.
 
 ### Mat og vann
 
@@ -407,19 +435,21 @@ den ene fuel-free-dagen avhengig av gass igjen.
 ## 6. Mengder per husstandsstørrelse 1–8
 
 Tabellen viser at kurven er jevn – ingen enkeltvare hopper uforholdsmessig
-ved noen bestemt husstandsstørrelse – fordi hver regel er skrevet som en
-funksjon av `personer`, ikke som et oppslag i en tabell.
+ved noen bestemt husstandsstørrelse – fordi hver vare (utenom esken) er
+skrevet som en funksjon av `personer`, ikke som et oppslag i en tabell.
+Esken er det ene bevisste unntaket: den er ett ferdig sett valgt via en
+personterskel (`maksPersoner`), ikke en formel – se avsnitt 3.
 
-| Personer | Vann (l) | Esker (stk) | Hodelykt (stk) | Litium AAA (10‑pk) | Kontanter (kr) | Førstehjelpsskrin | Håndsprit (fl.) | Bøttetoalett | Kokeapparat (sett) | CO-varsler (stk) | Nødteppe (stk) |
-| ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 1 | 20 | 1 | 2 | 1 | 500 | 1 | 1 | 1 | 1 | 1 | 1 |
-| 2 | 40 | 2 | 2 | 1 | 1 000 | 1 | 1 | 1 | 1 | 1 | 2 |
-| 3 | 60 | 3 | 3 | 2 | 1 500 | 1 | 1 | 1 | 1 | 1 | 3 |
-| 4 | 80 | 3 | 4 | 2 | 2 000 | 1 | 1 | 1 | 1 | 1 | 4 |
-| 5 | 100 | 4 | 5 | 3 | 2 500 | 2 | 2 | 2 | 2 | 2 | 5 |
-| 6 | 120 | 4 | 6 | 3 | 3 000 (tak) | 2 | 2 | 2 | 2 | 2 | 6 |
-| 7 | 140 | 5 | 7 | 4 | 3 000 (tak) | 2 | 2 | 2 | 2 | 2 | 7 |
-| 8 | 160 | 5 | 8 | 4 | 3 000 (tak) | 2 | 2 | 2 | 2 | 2 | 8 |
+| Personer | Vann (l) | Eskesett (kasser) | Hodelykt (stk) | Litium AAA (10‑pk) | Kontanter (kr) | Førstehjelpsskrin | Håndsprit (fl.) | Bøttetoalett | Kokeapparat (sett) | CO-varsler (stk) | Nødteppe (stk) |
+| ---: | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 1 | 20 | Liten (1) | 2 | 1 | 500 | 1 | 1 | 1 | 1 | 1 | 1 |
+| 2 | 40 | Liten (1) | 2 | 1 | 1 000 | 1 | 1 | 1 | 1 | 1 | 2 |
+| 3 | 60 | Mellom (2) | 3 | 2 | 1 500 | 1 | 1 | 1 | 1 | 1 | 3 |
+| 4 | 80 | Mellom (2) | 4 | 2 | 2 000 | 1 | 1 | 1 | 1 | 1 | 4 |
+| 5 | 100 | Mellom (2) | 5 | 3 | 2 500 | 2 | 2 | 2 | 2 | 2 | 5 |
+| 6 | 120 | Stor (3) | 6 | 3 | 3 000 (tak) | 2 | 2 | 2 | 2 | 2 | 6 |
+| 7 | 140 | Stor (3) | 7 | 4 | 3 000 (tak) | 2 | 2 | 2 | 2 | 2 | 7 |
+| 8 | 160 | Stor (3) | 8 | 4 | 3 000 (tak) | 2 | 2 | 2 | 2 | 2 | 8 |
 
 Brennstoff (gass eller rødsprit) er bevisst utelatt fra denne tabellen: det
 selges ikke av oss i noen mengde, se avsnitt 3.
