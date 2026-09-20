@@ -675,7 +675,7 @@ export const VARER = [
     beskrivelse:
       'Stormkjøkken med dobbel vindskjerm, kokekar på 1,75 og 1,5 liter, stekepanne og gripetang, levert med gassbrenner på 2800 W. Spritbrenneren følger med settet fra fabrikk.',
     hvorfor:
-      'Vindskjermen er selve konstruksjonen, ikke et tilbehør, og det er den som gjør at apparatet virker på en balkong i november. Settet gir deg to brennstoffer å velge mellom: gass når det skal gå fort, eller rødsprit hvis du vil ha noe som tåler å stå glemt i en bod i årevis. Brennstoffet kjøper du selv – se hvorfor i listen over det vi ikke selger.',
+      'Vindskjermen er selve konstruksjonen, ikke et tilbehør, og det er den som gjør at apparatet virker på en balkong i november. Settet gir deg to brennstoffer å velge mellom: gass når det skal gå fort, eller rødsprit hvis du vil ha noe som tåler å stå glemt i en bod i årevis. Brennstoffet kjøper du selv – se hvorfor i listen over det vi ikke selger. Apparatet er ikke godkjent for lukket rom: bruk det med vindu på gløtt, aldri mens du sover, og la CO-varsleren stå i samme rom.',
     kategori: 'Matlaging',
     type: 'engang',
     moduser: ['komplett'],
@@ -695,6 +695,33 @@ export const VARER = [
     // porsjoner under to liter tar for lang tid over sju døgn, og to sett gir
     // dessuten redundans om den ene brenneren svikter.
     antall: (p) => Math.ceil(p / 4),
+  },
+
+  {
+    sku: 'co-varsler',
+    navn: 'CO-varsler med display, batteridrevet',
+    beskrivelse:
+      'Karbonmonoksidvarsler med sifferdisplay og testknapp. Går på batteri og virker uten strøm.',
+    hvorfor:
+      'Kokeapparatet er ikke godkjent for lukket rom, men vi vet at folk kommer til å bruke det inne når det er kaldt og mørkt. Karbonmonoksid er luktfritt, og de første symptomene ligner influensa. Dette er den billigste varen i esken som kan redde liv, og den eneste grunnen til at vi tør selge et kokeapparat til en husstand som skal klare seg i sju døgn.',
+    kategori: 'Varme og lys',
+    type: 'engang',
+    moduser: ['komplett'],
+    enhet: 'stk',
+    pris: 349,
+    innkjop: 209,
+    holdbarhetAr: 7,
+    vektKg: 0.2,
+    dsb: 'Varme: brannsikkerhet ved økt bruk av åpen ild',
+    produkt: {
+      merke: 'ikke valgt',
+      modell: 'EN 50291-1-sertifisert CO-varsler for bolig',
+      kilde: 'IKKE SOURCET – pris er anslag, se docs/innkjopsliste.md',
+      url: '',
+    },
+    // Én per husstand opp til fire, to over det: en CO-varsler dekker rommet
+    // den står i, og større husstander bruker oftere mer enn ett rom.
+    antall: (p) => (p <= 4 ? 1 : 2),
   },
   {
     sku: 'fyrstikker',
