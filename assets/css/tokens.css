@@ -1,0 +1,181 @@
+/* ==========================================================================
+   Nødboks – designtokens
+   --------------------------------------------------------------------------
+   Ett sted for farge, typografi, rom og bevegelse. Alt annet CSS refererer
+   hit. Lys modus er standard; mørk modus følger systemet med mindre brukeren
+   har valgt noe selv (data-theme på <html>).
+
+   Fargevalget: varm papirhvit og dypgrønn gran i stedet for svart/oransje
+   "taktisk". Aksenten er en glødende ravfarge – lykt og varme, ikke faresignal.
+   ========================================================================== */
+
+:root {
+  color-scheme: light dark;
+
+  /* --- Flater og tekst (lys modus) --- */
+  --bg:            #FBF8F3;  /* varm papir */
+  --bg-sunken:     #F2ECE2;
+  --surface:       #FFFFFF;
+  --surface-2:     #F7F3EC;
+  --border:        #E4DCCE;
+  --border-strong: #CFC3B1;
+
+  --text:          #16211D;
+  --text-muted:    #53625C;
+  --text-faint:    #7F8D87;
+
+  /* --- Merkevare --- */
+  --brand:         #14342B;  /* dyp gran – seksjonsflater, logo */
+  --brand-2:       #1E4B3E;
+  --brand-ink:     #F4F0E7;  /* tekst på brand-flate */
+
+  /* --- Aksent: ravgul lykt --- */
+  --accent:        #B4551A;  /* AA-kontrast mot hvitt */
+  --accent-hover:  #994612;
+  --accent-ink:    #FFFFFF;  /* tekst på aksentflate */
+  --accent-soft:   #FBEEE0;  /* svak bakgrunn, badges */
+  --accent-line:   #EBD3B8;
+
+  /* --- Status --- */
+  --ok:            #1F6B4A;
+  --ok-soft:       #E4F1E9;
+  --warn:          #8A5A05;
+  --warn-soft:     #FBF0D9;
+  --info:          #1B5673;
+  --info-soft:     #E4EFF5;
+
+  /* --- Fokus --- */
+  --focus:         #1B5673;
+
+  /* --- Skygge: lav og varm, aldri "kort som svever" --- */
+  --shadow-sm: 0 1px 2px rgb(22 33 29 / 0.06), 0 1px 1px rgb(22 33 29 / 0.04);
+  --shadow-md: 0 2px 4px rgb(22 33 29 / 0.05), 0 6px 16px rgb(22 33 29 / 0.07);
+  --shadow-lg: 0 4px 8px rgb(22 33 29 / 0.05), 0 16px 40px rgb(22 33 29 / 0.10);
+
+  /* --- Typografi ---------------------------------------------------------
+     Ingen webfonter: null nettverkskall, ingen layout-shift, rask LCP.
+     Display-serifen gir redaksjonell tyngde (institusjon, ikke prepper-butikk),
+     UI-sansen er systemets egen og føles innfødt på iOS/Android/desktop.
+     ---------------------------------------------------------------------- */
+  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
+                  Charter, Georgia, ui-serif, serif;
+  --font-ui:      system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+                  Arial, "Noto Sans", sans-serif;
+  --font-mono:    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Flytende typeskala, 320px → 1280px */
+  --step--1: clamp(0.82rem, 0.79rem + 0.13vw, 0.89rem);
+  --step-0:  clamp(1.00rem, 0.97rem + 0.16vw, 1.09rem);
+  --step-1:  clamp(1.18rem, 1.11rem + 0.34vw, 1.38rem);
+  --step-2:  clamp(1.38rem, 1.25rem + 0.63vw, 1.75rem);
+  --step-3:  clamp(1.62rem, 1.39rem + 1.08vw, 2.22rem);
+  --step-4:  clamp(1.91rem, 1.53rem + 1.75vw, 2.81rem);
+  --step-5:  clamp(2.24rem, 1.65rem + 2.76vw, 3.58rem);
+
+  --lh-tight: 1.12;
+  --lh-snug:  1.28;
+  --lh-body:  1.62;
+
+  /* --- Rom: 4px-grid --- */
+  --sp-1: 0.25rem;  --sp-2: 0.5rem;   --sp-3: 0.75rem;  --sp-4: 1rem;
+  --sp-5: 1.5rem;   --sp-6: 2rem;     --sp-7: 3rem;     --sp-8: 4rem;
+  --sp-9: 6rem;     --sp-10: 8rem;
+
+  /* --- Form --- */
+  --radius-sm: 6px;
+  --radius:    10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
+
+  /* --- Bredder --- */
+  --width-page:  1140px;
+  --width-text:  68ch;
+  --width-narrow: 46ch;
+
+  /* --- Bevegelse: kort og lavmælt --- */
+  --ease:      cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-out:  cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast:  120ms;
+  --dur:       200ms;
+  --dur-slow:  360ms;
+}
+
+/* --- Mørk modus ----------------------------------------------------------
+   Ikke bare invertert: bakgrunnen er en dyp grønnsvart (samme granfamilie som
+   merkevaren), aksenten løftes og avmettes litt slik at den ikke gløder,
+   og teksten er varm beige i stedet for ren hvit – mindre halering om natten.
+   -------------------------------------------------------------------------- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:            #0C1311;
+    --bg-sunken:     #080D0C;
+    --surface:       #131D19;
+    --surface-2:     #1A2622;
+    --border:        #26332E;
+    --border-strong: #3A4A44;
+
+    --text:          #ECE6DB;
+    --text-muted:    #9CAAA3;
+    --text-faint:    #74827C;
+
+    --brand:         #D9E6DE;
+    --brand-2:       #B9CFC4;
+    --brand-ink:     #0C1311;
+
+    --accent:        #E79A4E;
+    --accent-hover:  #F2AC66;
+    --accent-ink:    #20130A;
+    --accent-soft:   #241A12;
+    --accent-line:   #3E2C1C;
+
+    --ok:            #6FC79B;
+    --ok-soft:       #10231A;
+    --warn:          #E2B764;
+    --warn-soft:     #241D0F;
+    --info:          #7FC2E0;
+    --info-soft:     #0F1E26;
+
+    --focus:         #7FC2E0;
+
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.40);
+    --shadow-md: 0 2px 4px rgb(0 0 0 / 0.35), 0 8px 20px rgb(0 0 0 / 0.40);
+    --shadow-lg: 0 4px 10px rgb(0 0 0 / 0.35), 0 20px 48px rgb(0 0 0 / 0.50);
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg:            #0C1311;
+  --bg-sunken:     #080D0C;
+  --surface:       #131D19;
+  --surface-2:     #1A2622;
+  --border:        #26332E;
+  --border-strong: #3A4A44;
+
+  --text:          #ECE6DB;
+  --text-muted:    #9CAAA3;
+  --text-faint:    #74827C;
+
+  --brand:         #D9E6DE;
+  --brand-2:       #B9CFC4;
+  --brand-ink:     #0C1311;
+
+  --accent:        #E79A4E;
+  --accent-hover:  #F2AC66;
+  --accent-ink:    #20130A;
+  --accent-soft:   #241A12;
+  --accent-line:   #3E2C1C;
+
+  --ok:            #6FC79B;
+  --ok-soft:       #10231A;
+  --warn:          #E2B764;
+  --warn-soft:     #241D0F;
+  --info:          #7FC2E0;
+  --info-soft:     #0F1E26;
+
+  --focus:         #7FC2E0;
+
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.40);
+  --shadow-md: 0 2px 4px rgb(0 0 0 / 0.35), 0 8px 20px rgb(0 0 0 / 0.40);
+  --shadow-lg: 0 4px 10px rgb(0 0 0 / 0.35), 0 20px 48px rgb(0 0 0 / 0.50);
+}
