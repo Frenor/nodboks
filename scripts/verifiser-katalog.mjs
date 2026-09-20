@@ -12,7 +12,7 @@
 import { readFileSync, existsSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
-import { byggPakke, klem } from '../assets/js/konfigurator.js'
+import { byggPakke, klem, klemHusstand, kontekst } from '../assets/js/konfigurator.js'
 import { KONFIG, VARER, ESKER, MATNIVAER, MODUSER, PAFYLL } from '../assets/js/data/katalog.js'
 
 /*
@@ -65,33 +65,65 @@ const dekket = ESKER.some((e) => e.maksPersoner >= KONFIG.personerMaks)
 dekket ? ok(`esker dekker opp til ${KONFIG.personerMaks} personer`)
        : nei(`ingen eske tar ${KONFIG.personerMaks} personer`)
 
-// --- Hver kombinasjon -------------------------------------------------------
+// --- Husstandsrutenettet ----------------------------------------------------
 for (const modus of MODUSER) {
   for (const niva of MATNIVAER) {
     bolk(`${modus.navn} · ${niva.navn}`)
-    let forrige = 0
-    for (let p = KONFIG.personerMin; p <= KONFIG.personerMaks; p++) {
-      const pakke = byggPakke({ personer: p, matniva: niva.id, modus: modus.id })
+    let feilFor = feil
 
-      if (pakke.sum <= forrige) nei(`${p} pers: prisen (${pakke.sum}) vokser ikke fra ${forrige}`)
-      forrige = pakke.sum
+    for (let voksne = 1; voksne <= KONFIG.personerMaks; voksne++) {
+      for (let barn = 0; barn <= 6; barn++) {
+        if (voksne + barn > KONFIG.personerMaks) continue
+        for (const dyr of [0, 2, 4]) {
+          const h = { voksne, barn, kjaeledyr: dyr }
+          const pakke = byggPakke({ husstand: h, matniva: niva.id, modus: modus.id })
+          const merke = `${voksne}v${barn}b${dyr}d`
 
-      if (pakke.kcalDekning < 0.95) {
-        nei(`${p} pers: energi dekker bare ${Math.round(pakke.kcalDekning * 100)} % av ${KONFIG.dogn} døgn`)
+          /*
+           * Identiteten. Energibehovet regnes av ve, mengdene skaleres av ve,
+           * og de to skal derfor være nøyaktig det samme som å regne voksne og
+           * barn hver for seg. Ryker denne, har noen satt barnFaktor som et
+           * frittstående tall, og da stemmer ikke dekningsvarselet med maten
+           * som faktisk ligger i esken.
+           */
+          const direkte =
+            (voksne * KONFIG.kcalVoksenDogn + barn * KONFIG.kcalBarnDogn) * KONFIG.dogn
+          if (Math.abs(pakke.kcalBehov - direkte) > 0.5) {
+            nei(`${merke}: energibehov ${pakke.kcalBehov.toFixed(1)} ≠ ${direkte.toFixed(1)}`)
+          }
+
+          if (pakke.kcalDekning < 0.95) {
+            nei(`${merke}: energi dekker ${Math.round(pakke.kcalDekning * 100)} %`)
+          }
+          if (modus.medVann && pakke.liter < pakke.vannBehov) {
+            nei(`${merke}: vann ${pakke.liter} l av ${pakke.vannBehov} l`)
+          }
+          if (dyr > 0 && modus.medEske) {
+            const dyrelinjer = pakke.linjer.filter((l) => /^dyre|dyrevann/.test(l.sku))
+            if (!dyrelinjer.length) nei(`${merke}: kjæledyr oppgitt, men ingen dyrevarer`)
+          }
+          if (dyr === 0 && pakke.linjer.some((l) => /^dyre|dyrevann/.test(l.sku))) {
+            nei(`${merke}: ingen kjæledyr, men dyrevarer i pakken`)
+          }
+        }
       }
-      if (modus.medVann && pakke.vanndekning < 0.999) {
-        nei(`${p} pers: vann ${pakke.liter} l av ${pakke.vannBehov} l`)
-      }
-      if (pakke.linjer.length === 0) nei(`${p} pers: tom pakke`)
-      if (modus.medEske && !pakke.eske) nei(`${p} pers: mangler eske`)
     }
 
-    const en = byggPakke({ personer: 1, matniva: niva.id, modus: modus.id })
-    const atte = byggPakke({ personer: 8, matniva: niva.id, modus: modus.id })
-    const skala = atte.sum / en.sum
-    if (skala > 8) obs(`8 personer koster ${skala.toFixed(1)}× én person – dårlig skalafordel`)
-    ok(`1–${KONFIG.personerMaks} personer: ${en.sum}–${atte.sum} kr, ` +
-       `${en.prisPerPersonPerDogn}–${atte.prisPerPersonPerDogn} kr per person per døgn`)
+    // Monotoni: ett barn ekstra gjør aldri pakken billigere, og aldri dyrere
+    // enn én voksen ekstra. Fanger en skaleringsregel som peker feil vei.
+    for (let voksne = 1; voksne <= 6; voksne++) {
+      const grunn = byggPakke({ husstand: { voksne, barn: 0 }, matniva: niva.id, modus: modus.id }).sum
+      const medBarn = byggPakke({ husstand: { voksne, barn: 1 }, matniva: niva.id, modus: modus.id }).sum
+      const medVoksen = byggPakke({ husstand: { voksne: voksne + 1, barn: 0 }, matniva: niva.id, modus: modus.id }).sum
+      if (medBarn < grunn) nei(`${voksne}v: ett barn til gjør pakken billigere`)
+      if (medBarn > medVoksen) nei(`${voksne}v: ett barn koster mer enn én voksen`)
+    }
+
+    if (feil === feilFor) {
+      const fire = byggPakke({ husstand: { voksne: 2, barn: 2 }, matniva: niva.id, modus: modus.id })
+      ok(`hele rutenettet: 2 voksne + 2 barn gir ${fire.sum} kr, ` +
+         `${fire.ctx.ve.toFixed(2)} voksenekvivalenter`)
+    }
   }
 }
 
@@ -148,6 +180,27 @@ bolk('Robusthet')
 klem(0) === KONFIG.personerMin ? ok('0 personer klemmes opp til minimum') : nei('klem(0) feiler')
 klem(99) === KONFIG.personerMaks ? ok('99 personer klemmes ned til maksimum') : nei('klem(99) feiler')
 klem(NaN) === KONFIG.personerMin ? ok('NaN håndteres') : nei('klem(NaN) feiler')
+
+const k1 = klemHusstand({ voksne: 5, barn: 5 })
+k1.voksne === 5 && k1.barn === 3
+  ? ok('taket på åtte trekker fra barn først: 5 voksne + 5 barn → 5 + 3')
+  : nei(`klemHusstand(5v5b) ga ${k1.voksne}v${k1.barn}b`)
+
+const k2 = klemHusstand({})
+k2.voksne === 1 && k2.barn === 0 && k2.kjaeledyr === 0
+  ? ok('tomt objekt gir én voksen')
+  : nei('klemHusstand({}) feiler')
+
+const k3 = klemHusstand({ voksne: 'to', barn: -3, kjaeledyr: 99 })
+k3.voksne === 1 && k3.barn === 0 && k3.kjaeledyr === 4
+  ? ok('søppel inn gir gyldig husstand ut')
+  : nei(`klemHusstand(søppel) ga ${JSON.stringify(k3)}`)
+
+const gammel = byggPakke({ personer: 4, matniva: 'torrmat', modus: 'komplett' })
+const ny = byggPakke({ husstand: { voksne: 4 }, matniva: 'torrmat', modus: 'komplett' })
+gammel.sum === ny.sum
+  ? ok('gammelt {personer}-kall gir samme pakke som {husstand}')
+  : nei(`bakoverkompatibilitet brutt: ${gammel.sum} mot ${ny.sum}`)
 
 // --- Fasit ------------------------------------------------------------------
 console.log(

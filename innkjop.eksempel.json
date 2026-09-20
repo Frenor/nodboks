@@ -418,5 +418,25 @@
     "kontakt": "",
     "minsteordre": "",
     "notat": ""
+  },
+  "dyrevann": {
+    "navn": "Vanndunk 10 liter til dyra",
+    "utsalg": 60,
+    "innkjop": 36.0,
+    "kilde": "ANSLAG: 0,6 × observert butikkpris",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": ""
+  },
+  "dyreboks": {
+    "navn": "Tett fôrboks, 5 liter, med datoetikett",
+    "utsalg": 129,
+    "innkjop": 77.4,
+    "kilde": "ANSLAG – varen er ikke sourcet",
+    "leverandor": "",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": "Må sources før lansering"
   }
 }

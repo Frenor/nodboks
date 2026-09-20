@@ -102,13 +102,36 @@ export const KONFIG = {
   dogn: 7,
   personerMin: 1,
   personerMaks: 8,
-  // DSBs råd: 9 liter drikkevann per person i tre døgn, skalert til sju døgn
-  // og rundet til 20 liter som også dekker matlaging og et minimum av hygiene.
+
+  // DSBs råd, og det eneste tallet DSB selv oppgir.
   vannLiterPerPerson: 20,
-  // Vår egen dimensjonering. DSB oppgir ingen kaloritall i det hele tatt –
-  // rådet deres er «nok mat for en uke». Det skal aldri stå på siden at
-  // 2 200 kcal er DSBs norm.
-  kcalPerPersonPerDogn: 2200,
+
+  /*
+   * To liter i døgnet i sju døgn. Vårt anslag, ikke DSBs – DSB nevner «vann til
+   * kjæledyr» uten mengde. Tallet står synlig i varens egen tekst.
+   */
+  vannLiterPerDyr: 14,
+
+  /*
+   * Energidimensjonering.
+   *
+   * Begge tall er våre egne, dokumentert i docs/pakkesammensetning.md § 3. DSB
+   * tallfester ikke kalorier i det hele tatt, og de skal aldri omtales som
+   * DSBs norm.
+   *
+   * barnFaktor er en getter og ikke et frittstående tall, og det er ikke
+   * eleganse: da kan energiberegningen og skaleringsreglene ikke sprike.
+   * ve × kcalVoksenDogn × døgn er per konstruksjon nøyaktig det samme som
+   * (voksne × 2338 + barn × 1450) × døgn. Settes faktoren uavhengig, kan de to
+   * drifte fra hverandre ved neste justering, og da stemmer ikke lenger
+   * dekningsvarselet med maten som faktisk ligger i esken.
+   * scripts/verifiser-katalog.mjs har en egen kontroll på den identiteten.
+   */
+  kcalVoksenDogn: 2338,
+  kcalBarnDogn: 1450,
+  get barnFaktor() {
+    return this.kcalBarnDogn / this.kcalVoksenDogn
+  },
 }
 
 // -----------------------------------------------------------------------------
@@ -385,6 +408,21 @@ export const PAFYLL = [
 // vannforbruk; setter man det på grøt og suppe, tror pakkebyggeren at maten
 // dekker DSBs 20 liter.
 
+/*
+ * Skalering.
+ *
+ * Mat skalerer på c.ve (voksenekvivalenter), utstyr på c.hoder, faste ting
+ * returnerer 1, og kjæledyrlinjer på c.dyr. Er du i tvil: teller varen
+ * porsjoner, er det ve; teller den hoder, hender eller senger, er det hoder.
+ *
+ * Matfaktorene ble justert opp 8 % da husstanden ble delt i voksne og barn.
+ * Grunnen er ikke barna – det er at normen ble eksplisitt. Den gamle flate
+ * satsen på 2 200 kcal lå mellom voksendøgnet (2 338) og det menyen faktisk
+ * leverte (2 069), og skjulte dermed at vi sendte rundt 90 % av vårt eget
+ * krav ved store husstander. Med 2 338 som uttalt norm måtte maten følge
+ * etter. Åtte prosent er den minste justeringen som gir minst 100 % dekning
+ * i hele rutenettet fra én til åtte personer.
+ */
 export const VARER = [
   // ---------------------------------------------------------------------------
   // Mat – felles for begge matnivåer
@@ -410,7 +448,7 @@ export const VARER = [
       url: 'https://oda.com/no/products/1612-wasa-knekkebrod-husman/',
     },
     // 72 g (6 skiver) per voksendøgn, 40 g per barnedøgn, sju døgn.
-    antall: (p) => Math.ceil(p * 1.25),
+    antall: (c) => Math.ceil(c.ve * 1.35),
   },
   {
     sku: 'leverpostei',
@@ -434,7 +472,7 @@ export const VARER = [
     },
     // Én åpnet form må spises opp samme døgn uten kjøleskap. Husstander på
     // én til to bør ha 100 g-formen i stedet; det håndteres ved plukk.
-    antall: (p) => Math.ceil(p * 1.8),
+    antall: (c) => Math.ceil(c.ve * 1.944),
   },
   {
     sku: 'kaviar',
@@ -456,7 +494,7 @@ export const VARER = [
       kilde: 'Oda, prisen utledet fra observert porsjonspris 5,03 kr per 25 g',
       url: 'https://oda.com/no/products/4819-mills-kaviar/',
     },
-    antall: (p) => Math.ceil(p * 0.7),
+    antall: (c) => Math.ceil(c.ve * 0.756),
   },
   {
     sku: 'makrell-tomat',
@@ -478,7 +516,7 @@ export const VARER = [
       kilde: 'Oda, observert 20.09.2026: 34,90 kr',
       url: 'https://oda.com/no/products/69867-stabburet-makrell-i-tomat/',
     },
-    antall: (p) => Math.ceil(p * 0.9),
+    antall: (c) => Math.ceil(c.ve * 0.972),
   },
   {
     sku: 'nugatti',
@@ -500,7 +538,7 @@ export const VARER = [
       kilde: 'Oda, prisen utledet fra observert porsjonspris 1,58 kr per 20 g',
       url: 'https://oda.com/no/products/1117-nugatti-nugatti-original/',
     },
-    antall: (p) => Math.ceil(p * 0.4),
+    antall: (c) => Math.ceil(c.ve * 0.432),
   },
   {
     sku: 'sjokolade',
@@ -522,7 +560,7 @@ export const VARER = [
       kilde: 'Oda, prisen utledet fra observert porsjonspris 5,98 kr per 40 g',
       url: 'https://oda.com/no/products/269-freia-melkesjokolade/',
     },
-    antall: (p) => Math.ceil(p * 0.9),
+    antall: (c) => Math.ceil(c.ve * 0.972),
   },
   {
     sku: 'mariekjeks',
@@ -544,7 +582,7 @@ export const VARER = [
       kilde: 'Oda, prisen utledet fra observert porsjonspris 3,64 kr per 40 g',
       url: 'https://oda.com/no/products/66256-saetre-mariekjeks/',
     },
-    antall: (p) => Math.ceil(p * 0.6),
+    antall: (c) => Math.ceil(c.ve * 0.648),
   },
   {
     sku: 'peanotter',
@@ -567,7 +605,7 @@ export const VARER = [
       kilde: 'Oda, prisen utledet fra observert porsjonspris 2,42 kr per 30 g',
       url: 'https://oda.com/no/products/8732-r-peanotter/',
     },
-    antall: (p) => Math.ceil(p * 0.5),
+    antall: (c) => Math.ceil(c.ve * 0.54),
   },
   {
     sku: 'rosiner',
@@ -589,7 +627,7 @@ export const VARER = [
       kilde: 'Oda, prisen utledet fra observert porsjonspris 2,22 kr per 20 g',
       url: 'https://oda.com/no/products/65770-r-rosiner/',
     },
-    antall: (p) => Math.ceil(p * 0.35),
+    antall: (c) => Math.ceil(c.ve * 0.378),
   },
   {
     sku: 'oboy',
@@ -611,7 +649,7 @@ export const VARER = [
       kilde: 'Oda, prisen utledet fra observert porsjonspris 1,83 kr per 15 g',
       url: 'https://oda.com/no/products/463-oboy-oboy-original/',
     },
-    antall: (p) => Math.ceil(p * 0.25),
+    antall: (c) => Math.ceil(c.ve * 0.27),
   },
   {
     sku: 'fruktcocktail',
@@ -633,7 +671,7 @@ export const VARER = [
       kilde: 'Oda, observert 20.09.2026: 31,20 kr',
       url: 'https://oda.com/no/products/66103-r-fruktcocktail-i-sukkerlake/',
     },
-    antall: (p) => Math.ceil(p / 4),
+    antall: (c) => Math.ceil(c.ve / 4),
   },
 
   // ---------------------------------------------------------------------------
@@ -661,7 +699,7 @@ export const VARER = [
       url: 'https://oda.com/no/products/1035-axa-bjorn-lettkokte-havregryn/',
     },
     // 80 g per voksendøgn, 50 g per barnedøgn, på fire av sju døgn.
-    antall: (p) => Math.ceil(p * 0.4),
+    antall: (c) => Math.ceil(c.ve * 0.432),
   },
   {
     sku: 'middagshermetikk',
@@ -689,7 +727,7 @@ export const VARER = [
     // En åpnet boks kan ikke kjøles og må spises opp samme døgn. Regelen er
     // derfor drøyt en halv boks per person per døgn. Trondhjems Sodd er
     // bevisst holdt utenfor: 47 kcal per 100 g er kraft, ikke middag.
-    antall: (p) => Math.ceil(p * 3.75),
+    antall: (c) => Math.ceil(c.ve * 4.05),
   },
 
   // ---------------------------------------------------------------------------
@@ -724,7 +762,9 @@ export const VARER = [
     // Én varm middag per person per døgn. Full frysetørket kost ville kostet
     // rundt 10 800 kr for fire personer og spist 7,8 av de 20 literne vann
     // per person. Resten av døgnet dekkes av tørrvarene over.
-    antall: (p) => p * KONFIG.dogn,
+    // ve rundes opp før multiplikasjon: man kan ikke sende 0,62 av en
+    // frysetørket porsjon, og et barn som får 62 % av en pose får i praksis en pose.
+    antall: (c) => Math.ceil(c.ve) * KONFIG.dogn,
   },
   {
     sku: 'real-frokost',
@@ -753,7 +793,7 @@ export const VARER = [
     },
     // Tre av sju frokoster. De øvrige dekkes av knekkebrød med pålegg –
     // både fordi det er billigere og fordi ingen orker müsli sju dager.
-    antall: (p) => p * 3,
+    antall: (c) => Math.ceil(c.ve) * 3,
   },
 
   // ---------------------------------------------------------------------------
@@ -786,7 +826,15 @@ export const VARER = [
     },
     // To kanner per person gir nøyaktig DSBs 20 liter. Stablet i to høyder
     // tar åtte kanner 0,17 m² gulv og 62 cm høyde – det får plass i en bod.
-    antall: (p) => p * 2,
+    /*
+     * Bare menneskene. Dyras vann er en egen vare, ikke flere kanner her.
+     *
+     * Byggeplanen hadde det begge steder, og da ble de samme kannene talt to
+     * ganger – 140 liter levert mot 108 i behov. Egen linje er dessuten det
+     * § 6.6 faktisk vil ha: kunden skal se dyras vann som sitt eget, ikke som
+     * et påslag i en post som heter noe annet.
+     */
+    antall: (c) => c.hoder * 2,
   },
   {
     sku: 'aquatabs',
@@ -811,7 +859,57 @@ export const VARER = [
     // Reserve for etterfylling, ikke primærforsyning – derfor skalerer den
     // mot husstand, ikke mot totalt vannvolum. Eneste vannkomponent med
     // utløpsdato, og derfor den eneste som hører hjemme i påfyllet.
-    antall: (p) => Math.ceil(p / 4),
+    antall: (c) => Math.ceil(c.hoder / 4),
+  },
+
+  /*
+   * Kjæledyr.
+   *
+   * Vi selger ikke fôret. pakkesammensetning.md § 8 forkastet det med en
+   * begrunnelse som fortsatt holder: vi kan ikke dimensjonere en fôrmengde uten
+   * å vite dyreart, størrelse og fôrtype, og å gjette den er nøyaktig det vi
+   * kritiserer resten av markedet for. Vi selger plassen til fôret, vannet, og
+   * beskjeden om at det er kundens jobb.
+   */
+  {
+    sku: 'dyrevann',
+    navn: 'Vanndunk 10 liter til dyra',
+    beskrivelse: 'Egen kanne, merket, så dyras vann ikke tas av husstandens.',
+    hvorfor:
+      'To liter i døgnet i sju døgn per dyr. Vårt anslag – DSB nevner vann til kjæledyr uten mengde.',
+    kategori: 'Vann',
+    type: 'engang',
+    moduser: ['komplett'],
+    kunKjaeledyr: true,
+    enhet: 'stk',
+    pris: 60,
+    holdbarhetAr: null,
+    liter: 10,
+    vektKg: 0.7,
+    dsb: 'Mat og vann: vann til kjæledyr',
+    produkt: { merke: 'Biltema', modell: 'Vanndunk 10 l', kilde: 'Observert 60 kr', url: '' },
+    antall: (c) => Math.ceil((c.dyr * KONFIG.vannLiterPerDyr) / 10),
+  },
+  {
+    sku: 'dyreboks',
+    navn: 'Tett fôrboks, 5 liter, med datoetikett',
+    beskrivelse: 'Lufttett boks med klips og et felt der dere skriver hva som er i den og når.',
+    hvorfor:
+      'Vi legger ikke fôr i esken. Vi vet ikke om dere har en chihuahua eller en grand danois, og en gjettet fôrmengde er verdiløs. Boksen er tom med vilje.',
+    kategori: 'Mat',
+    type: 'engang',
+    moduser: ['komplett'],
+    kunKjaeledyr: true,
+    // Fôr til dyr har ordinær sats. Redusert mva gjelder næringsmidler til
+    // mennesker, og boksen er uansett utstyr. Bekreftes av regnskapsfører.
+    mva: 'standard',
+    enhet: 'stk',
+    pris: 129,
+    holdbarhetAr: null,
+    vektKg: 0.4,
+    dsb: 'Mat og vann: mat til kjæledyr',
+    produkt: { merke: 'Orthex', modell: 'SmartStore boks 5 l', kilde: 'ANSLAG – ikke sourcet', url: '' },
+    antall: (c) => c.dyr,
   },
   {
     sku: 'vannfilter',
@@ -838,7 +936,7 @@ export const VARER = [
     // pakkebyggeren ville ellers tro at det dekker DSBs 20 liter.
     // Ett filter per påbegynte fire personer – 1 000 liter membran er rikelig
     // for sju døgn, så det andre filteret er redundans, ikke kapasitet.
-    antall: (p) => Math.ceil(p / 6),
+    antall: (c) => Math.ceil(c.hoder / 6),
   },
 
   // ---------------------------------------------------------------------------
@@ -873,7 +971,7 @@ export const VARER = [
     // 1,75 liter er det største kokekaret. Å varme mat til fem-åtte personer i
     // porsjoner under to liter tar for lang tid over sju døgn, og to sett gir
     // dessuten redundans om den ene brenneren svikter.
-    antall: (p) => Math.ceil(p / 4),
+    antall: (c) => Math.ceil(c.hoder / 4),
   },
 
   {
@@ -899,7 +997,9 @@ export const VARER = [
     },
     // Én per husstand opp til fire, to over det: en CO-varsler dekker rommet
     // den står i, og større husstander bruker oftere mer enn ett rom.
-    antall: (p) => (p <= 4 ? 1 : 2),
+    // Hoder: varsleren dekker rom, og rom skalerer med hvor mange som er der,
+    // ikke med hvor mye de spiser.
+    antall: (c) => (c.hoder <= 4 ? 1 : 2),
   },
   {
     sku: 'fyrstikker',
@@ -956,7 +1056,7 @@ export const VARER = [
     // svikter den eneste lyskilden er man blind, og reservelykten er den
     // billigste forsikringen i hele esken. Flere av de kartlagte
     // konkurrentene gir en familie på seks én hodelykt.
-    antall: (p) => Math.max(p, 2),
+    antall: (c) => Math.max(c.hoder, 2),
   },
   {
     sku: 'campinglykt',
@@ -991,7 +1091,7 @@ export const VARER = [
     // strømbrudd – DSB anbefaler selv å stenge dører for å holde på varmen.
     // Én lykt per fem personer, altså per rom det faktisk sitter folk i.
     // Én per person ville blitt liggende i esken.
-    antall: (p) => Math.ceil(p / 5),
+    antall: (c) => Math.ceil(c.hoder / 5),
   },
   {
     sku: 'batterier-aaa',
@@ -1026,7 +1126,7 @@ export const VARER = [
     // Vurder samtidig litium framfor alkalisk: Energizer Ultimate Lithium AAA
     // er dokumentert ned til −40 grader og er det riktige valget for en kasse
     // som står i en kald bod. Heller ikke den er priset ennå.
-    antall: (p) => Math.ceil(p / 6),
+    antall: (c) => Math.ceil(c.hoder / 6),
   },
   {
     sku: 'telys',
@@ -1073,7 +1173,9 @@ export const VARER = [
       kilde: 'Biltema, observert 20.09.2026: 29,90 kr',
       url: 'https://www.biltema.no/bil---mc/biltilbehor/sikkerhetsdetaljer/aluminiumsteppe-140-x-220-cm-2000042007',
     },
-    antall: (p) => p,
+    // Hoder, ikke voksenekvivalenter: et barn trenger et helt teppe.
+    // Et halvt teppe varmer ingen.
+    antall: (c) => c.hoder,
   },
 
   // ---------------------------------------------------------------------------
@@ -1141,7 +1243,7 @@ export const VARER = [
       kilde: 'avxperten.no 319 kr, observert 20.09.2026',
       url: '',
     },
-    antall: (p) => Math.max(1, Math.ceil(p / 4)),
+    antall: (c) => Math.max(1, Math.ceil(c.hoder / 4)),
   },
   {
     sku: 'meshtastic',
@@ -1184,7 +1286,7 @@ export const VARER = [
       'Rekkevidden avhenger av hvem andre som har utstyret. To enheter alene rekker to til ni kilometer med fri sikt, mindre i skog. Nettet er tettest rundt Oslo og Bergen og tynt nord for Trøndelag.',
       'Vi setter dem til frekvensen det norske miljøet bruker, ikke fabrikkinnstillingen – den kolliderer med norske strømmålere.',
     ],
-    antall: (p) => 1,
+    antall: () => 1,
   },
   {
     sku: 'powerbank',
@@ -1207,7 +1309,7 @@ export const VARER = [
       kilde: 'Observert 659 kr, se docs/leverandorer.md',
       url: '',
     },
-    antall: (p) => Math.ceil(p / 5),
+    antall: (c) => Math.ceil(c.hoder / 5),
   },
 
   // ---------------------------------------------------------------------------
@@ -1240,7 +1342,7 @@ export const VARER = [
     // reisemål med utrygge nåler, ikke for sju døgn hjemme i Norge.
     // Ett husstandssett dekker inntil seks personer. Sårstell skalerer ikke
     // lineært med antall hoder slik mat og hygiene gjør.
-    antall: (p) => Math.ceil(p / 6),
+    antall: (c) => Math.ceil(c.hoder / 6),
   },
   {
     sku: 'blodstopper',
@@ -1265,7 +1367,7 @@ export const VARER = [
     },
     // Aldri under to, deretter én per påbegynte to personer. En trykkbandasje
     // brukes opp på ett sår, og da skal det ligge en til igjen i esken.
-    antall: (p) => Math.max(2, Math.ceil(p / 2)),
+    antall: (c) => Math.max(2, Math.ceil(c.hoder / 2)),
   },
   {
     sku: 'hygienepakke',
@@ -1290,7 +1392,7 @@ export const VARER = [
     },
     // Hygiene er reelt forbruk per hode, og skalerer raskere enn
     // førstehjelpen: ett sett per påbegynte fem personer.
-    antall: (p) => Math.ceil(p / 5),
+    antall: (c) => Math.ceil(c.hoder / 5),
   },
 
   {
@@ -1316,7 +1418,7 @@ export const VARER = [
     },
     // Flere enn ett handler ikke om kø, men om posebytte: når en pose er full
     // må den knytes og bæres ut, og da er det greit å ha et toalett igjen.
-    antall: (p) => Math.ceil(p / 4),
+    antall: (c) => Math.ceil(c.hoder / 4),
   },
 
   // ---------------------------------------------------------------------------
@@ -1350,7 +1452,7 @@ export const VARER = [
     // et godt og billigere valg for den som heller vil ha kniv og fyrstål.
     // Ett verktøy per påbegynte fire personer, som kokeapparatet: det andre er
     // redundans og gjør at to personer kan jobbe hver for seg.
-    antall: (p) => Math.ceil(p / 8),
+    antall: (c) => Math.ceil(c.hoder / 8),
   },
   {
     sku: 'beredskapsperm',

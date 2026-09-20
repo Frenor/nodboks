@@ -84,16 +84,28 @@ lei, og lot kaloritallet falle ut av det. Det gir:
   barn, se avsnitt 5): 2 023–2 169 kcal per person per døgn, snitt
   **2 069 kcal**.
 
-Konfiguratoren (`KONFIG.kcalPerPersonPerDogn` i `katalog.js`) bruker i dag
-en flat sats på **2 200 kcal per person per døgn**, uavhengig av alder,
-fordi bestillingsflyten bare spør om antall personer, ikke sammensetning.
-Det er en bevisst forenkling, og vi bør si det slik i produktteksten: en
-husstand av bare voksne vil i praksis spise noe under normen per hode
-(2 200 mot voksendøgnets 2 338), mens en småbarnsfamilie vil ligge noe over
-det den faktisk trenger (2 200 mot husstandssnittet på 2 069). Avviket er
-under 7 % begge veier, og vi mener det er en rimelig pris for å slippe å
-spørre kunden om barnas alder i bestillingen. Det skal likevel stå tydelig
-at 2 200 er **vårt** tall.
+Den flate satsen på 2 200 kcal er **utgått**. Den fantes fordi
+bestillingsflyten bare spurte om antall personer, og den begrunnelsen
+forsvant da flyten begynte å spørre om voksne og barn hver for seg.
+
+Konfiguratoren regner nå med **2 338 kcal per voksendøgn og 1 450 per
+barnedøgn**, og skalerer maten på voksenekvivalenter:
+`ve = voksne + barn × (1450 / 2338)`. Barnefaktoren er definert som
+forholdet mellom de to tallene, ikke som et frittstående 0,62, slik at
+energiberegningen og skaleringsreglene ikke kan drifte fra hverandre.
+`scripts/verifiser-katalog.mjs` har en egen kontroll på identiteten.
+
+**Matmengdene ble justert opp 8 % samtidig, og grunnen er verdt å si høyt.**
+Den gamle flate satsen lå mellom voksendøgnet (2 338) og det menyen faktisk
+leverte (2 069), og skjulte dermed at vi ved store husstander sendte rundt
+90 % av vårt eget krav. Da normen ble eksplisitt, måtte maten følge etter.
+Åtte prosent er den minste justeringen som gir minst 100 % dekning i hele
+rutenettet fra én til åtte personer. Å la den stå ville vært samme feil vi
+kritiserer ReadyWise for i konkurrentanalysen: et kaloritall som følger av
+posene i esken framfor av et beredskapsfaglig mål.
+
+Begge tall er fortsatt **våre**. DSB tallfester ikke kalorier i det hele
+tatt, og det skal stå på produktsiden.
 
 **Hvorfor ikke 2 400 (nødrasjonenes norm):** å legge oss på nødrasjonenes
 kaloritall ville betydd å regne som om husstanden skal overleve på et

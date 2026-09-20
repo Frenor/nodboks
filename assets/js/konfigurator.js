@@ -32,7 +32,15 @@ import {
  * selvtesten trenger den og de to ikke får lov til å sprike.
  */
 export const MVA = { mat: 0.15, standard: 0.25 }
-export const mvaSats = (kategori) => (kategori === 'Mat' ? MVA.mat : MVA.standard)
+/*
+ * Satsen utledes av kategorien, men varen kan overstyre den. Fôrboksen ligger
+ * i «Mat og vann»-gruppen og har likevel ordinær sats: redusert mva gjelder
+ * næringsmidler til mennesker.
+ */
+export const mvaSats = (vare) =>
+  (typeof vare === 'string' ? vare : vare?.mva ?? vare?.kategori) === 'Mat'
+    ? MVA.mat
+    : MVA.standard
 
 /** Kategoriene som vises samlet som «Mat og vann» i prispanelet. */
 export const MATGRUPPER = ['Mat', 'Vann']
@@ -83,6 +91,47 @@ export const dsbGruppe = (kategori) => DSB_GRUPPER[kategori] ?? 'Annet'
 export const klem = (n) =>
   Math.min(KONFIG.personerMaks, Math.max(KONFIG.personerMin, Math.round(n || 1)))
 
+const heltall = (n, min, maks) =>
+  Math.min(maks, Math.max(min, Math.round(Number(n) || 0)))
+
+/**
+ * Klemmer husstanden inn i det katalogen dekker.
+ *
+ * Taket på åtte gjelder mennesker. Når det brytes, trekkes barn fra først –
+ * en husstand som oppgir fem voksne og fem barn har neppe ment å fjerne en
+ * voksen, og av de to feilene er det den minst gale.
+ */
+export function klemHusstand(h = {}) {
+  const voksne = heltall(h.voksne ?? 1, 1, KONFIG.personerMaks)
+  let barn = heltall(h.barn ?? 0, 0, 6)
+  if (voksne + barn > KONFIG.personerMaks) barn = KONFIG.personerMaks - voksne
+  return { voksne, barn, kjaeledyr: heltall(h.kjaeledyr ?? 0, 0, 4) }
+}
+
+/**
+ * Konteksten katalogen ser. Avledet, aldri lagret.
+ *
+ * Mat skalerer på voksenekvivalenter, utstyr på hoder. Er du i tvil: teller
+ * varen porsjoner, er det ve; teller den hoder, hender eller senger, er det
+ * hoder.
+ */
+export function kontekst(h) {
+  const { voksne, barn, kjaeledyr } = klemHusstand(h)
+  return {
+    voksne,
+    barn,
+    hoder: voksne + barn,
+    ve: voksne + barn * KONFIG.barnFaktor,
+    dyr: kjaeledyr,
+  }
+}
+
+/** Tar imot både {voksne, barn} og det gamle {personer}. */
+const lesHusstand = (valg) =>
+  valg.husstand
+    ? klemHusstand(valg.husstand)
+    : klemHusstand({ voksne: valg.personer ?? 1, barn: 0, kjaeledyr: 0 })
+
 /**
  * Gjelder varen for denne kombinasjonen?
  *
@@ -90,7 +139,8 @@ export const klem = (n) =>
  * om dem. Utstyr velges bort, tillegg velges til. Skillet ligger på varen selv
  * framfor i en egen liste, slik at katalogen fortsatt er ett sted.
  */
-function gjelder(vare, { modus, matniva, tillegg }) {
+function gjelder(vare, { modus, matniva, tillegg, ctx }) {
+  if (vare.kunKjaeledyr) return ctx.dyr > 0
   if (vare.tillegg) return tillegg.has(vare.sku)
   if (vare.moduser && !vare.moduser.includes(modus)) return false
   if (vare.matnivaer && !vare.matnivaer.includes(matniva)) return false
@@ -117,7 +167,9 @@ export function velgEske(personer, eskeType = 'plast') {
  * @returns pakkeobjekt med linjer, grupper, nøkkeltall og eventuelle varsler
  */
 export function byggPakke(valg) {
-  const personer = klem(valg.personer)
+  const husstand = lesHusstand(valg)
+  const ctx = kontekst(husstand)
+  const personer = ctx.hoder
   const matniva = finnMatniva(valg.matniva)
   const modus = finnModus(valg.modus)
   const abonnementId = valg.abonnement ?? null
@@ -125,12 +177,12 @@ export function byggPakke(valg) {
   const tillegg = new Set(valg.tillegg ?? [])
   const eskeType = finnEsketype(valg.eskeType).id
 
-  const kontekst = { personer, matniva: matniva.id, modus: modus.id, tillegg }
+  const utvalg = { modus: modus.id, matniva: matniva.id, tillegg, ctx }
 
   let linjer = []
   for (const vare of VARER) {
-    if (!gjelder(vare, kontekst)) continue
-    const antall = Math.max(0, Math.ceil(vare.antall(personer)))
+    if (!gjelder(vare, utvalg)) continue
+    const antall = Math.max(0, Math.ceil(vare.antall(ctx)))
     if (antall === 0) continue
     linjer.push({
       sku: vare.sku,
@@ -138,6 +190,7 @@ export function byggPakke(valg) {
       beskrivelse: vare.beskrivelse,
       hvorfor: vare.hvorfor,
       kategori: vare.kategori,
+      mva: vare.mva ?? null,
       type: vare.type, // 'engang' (utstyr) eller 'forbruk'
       enhet: vare.enhet,
       antall,
@@ -155,7 +208,8 @@ export function byggPakke(valg) {
   }
 
   // Esken følger bare med i den komplette pakken; påfyll sendes i kartong.
-  const eske = velgEske(personer, eskeType)
+  // Dyra tar plass: to dyr regnes som ett ekstra hode når esken velges.
+  const eske = velgEske(ctx.hoder + Math.ceil(ctx.dyr / 2), eskeType)
   if (modus.medEske) {
     linjer.unshift({
       sku: eske.sku,
@@ -221,7 +275,7 @@ export function byggPakke(valg) {
   const rabattfaktor = sumVarer ? sum / sumVarer : 1
   const mvaBelop = linjer.reduce((n, l) => {
     const brutto = l.sum * rabattfaktor
-    const sats = mvaSats(l.kategori)
+    const sats = mvaSats(l)
     return n + (brutto - brutto / (1 + sats))
   }, 0)
   const netto = sum - mvaBelop
@@ -236,19 +290,29 @@ export function byggPakke(valg) {
    * ingen andre i markedet stiller.
    */
   const kaldKcal = linjer.filter((l) => !l.kreverVarme).reduce((n, l) => n + l.kcal, 0)
-  const dognUtenVarme = personer
-    ? Math.floor(kaldKcal / (personer * KONFIG.kcalPerPersonPerDogn))
+  const dognUtenVarme = ctx.ve
+    ? Math.floor(kaldKcal / (ctx.ve * KONFIG.kcalVoksenDogn))
     : 0
 
   const kcal = linjer.reduce((n, l) => n + l.kcal, 0)
   const liter = linjer.reduce((n, l) => n + l.liter, 0)
   const vekt = linjer.reduce((n, l) => n + l.vekt, 0)
 
-  const kcalBehov = personer * KONFIG.dogn * KONFIG.kcalPerPersonPerDogn
-  const vannBehov = personer * KONFIG.vannLiterPerPerson
+  const kcalBehov = ctx.ve * KONFIG.kcalVoksenDogn * KONFIG.dogn
+
+  /*
+   * Vann skalerer på hoder, ikke på voksenekvivalenter. Bevisst asymmetri mot
+   * maten: DSBs 20 liter er ikke bare drikke, den dekker matlaging og et
+   * minimum av hygiene, og husstanden koker og vasker for alle fra de samme
+   * kannene. Å underdimensjonere vannet for å spare seksti kroner tom plast er
+   * en dårlig byttehandel.
+   */
+  const vannBehov =
+    ctx.hoder * KONFIG.vannLiterPerPerson + ctx.dyr * KONFIG.vannLiterPerDyr
 
   return {
     valg: {
+      husstand,
       personer,
       matniva: matniva.id,
       modus: modus.id,
@@ -260,6 +324,7 @@ export function byggPakke(valg) {
     matniva,
     modus,
     eske: modus.medEske ? eske : null,
+    ctx,
     linjer,
     grupper: grupper(linjer),
     utstyrsvalg: kanVelgesBort.map((l) => ({
@@ -394,7 +459,8 @@ export function pakkeId(pakke) {
   const v = pakke.valg
   const uten = v.utelatt?.length ? 'uten-' + [...v.utelatt].sort().join('_') : 'full'
   const med = v.tillegg?.length ? 'med-' + [...v.tillegg].sort().join('_') : ''
-  return ['pakke', v.modus, v.personer, v.matniva, v.eskeType, v.abonnement ?? 'engang', uten, med]
+  const h = v.husstand ?? { voksne: v.personer, barn: 0, kjaeledyr: 0 }
+  return ['pakke', v.modus, `${h.voksne}v${h.barn}b${h.kjaeledyr}d`, v.matniva, v.eskeType, v.abonnement ?? 'engang', uten, med]
     .filter(Boolean)
     .join('-')
 }
