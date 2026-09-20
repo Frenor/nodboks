@@ -22,6 +22,14 @@
  * gode og er vårt svar på at et Biltema-kjøp alltid er et alternativ).
  * Sammen med pakkerabatten gir det en dekningsgrad rundt 30 %.
  *
+ * ## Brennstoff følger ikke med
+ *
+ * Verken gass eller rødsprit kan sendes som vanlig pakke – gass er UN1950
+ * klasse 2.1, rødsprit er UN1170 klasse 3. Konkurrentene løser det ved å
+ * sende brenner uten beholder og la være å nevne det. Vi sender brenner uten
+ * beholder og sier nøyaktig hva du skal kjøpe, hvor mye, og hvorfor. Se
+ * seksjonen «Dette selger vi ikke, men du bør ha det» på forsiden.
+ *
  * ## Ett kjent avvik mot grensesnittet
  *
  * `ui/bygger.js` deler prisen i «Mat og vann» mot «Utstyr» ved å se etter
@@ -662,62 +670,31 @@ export const VARER = [
   // Matlaging
   // ---------------------------------------------------------------------------
   {
-    sku: 'stormkjokken',
-    navn: 'Trangia Stormkjøkken 25-1 UL',
+    sku: 'kokeapparat',
+    navn: 'Trangia Stormkjøkken 25-1 UL med gassbrenner',
     beskrivelse:
-      'Spritbrenner med dobbel vindskjerm, kokekar på 1,75 og 1,5 liter, stekepanne og gripetang. 845 gram.',
+      'Stormkjøkken med dobbel vindskjerm, kokekar på 1,75 og 1,5 liter, stekepanne og gripetang, levert med gassbrenner på 2800 W. Spritbrenneren følger med settet fra fabrikk.',
     hvorfor:
-      'Valgt på brenselet, ikke på effekten. Rødsprit er en væske i en skrukork – ingen ventil som kan lekke, ingenting som ruster, og det er lovlig å lagre i en kjellerbod, der gass er forbudt. Vindskjermen er selve konstruksjonen, så den virker på en balkong i november. Kokekar følger med, så du slipper å kjøpe kjelesett i tillegg.',
+      'Vindskjermen er selve konstruksjonen, ikke et tilbehør, og det er den som gjør at apparatet virker på en balkong i november. Settet gir deg to brennstoffer å velge mellom: gass når det skal gå fort, eller rødsprit hvis du vil ha noe som tåler å stå glemt i en bod i årevis. Brennstoffet kjøper du selv – se hvorfor i listen over det vi ikke selger.',
     kategori: 'Matlaging',
     type: 'engang',
     moduser: ['komplett'],
     enhet: 'sett',
-    pris: 679,
-    innkjop: 479.4,
+    pris: 1198,
+    innkjop: 778.8,
     holdbarhetAr: null,
-    vektKg: 0.845,
-    dsb: 'Varme: kokeapparat som går på gass eller rødsprit',
+    vektKg: 1.03,
+    dsb: 'Mat: grill, kokeapparat eller stormkjøkken',
     produkt: {
-      merke: 'Trangia AB (norsk distributør Ultimate Nordic AS)',
-      modell: '25-1 UL, Clas Ohlson art. 34-6993',
-      kilde: 'Clas Ohlson, observert 20.09.2026: 799 kr',
+      merke: 'Trangia + generisk gassbrenner',
+      modell: 'Trangia 25-1 UL (Clas Ohlson 34-6993) + gassbrenner 2800 W med gjengeventil EN 417',
+      kilde: 'Clas Ohlson 799 kr, Fangstmann 499 kr – begge observert 20.09.2026',
       url: 'https://www.clasohlson.com/no/Trangia-stormkjokken-25-1-UL/p/34-6993',
     },
-    // 1,75 liter er største kokekar. Å varme mat til fem–åtte personer i
-    // porsjoner under to liter over en 1000 W-brenner tar for lang tid i
-    // sju døgn, og to sett gir redundans om den ene brenneren svikter.
+    // 1,75 liter er det største kokekaret. Å varme mat til fem-åtte personer i
+    // porsjoner under to liter tar for lang tid over sju døgn, og to sett gir
+    // dessuten redundans om den ene brenneren svikter.
     antall: (p) => Math.ceil(p / 4),
-  },
-  {
-    sku: 'rodsprit',
-    navn: 'Kemetyl rødsprit, 1 liter',
-    beskrivelse:
-      'Etanolbasert brennstoff til spritbrenner. Rundt fire timers brenntid per liter.',
-    hvorfor:
-      'Fire personer i sju døgn trenger 35–42 liter kokt vann, som på Trangia med vindskjerm koster rundt 1,5 liter rødsprit. To flasker gir margin for kulde og vind, og holder husstanden godt under grensen på 10 liter brannfarlig væske i bolig.',
-    kategori: 'Matlaging',
-    type: 'forbruk',
-    moduser: ['komplett'],
-    enhet: 'stk',
-    pris: 68,
-    innkjop: 47.95,
-    // Forseglet etanol brytes ikke ned. Tallet gjelder flasken og
-    // forseglingen, ikke væsken.
-    holdbarhetAr: 10,
-    vektKg: 0.85,
-    dsb: 'Varme: brennstoff til kokeapparatet',
-    produkt: {
-      merke: 'Kemetyl Norge AS',
-      modell: 'Rødsprit / T-röd 1 L, Clas Ohlson art. 34-9841',
-      kilde: 'Clas Ohlson, observert 20.09.2026: 79,90 kr',
-      url: 'https://www.clasohlson.com/no/Kemetyl-rodsprit-1-liter-rengjoringsmiddel/p/34-9841',
-    },
-    // ADVARSEL, må løses før lansering: rødsprit er UN1170, klasse 3, og er
-    // forbudt innhold i vanlig Posten-pakke. Enten avtale om begrenset
-    // mengde (LQ/ADR) med fraktleverandør, eller så leveres brenneren med
-    // beskjed om å kjøpe to liter lokalt. Det siste må i så fall stå på
-    // produktsiden, ikke oppdages ved åpning.
-    antall: (p) => Math.max(2, Math.ceil(p / 2)),
   },
   {
     sku: 'fyrstikker',
