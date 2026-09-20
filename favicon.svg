@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img">
+  <title>Nødboks</title>
+
+  <!--
+    Faviconet er låst til natt-tilstanden, uten prefers-color-scheme.
+
+    To grunner: fargeskjema-støtte i SVG-favicons er ujevn på tvers av
+    nettlesere, og mørk modus er uansett den primære identiteten
+    (docs/farger.md). Flisen gjør også merket lesbart på både lys og mørk
+    fanelinje, noe et fritt merke i tekstfarge ikke ville vært.
+
+    Målene er ikke de samme som i assets/img/merke.svg: merket er skalert ned
+    til 22 av 32 enheter for å få luft inn til fliskanten. Formen er den samme.
+  -->
+
+  <rect width="32" height="32" rx="5" fill="#12211D"/>
+  <circle cx="16" cy="16" r="9.5" fill="none" stroke="#E8EFE9" stroke-width="2.6"/>
+  <circle cx="16" cy="16" r="4.4" fill="#D9E6A0"/>
+</svg>
