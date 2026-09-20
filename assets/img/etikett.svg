@@ -9,10 +9,15 @@
     Format: 148 × 105 mm (A6, liggende). Én SVG-brukerenhet er 1 mm, så filen
     kan sendes til trykk i faktisk størrelse uten omregning.
 
-    Flaten den skal på: Zarges Eurobox 40702, 600 × 400 × 330 mm (se ESKER i
-    assets/js/data/katalog.js). Etiketten går på lokket, 600 × 400 mm. Den
-    dekker da rundt en fjerdedel av bredden: bredt nok til å leses fra stående
-    høyde, smalt nok til at aluminiumet fortsatt er kassen.
+    Flaten den skal på: lokket på den kassen kunden har valgt. Formatet er målt
+    mot Zarges Eurobox 40702, 600 × 400 × 330 mm, som er det ene målet som står
+    dokumentert i katalogen (se ESKER i assets/js/data/katalog.js). På det
+    lokket dekker etiketten rundt en fjerdedel av bredden: bredt nok til å leses
+    fra stående høyde, smalt nok til at kassen fortsatt er kassen.
+
+    Plastkassen (SmartStore Dry 45) har ikke et mål oppgitt i katalogen.
+    Formatet må derfor måles mot et faktisk eksemplar før trykk. Vi gjetter
+    ikke på det her.
 
     FARGE: natt. Flaten er brand-tokenet #12211D, teksten brand-ink #E8EFE9
     (14,2:1) og ettergløden #D9E6A0 (12,5:1) bærer nøyaktig ett felt. Mørk

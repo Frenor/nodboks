@@ -407,8 +407,10 @@ details.accordion > :not(summary) { margin-bottom: var(--sp-5); }
 }
 .site-nav a:hover, .site-nav a[aria-current="page"] { color: var(--text); }
 
+/* Gapet er 0,5-0,6 x ringens diameter, slik at symbol og ordmerke leses som
+   ett merke og ikke som et ikon pluss en tekstlenke. Se docs/profil.md § 3.4. */
 .brandmark {
-  display: inline-flex; align-items: center; gap: var(--sp-3);
+  display: inline-flex; align-items: center; gap: var(--sp-2);
   text-decoration: none; color: var(--text);
   font-family: var(--font-display);
   font-size: var(--step-1);
