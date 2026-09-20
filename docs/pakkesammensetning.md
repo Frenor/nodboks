@@ -410,16 +410,19 @@ Tabellen viser at kurven er jevn – ingen enkeltvare hopper uforholdsmessig
 ved noen bestemt husstandsstørrelse – fordi hver regel er skrevet som en
 funksjon av `personer`, ikke som et oppslag i en tabell.
 
-| Personer | Vann (l) | Esker (stk) | Hodelykt (stk) | Litium AAA (10‑pk) | Kontanter (kr) | Førstehjelpsskrin | Håndsprit (fl.) | Bøttetoalett | Stormkjøkken/rødsprit (fl.) | Nødteppe (stk) |
-| ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 1 | 20 | 1 | 2 | 1 | 500 | 1 | 1 | 1 | 1 / 2 | 1 |
-| 2 | 40 | 2 | 2 | 1 | 1 000 | 1 | 1 | 1 | 1 / 2 | 2 |
-| 3 | 60 | 3 | 3 | 2 | 1 500 | 1 | 1 | 1 | 1 / 2 | 3 |
-| 4 | 80 | 3 | 4 | 2 | 2 000 | 1 | 1 | 1 | 1 / 2 | 4 |
-| 5 | 100 | 4 | 5 | 3 | 2 500 | 2 | 2 | 2 | 2 / 3 | 5 |
-| 6 | 120 | 4 | 6 | 3 | 3 000 (tak) | 2 | 2 | 2 | 2 / 3 | 6 |
-| 7 | 140 | 5 | 7 | 4 | 3 000 (tak) | 2 | 2 | 2 | 2 / 4 | 7 |
-| 8 | 160 | 5 | 8 | 4 | 3 000 (tak) | 2 | 2 | 2 | 2 / 4 | 8 |
+| Personer | Vann (l) | Esker (stk) | Hodelykt (stk) | Litium AAA (10‑pk) | Kontanter (kr) | Førstehjelpsskrin | Håndsprit (fl.) | Bøttetoalett | Kokeapparat (sett) | CO-varsler (stk) | Nødteppe (stk) |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 1 | 20 | 1 | 2 | 1 | 500 | 1 | 1 | 1 | 1 | 1 | 1 |
+| 2 | 40 | 2 | 2 | 1 | 1 000 | 1 | 1 | 1 | 1 | 1 | 2 |
+| 3 | 60 | 3 | 3 | 2 | 1 500 | 1 | 1 | 1 | 1 | 1 | 3 |
+| 4 | 80 | 3 | 4 | 2 | 2 000 | 1 | 1 | 1 | 1 | 1 | 4 |
+| 5 | 100 | 4 | 5 | 3 | 2 500 | 2 | 2 | 2 | 2 | 2 | 5 |
+| 6 | 120 | 4 | 6 | 3 | 3 000 (tak) | 2 | 2 | 2 | 2 | 2 | 6 |
+| 7 | 140 | 5 | 7 | 4 | 3 000 (tak) | 2 | 2 | 2 | 2 | 2 | 7 |
+| 8 | 160 | 5 | 8 | 4 | 3 000 (tak) | 2 | 2 | 2 | 2 | 2 | 8 |
+
+Brennstoff (gass eller rødsprit) er bevisst utelatt fra denne tabellen: det
+selges ikke av oss i noen mengde, se avsnitt 3.
 
 Vannkolonnen er den strengeste testen: den følger DSBs 20 liter per person
 nøyaktig ved hvert eneste trinn, uten avrundingstap – noe kun tre av de

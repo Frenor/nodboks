@@ -6,6 +6,22 @@ DSBs anbefaling om sju døgns egenberedskap.
 **Produksjon:** [nodboks.no](https://nodboks.no) · **Speil:** nødboks.no
 (`xn--ndboks-bya.no`, satt opp som redirect)
 
+## Posisjonen
+
+Nødboks ligger i premiumsegmentet, og begrunnelsen er funksjonell framfor
+statusbetont: **utstyret skal være så godt at kunden bruker det på tur**, blir
+kjent med det, og derfor er trygg på det når det gjelder.
+
+En hodelykt du aldri har brukt, er en hodelykt du fomler med i mørket. Beredskap
+som aldri berøres, er ikke beredskap – det er en kasse med fremmede gjenstander.
+Det løser samtidig hvorfor billigsegmentet vinner i dag: beredskap er død
+kapital for kunden. Utstyr man faktisk bruker, er det ikke.
+
+Markedet forøvrig selger komprimerte livbåtrasjoner som beredskapsmat, utstyr
+som ikke skalerer med husstanden, og vann under DSBs eget råd – og ingen av de
+tolv kartlagte aktørene tilbyr påfyll eller utløpsvarsling. Se
+[`docs/konkurrentanalyse.md`](docs/konkurrentanalyse.md).
+
 ## Hva dette er
 
 En statisk side uten byggsteg. HTML, CSS og ES-moduler serveres direkte fra
@@ -13,8 +29,13 @@ GitHub Pages. Ingen `npm install`, ingen bundler, ingen CI-steg mellom `git push
 og publisert side.
 
 Kjernen er **pakkebyggeren**: kunden drar i en slider for husstandsstørrelse
-(1–8 personer), velger matnivå og modus, og ser innholdslisten og prisen endre
-seg live. Alt regnes ut i nettleseren fra én datafil.
+(1–8 personer), velger matnivå og modus, krysser av utstyr de allerede eier, og
+ser innholdslisten og prisen endre seg live. Alt regnes ut i nettleseren fra én
+datafil.
+
+Avhukingen av utstyr man har fra før koster oss penger med vilje. En kunde som
+allerede har en god hodelykt skal ikke måtte kjøpe en til for å få resten, og
+alternativet – at de lar være å kjøpe noe – er dyrere for begge.
 
 ## Struktur
 
@@ -52,6 +73,9 @@ Endrer du et prispunkt, hører begrunnelsen hjemme i `docs/prisstrategi.md`.
 | [`docs/konkurrentanalyse.md`](docs/konkurrentanalyse.md) | Det norske markedet: pris per husstandsstørrelse, pakkeinnhold, posisjonering, hull |
 | [`docs/pakkesammensetning.md`](docs/pakkesammensetning.md) | Stykkliste per pakke og husstandsstørrelse, forankret i DSBs råd |
 | [`docs/prisstrategi.md`](docs/prisstrategi.md) | Prispunkter, marginlogikk, gjenkjøp via påfyll, posisjonering |
+| [`docs/leverandorer.md`](docs/leverandorer.md) | Sourcingrapport: hvilke produkter, hvilke leverandørledd, hva som er observert og hva som er anslag |
+| [`docs/innkjopsliste.md`](docs/innkjopsliste.md) | Grunnlag for å hente B2B-priser, med mengder for en første serie |
+| [`docs/farger.md`](docs/farger.md) | Fargeidentiteten «Natt» og hvorfor den forrige ble forkastet |
 | [`docs/designvalg.md`](docs/designvalg.md) | Designspec og begrunnelsen bak den |
 | [`docs/design/`](docs/design/) | Designskisser – åpne HTML-filene direkte i nettleser |
 
@@ -65,6 +89,29 @@ python3 -m http.server 8000
 
 ES-moduler krever `http://`, ikke `file://`, så åpne
 [localhost:8000](http://localhost:8000) framfor å dobbeltklikke `index.html`.
+
+### To kjørbare krav
+
+Begge skal kjøres etter endringer, og begge feiler med exit-kode:
+
+```bash
+node scripts/kontrast.mjs
+```
+
+Leser fargetokens rett ut av `tokens.css` og regner WCAG-kontrast for hvert par
+som forekommer i grensesnittet, i begge modi. En palett som ikke går grønt her,
+går ikke i produksjon – da er «AA» en påstand og ikke et faktum.
+
+```bash
+node scripts/verifiser-katalog.mjs
+```
+
+Kjører katalogen gjennom alle kombinasjoner av modus, matnivå og 1–8 personer og
+feiler hvis energien ikke dekker sju døgn, vannkannene ikke rommer 20 liter per
+person, prisen ikke vokser med husstanden, eller dekningsgraden faller under
+20 %. Dekningsgraden regnes på netto: `pris` er inkl. mva og `innkjop` er eks.
+mva, og å trekke det ene fra det andre blåser opp marginen med rundt fjorten
+prosentpoeng.
 
 ## Koble på nettbutikkplattform
 
