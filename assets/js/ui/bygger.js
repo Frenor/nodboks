@@ -279,6 +279,18 @@ function tegnPris(rot, pakke) {
     mva.textContent = `Herav mva. ${kr(pakke.mva)} – 15 % på mat, 25 % på utstyr.`
   }
 
+  /*
+   * Vi lover ikke at det er billigere. Varene er priset til butikkpris, og det
+   * står her framfor å bli antydet – en kunde som sjekker én pris og finner den
+   * lik, skal finne at vi allerede har sagt det.
+   */
+  const egenkjop = $('#pris-egenkjop', rot)
+  if (egenkjop) {
+    egenkjop.textContent = pakke.modus.medEske
+      ? 'Varene koster det samme som i butikk. Det du betaler for, er utvalget, riktige mengder og at noen holder styr på datoene.'
+      : ''
+  }
+
   const neste = $('#pris-neste', rot)
   if (neste) {
     neste.textContent = pakke.holdbarhetAr

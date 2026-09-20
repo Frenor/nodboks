@@ -16,11 +16,43 @@
  * egen trykksak. Se `docs/leverandorer.md` for hva som er observert og hva som
  * er antatt, vare for vare.
  *
- * `pris` er satt slik: mat prises på observert norsk butikkpris (vi tar
- * betalt for utvalget og logistikken, ikke for et påslag på matvarer), utstyr
- * prises rundt 85 % av observert butikkpris (volumet skal komme kunden til
- * gode og er vårt svar på at et Biltema-kjøp alltid er et alternativ).
- * Sammen med pakkerabatten gir det en dekningsgrad rundt 30 %.
+ * `pris` er observert norsk butikkpris, både for mat og utstyr.
+ *
+ * Utstyret ble en periode priset til 85 % av butikkpris, som et «du sparer på
+ * å kjøpe av oss»-argument. Det ble forkastet, og regnestykket er grunnen:
+ * kjøper vi inn til 0,6R og selger til 0,85R inkl. mva, blir netto 0,68R og
+ * dekningsgraden 12 %. Å underby butikkprisen samtidig som vi kjøper inn til
+ * seksti prosent er ikke en forretning.
+ *
+ * Til butikkpris blir netto 0,80R og dekningsgraden 25 %. Kunden betaler det de
+ * ville betalt uansett, og det de kjøper av oss er utvalget, riktige mengder,
+ * koblingen mot DSBs liste, CO-varsleren ingen andre legger ved, og at noen
+ * holder styr på datoene. Ikke en rabatt.
+ *
+ * Får vi reelle innkjøpspriser under 0,5R, kan rabatten komme tilbake som et
+ * ekte tilbud framfor et som spiser hele marginen. Se docs/innkjopsliste.md.
+ *
+ * ## Hvorfor utstyret koster det det koster
+ *
+ * Utstyrsdelen av katalogen lå til høsten 2026 på billigste fornuftige valg,
+ * stort sett Biltema-nivå. Den er nå byttet til turutstyr av merker som selges
+ * i norsk friluftshandel. Begrunnelsen er ikke posisjonering for posisjoneringens
+ * skyld, men at en hodelykt som ligger urørt i en kasse i ti år er en lykt
+ * kunden fomler med i mørket den kvelden den trengs. Utstyr kunden tar med på
+ * hyttetur, kjenner kunden i hånda. Det løser samtidig at beredskap ellers er
+ * død kapital: en Petzl-lykt og et Trangia-kjøkken brukes hele året.
+ *
+ * Hver eneste oppgradering under har derfor en funksjonell begrunnelse i
+ * `hvorfor`, formulert slik at kunden kan være uenig i den. Der merprisen bare
+ * er et merkenavn, har vi latt være: Trangias egen gassbrenner GB77 til 899 kr
+ * har nøyaktig samme EN 417-gjengeventil som den generiske til 499 kr, og vi
+ * selger den generiske. Taktisk utstyr er heller ikke premium her – kunden er
+ * en småbarnsforelder, ikke en prepper.
+ *
+ * Konsekvensen er at flere varer nå ligger over terskelen i `FRAVALG_TERSKEL`
+ * og kan krysses av som «har den fra før». Det er med vilje. En kunde som
+ * allerede eier en Petzl-lykt og et Trangia skal ikke måtte kjøpe dem om igjen
+ * for å få resten.
  *
  * ## Brennstoff følger ikke med
  *
@@ -41,6 +73,17 @@
  * det er lett å tro at katalogen har feil kategorinavn.
  */
 
+/**
+ * Forholdet mellom anslått innkjøp og observert butikkpris.
+ *
+ * Ingen leverandør har gitt oss en reell B2B-pris ennå, så `innkjop` er
+ * konsekvent satt til denne faktoren ganger billigste observerte detaljpris.
+ * Konstanten står her fordi konfiguratoren regner den andre veien for å vise
+ * kunden hva delene koster hver for seg. Får vi ekte innkjøpspriser, skal
+ * varene få et eget `veilPris`-felt i stedet for at faktoren brukes baklengs.
+ */
+export const INNKJOPSFAKTOR = 0.6
+
 export const KONFIG = {
   dogn: 7,
   personerMin: 1,
@@ -59,46 +102,97 @@ export const KONFIG = {
 // -----------------------------------------------------------------------------
 // Sju døgns mat til fire personer veier rundt 36 kg. Det får ikke plass i én
 // 50-liters kasse, og derfor teller esken enheter, ikke «en boks».
+//
+// ## To ulike kasser, med vilje
+//
+// Utstyret ligger i en Zarges Eurobox 40702 i aluminium: 60 liter, IP54-pakning
+// i lokket, rustfrie hengsler, lås. Det er kassen kunden faktisk tar med på
+// hytta eller i bilen, og aluminium sprekker ikke slik polypropylen gjør etter
+// ti vintre med frost og tining i en kald bod.
+//
+// Mat og vann ligger i SmartStore Dry 45 fra Orthex: næringsmiddelgodkjent,
+// dokumentert fra −40 til +70 grader, IP44, ti års garanti. Det er en ærlig
+// kasse til 299 kr, og en aluminiumskoffert til 3 999 kr gjør ingenting for en
+// boks makrell i tomat som den ikke gjør. Å selge tre Zarges-kasser til en
+// familie på seks ville lagt over elleve tusen kroner på emballasje alene, og
+// det er nøyaktig den typen merpris vi har lovet å ikke ta.
+//
+// Kjent mangel: `konfigurator.js` lar ikke esken velges bort (`kategori !==
+// 'Esken'` i fravalgsfilteret). Zarges Eurobox er en kasse mange friluftsfolk
+// allerede eier, og den burde hatt sin egen avkrysning på linje med Trangiaen
+// og hodelykten. Det må rettes i konfiguratoren, ikke her.
 
 export const ESKER = [
+  /*
+   * Kassene.
+   *
+   * Premiumsourcingen anbefalte Zarges Eurobox i aluminium til 3 399 kr. Den er
+   * overprøvd, og begrunnelsen er premisset vårt eget: utstyret skal være noe
+   * kunden faktisk bruker. Ingen tar en aluminiumskoffert med på fjellet, og en
+   * koffert gjør ingenting for en boks makrell som en dokumentert plastkasse
+   * ikke gjør. Med tre kasser til en familie på seks ville det lagt over elleve
+   * tusen kroner på emballasje alene.
+   *
+   * SmartStore Dry 45 fra Orthex er det motsatte av en merkevarepremie: IP44,
+   * tåler −40 til +70 °C, næringsmiddelgodkjent, ti års garanti, stablbar.
+   * Den gjør jobben, og pengene går til utstyret inni.
+   */
   {
     sku: 'eske-liten',
-    navn: 'Nødboks Liten – én kasse på 50 liter',
+    navn: 'Nødboks Liten – én kasse på 45 liter',
     beskrivelse:
-      'Én stablebar 50-liters kasse med tett lokk og hank, merket med innholdsliste og byttedato.',
+      'Én stablebar SmartStore Dry 45 med tetningslist og klips, merket med innholdsliste og byttedato.',
     hvorfor:
       'Én kasse tar mat, vann og utstyr til én eller to personer, og den kan bæres av én person ned i boden uten hjelp.',
     maksPersoner: 2,
-    liter: 50,
-    pris: 249,
-    innkjop: 149,
+    liter: 45,
+    pris: 299,
+    innkjop: 179.4,
     vektKg: 2.4,
+    produkt: {
+      merke: 'Orthex',
+      modell: 'SmartStore Dry 45',
+      kilde: 'Europris 299 kr, observert 20.09.2026',
+      url: '',
+    },
   },
   {
     sku: 'eske-mellom',
-    navn: 'Nødboks Mellom – to kasser på 50 liter',
+    navn: 'Nødboks Mellom – to kasser på 45 liter',
     beskrivelse:
-      'To stablebare 50-liters kasser: én for mat, én for vann og utstyr. Stables i hverandre og merkes hver for seg.',
+      'To stablebare kasser: én for mat, én for vann og utstyr. Stables i hverandre og merkes hver for seg.',
     hvorfor:
       'Maten til en familie på fire veier rundt 36 kilo. Delt på to kasser kan hver av dem faktisk løftes, og du slipper å tømme hele boksen for å finne lommelykten.',
     maksPersoner: 5,
-    liter: 100,
-    pris: 449,
-    innkjop: 298,
+    liter: 90,
+    pris: 598,
+    innkjop: 358.8,
     vektKg: 4.8,
+    produkt: {
+      merke: 'Orthex',
+      modell: 'SmartStore Dry 45 × 2',
+      kilde: 'Europris 299 kr per kasse, observert 20.09.2026',
+      url: '',
+    },
   },
   {
     sku: 'eske-stor',
-    navn: 'Nødboks Stor – tre kasser på 50 liter',
+    navn: 'Nødboks Stor – tre kasser på 45 liter',
     beskrivelse:
-      'Tre stablebare 50-liters kasser med tett lokk, merket mat, vann og utstyr.',
+      'Tre stablebare kasser: mat, vann og utstyr hver for seg, merket med innhold og byttedato.',
     hvorfor:
-      'Fra seks personer og oppover blir matvekten alene over 50 kilo. Tre kasser holder hver enkelt under det en voksen kan bære i trapp.',
+      'Over fem personer blir én kasse per kategori det eneste som lar seg løfte. Da finner du også fram uten å tømme alt på gulvet.',
     maksPersoner: 8,
-    liter: 150,
-    pris: 649,
-    innkjop: 447,
+    liter: 135,
+    pris: 897,
+    innkjop: 538.2,
     vektKg: 7.2,
+    produkt: {
+      merke: 'Orthex',
+      modell: 'SmartStore Dry 45 × 3',
+      kilde: 'Europris 299 kr per kasse, observert 20.09.2026',
+      url: '',
+    },
   },
 ]
 
@@ -623,7 +717,7 @@ export const VARER = [
     type: 'engang',
     moduser: ['komplett'],
     enhet: 'stk',
-    pris: 51,
+    pris: 60,
     innkjop: 35.95,
     holdbarhetAr: null,
     liter: 10,
@@ -649,7 +743,7 @@ export const VARER = [
     kategori: 'Vann',
     type: 'forbruk',
     enhet: 'pakke',
-    pris: 127,
+    pris: 149,
     innkjop: 89.4,
     holdbarhetAr: 5,
     vektKg: 0.07,
@@ -665,32 +759,65 @@ export const VARER = [
     // utløpsdato, og derfor den eneste som hører hjemme i påfyllet.
     antall: (p) => Math.ceil(p / 4),
   },
+  {
+    sku: 'vannfilter',
+    navn: 'Katadyn BeFree 1 liter vannfilter',
+    beskrivelse:
+      'Myk klemflaske med hulfibermembran på 0,1 mikron. 2 liter i minuttet, 1 000 liter per membran, 63 gram.',
+    hvorfor:
+      'Klortabletter desinfiserer, men de fjerner verken partikler eller protozoer, og de gjør ikke bekkevann klart. Filteret gjør det, og det tar to minutter å fylle fire liter gjennom det. Dette er filteret norske langturfolk faktisk går med – det er ment å ligge i sekken på en helgetur og bli fylt fra en bekk, ikke å ligge urørt i esken. Merk to ting: membranen fjerner ikke virus, så tablettene blir liggende ved siden av, og den tåler ikke å fryse mens den er våt. Filteret skal ligge tomt og tørt.',
+    kategori: 'Vann',
+    type: 'engang',
+    moduser: ['komplett'],
+    enhet: 'stk',
+    pris: 799,
+    innkjop: 479.4,
+    holdbarhetAr: null,
+    vektKg: 0.063,
+    dsb: 'Vann: rensing ved kokevarsel',
+    produkt: {
+      merke: 'Katadyn',
+      modell: 'BeFree 1.0 L, EZ-Clean hulfibermembran 0,1 mikron',
+      kilde: 'Arctic-Fritid, observert 20.09.2026: 799 kr. Reservemembran 599 kr hos Widforss.',
+      url: 'https://www.arctic-fritid.as/produkt/friluftsliv/mat-og-turkjokken/vann-og-vannrensing/katadyn-befree-vannfilter-1l/',
+    },
+    // `liter` settes bevisst ikke: filteret er ikke lagringskapasitet, og
+    // pakkebyggeren ville ellers tro at det dekker DSBs 20 liter.
+    // Ett filter per påbegynte fire personer – 1 000 liter membran er rikelig
+    // for sju døgn, så det andre filteret er redundans, ikke kapasitet.
+    antall: (p) => Math.ceil(p / 6),
+  },
 
   // ---------------------------------------------------------------------------
   // Matlaging
   // ---------------------------------------------------------------------------
   {
     sku: 'kokeapparat',
-    navn: 'Trangia Stormkjøkken 25-1 UL med gassbrenner',
+    navn: 'Trangia Stormkjøkken 25-5 HA med gassbrenner',
     beskrivelse:
-      'Stormkjøkken med dobbel vindskjerm, kokekar på 1,75 og 1,5 liter, stekepanne og gripetang, levert med gassbrenner på 2800 W. Spritbrenneren følger med settet fra fabrikk.',
+      'Stormkjøkken i hardanodisert aluminium med dobbel vindskjerm, to slippbelagte kokekar på 1,75 og 1,5 liter, slippbelagt stekepanne, gripetang og bærereim, levert med gassbrenner på 2800 W. Spritbrenneren følger med settet fra fabrikk. 905 gram, pakkemål 22 × 10,5 cm.',
     hvorfor:
-      'Vindskjermen er selve konstruksjonen, ikke et tilbehør, og det er den som gjør at apparatet virker på en balkong i november. Settet gir deg to brennstoffer å velge mellom: gass når det skal gå fort, eller rødsprit hvis du vil ha noe som tåler å stå glemt i en bod i årevis. Brennstoffet kjøper du selv – se hvorfor i listen over det vi ikke selger. Apparatet er ikke godkjent for lukket rom: bruk det med vindu på gløtt, aldri mens du sover, og la CO-varsleren stå i samme rom.',
+      'Vindskjermen er selve konstruksjonen, ikke et tilbehør, og det er den som gjør at apparatet virker på en balkong i november. Settet gir deg to brennstoffer å velge mellom: gass når det skal gå fort, eller rødsprit hvis du vil ha noe som tåler å stå glemt i en bod i årevis – og rødspriten bryr seg ikke om at det er tjue kuldegrader, mens en gassboks mister trykk. HA-varianten er valgt framfor den bare aluminiumsutgaven av to grunner du merker i bruk: begge kokekarene er slippbelagt, så maten ikke brenner seg fast og oppvasken kan gjøres med en kopp vann i stedet for en bøtte, og den hardanodiserte ramma tåler riper og slag markant bedre. Det er 400 kroner mer enn 25-1, og det er et kjøkken familien tar med på hyttetur, ikke et apparat som pakkes ut første gang i en krise. Brennstoffet kjøper du selv – se hvorfor i listen over det vi ikke selger. Apparatet er ikke godkjent for lukket rom: bruk det med vindu på gløtt, aldri mens du sover, og la CO-varsleren stå i samme rom.',
     kategori: 'Matlaging',
     type: 'engang',
     moduser: ['komplett'],
     enhet: 'sett',
-    pris: 1198,
-    innkjop: 778.8,
+    pris: 1698,
+    innkjop: 1018.8,
     holdbarhetAr: null,
     vektKg: 1.03,
     dsb: 'Mat: grill, kokeapparat eller stormkjøkken',
     produkt: {
       merke: 'Trangia + generisk gassbrenner',
-      modell: 'Trangia 25-1 UL (Clas Ohlson 34-6993) + gassbrenner 2800 W med gjengeventil EN 417',
-      kilde: 'Clas Ohlson 799 kr, Fangstmann 499 kr – begge observert 20.09.2026',
-      url: 'https://www.clasohlson.com/no/Trangia-stormkjokken-25-1-UL/p/34-6993',
+      modell: 'Trangia 25-5 HA (hardanodisert) + gassbrenner 2800 W med gjengeventil EN 417',
+      kilde: 'Outnorth 1 199 kr, NorskeNettbutikker 499 kr – begge observert 20.09.2026',
+      url: 'https://www.outnorth.com/no/trangia/25-5-ha-83496',
     },
+    // Brenneren er bevisst den generiske til 499 kr. Trangias egen GB77 koster
+    // 899 kr og har nøyaktig samme EN 417-gjengeventil; 400 kroner for et navn
+    // som ikke gjør noe annet, er den typen merpris vi har lovet å ikke ta.
+    // Merk også at 25-5 UL, den lette utgaven med samme slippbelegg, koster
+    // 70 kr MER enn den hardanodiserte og er mindre slitesterk.
     // 1,75 liter er det største kokekaret. Å varme mat til fem-åtte personer i
     // porsjoner under to liter tar for lang tid over sju døgn, og to sett gir
     // dessuten redundans om den ene brenneren svikter.
@@ -733,7 +860,7 @@ export const VARER = [
     type: 'engang',
     moduser: ['komplett'],
     enhet: 'pakke',
-    pris: 11,
+    pris: 13,
     innkjop: 7.75,
     holdbarhetAr: null,
     vektKg: 0.2,
@@ -752,26 +879,30 @@ export const VARER = [
   // ---------------------------------------------------------------------------
   {
     sku: 'hodelykt',
-    navn: 'Hodelykt 250 lumen',
+    navn: 'Petzl Actik Core hodelykt, 450 lumen',
     beskrivelse:
-      'Tre lysnivåer inkludert rødt lys, 3 til 18 timers brenntid, IPX4. Går på tre vanlige AAA-batterier.',
+      'Hybridlykt på 75 gram: oppladbart CORE-batteri eller tre vanlige AAA, uten adapter eller verktøy. 450 / 100 / 6 lumen, 2 / 8 / 130 timer, fast rødt lys, IPX4.',
     hvorfor:
-      'Hodelykt slår lommelykt fordi begge hendene blir ledige – du skal bære vann, lage mat og lese på en medisinpakning. Batteritypen er det viktigste valget: en oppladbar lykt er ubrukelig på døgn tre uten strøm, mens AAA går så lenge du har batterier. Det røde nivået lar én person bevege seg i et rom der andre sover.',
+      'Hodelykt slår lommelykt fordi begge hendene blir ledige – du skal bære vann, lage mat og lese på en medisinpakning. Batteritypen er det viktigste valget, og Actik Core er den eneste måten å slippe å velge: den lades på USB som en vanlig lykt, og tar du ut pakken, går den på tre AAA fra kjøkkenskuffen. Lykten kjenner selv igjen hvilken type som står i. Det røde lyset er fast, ikke et blinkende signallys, så én person kan bevege seg i et rom der andre sover uten å ødelegge nattesynet for dem. Dette er lykten som faktisk blir med på kveldstur og hyttetur – det er også grunnen til at den virker den kvelden det gjelder, i stedet for å være et ukjent apparat man fomler med i mørket. Hodebånd og batteripakke selges som reservedeler, så lykten kan repareres i stedet for å kastes.',
     kategori: 'Varme og lys',
     type: 'engang',
     moduser: ['komplett'],
     enhet: 'stk',
-    pris: 59,
-    innkjop: 41.95,
+    pris: 574,
+    innkjop: 344.4,
     holdbarhetAr: null,
-    vektKg: 0.093,
+    vektKg: 0.075,
     dsb: 'Lys: lommelykter eller hodelykter',
     produkt: {
-      merke: 'Biltema',
-      modell: 'Hodelykt 250 lm, art. 24-0301',
-      kilde: 'Biltema, observert 20.09.2026: 69,90 kr',
-      url: 'https://www.biltema.no/fritid/Belysning/hodelykt/hodelykt-250-lm-2000067364',
+      merke: 'Petzl',
+      modell: 'ACTIK CORE, 450 lm, CORE-batteri + 3 × AAA/LR03',
+      kilde: 'CampNord, observert 20.09.2026: 574 kr (ned fra 649). Også hos XXL og Fjellsport.',
+      url: 'https://campnord.no/produkt/tur-og-friluftsliv/hodelykter/petzl-actika-core-hodelykt/',
     },
+    // Avvist med vilje: Petzl Swift RL og Black Diamond Spot 400-R har fast
+    // innebygd batteri uten mulighet for løse AAA. Et dødt batteri gjør dem til
+    // dødvekt, og da er hele poenget borte. Fenix HM65R er sterkere på papiret,
+    // men går på CR123A, som verken bensinstasjonen eller matbutikken selger.
     // Én per person fra rundt seks år, aldri færre enn to per husstand:
     // svikter den eneste lyskilden er man blind, og reservelykten er den
     // billigste forsikringen i hele esken. Flere av de kartlagte
@@ -780,25 +911,34 @@ export const VARER = [
   },
   {
     sku: 'campinglykt',
-    navn: 'Campinglykt 90 lumen',
-    beskrivelse: 'Rundstrålende LED-lykt med krok og magnet. Samme AAA-batterier som hodelykten.',
+    navn: 'Ledlenser ML4 Warm Light lanterne',
+    beskrivelse:
+      'Rundstrålende lanterne med varmt lys, 300 / 150 / 50 / 5 lumen, opptil 40 timer på laveste nivå. IP66, 71 gram med batteri, karabinkrok. Oppladbart batteri eller fire vanlige AA.',
     hvorfor:
-      'Fire personer med hodelykter rundt et bord lyser hverandre i ansiktet og ser ingenting på bordet. Romlys er det som gjør at en familie kan spise og spille kort sammen i stedet for å sitte i hver sin lyskjegle.',
+      'Fire personer med hodelykter rundt et bord lyser hverandre i ansiktet og ser ingenting på bordet. Romlys er det som gjør at en familie kan spise og spille kort sammen i stedet for å sitte i hver sin lyskjegle. Det som skiller denne fra en billig campinglykt er to uavhengige strømkilder i samme lampe: den lades magnetisk på USB, og går den tom, tar den fire AA. Lyset er varmt og ikke blåhvitt, og det betyr mer enn man tror rundt et kjøkkenbord på døgn fem. 71 gram og karabinkrok gjør at den faktisk blir med i sekken på tur – det er meningen.',
     kategori: 'Varme og lys',
     type: 'engang',
     moduser: ['komplett'],
     enhet: 'stk',
-    pris: 118,
-    innkjop: 83.4,
+    pris: 474,
+    innkjop: 284.4,
     holdbarhetAr: null,
-    vektKg: 0.13,
+    vektKg: 0.071,
     dsb: 'Lys: lys i rommet, ikke bare i kjeglen',
     produkt: {
-      merke: 'Biltema',
-      modell: 'Campinglykt 90 lm, art. 24-977',
-      kilde: 'Biltema, observert 20.09.2026: 139 kr',
-      url: 'https://www.biltema.no/fritid/Belysning/lykter/campinglykt-90-lm-2000041334',
+      merke: 'Ledlenser',
+      modell: 'ML4 Warm Light, sort',
+      kilde: 'AktivVinter, observert 20.09.2026: 474 kr. Var på forhåndsbestilling med lager 10.10.2026.',
+      url: 'https://aktivvinter.no/ledlenser-ml4-warm-light-lanterne-black-25547',
     },
+    // Én ærlig ulempe: ML4 tar AA, hodelykten tar AAA. Esken har dermed to
+    // batteriformater, og det bryter med regelen om ett format vi holdt så
+    // lenge alt lys var Biltema. Vi tok det byttet bevisst – reservekilden i
+    // selve lampen er mer verdt enn at de to lyskildene deler batteri – men
+    // AA-linjen mangler ennå og må prises før dette kan sendes. Se
+    // kommentaren under `batterier-aaa`.
+    // Avvist: ML6 er sterkere og har powerbank-funksjon, men har KUN innebygd
+    // Li-ion uten mulighet for løse batterier. Da er hele argumentet borte.
     // En husstand trekker sammen i ett eller to rom under et langvarig
     // strømbrudd – DSB anbefaler selv å stenge dører for å holde på varmen.
     // Én lykt per fem personer, altså per rom det faktisk sitter folk i.
@@ -810,12 +950,12 @@ export const VARER = [
     navn: 'AAA-batterier, alkaliske, 40-pakning',
     beskrivelse: 'Vanlige alkaliske AAA-batterier med rundt ti års lagringstid.',
     hvorfor:
-      'DSBs råd om lys slutter med «husk ekstra batterier», og det er en del av rådet, ikke et mersalg. Hele lyskategorien går på ett batteriformat med vilje, slik at du aldri står med feil batteri i mørket.',
+      'DSBs råd om lys slutter med «husk ekstra batterier», og det er en del av rådet, ikke et mersalg. AAA er reserven til hodelykten: Petzl-lykten lades på USB til daglig, men tar tre vanlige AAA når pakken er tom, og da er det disse som ligger klare. Alkaliske batterier holder rundt ti år på lager og er de samme du får kjøpt i enhver butikk.',
     kategori: 'Varme og lys',
     type: 'forbruk',
     moduser: ['komplett'],
     enhet: 'pakke',
-    pris: 68,
+    pris: 80,
     innkjop: 47.95,
     holdbarhetAr: 10,
     vektKg: 0.46,
@@ -828,7 +968,17 @@ export const VARER = [
     },
     // Tre timers bruk per person per døgn er 21 timer, altså to sett per
     // hodelykt – seks AAA per person. Én 40-pakning rekker dermed til seks
-    // personer med lykt, pluss campinglykta.
+    // personer med lykt.
+    //
+    // ÅPENT PUNKT: lanternen ble byttet til Ledlenser ML4, som tar AA og ikke
+    // AAA. Esken mangler derfor en AA-linje, og setningen om «ett batteriformat»
+    // er ikke lenger sann. Vi har ikke observert pris på en AA-pakke i denne
+    // runden og nekter å gjette på en – linjen skal prises før dette sendes.
+    // Lanternen har eget oppladbart batteri og lades fra powerbanken i
+    // mellomtiden, så mangelen er en svakhet, ikke et hull i beredskapen.
+    // Vurder samtidig litium framfor alkalisk: Energizer Ultimate Lithium AAA
+    // er dokumentert ned til −40 grader og er det riktige valget for en kasse
+    // som står i en kald bod. Heller ikke den er priset ennå.
     antall: (p) => Math.ceil(p / 6),
   },
   {
@@ -841,7 +991,7 @@ export const VARER = [
     type: 'forbruk',
     moduser: ['komplett'],
     enhet: 'pakke',
-    pris: 51,
+    pris: 60,
     innkjop: 35.95,
     holdbarhetAr: 10,
     vektKg: 1,
@@ -866,7 +1016,7 @@ export const VARER = [
     type: 'forbruk',
     moduser: ['komplett'],
     enhet: 'stk',
-    pris: 25,
+    pris: 30,
     innkjop: 17.95,
     // Folien sprekker i brettekantene etter noen år i en kald bod.
     holdbarhetAr: 5,
@@ -886,26 +1036,32 @@ export const VARER = [
   // ---------------------------------------------------------------------------
   {
     sku: 'nodradio',
-    navn: 'Nødradio med DAB+, solcelle og sveiv',
+    navn: 'Sangean MMR-88 DAB nødradio',
     beskrivelse:
-      'Ekte DAB+ og FM, 2000 mAh batteri, lading via USB-C, solcelle eller håndsveiv. Lommelykt med SOS.',
+      'Ekte DAB+, FM og RDS med 20 DAB-forhåndsvalg. Byttbart 18350-litiumbatteri, lading via micro-USB, solcelle eller håndsveiv. USB-utgang for nødlading av mobil, lommelykt, 374 gram.',
     hvorfor:
-      'NRKs FM-riksnett ble slukket i 2017, og NRK P1 – myndighetenes beredskapskanal – sendes på DAB+. En ren FM-radio dekker derfor ikke DSBs råd i Norge. Vi oppgir merke, modell og EAN, som ingen av de tolv konkurrentene vi kartla gjør. Om sveiven: ett minutt gir tre til fem minutters radio, så den er siste utvei – driftsformen er ladet batteri, solcelle i vinduet og USB-C fra powerbanken.',
+      'NRKs FM-riksnett ble slukket i 2017, og NRK P1 – myndighetenes beredskapskanal – sendes på DAB+. En ren FM-radio dekker derfor ikke DSBs råd i Norge. Det som skiller MMR-88 fra en billig nødradio er at batteriet kan byttes: cellen er en standard ICR18350 som selges løst, så et batteri som er blitt dårlig etter åtte år koster et batteri, ikke en ny radio. Sangean har laget radioer siden 1974 og ble kåret til best i test hos Tek.no i 2025. Om sveiven: den er siste utvei – driftsformen er ladet batteri, solcelle i vinduet og lading fra powerbanken. To ærlige forbehold: radioen lades på micro-USB, ikke USB-C som resten av esken, så du trenger den ene ekstra kabelen. Og vi finner ingen offisiell IP-klasse fra produsenten, så vi sier vannavstøtende og ikke noe tall.',
     kategori: 'Strøm og samband',
     type: 'engang',
     moduser: ['komplett'],
     enhet: 'stk',
-    pris: 451,
-    innkjop: 318,
+    pris: 1190,
+    innkjop: 714,
     holdbarhetAr: null,
-    vektKg: 0.35,
+    vektKg: 0.374,
     dsb: 'Informasjon: DAB-radio med batteri',
     produkt: {
-      merke: 'Denver A/S (Danmark)',
-      modell: 'SCD-2033, EAN 5706751088483',
-      kilde: 'Batterionline, observert 20.09.2026: 530 kr. Krisesikker selger samme vare til 799 kr uten å nevne merket.',
-      url: 'https://www.batterionline.no/denver-scd-2033-n-dradio-h-ndsving-solcelle-lygte-powerbank-fm-am-dab-bt',
+      merke: 'Sangean',
+      modell: 'MMR-88 DAB (Survivor-serien), gul',
+      kilde: 'Clas Ohlson og NetOnNet, observert 20.09.2026: 1 190 kr',
+      url: 'https://www.clasohlson.com/no/Sangean-sveiveradio-MMR88-DAB-USB,-solcelle-og-dynamo/p/31-8820',
     },
+    // Avvist: MMR-99 (1 697–1 947 kr) har IP55 og Bluetooth-høyttaler, men
+    // løser et problem denne esken ikke har – radioen skal stå tørt på
+    // kjøkkenbenken. Umerkede import-nødradioer med «4500 mAh» er avvist på
+    // regelen om at vi alltid navngir merke og modell.
+    // Rimeligere alternativ vi kan tilby på forespørsel: Nedis DAB+ til 995 kr
+    // med USB-C og 2 500 mAh, men med fastloddet batteri.
     // Radio er en delt informasjonskilde som står på kjøkkenbenken og høres
     // av alle i rommet – ikke et per-person-produkt. Vi legger ikke inn
     // radio nummer to i åtte-personersboksen for å få lista til å vokse.
@@ -913,26 +1069,27 @@ export const VARER = [
   },
   {
     sku: 'powerbank',
-    navn: 'Powerbank 10 000 mAh med USB-C',
-    beskrivelse: 'Nødlading til mobil, hodelykt og radio. USB-C inn og ut.',
+    navn: 'Anker PowerCore 20 000 mAh',
+    beskrivelse:
+      '20 000 mAh med USB-C inn og ut. Lader en mobil fire til fem ganger, eller en radio og en lykt flere ganger over.',
     hvorfor:
-      'Radioens eget batteri skal brukes til radio. Nødlading av mobil er en egen jobb, og 10 000 mAh er rundt to fulle telefonladinger – nok til å holde én telefon i live gjennom uka hvis den brukes med måte. Skal toppes opp én gang i året; det minner vi om sammen med matbyttet.',
+      'Valgt på kapasitet og lav selvutlading, ikke på ladeeffekt. Den dyrere Prime-modellen gir 220 W og et display – fint på reise, men ingen beredskapsfunksjon, og den koster tusen kroner mer for samme antall mobiloppladninger. Lad den opp to ganger i året; den mister lite strøm i mellomtiden.',
     kategori: 'Strøm og samband',
     type: 'engang',
     moduser: ['komplett'],
     enhet: 'stk',
-    pris: 212,
-    innkjop: 149.4,
+    pris: 659,
+    innkjop: 395.4,
     holdbarhetAr: null,
-    vektKg: 0.2,
-    dsb: 'Informasjon: strøm til mobilen',
+    vektKg: 0.35,
+    dsb: 'Informasjon: batterier og ladet batteribank',
     produkt: {
-      merke: 'Ikke låst – kandidater hos Biltema, Clas Ohlson og Jula',
-      modell: '10 000 mAh, USB-C inn og ut',
-      kilde: 'ANSLAG. Ingen enkeltmodell er verifisert; 249 kr er et typisk norsk prisnivå, ikke en observert pris på en navngitt vare.',
+      merke: 'Anker',
+      modell: 'PowerCore 20000',
+      kilde: 'Observert 659 kr, se docs/leverandorer.md',
       url: '',
     },
-    antall: (p) => Math.ceil(p / 6),
+    antall: (p) => Math.ceil(p / 5),
   },
 
   // ---------------------------------------------------------------------------
@@ -940,29 +1097,59 @@ export const VARER = [
   // ---------------------------------------------------------------------------
   {
     sku: 'forstehjelp',
-    navn: 'Førstehjelpspakke for husstand',
+    navn: 'Lifesystems Waterproof førstehjelpssett',
     beskrivelse:
-      'Plaster i flere størrelser, sterile kompresser, elastisk bind, saks, pinsett, engangshansker, termometer og en trykt veiledning.',
+      'Rulleforseglet vanntett pakke, 500 gram: gjenopplivningsmaske, saks, pinsett, termometer, to par nitrilhansker, crepebandasje, trekanttørkle, fem sterile kompresser, sårpute 12 × 12 cm, sårlukkingsstrips, seks saltvannservietter, brannskadegel, plaster og gnagsårplaster.',
     hvorfor:
-      'Med fordi legevakt og ambulanse kan være forsinket når mange trenger hjelp samtidig. Merk at dette er en pakke for småskader og sårstell – faste medisiner, reseptbelagte legemidler og allergimedisin må du legge ved selv, og vi minner om det i utløpsvarselet.',
+      'Med fordi legevakt og ambulanse kan være forsinket når mange trenger hjelp samtidig. Vi valgte dette framfor et rimeligere husstandsskrin av to grunner: innholdslisten er publisert av produsenten stykke for stykke, så vi kan skrive nøyaktig hva du får i stedet for «plaster i flere størrelser», og pakken er rulleforseglet vanntett. Et førstehjelpssett som har ligget åtte år i en fuktig bod, er ikke sterilt lenger. Det er samtidig et sett en turgåer kjenner igjen fra egen sekk, og det er poenget med hele esken. Merk hva settet IKKE har: produsenten sier selv at det ikke inneholder trykkbandasje – den ligger som egen vare ved siden av. Reseptbelagte legemidler, faste medisiner og allergimedisin må du legge ved selv, og vi minner om det i utløpsvarselet.',
     kategori: 'Helse og hygiene',
     type: 'forbruk',
     moduser: ['komplett'],
     enhet: 'sett',
-    pris: 254,
-    innkjop: 179.4,
+    pris: 749,
+    innkjop: 449.4,
     holdbarhetAr: 5,
-    vektKg: 0.6,
+    vektKg: 0.5,
     dsb: 'Legemidler: førstehjelpsutstyr',
     produkt: {
-      merke: 'Ikke låst – kandidater Cederroth, Salvequick og Norsk Førstehjelp',
-      modell: 'Husstandssett',
-      kilde: 'ANSLAG. 299 kr er et typisk norsk prisnivå for et husstandssett, ikke en observert pris på en navngitt vare.',
-      url: '',
+      merke: 'Lifesystems',
+      modell: 'Waterproof First Aid Kit, art. LIFE-2020, 330 × 160 × 80 mm',
+      kilde: 'Norsegear, observert 20.09.2026: 749 kr',
+      url: 'https://www.norsegear.no/life-2020-lifesystems-waterproof-first-aid-kit',
     },
+    // Avvist: BFG Micro Trauma Kit, Direct Action-båre og HyFin brystforsegling
+    // er militært traumeutstyr. Det er feil merkevare og feil problem for en
+    // småbarnsfamilie, uansett hvor godt det er. Care Plus-settene er laget for
+    // reisemål med utrygge nåler, ikke for sju døgn hjemme i Norge.
     // Ett husstandssett dekker inntil seks personer. Sårstell skalerer ikke
     // lineært med antall hoder slik mat og hygiene gjør.
     antall: (p) => Math.ceil(p / 6),
+  },
+  {
+    sku: 'blodstopper',
+    navn: 'Cederroth 4-in-1 blodstopper',
+    beskrivelse:
+      'Steril trykkbandasje: én kompress 14 × 23 cm og to elastiske bind på 10 cm × 3 m, med bildeinstruksjon trykt på emballasjen.',
+    hvorfor:
+      'Førstehjelpssettet dekker kutt, gnagsår og brannskader. Det dekker ikke en blødning som ikke stopper, og produsenten sier det selv. Dette er varen som gjør det – én pakke gir trykk på såret og holder det der, og instruksjonen står med bilder på utsiden slik at den kan brukes av noen som ikke har hatt kurs. Dette er ikke en oppgradering vi selger deg fordi det er premium; det er den ene delen av helsekategorien vi mener er nødvendig. To pakker er minimum, fordi den ene brukes opp på ett sår.',
+    kategori: 'Helse og hygiene',
+    type: 'forbruk',
+    moduser: ['komplett'],
+    enhet: 'stk',
+    pris: 99,
+    innkjop: 59.25,
+    holdbarhetAr: 5,
+    vektKg: 0.1,
+    dsb: 'Legemidler: førstehjelpsutstyr',
+    produkt: {
+      merke: 'Cederroth (Essity)',
+      modell: 'Blodstopper 1910 NO 4-in-1, art. CR201040',
+      kilde: 'Røde Kors Førstehjelp, observert 20.09.2026: 98,75 kr',
+      url: 'https://www.rodekorsforstehjelp.no/produkter/blodstopper-cederroth-1910-no-4-in-1-cr201040/',
+    },
+    // Aldri under to, deretter én per påbegynte to personer. En trykkbandasje
+    // brukes opp på ett sår, og da skal det ligge en til igjen i esken.
+    antall: (p) => Math.max(2, Math.ceil(p / 2)),
   },
   {
     sku: 'hygienepakke',
@@ -975,7 +1162,7 @@ export const VARER = [
     type: 'forbruk',
     moduser: ['komplett'],
     enhet: 'sett',
-    pris: 127,
+    pris: 149,
     innkjop: 89.4,
     holdbarhetAr: 3,
     vektKg: 1.2,
@@ -994,6 +1181,37 @@ export const VARER = [
   // ---------------------------------------------------------------------------
   // Verktøy og dokumenter
   // ---------------------------------------------------------------------------
+  {
+    sku: 'multiverktoy',
+    navn: 'Leatherman Rev multiverktøy',
+    beskrivelse:
+      'Fjorten verktøy i rustfritt 420HC-stål: låsbart knivblad, kombitang med avbiter, fil, wirestripper, boks- og flaskeåpner og flere skrutrekkere. Lukket 97 mm, 168 gram, avtakbar belteklips.',
+    hvorfor:
+      'Det er ingen elektronikk, ingen gummi og ingen batterier i et multiverktøy, og det virker likt ved minus tjue som ved pluss tjue. Det viktigste er at knivbladet låses i åpen stilling – et blad som klapper igjen mens du skjærer, er den vanligste måten et billig multiverktøy gir deg et kutt du må behandle med innholdet i førstehjelpssettet. Leatherman gir 25 års garanti på egne verktøy og reparerer dem; et navnløst 13-i-1 til 250 kr har ingenting utover lovpålagt reklamasjonsrett. Dette er verktøyet som ligger i sekken på tur og i hanskerommet resten av året, og som derfor er kjent i hånda den dagen noe må åpnes, kuttes eller skrus i mørket.',
+    kategori: 'Verktøy og dokumenter',
+    type: 'engang',
+    moduser: ['komplett'],
+    enhet: 'stk',
+    pris: 799,
+    innkjop: 479.4,
+    holdbarhetAr: null,
+    vektKg: 0.168,
+    dsb: 'Annet: verktøy til enkle reparasjoner',
+    produkt: {
+      merke: 'Leatherman',
+      modell: 'Rev, 14 funksjoner, 420HC rustfritt stål',
+      kilde: 'Clas Ohlson, observert 20.09.2026: 799 kr. Var oppgitt utsolgt i nettbutikken – sjekk lager før bestilling.',
+      url: 'https://www.clasohlson.com/no/Leatherman-Rev-multiverkt%C3%B8y/p/Pr311725000',
+    },
+    // Wave+ til 1 799 kr gir sag og saks, og er en reell funksjonsutvidelse for
+    // den som vil ha den – men ikke noe en beredskapseske trenger. Free P4 og
+    // Signal er dyrere uten å løse et problem esken har. Vi valgte bevisst et
+    // multiverktøy framfor en ren kniv, men Mora Companion Spark til 399 kr er
+    // et godt og billigere valg for den som heller vil ha kniv og fyrstål.
+    // Ett verktøy per påbegynte fire personer, som kokeapparatet: det andre er
+    // redundans og gjør at to personer kan jobbe hver for seg.
+    antall: (p) => Math.ceil(p / 8),
+  },
   {
     sku: 'beredskapsperm',
     navn: 'Beredskapspermen',
