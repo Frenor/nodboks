@@ -433,6 +433,33 @@ eget publiserte resonnement uten at én ny opplysning hadde endret det.
 
 ### LoRa og mesh-kommunikasjon
 
+> **Beslutning, 20. september 2026.** Oppdragsgiver har overprøvd anbefalingen
+> under og valgt å tilby Meshtastic som **tillegg** i pakkebyggeren. Begrunnelsen
+> er en vurdering analysen ikke kan avgjøre: at MQTT- og Meshtastic-miljøet i
+> Norge er i vekst, og at nodetettheten som feller forslaget i dag ikke
+> nødvendigvis gjør det om to år.
+>
+> Analysen under står uendret, fordi innvendingene er reelle uansett hvilken vei
+> miljøet går. Den er nå et krav til hvordan produktet må utformes, ikke et
+> argument mot å ha det:
+>
+> - **Vi leverer enhetene ferdig konfigurert** – region, kanal og den frekvensen
+>   det norske miljøet faktisk bruker, ikke fabrikkinnstillingen som kolliderer
+>   med norske AMS-målere. Det er det som svarer på krav 6, og det er samtidig
+>   det eneste som skiller oss fra å kjøpe direkte fra Shenzhen.
+> - **De tre forbeholdene står i selve valgkortet**, ikke i en fotnote: at det er
+>   tekst og ikke tale, at rekkevidden avhenger av hvem andre som har utstyret,
+>   og at nettet er tynt nord for Trøndelag. Å selge dette uten dem ville vært
+>   nøyaktig det vi kritiserer markedet for.
+> - **Det er et tillegg, ikke standard.** Ingen får det uten å be om det.
+>
+> **Dette må avklares før første salg:** kjøper vi fra en produsent utenfor EØS,
+> blir Nødboks rettslig importør etter radioutstyrsdirektivet. Det betyr CE-
+> merking, ti års dokumentasjonsplikt, og vårt eget navn og adresse på varen.
+> Det er en reell forpliktelse, ikke en formalitet, og den må løses eller
+> unngås ved å kjøpe gjennom en EØS-forhandler.
+
+
 **Kortsvaret er nei.** Kommunikasjonsmodulen forblir Motorola Talkabout T42
 (PMR446, 319 kr). LoRa er lovlig uten søknad – det er ikke der problemet ligger
 – men enheten må pares med en telefon-app over Bluetooth, få riktig region og

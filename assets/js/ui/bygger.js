@@ -68,6 +68,7 @@ export function startBygger(rot = document) {
       modus: $('input[name="modus"]:checked', skjema)?.value,
       eskeType: $('input[name="eskeType"]:checked', skjema)?.value,
       utelatt: $$('input[name="harfraFor"]:checked', skjema).map((i) => i.value),
+      tillegg: $$('input[name="tillegg"]:checked', skjema).map((i) => i.value),
       abonnement: $('#abonnement', skjema)?.checked
         ? $('input[name="pafyll"]:checked', skjema)?.value ?? PAFYLL[0]?.id
         : null,
@@ -82,6 +83,7 @@ export function startBygger(rot = document) {
     tegnMatnivaer(rot, pakke)
     tegnEskevalg(rot, pakke)
   tegnHarFraFor(rot, pakke)
+    tegnTillegg(rot, pakke)
     tegnPris(rot, pakke)
     tegnListe(rot, pakke)
     tegnVarsler(rot, pakke)
@@ -232,6 +234,45 @@ function tegnMatnivaer(rot, pakke) {
   for (const m of MATNIVAER) {
     const fyll = $(`[data-holdbarhet="${m.id}"] .holdbarhet__fyll`, rot)
     if (fyll) fyll.style.width = `${Math.max(4, (m.holdbarhetAr / maks) * 100)}%`
+  }
+}
+
+/**
+ * Tillegg kunden velger til.
+ *
+ * Forbeholdene står i selve valgkortet, ikke bak en lenke. En vare som krever
+ * at kunden vet tre ting før den er nyttig, skal si de tre tingene der valget
+ * tas – ellers selger vi en skuffelse med to års forsinkelse.
+ */
+function tegnTillegg(rot, pakke) {
+  const el = $('#tillegg', rot)
+  if (!el) return
+  const valgt = new Set(pakke.valg.tillegg)
+  const signatur = pakke.tilleggsvalg.map((t) => `${t.sku}:${t.sum}`).join('|')
+  if (el.dataset.signatur !== signatur) {
+    el.dataset.signatur = signatur
+    el.innerHTML = pakke.tilleggsvalg
+      .map(
+        (t) => `
+        <label class="option">
+          <input type="checkbox" name="tillegg" value="${t.sku}" ${valgt.has(t.sku) ? 'checked' : ''}>
+          <span class="option__body">
+            <span class="option__title">${t.navn} <span class="tnum">${kr(t.sum)}</span></span>
+            <p class="option__desc">${t.beskrivelse}</p>
+            ${
+              t.forbehold.length
+                ? `<details class="forbehold">
+                     <summary>Tre ting du bør vite først</summary>
+                     <ul>${t.forbehold.map((f) => `<li>${f}</li>`).join('')}</ul>
+                   </details>`
+                : ''
+            }
+          </span>
+        </label>`
+      )
+      .join('')
+  } else {
+    for (const boks of $$('input[name="tillegg"]', el)) boks.checked = valgt.has(boks.value)
   }
 }
 

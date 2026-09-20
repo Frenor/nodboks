@@ -370,3 +370,20 @@
 }
 .harfor:has(input:checked) .harfor__sum { color: var(--accent); font-weight: 650; }
 .harfor input:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+
+/* --- Forbehold i et valgkort --------------------------------------------- */
+
+.forbehold { margin-top: var(--sp-3); font-size: var(--step--1); }
+.forbehold > summary {
+  cursor: pointer;
+  color: var(--text-muted);
+  font-weight: 600;
+  padding: var(--sp-1) 0;
+}
+.forbehold > summary:hover { color: var(--text); }
+.forbehold ul {
+  margin: var(--sp-2) 0 0;
+  padding-left: 1.1em;
+  color: var(--text-muted);
+}
+.forbehold li + li { margin-top: var(--sp-2); }

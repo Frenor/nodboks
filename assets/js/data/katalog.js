@@ -1125,6 +1125,82 @@ export const VARER = [
     // radio nummer to i åtte-personersboksen for å få lista til å vokse.
     antall: () => 1,
   },
+
+  /*
+   * Tillegg.
+   *
+   * Tillegg er ikke med før kunden krysser dem av. De skal tåle den samme
+   * testen som resten av katalogen, med ett unntak vi er åpne om: LoRa krever
+   * mer av brukeren enn noe annet i esken. Vi løser det ved å levere enhetene
+   * ferdig satt opp – se varens egen tekst.
+   */
+  {
+    sku: 'pmr-radio',
+    navn: 'Motorola Talkabout T42, toveisradio (2-pakning)',
+    beskrivelse:
+      'PMR446-radioer med åtte kanaler. Ingen lisens, ingen oppsett – sett i batterier, velg kanal, snakk.',
+    hvorfor:
+      'Tale når mobilnettet er nede. Én til to kilometer i by, mer i åpent terreng.',
+    kategori: 'Strøm og samband',
+    type: 'engang',
+    tillegg: true,
+    enhet: 'sett',
+    pris: 319,
+    innkjop: 191.4,
+    holdbarhetAr: null,
+    vektKg: 0.2,
+    dsb: 'Informasjon: kommunikasjon når mobilnettet er borte',
+    produkt: {
+      merke: 'Motorola',
+      modell: 'Talkabout T42',
+      kilde: 'avxperten.no 319 kr, observert 20.09.2026',
+      url: '',
+    },
+    antall: (p) => Math.max(1, Math.ceil(p / 4)),
+  },
+  {
+    sku: 'meshtastic',
+    navn: 'Meshtastic-sett, ferdig satt opp (2 enheter)',
+    beskrivelse:
+      'To SenseCAP T1000-E på 868 MHz. Sender tekstmeldinger mellom telefoner uten mobilnett, og videresender for andre i rekkevidde.',
+    hvorfor:
+      'Meldinger når nettet er nede. Vi setter opp frekvens og kanal før forsendelse, så de virker ut av esken.',
+    kategori: 'Strøm og samband',
+    type: 'engang',
+    tillegg: true,
+    enhet: 'sett',
+    pris: 1798,
+    innkjop: 1078.8,
+    holdbarhetAr: null,
+    vektKg: 0.1,
+    dsb: 'Informasjon: kommunikasjon når mobilnettet er borte',
+    produkt: {
+      merke: 'Seeed Studio',
+      modell: 'SenseCAP Card Tracker T1000-E',
+      kilde: 'Observert 899 kr per enhet. MERK: lagerstatus og importøransvar må avklares, se docs/sortiment.md',
+      url: '',
+    },
+    /*
+     * Tre ting denne varen ikke skal selges uten at kunden får vite:
+     *
+     * 1. Den sender TEKST, ikke tale. Telefonen er skjerm og tastatur, og den
+     *    virker fint uten nett – men den må ha strøm, så powerbanken hører med.
+     * 2. Rekkevidden avhenger av hvem andre som har utstyret. To enheter alene
+     *    er punkt til punkt, to til ni kilometer med fri sikt og mindre i skog.
+     *    Nettet er tettest rundt Oslo og Bergen og tynt nord for Trøndelag.
+     * 3. Vi leverer dem satt til frekvensen det norske miljøet bruker, ikke
+     *    fabrikkinnstillingen – den kolliderer med norske AMS-målere.
+     *
+     * Alle tre står i produktteksten på siden. Å selge dette uten dem ville
+     * vært å gjøre nøyaktig det vi kritiserer markedet for.
+     */
+    forbehold: [
+      'Det er tekst, ikke tale. Telefonen er skjerm og tastatur – den virker uten nett, men trenger strøm, så powerbanken hører med.',
+      'Rekkevidden avhenger av hvem andre som har utstyret. To enheter alene rekker to til ni kilometer med fri sikt, mindre i skog. Nettet er tettest rundt Oslo og Bergen og tynt nord for Trøndelag.',
+      'Vi setter dem til frekvensen det norske miljøet bruker, ikke fabrikkinnstillingen – den kolliderer med norske strømmålere.',
+    ],
+    antall: (p) => 1,
+  },
   {
     sku: 'powerbank',
     navn: 'Anker PowerCore 20 000 mAh',
