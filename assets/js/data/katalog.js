@@ -157,7 +157,7 @@ export const ESKER = [
     beskrivelse:
       'Én stablebar SmartStore Dry 45 med tetningslist og klips, merket med innholdsliste og byttedato.',
     hvorfor:
-      'Én kasse tar mat, vann og utstyr til én eller to personer, og den kan bæres av én person ned i boden uten hjelp.',
+      'Tar mat, vann og utstyr til to personer, og kan bæres av én.',
     maksPersoner: 2,
     liter: 45,
     pris: 299,
@@ -172,7 +172,7 @@ export const ESKER = [
     beskrivelse:
       'To stablebare kasser: én for mat, én for vann og utstyr. Stables i hverandre og merkes hver for seg.',
     hvorfor:
-      'Maten til en familie på fire veier rundt 36 kilo. Delt på to kasser kan hver av dem faktisk løftes, og du slipper å tømme hele boksen for å finne lommelykten.',
+      '36 kilo mat fordelt på to kasser, så hver av dem lar seg løfte.',
     maksPersoner: 5,
     liter: 90,
     pris: 598,
@@ -187,7 +187,7 @@ export const ESKER = [
     beskrivelse:
       'Tre stablebare kasser: mat, vann og utstyr hver for seg, merket med innhold og byttedato.',
     hvorfor:
-      'Over fem personer blir én kasse per kategori det eneste som lar seg løfte. Da finner du også fram uten å tømme alt på gulvet.',
+      'Én kasse per kategori. Du finner fram uten å tømme alt på gulvet.',
     maksPersoner: 8,
     liter: 135,
     pris: 897,
@@ -202,7 +202,7 @@ export const ESKER = [
     beskrivelse:
       'Zarges Eurobox 40702 i aluminium, 60 liter, med tetningslist og to hengelåsbeslag.',
     hvorfor:
-      'Kassen tåler å stå ute, på et biltak eller i en båt, og den er selv noe du bruker – ikke bare noe innholdet ligger i. Det er hele argumentet for merprisen.',
+      'Tåler å stå ute, på et biltak eller i en båt.',
     maksPersoner: 2,
     liter: 60,
     pris: 3999,
@@ -217,7 +217,7 @@ export const ESKER = [
     beskrivelse:
       'Zarges Eurobox i aluminium til utstyret, én SmartStore Dry 45 til mat og vann.',
     hvorfor:
-      'Utstyret ligger i aluminium fordi det er den kassen du tar med deg. Maten ligger i plast fordi en aluminiumskoffert ikke gjør noe for en boks makrell.',
+      'Aluminium til utstyret du tar med deg, plast til maten som blir stående.',
     maksPersoner: 5,
     liter: 105,
     pris: 4298,
@@ -232,7 +232,7 @@ export const ESKER = [
     beskrivelse:
       'Zarges Eurobox i aluminium til utstyret, to SmartStore Dry 45 til mat og vann.',
     hvorfor:
-      'Over fem personer trengs to matkasser for at hver av dem skal kunne løftes. Utstyret blir i aluminiumskassen.',
+      'To matkasser så hver av dem lar seg løfte. Utstyret blir i aluminiumskassen.',
     maksPersoner: 8,
     liter: 150,
     pris: 4597,
@@ -381,7 +381,7 @@ export const VARER = [
     navn: 'Wasa Husman knekkebrød, 520 g',
     beskrivelse: 'Grovt rugknekkebrød i økonomipakke, rundt 43 skiver.',
     hvorfor:
-      'Brødet i boksen. Det er det eneste brødsubstituttet som verken krever vann, varme eller kjøleskap, og det tåler romtemperatur også etter at pakken er åpnet.',
+      'Brødet i boksen. Verken vann, varme eller kjøleskap.',
     kategori: 'Mat',
     type: 'forbruk',
     enhet: 'pakke',
@@ -405,7 +405,7 @@ export const VARER = [
     navn: 'Stabburet Leverpostei Original, 200 g',
     beskrivelse: 'Steril leverpostei i form, med 6,2 mg jern per 100 g.',
     hvorfor:
-      'Den mest barnevennlige varen i hele boksen, og den med lengst dokumentert holdbarhet: 1 800 dager ved 2–25 grader. Et barn som får leverpostei på knekkebrød merker ikke at det er krise.',
+      'Holdbar 1 800 dager. Leverpostei på knekkebrød smaker ikke krise.',
     kategori: 'Mat',
     type: 'forbruk',
     enhet: 'stk',
@@ -430,7 +430,7 @@ export const VARER = [
     navn: 'Mills Kaviar, 185 g',
     beskrivelse: 'Kaviar på tube – pålegg som verken trenger kjøling eller kniv.',
     hvorfor:
-      'Tredje pålegg i rotasjonen, slik at ingen spiser leverpostei sju dager på rad. Tuben tåler å ligge åpnet i en kald leilighet, i motsetning til nesten alt annet pålegg.',
+      'Tredje pålegg i rotasjonen. Tuben tåler å stå åpnet i en kald leilighet.',
     kategori: 'Mat',
     type: 'forbruk',
     enhet: 'stk',
@@ -453,7 +453,7 @@ export const VARER = [
     navn: 'Stabburet Makrell i tomat, 170 g',
     beskrivelse: 'Makrellfilet i tomatsaus på boks.',
     hvorfor:
-      'Fet fisk og protein i en meny som ellers er korn og hermetikk. 170 g-boksen er billigere per kilo enn den lille og ikke utsolgt hos leverandør, slik 110 g-boksen var da vi sjekket.',
+      'Fet fisk og protein i en meny som ellers er korn og hermetikk.',
     kategori: 'Mat',
     type: 'forbruk',
     enhet: 'stk',
@@ -476,7 +476,7 @@ export const VARER = [
     navn: 'Nugatti Original, 350 g',
     beskrivelse: 'Kakaopålegg.',
     hvorfor:
-      'Frokost på knekkebrød de dagene ingen orker grøt, og det billigste vi kan legge i boksen som får et barn til å se fram til et måltid. 66 kalorier per krone gjør den dessuten til et av de mest effektive kjøpene i lista.',
+      '66 kalorier per krone, og det barna ser fram til på knekkebrødet.',
     kategori: 'Mat',
     type: 'forbruk',
     enhet: 'stk',
@@ -499,7 +499,7 @@ export const VARER = [
     navn: 'Freia Melkesjokolade, 200 g',
     beskrivelse: 'Melkesjokolade i plate.',
     hvorfor:
-      'DSB navngir sjokolade i sin egen liste, og grunnen er ikke kalorier. Et kveldsmåltid som ligner en vanlig kveld er det som gjør at sju døgn går an å holde ut, særlig med barn i huset.',
+      'Står på DSBs egen liste. En kveld som ligner en vanlig kveld.',
     kategori: 'Mat',
     type: 'forbruk',
     enhet: 'stk',
@@ -522,7 +522,7 @@ export const VARER = [
     navn: 'Sætre Mariekjeks, 350 g',
     beskrivelse: 'Tørre kjeks som tåler å ligge lenge.',
     hvorfor:
-      'Kveldsmat uten tilberedning, og det som holder ut lengst av alt i posen når noen blir kvalm eller ikke orker et helt måltid.',
+      'Kveldsmat uten tilberedning, og det som går ned når ingen orker mer.',
     kategori: 'Mat',
     type: 'forbruk',
     enhet: 'pakke',
@@ -545,7 +545,7 @@ export const VARER = [
     navn: 'Peanøtter, 500 g',
     beskrivelse: 'Saltede peanøtter.',
     hvorfor:
-      'Den nest beste kalorien per krone i hele boksen, og fett og protein i en meny som ellers er tung på karbohydrat. Merk pakken: hele nøtter er kvelningsfare for barn under fire år.',
+      'Fett og protein i en karbotung meny. Hele nøtter er kvelningsfare under fire år.',
     kategori: 'Mat',
     type: 'forbruk',
     enhet: 'pakke',
@@ -569,7 +569,7 @@ export const VARER = [
     navn: 'Rosiner, 500 g',
     beskrivelse: 'Tørket frukt.',
     hvorfor:
-      'Det som gjør havregrøt på vann til noe et barn spiser. DSB navngir tørket frukt, og dette er den formen som tåler å ligge i en kald bod.',
+      'Det som gjør havregrøt på vann til noe barn spiser.',
     kategori: 'Mat',
     type: 'forbruk',
     enhet: 'pakke',
@@ -592,7 +592,7 @@ export const VARER = [
     navn: "O'boy sjokoladedrikk, 450 g",
     beskrivelse: 'Kakaopulver som røres ut i varmt eller kaldt vann.',
     hvorfor:
-      'Noe varmt å drikke som ikke er kaffe, og det eneste i boksen som gjør et krus kokt vann til noe barn ber om. Rører seg også ut i kaldt vann hvis brenselet må spares.',
+      'Noe varmt som ikke er kaffe. Rører seg også ut i kaldt vann.',
     kategori: 'Mat',
     type: 'forbruk',
     enhet: 'stk',
@@ -615,7 +615,7 @@ export const VARER = [
     navn: 'Fruktcocktail i sukkerlake, 820 g',
     beskrivelse: 'Hermetisk frukt.',
     hvorfor:
-      'Jobben er ikke næring, men C-vitamin og noe friskt på døgn tre til fem, når alt annet har smakt hermetikk. Én boks per husstand uansett størrelse – mer er overflod.',
+      'C-vitamin og noe friskt på døgn tre, når alt har smakt hermetikk.',
     kategori: 'Mat',
     type: 'forbruk',
     enhet: 'stk',
@@ -642,7 +642,7 @@ export const VARER = [
     navn: 'Axa Bjørn Lettkokte Havregryn, 1,1 kg',
     beskrivelse: 'Lettkokte havregryn – trekker ferdig på ett minutt i kokende vann.',
     hvorfor:
-      'Den klart beste kalorien per krone i hele katalogen, rundt 150 kcal per krone. Grynene kan også bløtlegges kaldt over natten hvis brenselet må spares, og det er få andre varmretter som kan det.',
+      '150 kcal per krone, best i katalogen. Kan bløtlegges kaldt over natten.',
     kategori: 'Mat',
     type: 'forbruk',
     matnivaer: ['torrmat'],
@@ -668,7 +668,7 @@ export const VARER = [
     beskrivelse:
       'Spaghetti a la Capri, Maxboller i tomatsaus, brun lapskaus og lys lapskaus – fordelt slik at ingen sort går igjen to døgn på rad.',
     hvorfor:
-      'Den eneste middagen i hele sortimentet som kan spises kald rett fra boksen hvis både strøm og brensel er borte. Rundt 600 gram av innholdet er dessuten vann som ikke tappes av de 20 literne. Vi kjøper den for vann og moral, ikke for kalorier.',
+      'Den eneste middagen som kan spises kald rett fra boksen.',
     kategori: 'Mat',
     type: 'forbruk',
     matnivaer: ['torrmat'],
@@ -701,7 +701,7 @@ export const VARER = [
     beskrivelse:
       'Frysetørket middag i porsjonspose: Pasta Bolognese, Lapskaus, Kjøttgryte, Taco Bowl og Kremet pasta med laks. 3,7 dl kokende vann, åtte minutter.',
     hvorfor:
-      'Norskprodusert i Tromsø, og 702 kcal per pose mot 400–525 i den ordinære turmat-linjen. Vi kjøper enkeltposer nettopp for å styre utvalget: produsentens egen beredskapspakke har 12 av 28 middager i karri-, chili- og fiskesjiktet, og det er retter mange norske barn ikke spiser.',
+      '702 kcal per pose. Vi plukker rettene selv, så karri og bacalao blir igjen.',
     kategori: 'Mat',
     type: 'forbruk',
     matnivaer: ['langtidsmat'],
@@ -733,7 +733,7 @@ export const VARER = [
     beskrivelse:
       'Blåbær- og vaniljemüsli, crunchy granola, sjokolademüsli og havregrøt med eple og kanel. Kan lages på kaldt vann.',
     hvorfor:
-      'Frokosten er det eneste måltidet i langtidsmat-pakken som ikke krever kokeplate, og det er poenget: går gassen tom på døgn fire, stopper ikke frokosten – den blir bare kald.',
+      'Det eneste måltidet i langtidspakken som ikke krever kokeplate.',
     kategori: 'Mat',
     type: 'forbruk',
     matnivaer: ['langtidsmat'],
@@ -770,7 +770,7 @@ export const VARER = [
     beskrivelse:
       'Næringsmiddelgodkjent PE-dunk med skrulokk og bærehåndtak, stablebar. 23 × 19 × 31 cm.',
     hvorfor:
-      'Ti liter er den eneste størrelsen hele husstanden kan bruke. En full 20-literskanne veier 21 kilo og kan i praksis ikke bæres eller helles av et barn, en gravid eller en eldre – og det er akkurat de som skal kunne hente vann når det står på. Gjennomsiktig plast betyr at du ser nivået og ser om vannet er blitt uklart, uten å åpne.',
+      'En full 20-literskanne veier 21 kilo. Ti liter kan et barn bære.',
     kategori: 'Vann',
     type: 'engang',
     moduser: ['komplett'],
@@ -797,7 +797,7 @@ export const VARER = [
     beskrivelse:
       'Klorbaserte desinfeksjonstabletter i blister, til vann av usikker kvalitet.',
     hvorfor:
-      'Sju døgn er lang nok tid til at en kanne kan gå tom eller et kokevarsel kan komme. Da er 70 gram tabletter forskjellen på å ha vann og ikke ha det. Merk at tabletter desinfiserer mot bakterier og virus i klart vann – de fjerner ikke partikler, tungmetaller eller kjemisk forurensning.',
+      'For når kanna er tom eller kokevarselet kommer. Tar ikke partikler eller kjemikalier.',
     kategori: 'Vann',
     type: 'forbruk',
     enhet: 'pakke',
@@ -823,7 +823,7 @@ export const VARER = [
     beskrivelse:
       'Myk klemflaske med hulfibermembran på 0,1 mikron. 2 liter i minuttet, 1 000 liter per membran, 63 gram.',
     hvorfor:
-      'Klortabletter desinfiserer, men de fjerner verken partikler eller protozoer, og de gjør ikke bekkevann klart. Filteret gjør det, og det tar to minutter å fylle fire liter gjennom det. Dette er filteret norske langturfolk faktisk går med – det er ment å ligge i sekken på en helgetur og bli fylt fra en bekk, ikke å ligge urørt i esken. Merk to ting: membranen fjerner ikke virus, så tablettene blir liggende ved siden av, og den tåler ikke å fryse mens den er våt. Filteret skal ligge tomt og tørt.',
+      'Fjerner partikler og protozoer som tabletter ikke tar. Fire liter på to minutter.',
     kategori: 'Vann',
     type: 'engang',
     moduser: ['komplett'],
@@ -855,7 +855,7 @@ export const VARER = [
     beskrivelse:
       'Stormkjøkken i hardanodisert aluminium med dobbel vindskjerm, to slippbelagte kokekar på 1,75 og 1,5 liter, slippbelagt stekepanne, gripetang og bærereim, levert med gassbrenner på 2800 W. Spritbrenneren følger med settet fra fabrikk. 905 gram, pakkemål 22 × 10,5 cm.',
     hvorfor:
-      'Vindskjermen er selve konstruksjonen, ikke et tilbehør, og det er den som gjør at apparatet virker på en balkong i november. Settet gir deg to brennstoffer å velge mellom: gass når det skal gå fort, eller rødsprit hvis du vil ha noe som tåler å stå glemt i en bod i årevis – og rødspriten bryr seg ikke om at det er tjue kuldegrader, mens en gassboks mister trykk. HA-varianten er valgt framfor den bare aluminiumsutgaven av to grunner du merker i bruk: begge kokekarene er slippbelagt, så maten ikke brenner seg fast og oppvasken kan gjøres med en kopp vann i stedet for en bøtte, og den hardanodiserte ramma tåler riper og slag markant bedre. Det er 400 kroner mer enn 25-1, og det er et kjøkken familien tar med på hyttetur, ikke et apparat som pakkes ut første gang i en krise. Brennstoffet kjøper du selv – se hvorfor i listen over det vi ikke selger. Apparatet er ikke godkjent for lukket rom: bruk det med vindu på gløtt, aldri mens du sover, og la CO-varsleren stå i samme rom.',
+      'Vindskjermen er grunnen: den virker på en balkong i november. Ikke godkjent for lukket rom.',
     kategori: 'Matlaging',
     type: 'engang',
     moduser: ['komplett'],
@@ -888,7 +888,7 @@ export const VARER = [
     beskrivelse:
       'Karbonmonoksidvarsler med sifferdisplay og testknapp. Går på batteri og virker uten strøm.',
     hvorfor:
-      'Kokeapparatet er ikke godkjent for lukket rom, men vi vet at folk kommer til å bruke det inne når det er kaldt og mørkt. Karbonmonoksid er luktfritt, og de første symptomene ligner influensa. Dette er den billigste varen i esken som kan redde liv, og den eneste grunnen til at vi tør selge et kokeapparat til en husstand som skal klare seg i sju døgn.',
+      'CO lukter ingenting, og symptomene ligner influensa. Billigste varen som kan redde liv.',
     kategori: 'Varme og lys',
     type: 'engang',
     moduser: ['komplett'],
@@ -913,7 +913,7 @@ export const VARER = [
     navn: 'Fyrstikker, 10 esker',
     beskrivelse: 'Vanlige husholdningsfyrstikker, 45 stikker per eske.',
     hvorfor:
-      'Tenningen. Piezotenning er det første som slutter å virke etter år i kald, fuktig lagring, og det er et bekvemmelighetstrekk man verken skal betale for eller stole på.',
+      'Piezotenning er det første som slutter å virke etter år i fuktig bod.',
     kategori: 'Matlaging',
     type: 'engang',
     moduser: ['komplett'],
@@ -941,7 +941,7 @@ export const VARER = [
     beskrivelse:
       'Hybridlykt på 75 gram: oppladbart CORE-batteri eller tre vanlige AAA, uten adapter eller verktøy. 450 / 100 / 6 lumen, 2 / 8 / 130 timer, fast rødt lys, IPX4.',
     hvorfor:
-      'Hodelykt slår lommelykt fordi begge hendene blir ledige – du skal bære vann, lage mat og lese på en medisinpakning. Batteritypen er det viktigste valget, og Actik Core er den eneste måten å slippe å velge: den lades på USB som en vanlig lykt, og tar du ut pakken, går den på tre AAA fra kjøkkenskuffen. Lykten kjenner selv igjen hvilken type som står i. Det røde lyset er fast, ikke et blinkende signallys, så én person kan bevege seg i et rom der andre sover uten å ødelegge nattesynet for dem. Dette er lykten som faktisk blir med på kveldstur og hyttetur – det er også grunnen til at den virker den kvelden det gjelder, i stedet for å være et ukjent apparat man fomler med i mørket. Hodebånd og batteripakke selges som reservedeler, så lykten kan repareres i stedet for å kastes.',
+      'Lades på USB, går på tre AAA når pakken er tom. Begge hender ledige.',
     kategori: 'Varme og lys',
     type: 'engang',
     moduser: ['komplett'],
@@ -973,7 +973,7 @@ export const VARER = [
     beskrivelse:
       'Rundstrålende lanterne med varmt lys, 300 / 150 / 50 / 5 lumen, opptil 40 timer på laveste nivå. IP66, 71 gram med batteri, karabinkrok. Oppladbart batteri eller fire vanlige AA.',
     hvorfor:
-      'Fire personer med hodelykter rundt et bord lyser hverandre i ansiktet og ser ingenting på bordet. Romlys er det som gjør at en familie kan spise og spille kort sammen i stedet for å sitte i hver sin lyskjegle. Det som skiller denne fra en billig campinglykt er to uavhengige strømkilder i samme lampe: den lades magnetisk på USB, og går den tom, tar den fire AA. Lyset er varmt og ikke blåhvitt, og det betyr mer enn man tror rundt et kjøkkenbord på døgn fem. 71 gram og karabinkrok gjør at den faktisk blir med i sekken på tur – det er meningen.',
+      'Romlys, så familien kan spise sammen i stedet for hver sin lyskjegle.',
     kategori: 'Varme og lys',
     type: 'engang',
     moduser: ['komplett'],
@@ -1008,7 +1008,7 @@ export const VARER = [
     navn: 'AAA-batterier, alkaliske, 40-pakning',
     beskrivelse: 'Vanlige alkaliske AAA-batterier med rundt ti års lagringstid.',
     hvorfor:
-      'DSBs råd om lys slutter med «husk ekstra batterier», og det er en del av rådet, ikke et mersalg. AAA er reserven til hodelykten: Petzl-lykten lades på USB til daglig, men tar tre vanlige AAA når pakken er tom, og da er det disse som ligger klare. Alkaliske batterier holder rundt ti år på lager og er de samme du får kjøpt i enhver butikk.',
+      'Reserven til hodelykten. Alkaliske holder rundt ti år på lager.',
     kategori: 'Varme og lys',
     type: 'forbruk',
     moduser: ['komplett'],
@@ -1044,7 +1044,7 @@ export const VARER = [
     navn: 'Telys av stearin, 50-pakning',
     beskrivelse: '100 % stearin, seks timers brenntid per lys. 300 lystimer i pakken.',
     hvorfor:
-      'Det eneste lyset i esken som ikke kan gå tomt for batteri, og DSB navngir det selv. Rekkefølgen skal likevel være tydelig: batterilys først, telys som reserve. Mer bruk av åpen ild i en mørk bolig er den vanligste måten et strømbrudd blir til en brann på – aldri uten tilsyn, aldri på soverom.',
+      'Det eneste lyset som ikke går tomt for batteri. Aldri uten tilsyn.',
     kategori: 'Varme og lys',
     type: 'forbruk',
     moduser: ['komplett'],
@@ -1069,7 +1069,7 @@ export const VARER = [
     navn: 'Nødteppe, 140 × 220 cm',
     beskrivelse: 'Aluminiumsbelagt polyeten, 50 gram, pakkes til lommestørrelse.',
     hvorfor:
-      'Med i esken for det ene tilfellet der husstanden må forlate boligen: teppet ligger i sekken, dyna gjør ikke det. Den varmen du skal bruke hjemme er pledd, dyner og soveposer du allerede eier – det er også det DSB faktisk anbefaler. Merk at teppet er lettantennelig og ikke skal i nærheten av telysene i samme eske.',
+      'For det ene tilfellet der dere må forlate boligen. Hjemme bruker du dyna.',
     kategori: 'Varme og lys',
     type: 'forbruk',
     moduser: ['komplett'],
@@ -1098,7 +1098,7 @@ export const VARER = [
     beskrivelse:
       'Ekte DAB+, FM og RDS med 20 DAB-forhåndsvalg. Byttbart 18350-litiumbatteri, lading via micro-USB, solcelle eller håndsveiv. USB-utgang for nødlading av mobil, lommelykt, 374 gram.',
     hvorfor:
-      'NRKs FM-riksnett ble slukket i 2017, og NRK P1 – myndighetenes beredskapskanal – sendes på DAB+. En ren FM-radio dekker derfor ikke DSBs råd i Norge. Det som skiller MMR-88 fra en billig nødradio er at batteriet kan byttes: cellen er en standard ICR18350 som selges løst, så et batteri som er blitt dårlig etter åtte år koster et batteri, ikke en ny radio. Sangean har laget radioer siden 1974 og ble kåret til best i test hos Tek.no i 2025. Om sveiven: den er siste utvei – driftsformen er ladet batteri, solcelle i vinduet og lading fra powerbanken. To ærlige forbehold: radioen lades på micro-USB, ikke USB-C som resten av esken, så du trenger den ene ekstra kabelen. Og vi finner ingen offisiell IP-klasse fra produsenten, så vi sier vannavstøtende og ikke noe tall.',
+      'FM-riksnettet er slukket. NRK P1 går på DAB+, og batteriet kan byttes.',
     kategori: 'Strøm og samband',
     type: 'engang',
     moduser: ['komplett'],
@@ -1125,13 +1125,90 @@ export const VARER = [
     // radio nummer to i åtte-personersboksen for å få lista til å vokse.
     antall: () => 1,
   },
+
+  /*
+   * Tillegg.
+   *
+   * Tillegg er ikke med før kunden krysser dem av. De skal tåle den samme
+   * testen som resten av katalogen, med ett unntak vi er åpne om: LoRa krever
+   * mer av brukeren enn noe annet i esken. Vi løser det ved å levere enhetene
+   * ferdig satt opp – se varens egen tekst.
+   */
+  {
+    sku: 'pmr-radio',
+    navn: 'Motorola Talkabout T42, toveisradio (2-pakning)',
+    beskrivelse:
+      'PMR446-radioer med åtte kanaler. Ingen lisens, ingen oppsett – sett i batterier, velg kanal, snakk.',
+    hvorfor:
+      'Tale når mobilnettet er nede. Én til to kilometer i by, mer i åpent terreng.',
+    kategori: 'Strøm og samband',
+    type: 'engang',
+    tillegg: true,
+    enhet: 'sett',
+    pris: 319,
+    innkjop: 191.4,
+    holdbarhetAr: null,
+    vektKg: 0.2,
+    dsb: 'Informasjon: kommunikasjon når mobilnettet er borte',
+    produkt: {
+      merke: 'Motorola',
+      modell: 'Talkabout T42',
+      kilde: 'avxperten.no 319 kr, observert 20.09.2026',
+      url: '',
+    },
+    antall: (p) => Math.max(1, Math.ceil(p / 4)),
+  },
+  {
+    sku: 'meshtastic',
+    navn: 'Meshtastic-sett, ferdig satt opp (2 enheter)',
+    beskrivelse:
+      'To SenseCAP T1000-E på 868 MHz. Sender tekstmeldinger mellom telefoner uten mobilnett, og videresender for andre i rekkevidde.',
+    hvorfor:
+      'Meldinger når nettet er nede. Vi setter opp frekvens og kanal før forsendelse, så de virker ut av esken.',
+    kategori: 'Strøm og samband',
+    type: 'engang',
+    tillegg: true,
+    enhet: 'sett',
+    pris: 1798,
+    innkjop: 1078.8,
+    holdbarhetAr: null,
+    vektKg: 0.1,
+    dsb: 'Informasjon: kommunikasjon når mobilnettet er borte',
+    produkt: {
+      merke: 'Seeed Studio',
+      modell: 'SenseCAP Card Tracker T1000-E',
+      kilde: 'Observert 899 kr per enhet. Kjøpes fra EØS-forhandler, så importøransvaret ligger hos dem. Lagerstatus må bekreftes per ordre.',
+      url: '',
+    },
+    /*
+     * Tre ting denne varen ikke skal selges uten at kunden får vite:
+     *
+     * 1. Den sender TEKST, ikke tale. Telefonen er skjerm og tastatur, og den
+     *    virker fint uten nett – men den må ha strøm, så powerbanken hører med.
+     * 2. Rekkevidden avhenger av hvem andre som har utstyret. To enheter alene
+     *    er punkt til punkt, to til ni kilometer med fri sikt og mindre i skog.
+     *    Nettet er tettest rundt Oslo og Bergen og tynt nord for Trøndelag.
+     * 3. Vi leverer dem satt til frekvensen det norske miljøet bruker, ikke
+     *    fabrikkinnstillingen – den kolliderer med norske AMS-målere.
+     *
+     * Alle tre står i produktteksten på siden. Å selge dette uten dem ville
+     * vært å gjøre nøyaktig det vi kritiserer markedet for.
+     */
+    bruksanvisning: 'beredskap/meshtastic.html',
+    forbehold: [
+      'Det er tekst, ikke tale. Telefonen er skjerm og tastatur – den virker uten nett, men trenger strøm, så powerbanken hører med.',
+      'Rekkevidden avhenger av hvem andre som har utstyret. To enheter alene rekker to til ni kilometer med fri sikt, mindre i skog. Nettet er tettest rundt Oslo og Bergen og tynt nord for Trøndelag.',
+      'Vi setter dem til frekvensen det norske miljøet bruker, ikke fabrikkinnstillingen – den kolliderer med norske strømmålere.',
+    ],
+    antall: (p) => 1,
+  },
   {
     sku: 'powerbank',
     navn: 'Anker PowerCore 20 000 mAh',
     beskrivelse:
       '20 000 mAh med USB-C inn og ut. Lader en mobil fire til fem ganger, eller en radio og en lykt flere ganger over.',
     hvorfor:
-      'Valgt på kapasitet og lav selvutlading, ikke på ladeeffekt. Den dyrere Prime-modellen gir 220 W og et display – fint på reise, men ingen beredskapsfunksjon, og den koster tusen kroner mer for samme antall mobiloppladninger. Lad den opp to ganger i året; den mister lite strøm i mellomtiden.',
+      '20 000 mAh og lav selvutlading. Lad den to ganger i året.',
     kategori: 'Strøm og samband',
     type: 'engang',
     moduser: ['komplett'],
@@ -1159,7 +1236,7 @@ export const VARER = [
     beskrivelse:
       'Rulleforseglet vanntett pakke, 500 gram: gjenopplivningsmaske, saks, pinsett, termometer, to par nitrilhansker, crepebandasje, trekanttørkle, fem sterile kompresser, sårpute 12 × 12 cm, sårlukkingsstrips, seks saltvannservietter, brannskadegel, plaster og gnagsårplaster.',
     hvorfor:
-      'Med fordi legevakt og ambulanse kan være forsinket når mange trenger hjelp samtidig. Vi valgte dette framfor et rimeligere husstandsskrin av to grunner: innholdslisten er publisert av produsenten stykke for stykke, så vi kan skrive nøyaktig hva du får i stedet for «plaster i flere størrelser», og pakken er rulleforseglet vanntett. Et førstehjelpssett som har ligget åtte år i en fuktig bod, er ikke sterilt lenger. Det er samtidig et sett en turgåer kjenner igjen fra egen sekk, og det er poenget med hele esken. Merk hva settet IKKE har: produsenten sier selv at det ikke inneholder trykkbandasje – den ligger som egen vare ved siden av. Reseptbelagte legemidler, faste medisiner og allergimedisin må du legge ved selv, og vi minner om det i utløpsvarselet.',
+      'Rulleforseglet vanntett, med publisert innholdsliste. Trykkbandasje ligger ved siden av.',
     kategori: 'Helse og hygiene',
     type: 'forbruk',
     moduser: ['komplett'],
@@ -1189,7 +1266,7 @@ export const VARER = [
     beskrivelse:
       'Steril trykkbandasje: én kompress 14 × 23 cm og to elastiske bind på 10 cm × 3 m, med bildeinstruksjon trykt på emballasjen.',
     hvorfor:
-      'Førstehjelpssettet dekker kutt, gnagsår og brannskader. Det dekker ikke en blødning som ikke stopper, og produsenten sier det selv. Dette er varen som gjør det – én pakke gir trykk på såret og holder det der, og instruksjonen står med bilder på utsiden slik at den kan brukes av noen som ikke har hatt kurs. Dette er ikke en oppgradering vi selger deg fordi det er premium; det er den ene delen av helsekategorien vi mener er nødvendig. To pakker er minimum, fordi den ene brukes opp på ett sår.',
+      'For blødningen som ikke stopper. Instruksjon med bilder på utsiden.',
     kategori: 'Helse og hygiene',
     type: 'forbruk',
     moduser: ['komplett'],
@@ -1215,7 +1292,7 @@ export const VARER = [
     beskrivelse:
       'Våtservietter, håndsprit, kraftige søppelsekker, toalettpapir og en pakke engangskluter.',
     hvorfor:
-      'Uten vann i springen blir hygiene raskt det vanskeligste, ikke maten. Søppelsekkene er med av en grunn folk ikke liker å tenke på: uten vann virker heller ikke toalettet, og en dobbel søppelsekk i toalettskålen er det som gjør en leilighet beboelig i sju døgn.',
+      'Uten vann virker heller ikke toalettet. Det blir vanskeligere enn maten.',
     kategori: 'Helse og hygiene',
     type: 'forbruk',
     moduser: ['komplett'],
@@ -1242,7 +1319,7 @@ export const VARER = [
     beskrivelse:
       'Bøtte med ekte toalettsete og tett lokk. Sittehøyde 37 cm, bæreevne 130 kg. Brukes med dobbel søppelsekk og absorbent.',
     hvorfor:
-      'Uten vann virker heller ikke toalettet, og det er det som gjør en leilighet ubeboelig raskest – fortere enn maten tar slutt. En bøtte uten sete kan eldre, gravide og barn i praksis ikke bruke; sittehøyden og bæreevnen er hele forskjellen. DSB beskriver framgangsmåten med dobbel bærepose, men ingen i markedet selger en løsning, antagelig fordi det er det minst appetittvekkende produktet man kan tenke seg.',
+      'Sittehøyde 37 cm, bæreevne 130 kg. En bøtte uten sete kan ikke eldre og barn bruke.',
     kategori: 'Helse og hygiene',
     type: 'engang',
     moduser: ['komplett'],
@@ -1272,7 +1349,7 @@ export const VARER = [
     beskrivelse:
       'Fjorten verktøy i rustfritt 420HC-stål: låsbart knivblad, kombitang med avbiter, fil, wirestripper, boks- og flaskeåpner og flere skrutrekkere. Lukket 97 mm, 168 gram, avtakbar belteklips.',
     hvorfor:
-      'Det er ingen elektronikk, ingen gummi og ingen batterier i et multiverktøy, og det virker likt ved minus tjue som ved pluss tjue. Det viktigste er at knivbladet låses i åpen stilling – et blad som klapper igjen mens du skjærer, er den vanligste måten et billig multiverktøy gir deg et kutt du må behandle med innholdet i førstehjelpssettet. Leatherman gir 25 års garanti på egne verktøy og reparerer dem; et navnløst 13-i-1 til 250 kr har ingenting utover lovpålagt reklamasjonsrett. Dette er verktøyet som ligger i sekken på tur og i hanskerommet resten av året, og som derfor er kjent i hånda den dagen noe må åpnes, kuttes eller skrus i mørket.',
+      'Knivbladet låses i åpen stilling. 25 års garanti fra Leatherman.',
     kategori: 'Verktøy og dokumenter',
     type: 'engang',
     moduser: ['komplett'],
@@ -1303,7 +1380,7 @@ export const VARER = [
     beskrivelse:
       'Trykt hefte: hva du gjør de første timene, sju døgns menyplan med tilberedning, DSBs egen sjekkliste, skjema for kontakter og medisiner, og en konvolutt til kontanter.',
     hvorfor:
-      'Papir virker når telefonen er død. Menyplanen står trykt fordi den eneste måten å vite at maten faktisk rekker sju døgn, er å ha den fordelt på døgn på forhånd – og fordi minst to måltider hver dag skal kunne lages helt uten varme. Konvolutten er tom; kontanter legger du i selv, men vi minner om det, for kortterminaler går på strøm.',
+      'Papir virker når telefonen er død. Menyplanen står trykt, døgn for døgn.',
     kategori: 'Verktøy og dokumenter',
     type: 'engang',
     moduser: ['komplett'],

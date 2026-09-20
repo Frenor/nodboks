@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Slik bruker du Meshtastic-settet – Nødboks</title>
+<meta name="description" content="Bruksanvisning for Meshtastic-settet fra Nødboks. Meldinger mellom telefoner uten mobilnett. Sett det opp nå, ikke når strømmen er borte.">
+<link rel="canonical" href="https://nodboks.no/beredskap/meshtastic.html">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/tokens.css">
+<link rel="stylesheet" href="../assets/css/base.css">
+<script>
+  try { var t = localStorage.getItem('nodboks:tema'); if (t) document.documentElement.setAttribute('data-theme', t) } catch (e) {}
+</script>
+<style>
+  .ark { max-width: 34rem; margin-inline: auto; }
+  .steg-liste { list-style: none; counter-reset: s; padding: 0; margin: 0; }
+  .steg-liste > li {
+    counter-increment: s;
+    display: grid; grid-template-columns: 2rem 1fr; gap: var(--sp-4);
+    padding-block: var(--sp-5);
+    border-top: 1px solid var(--border);
+    max-width: none;
+  }
+  .steg-liste > li::before {
+    content: counter(s);
+    width: 2rem; height: 2rem;
+    display: grid; place-items: center;
+    border: 1px solid var(--border-strong); border-radius: 50%;
+    font-size: var(--step--1); font-weight: 650; font-variant-numeric: tabular-nums;
+    color: var(--text-muted);
+  }
+  .steg-liste h3 { font-size: var(--step-1); margin: 0 0 var(--sp-2); }
+  .steg-liste p { margin: 0; font-size: var(--step-0); }
+  .steg-liste p + p { margin-top: var(--sp-2); }
+
+  .naa {
+    border: 2px solid var(--accent);
+    border-radius: var(--radius-lg);
+    padding: var(--sp-5);
+    margin-block: var(--sp-6);
+  }
+  .naa p:last-child { margin-bottom: 0; }
+
+  .ikke li { margin-bottom: var(--sp-3); }
+  .kort { border: 1px solid var(--border); border-radius: var(--radius); padding: var(--sp-4); }
+
+  @media print {
+    /* Trykkes på A5. Fargene slås av, lenkene skrives ut som tekst,
+       og nettsidens navigasjon forsvinner. */
+    @page { size: A5; margin: 14mm; }
+    :root {
+      --bg: #fff; --surface: #fff; --text: #000; --text-muted: #333;
+      --border: #999; --border-strong: #555; --accent: #000;
+    }
+    .site-header, .site-footer, .skjul-i-trykk { display: none !important; }
+    body { font-size: 10.5pt; line-height: 1.45; }
+    h1 { font-size: 20pt; }
+    .steg-liste h3 { font-size: 11.5pt; }
+    .steg-liste > li { padding-block: 3mm; break-inside: avoid; }
+    .naa { border-width: 1.5pt; padding: 4mm; break-inside: avoid; }
+    a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 8.5pt; color: #555; }
+    .wrap { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#hoved">Hopp til innhold</a>
+
+<header class="site-header skjul-i-trykk">
+  <div class="wrap site-header__inner">
+    <a class="brandmark" href="../">
+      <svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true">
+        <circle cx="16" cy="16" r="10.5" fill="none" stroke="currentColor" stroke-width="3"/>
+        <circle cx="16" cy="16" r="5" fill="var(--accent)"/>
+      </svg>
+      Nødboks
+    </a>
+    <div class="cluster" style="margin-left:auto; gap:var(--sp-2)">
+      <button class="btn btn--sm btn--ghost" data-tema-bryter aria-pressed="false" aria-label="Bytt til mørk modus">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" data-tema-ikon>
+          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>
+        </svg>
+      </button>
+      <a class="btn btn--sm" href="../#bygg">Pakkebyggeren</a>
+    </div>
+  </div>
+</header>
+
+<main id="hoved" class="section">
+  <div class="wrap ark">
+
+    <p class="eyebrow">Bruksanvisning</p>
+    <h1>Meshtastic-settet</h1>
+    <p class="lead">
+      To små enheter som sender tekstmeldinger mellom telefonene deres uten at
+      mobilnettet er oppe. De er ferdig satt opp fra oss.
+    </p>
+
+    <div class="naa">
+      <h2 style="font-size:var(--step-2); margin-bottom:var(--sp-3)">Gjør dette i dag</h2>
+      <p>
+        Ikke legg settet i esken uoppakket. Lad enhetene, installer appen og send
+        én melding til hverandre mens dere sitter i sofaen. Det tar tjue minutter.
+      </p>
+      <p>
+        Grunnen er enkel: den kvelden dere faktisk trenger dette, er det mørkt,
+        det er stress, og ingen har lyst til å lese en bruksanvisning. Har dere
+        gjort det én gang, husker hendene resten.
+      </p>
+    </div>
+
+    <h2>Kom i gang</h2>
+    <ol class="steg-liste">
+      <li>
+        <div>
+          <h3>Lad begge enhetene</h3>
+          <p>USB-C. Full lading tar et par timer, og holder i flere dager i bruk.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>Installer Meshtastic-appen</h3>
+          <p>Gratis, finnes til både iPhone og Android. Søk på «Meshtastic» i App Store eller Google Play.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>Slå på enheten og koble til</h3>
+          <p>Hold knappen inne til den lyser. Åpne appen, velg enheten i lista, og godkjenn Bluetooth-koblingen.</p>
+          <p class="muted">Første gang spør telefonen om en kode. Den står på skjermen til enheten, eller er 123456.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>Send en melding til hverandre</h3>
+          <p>Gjenta punkt 2 og 3 på den andre telefonen. Skriv noe i appen. Det skal komme fram på den andre med én gang.</p>
+          <p class="muted">Kommer den ikke fram, er det nesten alltid at den andre enheten ikke er slått på.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>Legg dem tilbake, og sett en påminnelse</h3>
+          <p>Slå dem av. Lad dem opp igjen to ganger i året – vi minner dere på det sammen med matpåfyllet.</p>
+        </div>
+      </li>
+    </ol>
+
+    <h2>Det vi har gjort for dere</h2>
+    <p>
+      Enhetene er satt opp før de ble sendt. Frekvens, kanal og region er på
+      plass, og de to snakker allerede sammen.
+    </p>
+    <p>
+      Det siste er verdt å vite hvorfor: enheter rett fra fabrikk sender på en
+      frekvens som i Norge kolliderer med strømmålerne i husveggen. Vi har flyttet
+      dem til den frekvensen det norske Meshtastic-miljøet faktisk bruker, slik at
+      dere også når andre enn hverandre.
+    </p>
+    <p class="muted">
+      Ikke oppdater fastvaren med mindre dere vet hva dere gjør. Da mister dere
+      oppsettet, og enhetene må settes opp på nytt.
+    </p>
+
+    <h2>Hva dette er, og hva det ikke er</h2>
+    <ul class="ikke prose">
+      <li>
+        <strong>Det er tekst, ikke tale.</strong> Telefonen er skjerm og tastatur.
+        Den virker fint uten mobilnett, men den må ha strøm – så powerbanken i
+        esken hører med.
+      </li>
+      <li>
+        <strong>Rekkevidden avhenger av hvem andre som har utstyret.</strong> To
+        enheter alene rekker to til ni kilometer med fri sikt, mindre i skog og
+        mellom hus. Er det andre med Meshtastic i nærheten, videresender de for
+        dere, og rekkevidden blir mye større. Nettet er tettest rundt Oslo og
+        Bergen og tynt nord for Trøndelag.
+      </li>
+      <li>
+        <strong>Det er ikke en nødtelefon.</strong> Ingen sentral lytter. Skal
+        dere nå nødetatene, er det 110, 112 og 113 – og de går over mobilnettet.
+      </li>
+      <li>
+        <strong>Meldinger er kryptert</strong> mellom enheter på samme kanal, men
+        behandle det likevel som en åpen kanal. Ikke send noe dere ikke ville
+        sagt høyt.
+      </li>
+    </ul>
+
+    <h2>Når noe ikke virker</h2>
+    <div class="grid grid--2" style="margin-top:var(--sp-5)">
+      <div class="kort">
+        <h3 style="font-size:var(--step-1)">Appen finner ikke enheten</h3>
+        <p class="muted" style="font-size:var(--step--1); margin:0">
+          Er den slått på? Er Bluetooth på? Slå Bluetooth av og på igjen på
+          telefonen – det løser det ni av ti ganger.
+        </p>
+      </div>
+      <div class="kort">
+        <h3 style="font-size:var(--step-1)">Meldingen kommer ikke fram</h3>
+        <p class="muted" style="font-size:var(--step--1); margin:0">
+          Den andre enheten må være slått på og innenfor rekkevidde. Gå ut, eller
+          opp – høyde hjelper mer enn avstand skader.
+        </p>
+      </div>
+      <div class="kort">
+        <h3 style="font-size:var(--step-1)">Enheten lader ikke</h3>
+        <p class="muted" style="font-size:var(--step--1); margin:0">
+          Prøv en annen kabel først. Litiumbatterier som har stått helt tomme
+          lenge kan bruke noen minutter før de viser tegn til liv.
+        </p>
+      </div>
+      <div class="kort">
+        <h3 style="font-size:var(--step-1)">Vi hjelper</h3>
+        <p class="muted" style="font-size:var(--step--1); margin:0">
+          Får dere det ikke til, ta kontakt. Et sett som ligger uoppsatt i en
+          eske er verdiløst for dere og pinlig for oss.
+        </p>
+      </div>
+    </div>
+
+    <p style="margin-top:var(--sp-7)" class="muted">
+      Denne siden finnes alltid på
+      <a href="https://nodboks.no/beredskap/meshtastic.html">nodboks.no/beredskap/meshtastic.html</a>.
+      Papiret blir borte; siden gjør ikke det.
+    </p>
+
+    <p class="skjul-i-trykk" style="margin-top:var(--sp-6)">
+      <a class="btn" href="../#bygg">← Tilbake til pakkebyggeren</a>
+    </p>
+
+  </div>
+</main>
+
+<footer class="site-footer skjul-i-trykk">
+  <div class="wrap">
+    <p>
+      Nødboks er et privat firma og er ikke tilknyttet eller godkjent av DSB.
+      Meshtastic er fri programvare og et åpent nettverk; vi leverer maskinvaren
+      ferdig satt opp, men driver ikke nettet.
+    </p>
+  </div>
+</footer>
+
+<script type="module">
+  import { koblTemabryter } from '../assets/js/ui/tema.js'
+  koblTemabryter()
+</script>
+</body>
+</html>

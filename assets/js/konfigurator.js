@@ -84,8 +84,15 @@ export const dsbGruppe = (kategori) => DSB_GRUPPER[kategori] ?? 'Annet'
 export const klem = (n) =>
   Math.min(KONFIG.personerMaks, Math.max(KONFIG.personerMin, Math.round(n || 1)))
 
-/** Gjelder varen for denne kombinasjonen av modus og matnivå? */
-function gjelder(vare, { modus, matniva }) {
+/**
+ * Gjelder varen for denne kombinasjonen?
+ *
+ * Tillegg er motsatt av alt annet i katalogen: de er ikke med før kunden ber
+ * om dem. Utstyr velges bort, tillegg velges til. Skillet ligger på varen selv
+ * framfor i en egen liste, slik at katalogen fortsatt er ett sted.
+ */
+function gjelder(vare, { modus, matniva, tillegg }) {
+  if (vare.tillegg) return tillegg.has(vare.sku)
   if (vare.moduser && !vare.moduser.includes(modus)) return false
   if (vare.matnivaer && !vare.matnivaer.includes(matniva)) return false
   return true
@@ -116,9 +123,10 @@ export function byggPakke(valg) {
   const modus = finnModus(valg.modus)
   const abonnementId = valg.abonnement ?? null
   const utelatt = new Set(valg.utelatt ?? [])
+  const tillegg = new Set(valg.tillegg ?? [])
   const eskeType = finnEsketype(valg.eskeType).id
 
-  const kontekst = { personer, matniva: matniva.id, modus: modus.id }
+  const kontekst = { personer, matniva: matniva.id, modus: modus.id, tillegg }
 
   let linjer = []
   for (const vare of VARER) {
@@ -139,8 +147,10 @@ export function byggPakke(valg) {
       sum: vare.pris * antall,
       holdbarhetAr: vare.holdbarhetAr ?? null,
       dsb: vare.dsb ?? null,
+      bruksanvisning: vare.bruksanvisning ?? null,
       kcal: (vare.kcal ?? 0) * antall,
       kreverVarme: vare.kreverVarme === true,
+      erTillegg: vare.tillegg === true,
       liter: (vare.liter ?? 0) * antall,
       vekt: (vare.vektKg ?? 0) * antall,
     })
@@ -181,11 +191,26 @@ export function byggPakke(valg) {
    * være å kjøpe noe – er dyrere for begge.
    */
   const kanVelgesBort = linjer.filter(
-    (l) => l.type === 'engang' && l.kategori !== 'Esken' && l.sum >= FRAVALG_TERSKEL
+    (l) => l.type === 'engang' && l.kategori !== 'Esken' && !l.erTillegg && l.sum >= FRAVALG_TERSKEL
   )
   const fravalgt = kanVelgesBort.filter((l) => utelatt.has(l.sku))
   const spart = fravalgt.reduce((n, l) => n + l.sum, 0)
   linjer = linjer.filter((l) => !utelatt.has(l.sku))
+
+  const tilleggsvalg = VARER.filter((v) => v.tillegg).map((v) => {
+    const antall = Math.max(1, Math.ceil(v.antall(personer)))
+    return {
+      sku: v.sku,
+      navn: v.navn,
+      beskrivelse: v.beskrivelse,
+      hvorfor: v.hvorfor,
+      forbehold: v.forbehold ?? [],
+      bruksanvisning: v.bruksanvisning ?? null,
+      antall,
+      sum: v.pris * antall,
+      valgt: tillegg.has(v.sku),
+    }
+  })
 
   const sumVarer = linjer.reduce((n, l) => n + l.sum, 0)
   const pakkerabatt = Math.round(sumVarer * (modus.rabatt ?? 0))
@@ -249,6 +274,7 @@ export function byggPakke(valg) {
       abonnement: abonnementId,
       eskeType,
       utelatt: [...utelatt],
+      tillegg: [...tillegg],
     },
     matniva,
     modus,
@@ -262,6 +288,7 @@ export function byggPakke(valg) {
       sum: l.sum,
       valgtBort: utelatt.has(l.sku),
     })),
+    tilleggsvalg,
     fravalgt,
     /** Bruttoverdien av det som er tatt ut – brukes i prisoppsettets fradragslinje. */
     spart,
@@ -387,7 +414,10 @@ export function referanse(pakke) {
 export function pakkeId(pakke) {
   const v = pakke.valg
   const uten = v.utelatt?.length ? 'uten-' + [...v.utelatt].sort().join('_') : 'full'
-  return ['pakke', v.modus, v.personer, v.matniva, v.eskeType, v.abonnement ?? 'engang', uten].join('-')
+  const med = v.tillegg?.length ? 'med-' + [...v.tillegg].sort().join('_') : ''
+  return ['pakke', v.modus, v.personer, v.matniva, v.eskeType, v.abonnement ?? 'engang', uten, med]
+    .filter(Boolean)
+    .join('-')
 }
 
 /** Gjør pakken om til en kurvpost. */

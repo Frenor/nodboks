@@ -30,6 +30,21 @@ const $$ = (sel, rot = document) => [...rot.querySelectorAll(sel)]
 /** Norsk flertall uten å skrive «1 personer». */
 const personer = (n) => `${n} ${n === 1 ? 'person' : 'personer'}`
 
+/**
+ * Holdbarhet som noe man kan lese.
+ *
+ * Katalogen lagrer år som desimaltall fordi mengdene regnes ut av dem. «1,2 år»
+ * er presist og ubrukelig; under to år er måneder det folk faktisk tenker i.
+ */
+function holdbarhet(ar) {
+  if (!ar) return null
+  if (ar < 2) {
+    const md = Math.round(ar * 12)
+    return `${md} måned${md === 1 ? '' : 'er'}`
+  }
+  return `${tall(Math.round(ar))} år`
+}
+
 const ikon = {
   ok: '<svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8.5 6.5 12 13 4.5"/></svg>',
   warn: '<svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2.5 15 14H1z"/><path d="M8 6.5v3.2"/><path d="M8 11.8v.6"/></svg>',
@@ -53,6 +68,7 @@ export function startBygger(rot = document) {
       modus: $('input[name="modus"]:checked', skjema)?.value,
       eskeType: $('input[name="eskeType"]:checked', skjema)?.value,
       utelatt: $$('input[name="harfraFor"]:checked', skjema).map((i) => i.value),
+      tillegg: $$('input[name="tillegg"]:checked', skjema).map((i) => i.value),
       abonnement: $('#abonnement', skjema)?.checked
         ? $('input[name="pafyll"]:checked', skjema)?.value ?? PAFYLL[0]?.id
         : null,
@@ -67,6 +83,7 @@ export function startBygger(rot = document) {
     tegnMatnivaer(rot, pakke)
     tegnEskevalg(rot, pakke)
   tegnHarFraFor(rot, pakke)
+    tegnTillegg(rot, pakke)
     tegnPris(rot, pakke)
     tegnListe(rot, pakke)
     tegnVarsler(rot, pakke)
@@ -220,6 +237,50 @@ function tegnMatnivaer(rot, pakke) {
   }
 }
 
+/**
+ * Tillegg kunden velger til.
+ *
+ * Forbeholdene står i selve valgkortet, ikke bak en lenke. En vare som krever
+ * at kunden vet tre ting før den er nyttig, skal si de tre tingene der valget
+ * tas – ellers selger vi en skuffelse med to års forsinkelse.
+ */
+function tegnTillegg(rot, pakke) {
+  const el = $('#tillegg', rot)
+  if (!el) return
+  const valgt = new Set(pakke.valg.tillegg)
+  const signatur = pakke.tilleggsvalg.map((t) => `${t.sku}:${t.sum}`).join('|')
+  if (el.dataset.signatur !== signatur) {
+    el.dataset.signatur = signatur
+    el.innerHTML = pakke.tilleggsvalg
+      .map(
+        (t) => `
+        <label class="option">
+          <input type="checkbox" name="tillegg" value="${t.sku}" ${valgt.has(t.sku) ? 'checked' : ''}>
+          <span class="option__body">
+            <span class="option__title">${t.navn} <span class="tnum">${kr(t.sum)}</span></span>
+            <p class="option__desc">${t.beskrivelse}</p>
+            ${
+              t.forbehold.length
+                ? `<details class="forbehold">
+                     <summary>Tre ting du bør vite først</summary>
+                     <ul>${t.forbehold.map((f) => `<li>${f}</li>`).join('')}</ul>
+                     ${
+                       t.bruksanvisning
+                         ? `<p style="margin-top:var(--sp-3)"><a href="${t.bruksanvisning}">Les bruksanvisningen</a></p>`
+                         : ''
+                     }
+                   </details>`
+                : ''
+            }
+          </span>
+        </label>`
+      )
+      .join('')
+  } else {
+    for (const boks of $$('input[name="tillegg"]', el)) boks.checked = valgt.has(boks.value)
+  }
+}
+
 /** Viser hva hvert kassemateriale koster for den valgte husstanden. */
 function tegnEskevalg(rot, pakke) {
   const steg = $('#eskevalg', rot)?.closest('.steg')
@@ -329,7 +390,7 @@ function tegnPris(rot, pakke) {
   const neste = $('#pris-neste', rot)
   if (neste) {
     neste.textContent = pakke.holdbarhetAr
-      ? `Neste påfyll om rundt ${pakke.holdbarhetAr} år.`
+      ? `Neste påfyll om rundt ${holdbarhet(pakke.holdbarhetAr)}.`
       : ''
   }
 }
@@ -354,8 +415,9 @@ function tegnListe(rot, pakke) {
             <span class="vare__navn">${v.navn}</span>
             <span class="vare__antall">${tall(v.antall)} ${v.enhet}</span>
             ${v.hvorfor ? `<p class="vare__hvorfor">${v.hvorfor}</p>` : ''}
+            ${v.bruksanvisning ? `<p class="vare__hvorfor"><a href="${v.bruksanvisning}">Bruksanvisning</a></p>` : ''}
             <div class="vare__merker">
-              ${v.holdbarhetAr ? `<span class="badge">Holdbar ${v.holdbarhetAr} år</span>` : ''}
+              ${holdbarhet(v.holdbarhetAr) ? `<span class="badge">Holdbar ${holdbarhet(v.holdbarhetAr)}</span>` : ''}
               <span class="badge">${v.type === 'engang' ? 'Varer i mange år' : 'Går ut på dato'}</span>
             </div>
           </div>`

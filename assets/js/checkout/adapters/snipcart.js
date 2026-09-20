@@ -45,7 +45,7 @@ export const adapterSnipcart = {
         id: linje.sku,
         name: linje.navn,
         price: linje.enhetspris,
-        url: `${location.origin}/produkt/${linje.sku}.html`,
+        url: new URL(`produkt/${linje.sku}.html`, document.baseURI).href,
         quantity: linje.antall,
         metadata: { konfigurasjon: ordre.referanse, ...linje.metadata },
       }
