@@ -76,17 +76,24 @@ const GLYFER = {
 
 /* ------------------------------------------------------------------ bygging */
 
-function byggStepper(felt, etikett, min, maks) {
+/*
+ * Samme stepper kan stå flere steder – i heroen og i byggeren. Derfor får hvert
+ * sett sin egen id-forstavelse: to <input id="felt-voksne"> ville gjort at
+ * byggerens etikett pekte på heroens felt, og et klikk på «Voksne» nede ville
+ * flyttet fokus tolv skjermhøyder opp.
+ */
+function byggStepper(felt, etikett, min, maks, forstavelse) {
+  const id = `${forstavelse}-${felt}`
   const boks = lagEl('div', 'stepper')
   boks.dataset.felt = felt
   boks.innerHTML = `
     <svg class="stepper__glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor"
          stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${GLYFER[felt]}</svg>
-    <label class="stepper__etikett" for="felt-${felt}">${etikett}</label>
+    <label class="stepper__etikett" for="${id}">${etikett}</label>
     <div class="stepper__rad">
       <button type="button" class="stepper__knapp" data-steg="-1"
               aria-label="Én ${etikett.toLowerCase()} færre">−</button>
-      <input class="stepper__tall" id="felt-${felt}" type="number" inputmode="numeric"
+      <input class="stepper__tall" id="${id}" type="number" inputmode="numeric"
              min="${min}" max="${maks}" step="1" value="${min}">
       <button type="button" class="stepper__knapp" data-steg="1"
               aria-label="Én ${etikett.toLowerCase()} til">+</button>
@@ -163,8 +170,9 @@ export function startBygger(rot = document) {
 
   /* --- struktur, én gang --- */
 
-  for (const vert of $$('[data-steppere]', rot)) {
-    for (const s of STEPPERE) vert.append(byggStepper(s.felt, s.etikett, s.min, s.maks))
+  for (const [i, vert] of $$('[data-steppere]', rot).entries()) {
+    const forstavelse = vert.dataset.steppere || `felt${i}`
+    for (const s of STEPPERE) vert.append(byggStepper(s.felt, s.etikett, s.min, s.maks, forstavelse))
   }
 
   const matRot = $('#matnivaer', skjema)
@@ -329,8 +337,8 @@ function tegnSteppere(rot, t) {
       knapp.disabled = ny < spec.min || ny > spec.maks || overTak
     }
   }
-  const tak = $('[data-tak]', rot)
-  if (tak) tak.hidden = t.voksne + t.barn < KONFIG.personerMaks
+  const overTaket = t.voksne + t.barn < KONFIG.personerMaks
+  for (const tak of $$('[data-tak]', rot)) tak.hidden = overTaket
 }
 
 function tegnSvar(rot, pakke) {
@@ -352,6 +360,14 @@ function tegnSvar(rot, pakke) {
     `${hvem.join(', ')}: ${tall(Math.round(pakke.kcal))} kcal, ${tall(pakke.liter)} liter vann, ` +
     `og ${pakke.eske ? pakke.eske.navn.split('–')[1]?.trim() ?? 'esken' : 'et påfyll'} ` +
     `på rundt ${tall(Math.round(pakke.vekt))} kg. ${kaldt}`
+
+  /*
+   * Heroens variant er kortere. Over bretten er spørsmålet «hva koster det for
+   * oss», ikke «hvor mange kalorier» – detaljene står i byggeren, tolv
+   * skjermhøyder lenger ned.
+   */
+  const hero = $('[data-hero-svar]', rot)
+  if (hero) hero.textContent = `${pakke.modus.navn} · ${hvem.join(' og ')} · ${pakke.matniva.kortnavn.toLowerCase()}`
 }
 
 function tegnValg(skjema, t, pakke) {
@@ -500,8 +516,9 @@ function tegnPris(rot, pakke) {
 }
 
 function tegnGjenopprettet(rot) {
-  const el = $('[data-gjenopprettet]', rot)
-  if (el) el.hidden = !tilstand.bleGjenopprettet()
+  // Flertall: både heroen og byggeren viser notisen, hver på sin plass.
+  const gjenopprettet = !tilstand.bleGjenopprettet()
+  for (const el of $$('[data-gjenopprettet]', rot)) el.hidden = gjenopprettet
 }
 
 /**

@@ -95,16 +95,43 @@
           mengden – nok til alle som bor i huset, i sju døgn.
         </p>
 
-        <p class="hero__pris">
-          <span>Komplett pakke · fire personer · vanlig mat</span>
-          <b data-hero-pris>–</b>
-          <span>inkl. mva. Frakt kommer i tillegg.</span>
-        </p>
+        <!--
+          Husstandskortet.
 
-        <p class="cluster">
-          <a class="btn btn--primary btn--lg" href="#bygg">Sett sammen esken din</a>
-          <a class="btn btn--lg" href="#innhold">Se hva som ligger i den</a>
-        </p>
+          Den tidligere heroen forankret prisen på «fire personer» uansett hvem
+          som leste. Her svarer kunden på det ene spørsmålet som avgjør alt
+          annet, og svaret følger med inn i byggeren – de samme stepperne, den
+          samme tilstanden, ingen ny inntasting lenger nede.
+        -->
+        <div class="husstandskort" role="group" aria-labelledby="hk-tittel" aria-describedby="hk-hjelp">
+          <h2 class="husstandskort__tittel" id="hk-tittel">Hvem bor hjemme hos dere?</h2>
+          <p class="husstandskort__hjelp" id="hk-hjelp">
+            Barn spiser mindre enn voksne, og kjæledyr trenger eget vann. Vi regner
+            ut mengdene mens du teller.
+          </p>
+
+          <div class="steppere" data-steppere="hero"></div>
+
+          <p class="husstandskort__merknad" data-tak hidden>
+            Åtte er det mest vi pakker i én eske. Er dere flere, <a href="#faq">si fra</a>.
+          </p>
+
+          <p class="hero__pris">
+            <span data-hero-svar>–</span>
+            <b data-sum>–</b>
+            <span>inkl. mva. Frakt kommer i tillegg.</span>
+          </p>
+
+          <p class="cluster">
+            <a class="btn btn--primary btn--lg" href="#bygg" data-flytt-fokus>Sett sammen esken</a>
+            <a class="btn btn--lg" href="#innhold" data-flytt-fokus>Se hva som ligger i den</a>
+          </p>
+
+          <p class="husstandskort__merknad" data-gjenopprettet hidden>
+            Vi husker hva dere valgte sist.
+            <button type="button" class="lenkeknapp" data-nullstill>Start på nytt</button>
+          </p>
+        </div>
 
         <p class="muted" style="font-size:var(--step--1); margin-top:var(--sp-5)">
           Satt sammen etter
@@ -238,7 +265,7 @@
               </div>
             </div>
 
-            <div class="steppere" data-steppere></div>
+            <div class="steppere" data-steppere="bygger"></div>
 
             <p class="steg__merknad" data-tak hidden>
               Åtte personer er det mest vi pakker i én eske. Er dere flere,

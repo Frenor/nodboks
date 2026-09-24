@@ -659,3 +659,37 @@
   margin: calc(-1 * var(--sp-2)) 0 var(--sp-5);
   max-width: 62ch;
 }
+
+
+/* --- Husstandskortet i heroen -------------------------------------------- */
+
+/*
+ * Over bretten, fordi antallet er det ene spørsmålet som avgjør alt annet:
+ * mengder, eskestørrelse og pris. Svaret følger med inn i byggeren, så kunden
+ * aldri må taste det samme to ganger.
+ */
+.husstandskort {
+  margin-top: var(--sp-6);
+  padding: var(--sp-5);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+.husstandskort__tittel {
+  margin: 0;
+  font-size: var(--step-1);
+}
+.husstandskort__hjelp {
+  margin: var(--sp-2) 0 var(--sp-4);
+  font-size: var(--step--1);
+  color: var(--text-muted);
+  max-width: 48ch;
+}
+.husstandskort .steppere { margin-bottom: var(--sp-4); }
+.husstandskort .hero__pris { margin-block: var(--sp-4); }
+.husstandskort__merknad {
+  margin-top: var(--sp-3);
+  font-size: var(--step--1);
+  color: var(--text-muted);
+}
