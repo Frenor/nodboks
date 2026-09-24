@@ -153,7 +153,7 @@ avsnitt 3–4 for produkt, pris og skaleringsregel per vare.
 | Hodelykt / campinglykt | engang | – | Selve lykta har ingen utløpsdato – batteriene i den har. |
 | Bøttetoalett | engang | – | Ingen utløpsdato. |
 | Dokumentmappe (aLOKSAK) + nødkort + notatbok | engang | – | Fylles ut én gang av kunden. |
-| Boksåpner | engang/forbruk-følge | – | Selve verktøyet slites ikke, men vi sender den med i matpåfyllet fordi den er billig og lett å glemme å legge til side. |
+| Boksåpner **(ikke i katalogen)** | engang/forbruk-følge | – | Selve verktøyet slites ikke, men den bør følge matpåfyllet fordi den er billig og lett å glemme. **SKU-en finnes ikke i `katalog.js`.** Se merknaden under tabellen i § 4.4. |
 | Mat, tørrmat-nivå | forbruk | ca. 1 år | Butikkvarer med vanlig holdbarhet – dette er selve grunnen til at abonnementet finnes. |
 | Mat, langtidsnivå (REAL Field Meal) | forbruk | 5 år | Lengre syklus, men går likevel ut. Gjelder bare de fire frysetørkede middagene: frokost, lunsj, mellommåltid og de tre øvrige middagene i langtidspakken er de samme tørrvarene og den samme hermetikken som i raden over, med sin egen, kortere dato. Byttesyklusen for pakken styres derfor av den korteste datoen, ikke av REAL-posene. |
 | Batterier, litium AAA/AA | forbruk | 25 år | I praksis nesten aldri i en ti-årshorisont – men formelt en forbruksvare. |
@@ -314,7 +314,7 @@ er pynt, det er ansvaret som følger med det vi selger.
 
 | Vare | Produkt | Enhet | Mengde | Skaleringsregel | Holdbarhet | Hvorfor |
 | --- | --- | --- | --- | --- | --- | --- |
-| Boksåpner | Coline boksåpner i rustfritt stål, Clas Ohlson 44‑2732, 79,90 kr | stk | 2 (tørrmat), 1 (langtidsmat), uansett husstandsstørrelse | `matniva === 'torrmat' ? 2 : 1` | – | Tørrmat-menyen er bygget på hermetikk, og etter at REAL ble kuttet til fire av sju middager inneholder også langtidsnivået hermetikk – bare mindre av den. Uten boksåpner er halve matlageret utilgjengelig – høyest konsekvens per krone i hele verktøygruppen. To stykker: én i bruk, én uåpnet reserve. |
+| Boksåpner **(ikke i katalogen)** | Coline boksåpner i rustfritt stål, Clas Ohlson 44‑2732, 79,90 kr | stk | 2 (tørrmat), 1 (langtidsmat), uansett husstandsstørrelse | `matniva === 'torrmat' ? 2 : 1` | – | Tørrmat-menyen er bygget på hermetikk, og etter at REAL ble kuttet til fire av sju middager inneholder også langtidsnivået hermetikk – bare mindre av den. Uten boksåpner er halve matlageret utilgjengelig – høyest konsekvens per krone i hele verktøygruppen. To stykker: én i bruk, én uåpnet reserve. |
 | Brannteppe | Housegard brannteppe 120×180 cm, Clas Ohlson 36‑9533, 349,90 kr | stk | 1 for 1–4 personer, 2 for 5–8 | `Math.ceil(personer / 4)` | – | Direkte konsekvens av at vi selger en gassprimus og 50 telys inn i et mørkt hjem. Skaleres på antall flammer/etasjer, ikke strengt på hoder. |
 | Reparasjon | tesa Extra Power gaffateip 50 mm × 50 m, avxperten.no, 192 kr | rull | 1 per husstand | `1` | – | Står eksplisitt på DSBs (nett)liste. Løser de faktiske småkatastrofene i et sju døgns strømbrudd: knust rute, sprukket vannkanne, en lekkasje. |
 | Multiverktøy | Multiverktøy 13‑i‑1, Clas Ohlson 31‑2191, 249,90 kr | stk | 1 per husstand | `1` | – | DSB skriver «multikniv». Realiteten i sju døgn hjemme er kutting av emballasje og stramming av en skrue, ikke felling av trær – én per husstand er riktig, ikke én per person. |
@@ -333,6 +333,18 @@ komplett-pakke eller fra andre steder.
 | REAL Field Meal (kun langtidsmat-nivå) | porsjon | 4 per voksenekvivalent (oppr.) | `Math.ceil(ve) * 4` | 5 år |
 | Aquatabs 50 stk | pakke | 1 per påbegynt 4 personer | `Math.ceil(personer / 4)` | 5 år |
 | Boksåpner (følger med kostnadsfritt) | stk | 1 | `1` | – |
+
+> **Boksåpneren er spesifisert her, men finnes ikke i `assets/js/data/katalog.js`.**
+> Det er ikke en dokumentfeil å rette med et tastetrykk, men et hull i
+> sortimentet: et matpåfyll til fire personer inneholder 34 bokser, og minst 18
+> av dem – Trondhjems-boksene og fruktcocktailen – har ikke rivelokk. Påfyllet
+> inneholder ingen varer i kategorien «Verktøy og dokumenter» i det hele tatt.
+>
+> I den komplette pakken er funksjonen dekket: Leatherman Rev har boksåpner.
+> Men multiverktøyet har `moduser: ['komplett']`, så påfyllskunden står igjen
+> uten. Enten legges SKU-en inn, eller så strykes boksåpneren fra dette
+> dokumentet – men da må begrunnelsen «høyest konsekvens per krone i hele
+> verktøygruppen» strykes med den.
 
 **Tørrmatlinjene er ikke helt like i de to nivåene.** To av dem har hver sin
 regel per matnivå: havregrynregelen er drøyt doblet i langtidsmat (havregrøt
@@ -570,10 +582,14 @@ bygget for (sju døgn hjemme, uten strøm, med familie):
   funksjon som en generisk brenner til 499 kr.
 - **Bluetooth-høyttaler og kompass på nødradio** – null nytte i sju døgn
   uten strøm; ren datablad-fyll som ikke skal stå i markedsføringen.
-- **Vannfiltersystemer** (Sagan Life RapidFlo, XStream, Aquabrick,
+- **Vannfilter*systemer*** (Sagan Life RapidFlo, XStream, Aquabrick,
   3 552–5 267 kr for ferdigpakker) – løser å gjøre elvevann drikkbart over
   lang tid. I sju døgn med springvann og Aquatabs som reserve er det en
   løsning på et problem en norsk husstand i all hovedsak ikke har.
+  Et *personlig* filter er en annen sak, og det sender vi: Katadyn BeFree 1 l
+  til 799 kr ligger i hver komplette pakke. Forskjellen er hva det skal løse –
+  BeFree er reserven når kannene er tomme og springvannet er blitt urein, ikke
+  et anlegg for å gjøre elva til vannverk.
 - **Brannslukningsapparat** – vurdert og forkastet, men av juridiske grunner:
   forskrift om brannforebygging § 7 pålegger boligeieren å ha ett av flere
   godkjente slokkemidler uansett, og et lite 2 kg-apparat markedsført som

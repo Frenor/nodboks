@@ -44,113 +44,144 @@ boksen** — 31 % mot 22–23 %. Det er ikke et problem, det er forretningsmodel
 Boksen er kundeanskaffelsen; abonnementet er inntekten. Ingen av de tolv
 kartlagte konkurrentene tilbyr påfyll i det hele tatt.
 
-**3. Rødsprit kan ikke sendes i en vanlig pakke.**
-Kemetyl rødsprit er UN1170, klasse 3, og står på Postens liste over forbudt
-innhold. Det samme gjelder gassbokser. Enten skaffer vi avtale om begrenset
+**3. Vi kan ikke sende brennstoff i det hele tatt.**
+Kokeapparatet er nå Trangia 25-5 HA med gassbrenner, ikke rødsprit. Det løser
+ingenting fraktmessig: gassbokser er UN2037 og rødsprit UN1170, og begge står
+på Postens liste over forbudt innhold. Enten skaffer vi avtale om begrenset
 mengde (LQ/ADR) med fraktleverandør, eller så leveres brenneren med beskjed om
-å kjøpe to liter lokalt — og da må det stå på produktsiden, ikke oppdages ved
-åpning. Dette er en forretningsbeslutning som må tas før lansering, ikke en
-detalj. Se § 4.
+å kjøpe gass lokalt — og da må det stå på produktsiden, ikke oppdages ved
+åpning.
+
+Katalogen tar konsekvensen av dette allerede: den regner ut hvor mange døgn
+maten rekker uten varme, og viser tallet i byggeren. Etter at REAL-andelen ble
+redusert og hermetikk og havregryn kom inn, er det tallet seks til sju døgn i
+begge matnivåer — mot fire til fem før. Det gjør beslutningen mindre akutt,
+men ikke mindre nødvendig.
 
 ---
 
 ## 1. Varegruppe for varegruppe
 
-Kolonnen «Innkjøp» er eks. mva og er **anslag** overalt der ikke annet står.
-Kolonnen «Detalj» er observert norsk butikkpris inkl. mva.
+Kolonnen «Innkjøp» er eks. mva. Alle innkjøpstall er **anslag** – 0,6 × observert
+detaljpris – bortsett fra de to egne trykksakene, der kostnaden er et
+trykkeanslag. Se § 0 punkt 1.
 
-### Mat — felles for begge matnivåer
+> **Tabellene under er generert fra katalogen.** Rediger dem ikke for hånd:
+> kjør `node scripts/tall.mjs leverandorer --skriv`, så hentes de fra
+> `assets/js/data/katalog.js` og `innkjop.local.json`. Denne seksjonen var
+> tidligere et øyeblikksbilde fra en gammel commit, med tretten feil priser og
+> seks varer som manglet helt. Den skal ikke kunne drive igjen.
 
-| Vare | Merke / modell | Detalj | Vår pris | Innkjøp | Kilde |
-| --- | --- | ---: | ---: | ---: | --- |
-| Knekkebrød 520 g | Wasa Husman, GTIN 7300400118408 | 29,90 | 30 | 17,95 | [Oda](https://oda.com/no/products/1612-wasa-knekkebrod-husman/) |
-| Leverpostei 200 g | Stabburet Original, GTIN 07039010132435 | 24,90 | 25 | 14,95 | [Oda](https://oda.com/no/products/6535-stabburet-leverpostei-original/) |
-| Kaviar 185 g | Mills | 37,20 ▲ | 37 | 22,30 | [Oda](https://oda.com/no/products/4819-mills-kaviar/) |
-| Makrell i tomat 170 g | Stabburet | 34,90 | 35 | 20,95 | [Oda](https://oda.com/no/products/69867-stabburet-makrell-i-tomat/) |
-| Nugatti 350 g | Orkla | 27,90 ▲ | 28 | 16,75 | [Oda](https://oda.com/no/products/1117-nugatti-nugatti-original/) |
-| Melkesjokolade 200 g | Freia | 29,90 ▲ | 30 | 17,95 | [Oda](https://oda.com/no/products/269-freia-melkesjokolade/) |
-| Mariekjeks 350 g | Sætre | 31,90 ▲ | 32 | 19,15 | [Oda](https://oda.com/no/products/66256-saetre-mariekjeks/) |
-| Peanøtter 500 g | REMA 1000 | 40,30 ▲ | 40 | 24,20 | [Oda](https://oda.com/no/products/8732-r-peanotter/) |
-| Rosiner 500 g | REMA 1000 | 55,50 ▲ | 55 | 33,30 | [Oda](https://oda.com/no/products/65770-r-rosiner/) |
-| O'boy 450 g | Mondelez | 54,90 ▲ | 55 | 32,95 | [Oda](https://oda.com/no/products/463-oboy-oboy-original/) |
-| Fruktcocktail 820 g | REMA 1000 | 31,20 | 31 | 18,70 | [Oda](https://oda.com/no/products/66103-r-fruktcocktail-i-sukkerlake/) |
-| Havregryn 1,1 kg | Axa Bjørn Lettkokte | 26,90 | 27 | 16,15 | [Oda](https://oda.com/no/products/1035-axa-bjorn-lettkokte-havregryn/) |
-| Middagshermetikk 800–870 g | Trondhjems, fire sorter | 62,40–73,70 (snitt 67,35) | 67 | 40,40 | [Oda](https://oda.com/no/products/13660-trondhjems-maxboller-i-tomatsaus/) |
+<!-- GENERERT:tabeller -->
 
-▲ = pakkeprisen er **regnet ut** fra en observert porsjonspris, ikke lest av en
-produktside. Se § 5.
+### Mat
 
-Havregryn og middagshermetikk ligger i begge matnivåer, men med ulik rolle og
-derfor ulikt antall. Til fire personer: to pakker havregryn og 17 bokser
-hermetikk i tørrmat, mot fire pakker havregryn og seks bokser i langtidsmat. I
-langtidsmat er havregrøt frokosten alle sju døgn, og hermetikken dekker de tre
-middagene REAL ikke tar.
-
-### Mat — kun langtidsmat
-
-| Vare | Merke / modell | Detalj | Vår pris | Innkjøp | Kilde |
-| --- | --- | ---: | ---: | ---: | --- |
-| REAL Field Meal 700 kcal | Drytech AS, Tromsø | 129 | 129 | 77,40 | [Beredskapslager](https://www.beredskapslager.no/produkt/mat/turmat/real-field-meal-kylling-karri/) |
-
-Fire porsjoner per person, altså fire av sju middager. Til fire personer er det
-16 poser, 2 064 kr — 53 % av matkostnaden i langtidsmat og 14 % av kaloriene.
-Det er den dyreste kalorien i katalogen: 0,18 kr/kcal, mot 0,08 for
-middagshermetikk og 0,007 for havregryn.
+| Vare | Merke / modell | Vår pris | Innkjøp | Kilde |
+| --- | --- | ---: | ---: | --- |
+| Wasa Husman knekkebrød, 520 g | Wasa (Barilla Norge) Husman 520 g, GTIN 7300400118408 | 30 | 17,95 | [kilde](https://oda.com/no/products/1612-wasa-knekkebrod-husman/) |
+| Stabburet Leverpostei Original, 200 g | Stabburet (Orkla Foods Norge) Leverpostei Original 200 g, GTIN 07039010132435 | 25 | 14,95 | [kilde](https://oda.com/no/products/6535-stabburet-leverpostei-original/) |
+| Mills Kaviar, 185 g | Mills Kaviar original, tube | 37 | 22,3 | [kilde](https://oda.com/no/products/4819-mills-kaviar/) |
+| Stabburet Makrell i tomat, 170 g | Stabburet (Orkla Foods Norge) Makrell i tomat 170 g | 35 | 20,95 | [kilde](https://oda.com/no/products/69867-stabburet-makrell-i-tomat/) |
+| Nugatti Original, 350 g | Nugatti (Orkla) Nugatti Original | 28 | 16,75 | [kilde](https://oda.com/no/products/1117-nugatti-nugatti-original/) |
+| Freia Melkesjokolade, 200 g | Freia (Mondelez) Melkesjokolade 200 g | 30 | 17,95 | [kilde](https://oda.com/no/products/269-freia-melkesjokolade/) |
+| Sætre Mariekjeks, 350 g | Sætre (Orkla) Mariekjeks | 32 | 19,15 | [kilde](https://oda.com/no/products/66256-saetre-mariekjeks/) |
+| Peanøtter, 500 g | REMA 1000 / R Peanøtter salte | 40 | 24,2 | [kilde](https://oda.com/no/products/8732-r-peanotter/) |
+| Rosiner, 500 g | REMA 1000 / R Rosiner | 55 | 33,3 | [kilde](https://oda.com/no/products/65770-r-rosiner/) |
+| O'boy sjokoladedrikk, 450 g | O'boy (Mondelez) O'boy Original | 55 | 32,95 | [kilde](https://oda.com/no/products/463-oboy-oboy-original/) |
+| Fruktcocktail i sukkerlake, 820 g | REMA 1000 / R Fruktcocktail i sukkerlake 820 g | 31 | 18,7 | [kilde](https://oda.com/no/products/66103-r-fruktcocktail-i-sukkerlake/) |
+| Axa Bjørn Lettkokte Havregryn, 1,1 kg | Axa (Lantmännen Cerealia) Bjørn Lettkokte Havregryn 1,1 kg | 27 | 16,15 | [kilde](https://oda.com/no/products/1035-axa-bjorn-lettkokte-havregryn/) |
+| Trondhjems middagshermetikk, fire sorter | Trondhjems (Orkla Foods Norge) Spaghetti a la Capri 870 g / Maxboller 825 g / Brun og lys lapskaus 800 g | 67 | 40,4 | [kilde](https://oda.com/no/products/13660-trondhjems-maxboller-i-tomatsaus/) |
+| REAL Field Meal, 700 kcal – håndplukket utvalg | REAL Turmat / Drytech AS, Tromsø REAL Field Meal Full Meal 700 kcal | 129 | 77,4 | [kilde](https://www.beredskapslager.no/produkt/mat/turmat/real-field-meal-kylling-karri/) |
+| Tett fôrboks, 5 liter, med datoetikett ✱ | Orthex SmartStore boks 5 l | 129 | 77,4 | — |
 
 ### Vann
 
-| Vare | Merke / modell | Detalj | Vår pris | Innkjøp | Kilde |
-| --- | --- | ---: | ---: | ---: | --- |
-| Vanndunk 10 l | Biltema art. 88-4110 | 59,90 | 51 | 35,95 | [Biltema](https://www.biltema.no/fritid/friluftsliv-og-camping/vannkanner/vanndunk-10-liter-2000058583) |
-| Aquatabs 50 stk | Aquatabs | 149 | 127 | 89,40 | [Beredskapsvakten](https://beredskapsvakten.no/products/aquatabs-vannrensetabletter) |
+| Vare | Merke / modell | Vår pris | Innkjøp | Kilde |
+| --- | --- | ---: | ---: | --- |
+| Vanndunk 10 liter, gjennomsiktig | Biltema Vanndunk 10 liter, art. 88-4110 | 60 | 35,95 | [kilde](https://www.biltema.no/fritid/friluftsliv-og-camping/vannkanner/vanndunk-10-liter-2000058583) |
+| Aquatabs vannrensetabletter, 50 stk | Aquatabs Vannrensetabletter 50 stk | 149 | 89,4 | [kilde](https://beredskapsvakten.no/products/aquatabs-vannrensetabletter) |
+| Vanndunk 10 liter til dyra | Biltema Vanndunk 10 l | 60 | 36 | — |
+| Katadyn BeFree 1 liter vannfilter | Katadyn BeFree 1.0 L, EZ-Clean hulfibermembran 0,1 mikron | 799 | 479,4 | [kilde](https://www.arctic-fritid.as/produkt/friluftsliv/mat-og-turkjokken/vann-og-vannrensing/katadyn-befree-vannfilter-1l/) |
 
 ### Matlaging
 
-| Vare | Merke / modell | Detalj | Vår pris | Innkjøp | Kilde |
-| --- | --- | ---: | ---: | ---: | --- |
-| Stormkjøkken 25-1 UL | Trangia AB | 799 | 679 | 479,40 | [Clas Ohlson](https://www.clasohlson.com/no/Trangia-stormkjokken-25-1-UL/p/34-6993) |
-| Rødsprit 1 l | Kemetyl T-röd | 79,90 | 68 | 47,95 | [Clas Ohlson](https://www.clasohlson.com/no/Kemetyl-rodsprit-1-liter-rengjoringsmiddel/p/34-9841) |
-| Fyrstikker 10-pk | Nitedals / Biltema art. 37-680 | 12,90 | 11 | 7,75 | [Biltema](https://www.biltema.no/fritid/friluftsliv-og-camping/stormkjokken/) |
+| Vare | Merke / modell | Vår pris | Innkjøp | Kilde |
+| --- | --- | ---: | ---: | --- |
+| Trangia Stormkjøkken 25-5 HA med gassbrenner | Trangia + generisk gassbrenner Trangia 25-5 HA (hardanodisert) + gassbrenner 2800 W med gjengeventil EN 417 | 1 698 | 1 018,8 | [kilde](https://www.outnorth.com/no/trangia/25-5-ha-83496) |
+| Fyrstikker, 10 esker | Nitedals / Biltema Fyrstikkeske 10-pakning, Biltema art. 37-680 | 13 | 7,75 | [kilde](https://www.biltema.no/fritid/friluftsliv-og-camping/stormkjokken/) |
 
 ### Varme og lys
 
-| Vare | Merke / modell | Detalj | Vår pris | Innkjøp | Kilde |
-| --- | --- | ---: | ---: | ---: | --- |
-| Hodelykt 250 lm | Biltema art. 24-0301 | 69,90 | 59 | 41,95 | [Biltema](https://www.biltema.no/fritid/Belysning/hodelykt/hodelykt-250-lm-2000067364) |
-| Campinglykt 90 lm | Biltema art. 24-977 | 139 | 118 | 83,40 | [Biltema](https://www.biltema.no/fritid/Belysning/lykter/campinglykt-90-lm-2000041334) |
-| AAA alkalisk 40-pk | Biltema art. 84-1382 | 79,90 | 68 | 47,95 | [Biltema](https://www.biltema.no/fritid/Belysning/hodelykt/) |
-| Telys stearin 50-pk | Biltema art. 47-1676 | 59,90 | 51 | 35,95 | [Biltema](https://www.biltema.no/hjem/innredning-og-dekorasjon/lys-og-lyslykter/telys/telys-av-stearin-50-pakning-2000047849) |
-| Nødteppe 140 × 220 | Biltema art. 40-495 | 29,90 | 25 | 17,95 | [Biltema](https://www.biltema.no/bil---mc/biltilbehor/sikkerhetsdetaljer/aluminiumsteppe-140-x-220-cm-2000042007) |
+| Vare | Merke / modell | Vår pris | Innkjøp | Kilde |
+| --- | --- | ---: | ---: | --- |
+| CO-varsler med display, batteridrevet ✱ | ikke valgt EN 50291-1-sertifisert CO-varsler for bolig | 349 | 209 | — |
+| Petzl Actik Core hodelykt, 450 lumen | Petzl ACTIK CORE, 450 lm, CORE-batteri + 3 × AAA/LR03 | 574 | 344,4 | [kilde](https://campnord.no/produkt/tur-og-friluftsliv/hodelykter/petzl-actika-core-hodelykt/) |
+| Ledlenser ML4 Warm Light lanterne | Ledlenser ML4 Warm Light, sort | 474 | 284,4 | [kilde](https://aktivvinter.no/ledlenser-ml4-warm-light-lanterne-black-25547) |
+| AAA-batterier, alkaliske, 40-pakning | Biltema Batteri AAA alkalisk 40-pk, art. 84-1382 | 80 | 47,95 | [kilde](https://www.biltema.no/fritid/Belysning/hodelykt/hodelykt-250-lm-2000067364) |
+| Telys av stearin, 50-pakning | Biltema Telys av stearin 50-pk, art. 47-1676 | 60 | 35,95 | [kilde](https://www.biltema.no/hjem/innredning-og-dekorasjon/lys-og-lyslykter/telys/telys-av-stearin-50-pakning-2000047849) |
+| Nødteppe, 140 × 220 cm | Biltema Aluminiumsteppe 140 × 220 cm, art. 40-495 | 30 | 17,95 | [kilde](https://www.biltema.no/bil---mc/biltilbehor/sikkerhetsdetaljer/aluminiumsteppe-140-x-220-cm-2000042007) |
 
 ### Strøm og samband
 
-| Vare | Merke / modell | Detalj | Vår pris | Innkjøp | Kilde |
-| --- | --- | ---: | ---: | ---: | --- |
-| Nødradio DAB+ | Denver SCD-2033, EAN 5706751088483 | 530 | 451 | 318 | [Batterionline](https://www.batterionline.no/denver-scd-2033-n-dradio-h-ndsving-solcelle-lygte-powerbank-fm-am-dab-bt) |
-| Powerbank 10 000 mAh | **ikke valgt** | ~249 ✱ | 212 | 149,40 | — |
+| Vare | Merke / modell | Vår pris | Innkjøp | Kilde |
+| --- | --- | ---: | ---: | --- |
+| Sangean MMR-88 DAB nødradio | Sangean MMR-88 DAB (Survivor-serien), gul | 1 190 | 714 | [kilde](https://www.clasohlson.com/no/Sangean-sveiveradio-MMR88-DAB-USB,-solcelle-og-dynamo/p/31-8820) |
+| Motorola Talkabout T42, toveisradio (2-pakning) | Motorola Talkabout T42 | 319 | 191,4 | — |
+| Meshtastic-sett, ferdig satt opp (2 enheter) | Seeed Studio SenseCAP Card Tracker T1000-E | 1 798 | 1 078,8 | — |
+| Anker PowerCore 20 000 mAh | Anker PowerCore 20000 | 659 | 395,4 | — |
 
-### Helse og hygiene, verktøy
+### Helse og hygiene
 
-| Vare | Merke / modell | Detalj | Vår pris | Innkjøp | Kilde |
-| --- | --- | ---: | ---: | ---: | --- |
-| Førstehjelpspakke | **ikke valgt** | ~299 ✱ | 254 | 179,40 | — |
-| Hygienepakke | **ikke valgt** | ~149 ✱ | 127 | 89,40 | — |
-| Beredskapspermen | Nødboks, egen trykksak | — | 199 | **49** (reelt) | trykkeanslag, 500 eks. |
+| Vare | Merke / modell | Vår pris | Innkjøp | Kilde |
+| --- | --- | ---: | ---: | --- |
+| Lifesystems Waterproof førstehjelpssett | Lifesystems Waterproof First Aid Kit, art. LIFE-2020, 330 × 160 × 80 mm | 749 | 449,4 | [kilde](https://www.norsegear.no/life-2020-lifesystems-waterproof-first-aid-kit) |
+| Cederroth 4-in-1 blodstopper | Cederroth (Essity) Blodstopper 1910 NO 4-in-1, art. CR201040 | 99 | 59,25 | [kilde](https://www.rodekorsforstehjelp.no/produkter/blodstopper-cederroth-1910-no-4-in-1-cr201040/) |
+| Hygienepakke ✱ | Ikke låst – settes sammen av standardvarer Nødboks hygienesett | 149 | 89,4 | — |
+| Bøttetoalett 22 liter med sete og lokk | Home And Beauty Bøttetoalett 22 l | 399 | 239,4 | — |
 
-✱ = **ingen navngitt vare, ingen kilde, ingen observasjon.** Se § 5.
+### Verktøy og dokumenter
+
+| Vare | Merke / modell | Vår pris | Innkjøp | Kilde |
+| --- | --- | ---: | ---: | --- |
+| Leatherman Rev multiverktøy | Leatherman Rev, 14 funksjoner, 420HC rustfritt stål | 799 | 479,4 | [kilde](https://www.clasohlson.com/no/Leatherman-Rev-multiverkt%C3%B8y/p/Pr311725000) |
+| Rulleringssettet | Nødboks Rulleringssettet, 1. utgave | 249 | 22 | [kilde](https://www.lasertrykk.no/) |
+| Beredskapspermen ✱ | Nødboks Beredskapspermen, 1. utgave | 199 | 49 | — |
 
 ### Esker
 
-| Eske | Innhold | Opp til | Vår pris | Innkjøp |
-| --- | --- | ---: | ---: | ---: |
-| Nødboks Liten | 1 × 50 l kasse | 2 pers. | 249 | 149 ✱ |
-| Nødboks Mellom | 2 × 50 l kasser | 5 pers. | 449 | 298 ✱ |
-| Nødboks Stor | 3 × 50 l kasser | 8 pers. | 649 | 447 ✱ |
+| Eske | Opp til | Vår pris | Innkjøp |
+| --- | ---: | ---: | ---: |
+| Nødboks Liten – én kasse på 45 liter ✱ | 2 pers. | 299 | 179,4 |
+| Nødboks Mellom – to kasser på 45 liter ✱ | 5 pers. | 598 | 358,8 |
+| Nødboks Stor – tre kasser på 45 liter ✱ | 8 pers. | 897 | 538,2 |
+| Nødboks Liten i aluminium – én Zarges-kasse ✱ | 2 pers. | 3 999 | 2 399,4 |
+| Nødboks Mellom i aluminium – Zarges og matkasse ✱ | 5 pers. | 4 298 | 2 578,8 |
+| Nødboks Stor i aluminium – Zarges og to matkasser ✱ | 8 pers. | 4 597 | 2 758,2 |
 
-Eskestørrelsene er drevet av vekt, ikke volum: sju døgns tørrmat til fire
-personer veier 29 kg, og en full 4-personers Nødboks veier 48 kg inklusive
-tomme vannkanner og utstyr. Langtidsmat-utgaven veier 44 kg: hermetikken og
+✱ = ingen navngitt produkt eller ingen observert kilde. **40 av 44 varer er sourcet.**
+Gjenstår: Tett fôrboks, CO-varsler med display, Hygienepakke, Beredskapspermen.
+
+<!-- /GENERERT:tabeller -->
+
+**Havregryn og middagshermetikk ligger i begge matnivåer, men med ulik rolle.**
+Til fire personer: to pakker havregryn og 17 bokser hermetikk i tørrmat, mot
+fire pakker og seks bokser i langtidsmat. I langtidsmat er havregrøt frokosten
+alle sju døgn, og hermetikken dekker de tre middagene REAL ikke tar.
+
+**REAL Field Meal er fire porsjoner per voksenekvivalent** – fire av sju
+middager. Til fire voksne er det 16 poser, 2 064 kr: 53 % av matkostnaden i
+langtidsmat og 14 % av kaloriene. Det er den dyreste kalorien i katalogen, 0,18
+kr/kcal, mot 0,08 for middagshermetikk og 0,007 for havregryn.
+
+**Eskestørrelsene er drevet av vekt, ikke volum.** Sju døgns tørrmat til fire
+personer veier 29 kg, og en full firepersoners Nødboks veier 48 kg med tomme
+vannkanner og alt utstyret. Langtidsmat-utgaven veier 44 kg: hermetikken og
 havregrynene tar igjen mye av det de frysetørkede posene sparer.
+
+**Vi sender ikke brennstoff.** Kokeapparatet leveres med gassbrenner, men verken
+gassboks eller rødsprit kan gå i en vanlig pakke. Se § 0 punkt 3. Katalogen
+regner derfor ut hvor mange døgn maten rekker uten varme, og tallet vises til
+kunden i byggeren.
 
 ---
 
@@ -174,18 +205,19 @@ driftsresultat, 2024). **Dette er første telefon som skal tas.**
 | Vare | Produsent | Importør / grossist | Status |
 | --- | --- | --- | --- |
 | Trangia | Trangia AB, Sverige | **Ultimate Nordic AS**, kundeservice@ultimatenordic.no, 22 57 50 50 | Bekreftet norsk distributør direkte fra Trangias egen kontaktside. Forhandlerportal krever registrering. |
-| Rødsprit | Kemetyl Norge AS, Henrik Ibsens gate 90, Oslo | Ahlsell Norge, art. 113478 | Ahlsell fører varen, men prisen er bak innlogging. |
 | Leverpostei, Trondhjems, Nugatti, Sætre | Orkla Foods Norge | ASKO Servering; Orkla Storhusholdning (tlf. 22 06 27 92, kl. 9–12) | Begge krever kundeavtale. Engrosnett.no viser 28,31 kr inkl. mva for leverpostei — **dyrere enn butikk**, altså ingen reell engrosfordel der. |
 | Øvrig dagligvare | diverse | ASKO, Oslo Engros | Priser bak innlogging. |
 | Vannkanner, lykter, batterier, telys, nødteppe | Biltema (egenimport) | — | «Biltema Bedrift» er en **kredittkonto, ikke en engrosordning**: du handler til ordinær butikkpris på faktura. Ingen volumrabatt er nevnt noe sted. biltemabedrift@biltema.no |
-| Nødradio | Denver A/S, Danmark | ingen nordisk distributør funnet | Ingen B2B-side. Må kontaktes direkte. |
+| Nødradio | Sangean Electronics, Taiwan | Clas Ohlson (art. 31-8820) | Kjøpes over disk til 1 190 kr. Ingen norsk B2B-kanal funnet for Sangean direkte. |
+| Petzl, Ledlenser, Leatherman, Katadyn, Lifesystems | diverse | Clas Ohlson, Campnord, AktivVinter, Norsegear, Arctic Fritid | Alle kjøpt som detaljvare. Ingen av dem er forhandlet som B2B ennå — det er punkt 1 i § 4. |
 
 To observasjoner verdt å ta med i forhandling:
 
 - **Beredskapsbutikkene tar 50–140 % påslag på umerkede importvarer.**
-  Krisesikker.no selger Denver SCD-2033 til 799 kr uten å nevne at det er en
+  Observasjonen står, selv om vi endte med å velge en annen radio:
+  Krisesikker.no solgte Denver SCD-2033 til 799 kr uten å nevne at det er en
   Denver; deres eget Shopify-felt oppgir `vendor: "Denver"` og samme EAN som
-  Batterionline, som tar 530 kr. Food Force 21 måltider koster 879 kr hos
+  Batterionline, som tok 530 kr. Food Force 21 måltider koster 879 kr hos
   Foodstuff og 1 355 kr hos Beredskapsvakten — samme varenummer, 54 % påslag.
 - **Nordiska Plasts vannkanne koster 289 kr hos Beredskapsvakten og 389 kr hos
   Bole.** Spredningen viser at det finnes rom i marginen. Witre AS (org.
@@ -205,7 +237,6 @@ en gravid eller en eldre. Det er akkurat de som skal kunne hente sitt eget vann.
 | **REAL Field Meal** | Tromsø (Drytech AS) | De fire varme middagene i langtidsmat-linjen: 53 % av matkostnaden, 14 % av kaloriene. |
 | Leverpostei | Fredrikstad (Orkla Foods) | Norges mest spiste pålegg. |
 | Trondhjems middagshermetikk | Orkla Foods Norge | Navnet gjør jobben alene. |
-| Rødsprit | Kemetyl Norge AS, Oslo | Produksjonssted (Halden/Fredrikstad) er **ikke bekreftet** — ikke bruk i markedsføring uten kilde. |
 
 **Hvorfor Drytech er verdt mer enn opprinnelsesmerket.** Argumentet er ikke
 patriotisk, det er etterprøvbart, og det treffer der konkurrentene er svakest:
@@ -241,27 +272,40 @@ gjenbruk tallet uten skriftlig bekreftelse.
 | # | Punkt | Konsekvens hvis ignorert |
 | --- | --- | --- |
 | 1 | **Ekte innkjøpspriser.** Start med Drytech-registrering. | Hele marginen er hypotetisk. |
-| 2 | **Frakt av rødsprit** (UN1170). LQ/ADR-avtale, eller «kjøp lokalt»-instruks på produktsiden. | Vi selger et kokeapparat uten brensel og oppdager det i kassen. |
-| 3 | **Velg powerbank, førstehjelp og hygienepakke.** Tre varer uten navngitt produkt. | 593 kr av 5 484 er ikke sourcet. |
-| 4 | **Velg eskeleverandør.** Alle tre eskeprisene er anslag. | 449 kr av 5 484 er ikke sourcet. |
-| 5 | **Mål brenntiden på campinglykta selv.** Biltema oppgir den ikke. | Hull i spesifikasjonen akkurat der vi lover ærlige tall. |
+| 2 | **Frakt av gass** (UN2037). LQ/ADR-avtale, eller «kjøp lokalt»-instruks på produktsiden. | Vi selger et kokeapparat uten brensel og oppdager det i kassen. |
+| 3 | **Velg CO-varsler, hygienepakke og fôrboks.** Tre varer uten navngitt produkt. | 498 kr av 13 124 i en vanlig pakke, pluss 129 kr per kjæledyr. |
+| 4 | **Velg eskeleverandør.** Alle seks eskeprisene er anslag, og Zarges-kassene er de dyreste enkeltpostene i katalogen. | 598 kr av en plastpakke, 4 298 kr av en aluminiumspakke. |
+| 5 | **Verifiser Aquatabs-styrken.** Selges i flere styrker under samme navn — er 50 tabletter til 1 l eller 20 l? | Vi trykker feil dosering på en vannrensetablett. |
 | 6 | **Vei vanndunkene.** Biltema publiserer ikke tomvekt; 0,7 kg er anslag. | Fraktvekten i katalogen er feil. |
-| 7 | **Verifiser Aquatabs-styrken.** Selges i flere styrker under samme navn — er 50 tabletter til 1 l eller 20 l? | Vi trykker feil dosering på en vannrensetablett. |
-| 8 | **Biltemas sortiment roterer raskt.** Hodelykt 24-981 → 24-0301, telys 47-1603 → 47-1676 er byttet nylig. | Fast innholdsliste på emballasje mot en leverandør som bytter artikkelnummer. |
-| 9 | **Rett `ui/bygger.js`.** Momsoppdelingen ser etter kategorien `'Mat og vann'`; katalogen bruker `'Mat'` og `'Vann'` slik kontrakten krever. | All mat regnes som 25 % utstyr i prispanelet. Filteret skal være `['Mat','Vann'].includes(l.kategori)`. |
+| 7 | **Ledlenser ML4 var på forhåndsbestilling** med lager 10.10.2026 da den ble observert. | Vi lover en lanterne vi ikke får tak i. |
+| 8 | **Biltemas sortiment roterer raskt.** Batterier, telys, nødteppe, fyrstikker og vanndunk kommer alle derfra, og artikkelnumre er byttet før. | Fast innholdsliste på emballasje mot en leverandør som bytter artikkelnummer. |
+| 9 | **Boksåpner mangler i katalogen.** Spesifisert i `pakkesammensetning.md` med kilde (Coline, Clas Ohlson 44‑2732, 79,90 kr), men SKU-en finnes ikke. Et matpåfyll til fire har 34 bokser, minst 18 uten rivelokk, og ingen verktøyvarer i det hele tatt. | Kunden får maten, men kommer ikke inn i den. |
+| 10 | **Bekreft trykkeprisen på rulleringssettet.** 22 kr per sett er kalkulatorpris; tolv kort × 500 sett er 6 000 kort, utenfor det kalkulatoren kunne teste. | Den høyeste dekningsgraden i katalogen hviler på et tall ingen har fakturert. |
+
+**Lukket siden forrige utgave.** Powerbank, førstehjelpssett, hodelykt,
+campinglykt, nødradio og multiverktøy hadde ingen navngitt vare; alle seks er nå
+valgt og sourcet. Momsoppdelingen i `ui/bygger.js` som regnet all mat som 25 %
+utstyr, er rettet — `mvaSats` ligger nå i `konfigurator.js` og brukes ett sted.
 
 ---
 
 ## 5. Observert kontra antatt — vare for vare
 
-Dette er avsnittet oppdraget ba om å være ubehagelig tydelig på.
+Dette er avsnittet oppdraget ba om å være ubehagelig tydelig på. Tallene er
+bedre enn forrige utgave, og de er fortsatt ikke gode nok.
 
-**Observert direkte på en produktside, med pris og varenummer (18 varer).**
-Havregryn, knekkebrød, leverpostei, makrell i tomat, fruktcocktail,
-middagshermetikk, REAL Field Meal, vanndunk 10 l, Aquatabs, Trangia 25-1 UL,
-rødsprit, fyrstikker, hodelykt, campinglykt, telys, nødteppe,
-nødradio, AAA-batterier. Disse er kontrollert mot kilden samme dag, og flere er
-kryssjekket mot en annen butikk.
+**Navngitt produkt med observert kilde: 40 av 44 varer.** Kjør
+`node scripts/tall.mjs leverandorer` for den gjeldende listen — den regnes ut,
+så den kan ikke bli utdatert slik forrige utgave ble.
+
+**Uten kilde (4 varer).** Fôrboksen, CO-varsleren, hygienepakka og
+beredskapspermen. For de tre første er selv detaljprisen et anslag om hva slike
+varer koster i Norge. Beredskapspermen er vår egen trykksak, så der er
+kostnaden et trykkeanslag og ikke en gjetning om butikkpris.
+
+**Eskene.** Alle seks eskeprisene er anslag. Plastkassene er den mindre av
+risikoene; Zarges-kassene er katalogens dyreste enkeltposter, og en feil på ti
+prosent der flytter mer enn hele matbudsjettet.
 
 **Pakkepris regnet ut fra en observert porsjonspris (7 varer).**
 Kaviar, Nugatti, melkesjokolade, mariekjeks, peanøtter, rosiner, O'boy.
@@ -269,21 +313,19 @@ Grunnlaget er en observert kroner-per-porsjon fra Oda, ganget opp til vanlig
 pakkestørrelse. Aritmetikken er riktig, men **pakkeprisen er ikke lest av en
 produktside.** Skal kontrolleres ved første innkjøp.
 
-**Ingen kilde i det hele tatt (5 varer + 3 esker).**
-Powerbank, førstehjelpspakke, hygienepakke og de tre eskene. Her er selv
-«detaljprisen» et anslag om hva slike varer koster i Norge. Til sammen utgjør
-de **1 042 kr av en 4-personers pakke på 5 484 kr — 19 % av varelinjen.**
-
-**Alle `innkjop`-tall, uten unntak bortsett fra beredskapspermen.**
-0,6 × detaljpris. Faktoren er pålagt av oppdraget og har ingen empirisk støtte i
-noen av kildene. Reell dagligvaremargin ligger ofte lavere for grossist enn
-0,6, og reell hardware-margin ofte høyere. Sensitiviteten er stor: endres
-faktoren til 0,5, går dekningsgraden på komplett tørrmat fra 22 % til 35 %;
-endres den til 0,7, faller den til 9 %.
+**Alle `innkjop`-tall, med to unntak.** 0,6 × detaljpris. Faktoren er pålagt av
+oppdraget og har ingen empirisk støtte i noen av kildene. Reell dagligvaremargin
+ligger ofte lavere for grossist enn 0,6, og reell hardware-margin ofte høyere.
+Sensitiviteten er stor: endres faktoren til 0,5, går dekningsgraden på komplett
+tørrmat fra 22 % til 35 %; endres den til 0,7, faller den til 9 %. Unntakene er
+de to trykksakene, der kostnaden er et trykkeanslag: beredskapspermen 49 kr og
+rulleringssettet 22 kr.
 
 **Holdbarhetstall.** Bare to er dokumenterte: leverpostei 1 800 dager ved 2–25 °C
-(Matinfo, GTIN 07039010132435) og Real Turmat fem år garantert fra produksjon
-(Drytechs eget hjelpesenter). Resten er anslag basert på varetype.
+(Matinfo, GTIN 07039010132435) og REAL Turmat fem år garantert fra produksjon
+(Drytechs eget hjelpesenter). Resten er anslag basert på varetype. Merk at
+pakkens korteste dato er ett år i **begge** matnivåer — brød, pålegg og kjeks
+setter den, ikke de frysetørkede posene.
 
 ---
 
@@ -295,7 +337,7 @@ ut i en innholdsliste og ikke gjør nytte i sju døgn i en norsk husstand.
 | Vare | Observert pris | Hvorfor ikke |
 | --- | ---: | --- |
 | Nødrasjon (Seven Oceans / BP-ER) | 59–84 kr/døgn | Billigst per kalori og lengst holdbarhet — og likevel den viktigste posten å avvise. Livbåtrasjonen er optimalisert for at en livbåt ikke har plass. En bod har plass. Et barn som får presset kjeksblokk til alle måltider i sju dager spiser den ikke, og da er 59 kr/døgn ikke billig, det er bortkastet. |
-| Sagan Life vannfilter | 899–3 290 kr | Løser elvevann over lang tid. Et filter til 3 290 kr tilsvarer 68 liter lagringskapasitet i kanner. |
+| Sagan Life og andre filter**systemer** | 899–3 290 kr | Løser elvevann over lang tid. Et filter til 3 290 kr tilsvarer 68 liter lagringskapasitet i kanner. Vi sender derimot et personlig filter: Katadyn BeFree 1 l til 799 kr, som er reserven når kannene er tomme og springen er urein – ikke et system for å gjøre elva til vannverk. |
 | Vannrensetabletter for 1 250 l | — | En firepersonershusstand trenger 80 liter. Et tall som selger, ikke et volum noen bruker. |
 | ReadyWise 7 dager, «60 porsjoner» | 3 199 kr | 13 880 kcal / 60 = 231 kcal per «porsjon». Det er et mellommåltid. Krever dessuten 14,2 l vann — 71 % av én persons hele vannlager. |
 | Toro «Rett i koppen» | 13,60 kr | 6,6 kcal per krone, dårligste kjøp i hele undersøkelsen. Ti poser gir en fin linje i innholdslista og 900 kcal. |
@@ -310,60 +352,82 @@ ut i en innholdsliste og ikke gjør nytte i sju døgn i en norsk husstand.
 
 ## 7. Første innkjøpsordre
 
-**Ti komplette pakker til fire personer, tørrmat.** Salgsverdi 54 840 kr inkl.
-mva, nettoomsetning 45 666 kr eks. mva.
+> **Tabellen er generert.** `node scripts/tall.mjs leverandorer --skriv` henter
+> den fra katalogen. Den forrige utgaven bestilte tjue flasker rødsprit vi ikke
+> selger lenger, og bygde på en pakkepris som var under halvparten av dagens.
+
+<!-- GENERERT:ordre -->
+
+**10 komplette pakker til fire personer, tørrmat.** Salgsverdi 131 240 kr
+inkl. mva, nettoomsetning 106 630 kr eks. mva.
 
 | Antall | Enhet | Vare | Kost eks. mva |
 | ---: | --- | --- | ---: |
-| 150 | stk | Trondhjems middagshermetikk, fire sorter | 6 060 |
-| 10 | sett | Trangia Stormkjøkken 25-1 UL | 4 794 |
-| 10 | stk | Nødradio Denver SCD-2033 | 3 180 |
-| 10 | stk | Nødboks Mellom (2 × 50 l kasse) | 2 980 |
-| 80 | stk | Vanndunk 10 liter | 2 876 |
-| 10 | sett | Førstehjelpspakke | 1 794 |
-| 40 | stk | Hodelykt 250 lm | 1 678 |
-| 10 | stk | Powerbank 10 000 mAh | 1 494 |
-| 80 | stk | Leverpostei 200 g | 1 196 |
-| 20 | stk | Kemetyl rødsprit 1 l | 959 |
-| 50 | pakke | Wasa Husman knekkebrød | 898 |
-| 10 | pakke | Aquatabs 50 stk | 894 |
+| 40 | stk | Petzl Actik Core hodelykt, 450 lumen | 13 776 |
+| 10 | sett | Trangia Stormkjøkken 25-5 HA med gassbrenner | 10 188 |
+| 10 | stk | Sangean MMR-88 DAB nødradio | 7 140 |
+| 170 | stk | Trondhjems middagshermetikk, fire sorter | 6 868 |
+| 10 | stk | Katadyn BeFree 1 liter vannfilter | 4 794 |
+| 10 | stk | Leatherman Rev multiverktøy | 4 794 |
+| 10 | sett | Lifesystems Waterproof førstehjelpssett | 4 494 |
+| 10 | stk | Anker PowerCore 20 000 mAh | 3 954 |
+| 10 | stk | Nødboks Mellom – to kasser på 45 liter | 3 588 |
+| 80 | stk | Vanndunk 10 liter, gjennomsiktig | 2 876 |
+| 10 | stk | Ledlenser ML4 Warm Light lanterne | 2 844 |
+| 10 | stk | Bøttetoalett 22 liter med sete og lokk | 2 394 |
+| 10 | stk | CO-varsler med display, batteridrevet | 2 090 |
+| 80 | stk | Stabburet Leverpostei Original, 200 g | 1 196 |
+| 20 | stk | Cederroth 4-in-1 blodstopper | 1 185 |
+| 60 | pakke | Wasa Husman knekkebrød, 520 g | 1 077 |
+| 10 | pakke | Aquatabs vannrensetabletter, 50 stk | 894 |
 | 10 | sett | Hygienepakke | 894 |
-| 10 | stk | Campinglykt 90 lm | 834 |
-| 40 | stk | Makrell i tomat 170 g | 838 |
-| 40 | stk | Freia Melkesjokolade 200 g | 718 |
-| 40 | stk | Nødteppe | 718 |
-| 30 | stk | Mills Kaviar 185 g | 669 |
-| 20 | pakke | Rosiner 500 g | 666 |
-| 30 | pakke | Sætre Mariekjeks 350 g | 575 |
+| 40 | stk | Mills Kaviar, 185 g | 892 |
+| 40 | stk | Stabburet Makrell i tomat, 170 g | 838 |
+| 30 | pakke | Peanøtter, 500 g | 726 |
+| 40 | stk | Freia Melkesjokolade, 200 g | 718 |
+| 40 | stk | Nødteppe, 140 × 220 cm | 718 |
+| 20 | pakke | Rosiner, 500 g | 666 |
+| 20 | stk | O'boy sjokoladedrikk, 450 g | 659 |
+| 30 | pakke | Sætre Mariekjeks, 350 g | 575 |
 | 10 | stk | Beredskapspermen | 490 |
-| 20 | pakke | Peanøtter 500 g | 484 |
-| 10 | pakke | AAA alkalisk 40-pk | 480 |
-| 10 | pakke | Telys stearin 50-pk | 360 |
-| 20 | pakke | Axa Bjørn Havregryn 1,1 kg | 323 |
-| 20 | stk | Nugatti 350 g | 335 |
-| 10 | stk | O'boy 450 g | 330 |
-| 10 | stk | Fruktcocktail 820 g | 187 |
-| 10 | pakke | Fyrstikker 10-pk | 78 |
-| | | **Kapitalbinding** | **37 779** |
+| 10 | pakke | AAA-batterier, alkaliske, 40-pakning | 480 |
+| 10 | pakke | Telys av stearin, 50-pakning | 360 |
+| 20 | stk | Nugatti Original, 350 g | 335 |
+| 20 | pakke | Axa Bjørn Lettkokte Havregryn, 1,1 kg | 323 |
+| 10 | stk | Fruktcocktail i sukkerlake, 820 g | 187 |
+| 10 | pakke | Fyrstikker, 10 esker | 78 |
+| | | **Kapitalbinding** | **83 089** |
 
-**Dekningsbidrag på ti pakker: 7 887 kr** (45 666 − 37 779). Det skal dekke
-frakt inn, frakt ut, emballasje, svinn og all arbeidstid. Det holder ikke, og
-det er tallet som gjør § 0 punkt 1 til førsteprioritet.
+**Dekningsbidrag på 10 pakker: 23 541 kr** (106 630 − 83 089).
+Det skal dekke frakt inn, frakt ut, emballasje, svinn og all arbeidstid.
+
+<!-- /GENERERT:ordre -->
 
 **Merknader til bestillingen.**
 
-- **Middagshermetikken er største enkeltpost (6 060 kr, 16 % av ordren).** 150
-  bokser skal fordeles på fire sorter, rundt 38 av hver, og legges i menyen slik
-  at ingen sort går igjen to døgn på rad.
-- **Rødspriten (20 flasker) kan ikke fraktes med vanlig pakke.** Se § 0 punkt 3.
-  Bestill den lokalt til pakkeriet, ikke som del av en samleordre.
-- **Bestill ett eksemplar ekstra av vanndunk og campinglykt til måling.** Tomvekt
-  og brenntid mangler, og begge skal trykkes i innholdslista.
+- **Hodelyktene er største enkeltpost.** Førti Petzl Actik Core er 13 776 kr,
+  17 % av hele ordren. Det er prisen på premiumvalget, og den er verdt å se i
+  øynene før den bestilles: en Biltema-lykt til 70 kr ville tatt posten ned til
+  1 700 kr. Begrunnelsen for Petzl står i `sortiment.md` – utstyr kunden
+  faktisk tar med på tur, og derfor stoler på – men den er en beslutning, ikke
+  en selvfølge.
+- **Middagshermetikken er største matpost.** 170 bokser skal fordeles på fire
+  sorter, rundt 43 av hver, og legges i menyen slik at ingen sort går igjen to
+  døgn på rad.
+- **Ingen brennstoff i ordren.** Kokeapparatet kommer med gassbrenner, men
+  gassboksene må kunden kjøpe lokalt. Det skal stå på produktsiden, ikke
+  oppdages ved åpning. Se § 0 punkt 3.
+- **Bestill ett eksemplar ekstra av vanndunk til måling.** Biltema publiserer
+  ikke tomvekt, og 0,7 kg er anslag som går rett inn i fraktvekten.
 - **Bestill mat sist.** Utstyret er holdbart; maten begynner å gå ut på dato den
   dagen den kommer inn på lager, og vi selger utløpsvarsling. Ordren bør derfor
-  deles: utstyr og esker først, mat når de ti pakkene faktisk er solgt eller
-  nær solgt.
+  deles: utstyr og esker først, mat når pakkene faktisk er solgt eller nær solgt.
+- **Fire varer har ingen innkjøpspris fra en navngitt kilde**: fôrboksen,
+  CO-varsleren, hygienepakka og beredskapspermen. De tre første må velges før
+  ordren sendes.
 - **Til sammenligning:** hjemmeberedt.no tar 3 299 kr for mat *og vann* alene til
-  fire personer. Vår komplette pakke med samme mat, vann og alt utstyret ligger
-  på 5 484 kr. Marginen skal ikke forsvares med lavere pris, men med at vi viser
-  menyen, kaloriene og byttedatoen som de holder skjult.
+  fire personer. Vår komplette pakke med mat, vann og alt utstyret ligger på
+  13 124 kr. Det er ikke samme produkt, og sammenligningen holder bare på
+  matdelen: der ligger vi på 2 504 kr for mat og 1 428 kr for vann. Marginen
+  skal uansett ikke forsvares med lavere pris, men med at vi viser menyen,
+  kaloriene og byttedatoen som de holder skjult.
