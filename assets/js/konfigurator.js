@@ -139,11 +139,21 @@ const lesHusstand = (valg) =>
  * om dem. Utstyr velges bort, tillegg velges til. Skillet ligger på varen selv
  * framfor i en egen liste, slik at katalogen fortsatt er ett sted.
  */
-function gjelder(vare, { modus, matniva, tillegg, ctx }) {
-  if (vare.kunKjaeledyr) return ctx.dyr > 0
+function gjelder(vare, { modus, matniva, senderMat, tillegg, ctx }) {
+  if (vare.kunKjaeledyr) return ctx.dyr > 0 && (senderMat || vare.kategori !== 'Mat' || vare.erBeholder === true)
   if (vare.tillegg) return tillegg.has(vare.sku)
   if (vare.moduser && !vare.moduser.includes(modus)) return false
   if (vare.matnivaer && !vare.matnivaer.includes(matniva)) return false
+  /*
+   * I eget-lager-sporet sender vi ikke mat. Regelen står her, på kategorien,
+   * og ikke som `matnivaer` på hver enkelt matvare: da blir en ny matvare
+   * automatisk utelatt i riktig spor, i stedet for å dukke opp i en pakke den
+   * ikke hører hjemme i fordi noen glemte listen.
+   *
+   * Vann er ikke mat i denne sammenhengen. Nesten ingen har tjue liter
+   * stående, så kannene følger med uansett spor.
+   */
+  if (!senderMat && vare.kategori === 'Mat' && !vare.erBeholder) return false
   return true
 }
 
@@ -177,7 +187,7 @@ export function byggPakke(valg) {
   const tillegg = new Set(valg.tillegg ?? [])
   const eskeType = finnEsketype(valg.eskeType).id
 
-  const utvalg = { modus: modus.id, matniva: matniva.id, tillegg, ctx }
+  const utvalg = { modus: modus.id, matniva: matniva.id, senderMat: matniva.senderMat !== false, tillegg, ctx }
 
   /*
    * Konteksten antall-funksjonene regner ut fra.
@@ -275,6 +285,44 @@ export function byggPakke(valg) {
     }
   })
 
+  /*
+   * Handlelisten.
+   *
+   * I eget-lager-sporet er dette selve produktet: ikke hva vi sender, men hva
+   * kunden skal kjøpe, i mengder regnet ut for husstanden deres. Den bygges på
+   * tørrmatsporets varer, fordi det er den maten en vanlig husstand faktisk
+   * har i skapet.
+   *
+   * Prisene er veiledende butikkpriser vi har observert, ikke våre priser. De
+   * står der for at kunden skal kunne sammenligne sporene ærlig: vi tar mindre
+   * betalt her, men maten koster like mye uansett hvem som henter den.
+   */
+  const handleliste = matniva.senderMat
+    ? []
+    : VARER.filter(
+        (v) =>
+          v.kategori === 'Mat' &&
+          !v.erBeholder &&
+          (!v.matnivaer || v.matnivaer.includes('torrmat')) &&
+          (!v.kunKjaeledyr || ctx.dyr > 0)
+      )
+        .map((v) => {
+          const antall = Math.max(0, Math.ceil(v.antall({ ...ctx, matniva: 'torrmat', modus: modus.id })))
+          return {
+            sku: v.sku,
+            navn: v.navn,
+            hvorfor: v.hvorfor,
+            enhet: v.enhet,
+            antall,
+            veiledende: v.pris * antall,
+            kcal: (v.kcal ?? 0) * antall,
+          }
+        })
+        .filter((l) => l.antall > 0)
+
+  const handlelisteSum = handleliste.reduce((n, l) => n + l.veiledende, 0)
+  const handlelisteKcal = handleliste.reduce((n, l) => n + l.kcal, 0)
+
   const sumVarer = linjer.reduce((n, l) => n + l.sum, 0)
   const pakkerabatt = Math.round(sumVarer * (modus.rabatt ?? 0))
   const sum = sumVarer - pakkerabatt
@@ -348,6 +396,10 @@ export function byggPakke(valg) {
     })),
     tilleggsvalg,
     fravalgt,
+    /** Hva kunden skal kjøpe selv. Tom når vi sender maten. */
+    handleliste,
+    handlelisteSum,
+    handlelisteKcal,
     /** Bruttoverdien av det som er tatt ut – brukes i prisoppsettets fradragslinje. */
     spart,
     /*
@@ -376,7 +428,7 @@ export function byggPakke(valg) {
     vanndekning: vannBehov ? liter / vannBehov : 0,
     vekt: Math.round(vekt * 10) / 10,
     holdbarhetAr: korteste(linjer),
-    varsler: varsler({ personer, ctx, matniva, modus, kcal, kcalBehov, liter, vannBehov, dognUtenVarme, fravalgt }),
+    varsler: varsler({ personer, ctx, matniva, modus, kcal, kcalBehov, liter, vannBehov, dognUtenVarme, fravalgt, handlelisteSum, handlelisteKcal }),
   }
 }
 
@@ -406,8 +458,43 @@ function korteste(linjer) {
   return år.length ? Math.min(...år) : null
 }
 
-function varsler({ personer, ctx, matniva, modus, kcal, kcalBehov, liter, vannBehov, dognUtenVarme, fravalgt }) {
+function varsler({ personer, ctx, matniva, modus, kcal, kcalBehov, liter, vannBehov, dognUtenVarme, fravalgt, handlelisteSum, handlelisteKcal }) {
   const ut = []
+
+  /*
+   * Eget lager: null kalorier er ikke en mangel her, det er avtalen.
+   *
+   * Varslene om energidekning, døgn uten varme og utløpsdato handler alle om
+   * mat vi sender. Å la dem stå ville framstilt sporet som en pakke som ikke
+   * virker, i stedet for en som virker annerledes. Denne blokken kommer først
+   * og returnerer, slik at heller ikke matpåfyllsteksten – «bare mat og
+   * vannrensetabletter» – slipper til i en pakke uten mat.
+   */
+  if (matniva.senderMat === false) {
+    ut.push({
+      type: 'info',
+      tekst: modus.medEske
+        ? `Dere handler maten selv. Handlelisten er regnet ut for ${personer} ` +
+          `${personer === 1 ? 'person' : 'personer'} i ${KONFIG.dogn} døgn: rundt ` +
+          `${Math.round(handlelisteKcal).toLocaleString('nb-NO')} kcal, for omtrent ` +
+          `${Math.round(handlelisteSum).toLocaleString('nb-NO')} kroner i butikken.`
+        : `Dette er systemet alene: skapplakaten, lagerkortene og handlelisten for ` +
+          `${personer} ${personer === 1 ? 'person' : 'personer'}, pluss rensetabletter ` +
+          `til vannet. Verken eske eller utstyr følger med.`,
+    })
+
+    // Bare et avvik når vi faktisk skulle sendt vann.
+    if (modus.medVann && vannBehov && liter / vannBehov < 0.999) {
+      ut.push({
+        type: 'warn',
+        tekst:
+          `Vannet sender vi: ${liter} liter av ${vannBehov}. Resten må dere ha ` +
+          `stående selv – DSB regner tjue liter per person.`,
+      })
+    }
+    return ut
+  }
+
   if (modus.id === 'matpafyll') {
     ut.push({
       type: 'info',
@@ -423,7 +510,12 @@ function varsler({ personer, ctx, matniva, modus, kcal, kcalBehov, liter, vannBe
         `${personer} ${personer === 1 ? 'person' : 'personer'} i ${KONFIG.dogn} døgn.`,
     })
   }
-  if (vannBehov && liter / vannBehov < 0.999) {
+  /*
+   * Bare når vi faktisk skulle sendt vann. Matpåfyll inneholder ingen kanner
+   * med vilje, og «kannene rommer 0 liter» om kanner som ikke er bestilt, er
+   * en feilmelding og ikke en opplysning.
+   */
+  if (modus.medVann && vannBehov && liter / vannBehov < 0.999) {
     /*
      * To ulike situasjoner, som fortjener to ulike setninger.
      *
@@ -462,6 +554,23 @@ function varsler({ personer, ctx, matniva, modus, kcal, kcalBehov, liter, vannBe
     ut.push({
       type: 'info',
       tekst: `Vanlig tørrmat holder ${matniva.holdbarhetAr} år. Sett på påfyll, så sier vi fra i tide.`,
+    })
+  }
+  if (matniva.id === 'langtidsmat') {
+    /*
+     * Det er ikke REAL som setter datoen på denne pakken.
+     *
+     * Frysetørket holder fem år, men knekkebrød, pålegg og kjeks holder ett –
+     * og de ligger i samme eske. Kunden som velger langtidsmat i troen på at
+     * esken kan glemmes i fem år, tar feil, og det er vår jobb å si det før
+     * de betaler, ikke etterpå.
+     */
+    ut.push({
+      type: 'info',
+      tekst:
+        `De frysetørkede middagene holder ${matniva.holdbarhetAr} år, men brød, ` +
+        `pålegg og gryn i samme eske holder ett. Det er den korteste datoen som ` +
+        `avgjør når noe må byttes.`,
     })
   }
   return ut

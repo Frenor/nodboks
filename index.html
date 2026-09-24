@@ -65,7 +65,7 @@
 
     <nav class="site-nav" aria-label="Hovedmeny">
       <a href="#bygg">Sett sammen esken</a>
-      <a href="#matnivaa">Vanlig mat eller langtidsmat</a>
+      <a href="#matnivaa">Tre måter å ha mat på</a>
       <a href="#tillit">Slik jobber vi</a>
       <a href="#faq">Spørsmål</a>
     </nav>
@@ -287,7 +287,7 @@
               <div>
                 <h3 class="steg__tittel" id="t-mat">Hva slags mat?</h3>
                 <p class="steg__hjelp" id="h-mat">
-                  Det viktigste valget. Se
+                  Tre veier til det samme. Se
                   <a href="#matnivaa">hele sammenligningen</a> hvis du er i tvil.
                 </p>
               </div>
@@ -371,6 +371,27 @@
             Har dere hund eller katt, legger vi inn fôr og eget vann til dem når
             du teller dem opp over.
           </p>
+
+          <!--
+            Handlelisten.
+
+            I eget-lager-sporet er dette produktet: ikke hva vi sender, men hva
+            dere skal kjøpe, i mengder regnet ut for husstanden. Prisene er
+            veiledende butikkpriser vi har observert, ikke våre – de står der
+            for at de tre sporene skal kunne sammenlignes ærlig.
+          -->
+          <section class="handleliste" id="handleliste" hidden aria-labelledby="handleliste-tittel">
+            <div class="innholdsliste__hode">
+              <h3 style="margin:0" id="handleliste-tittel">Dette handler dere selv</h3>
+              <span class="badge" data-handleliste-sum></span>
+            </div>
+            <p class="muted innholdsliste__ingress" id="handleliste-ingress"></p>
+            <div id="handleliste-rader"></div>
+            <p class="muted" style="font-size:var(--step--1); margin-top:var(--sp-5)">
+              Listen følger med trykt i rulleringssettet, med plass til å skrive
+              datoen dere kjøpte hver ting.
+            </p>
+          </section>
         </div>
 
       </div>
@@ -400,51 +421,59 @@
   <!-- 5. Matnivå-sammenligning -------------------------------------------- -->
   <section class="section section--sunken" id="matnivaa">
     <div class="wrap">
-      <h2>Vanlig mat eller langtidsmat?</h2>
+      <h2>Tre måter å ha mat på</h2>
       <p class="lead">
-        Det er ikke billig mot dyrt. Det er to ærlige veier, og de passer ulike hjem.
+        Det er ikke billig mot dyrt, og ingen av dem er den riktige. De løser
+        den samme oppgaven på tre måter, og de passer ulike hjem. Rekkefølgen
+        under er stigende etter hvor mye mat vi sender – ikke en rangering.
       </p>
 
       <table class="sml" style="margin-top:var(--sp-6)">
         <thead>
-          <tr><th>&nbsp;</th><th>Vanlig norsk mat</th><th>Langtidsmat</th></tr>
+          <tr><th>&nbsp;</th><th>Ditt eget lager</th><th>Vanlig butikkmat</th><th>Langtidsmat</th></tr>
         </thead>
         <tbody>
           <tr>
             <td data-kolonne="Hva det er"><strong>Hva det er</strong></td>
-            <td data-kolonne="Vanlig mat">Havregryn, hermetikk, knekkebrød, tørket frukt. Mat dere kjenner igjen.</td>
+            <td data-kolonne="Eget lager">Esken, utstyret og vannet fra oss. Maten handler dere selv, av det dere spiser til vanlig.</td>
+            <td data-kolonne="Vanlig mat">Havregryn, hermetikk, knekkebrød, tørket frukt. Vi handler den og pakker den ferdig.</td>
             <td data-kolonne="Langtidsmat">Fire frysetørkede middager. Frokost er havregrøt, resten er den samme butikkmaten.</td>
           </tr>
           <tr>
             <td data-kolonne="Spiser barna det?"><strong>Spiser barna det?</strong></td>
+            <td data-kolonne="Eget lager">Ja. Dere velger selv hva som står der.</td>
             <td data-kolonne="Vanlig mat">Ja. Det er den samme maten som står i skapet ellers.</td>
             <td data-kolonne="Langtidsmat">Som regel. Velg retter dere har smakt på tur først.</td>
           </tr>
           <tr>
             <td data-kolonne="Holdbarhet"><strong>Holdbarhet</strong></td>
+            <td data-kolonne="Eget lager">Den dere gir den. Rulleringssettet holder styr på datoene.</td>
             <td data-kolonne="Vanlig mat">1–2 år. Må byttes.</td>
-            <td data-kolonne="Langtidsmat">Flere år. Sjekk datoen på posen – tallene som sirkulerer i bransjen spriker.</td>
+            <td data-kolonne="Langtidsmat">Middagene fem år, brød og pålegg ett. Den korteste datoen avgjør.</td>
           </tr>
           <tr>
             <td data-kolonne="Din jobb"><strong>Din jobb</strong></td>
+            <td data-kolonne="Eget lager">Handle etter listen, og fylle på igjen når noe blir spist opp.</td>
             <td data-kolonne="Vanlig mat">Bytte maten når vi sier fra. Ta gjerne det gamle inn i skapet.</td>
-            <td data-kolonne="Langtidsmat">Nesten ingenting. Sett den bort og sjekk datoen av og til.</td>
+            <td data-kolonne="Langtidsmat">Lite. Sett den bort og sjekk datoen av og til.</td>
           </tr>
           <tr>
             <td data-kolonne="Krever"><strong>Krever</strong></td>
+            <td data-kolonne="Eget lager">At noen faktisk gjør det. Til gjengjeld blir maten spist opp før den går ut.</td>
             <td data-kolonne="Vanlig mat">Lite. Mye kan spises kaldt rett fra boksen.</td>
-            <td data-kolonne="Langtidsmat">Kokende vann til de fire middagene – 3,7 dl per pose. Resten klarer seg uten.</td>
+            <td data-kolonne="Langtidsmat">Kokende vann til de fire middagene – 3,7 dl per pose.</td>
           </tr>
           <tr>
             <td data-kolonne="Uten brennstoff"><strong>Uten brennstoff</strong></td>
+            <td data-kolonne="Eget lager">Opp til dere. Listen vår er satt opp slik at det meste kan spises kaldt.</td>
             <td data-kolonne="Vanlig mat">Rekker seks til sju døgn. Nesten alt kan spises kaldt.</td>
-            <td data-kolonne="Langtidsmat">Rekker seks til sju døgn. Bare de fire middagene krever koking. Byggeren viser tallet for din husstand.</td>
+            <td data-kolonne="Langtidsmat">Seks til sju døgn. Bare de fire middagene krever koking.</td>
           </tr>
         </tbody>
       </table>
 
       <p class="muted" style="margin-top:var(--sp-5); font-size:var(--step--1)">
-        Vi sier ikke at langtidsmat er tryggere. Mat som står i skapet og faktisk
+        Vi sier ikke at ett av sporene er tryggere. Mat som står i skapet og faktisk
         blir spist, er også beredskap – og DSB anbefaler selv å
         <a href="https://www.dsb.no/sikkerhverdag/egenberedskap/mat-du-bor-ha-i-hus-i-tilfelle-krise/" rel="noopener">ha litt ekstra av den maten du spiser til vanlig</a>.
       </p>
@@ -678,7 +707,7 @@
       <div>
         <p><strong>Om pakkene</strong></p>
         <p>
-          <a href="#matnivaa">Vanlig mat eller langtidsmat</a><br>
+          <a href="#matnivaa">Tre måter å ha mat på</a><br>
           <a href="#innhold">Hva som ligger i esken</a><br>
           <a href="#faq">Spørsmål</a>
         </p>

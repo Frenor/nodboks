@@ -151,7 +151,9 @@ function byggValgkort(navn, id, tittel, beskrivelse, bilde) {
   inp.setAttribute('aria-describedby', `${navn}-${id}-desc`)
   const kropp = lagEl('span', 'option__body')
   const tit = lagEl('span', 'option__title')
-  tit.append(document.createTextNode(tittel + ' '))
+  // Navnet i sin egen node: moduskortene skifter tittel når matsporet endres,
+  // og da må teksten kunne byttes uten å røre prislappen ved siden av.
+  tit.append(lagEl('span', 'option__navn', tittel), document.createTextNode(' '))
   const pris = lagEl('span', 'tnum')
   pris.dataset.pris = id
   tit.append(pris)
@@ -180,9 +182,21 @@ export function startBygger(rot = document) {
     for (const m of MATNIVAER) {
       const kort = byggValgkort('matniva', m.id, m.navn, m.beskrivelse)
       const linjal = lagEl('div', 'holdbarhet')
-      linjal.innerHTML = `<div class="holdbarhet__spor"><div class="holdbarhet__fyll"></div></div>
-        <div class="holdbarhet__tekst"><span>Holdbarhet</span><span>${holdbarhet(m.holdbarhetAr)}</span></div>`
       linjal.dataset.holdbarhet = m.id
+      if (m.holdbarhetAr) {
+        linjal.innerHTML = `<div class="holdbarhet__spor"><div class="holdbarhet__fyll"></div></div>
+          <div class="holdbarhet__tekst"><span>Holdbarhet</span><span>${holdbarhet(m.holdbarhetAr)}</span></div>`
+      } else {
+        /*
+         * Sporet uten utløpsdato får ingen linjal.
+         *
+         * En tom eller nesten tom stolpe leses som «dårligst», og det ville
+         * lagt en tommel på vekten mot det sporet som ikke har noen dato å
+         * vise – ikke fordi maten er dårlig, men fordi kunden kjøper den selv.
+         */
+        linjal.innerHTML = `<div class="holdbarhet__tekst holdbarhet__tekst--alene">
+          <span>Holdbarhet</span><span>den dere gir den</span></div>`
+      }
       $('.option__body', kort).append(linjal)
       matRot.append(kort)
     }
@@ -218,6 +232,21 @@ export function startBygger(rot = document) {
     }
     for (const vare of ALLE_VARER) {
       $(`[data-gruppe="${dsbGruppe(vare.kategori)}"]`, listeRot).append(byggVarelinje(vare))
+    }
+  }
+
+  const handleRot = $('#handleliste-rader', rot)
+  if (handleRot && !handleRot.children.length) {
+    for (const vare of VARER.filter((v) => v.kategori === 'Mat' && !v.erBeholder)) {
+      const rad = lagEl('div', 'vare')
+      rad.dataset.sku = vare.sku
+      rad.hidden = true
+      rad.append(
+        lagEl('span', 'vare__navn', vare.navn),
+        lagEl('span', 'vare__antall'),
+        lagEl('p', 'vare__hvorfor', vare.hvorfor ?? '')
+      )
+      handleRot.append(rad)
     }
   }
 
@@ -304,6 +333,7 @@ export function startBygger(rot = document) {
     tegnSvar(rot, pakke)
     tegnValg(skjema, t, pakke)
     tegnListe(listeRot, pakke)
+    tegnHandleliste(rot, pakke)
     tegnPris(rot, pakke)
     tegnGjenopprettet(rot)
 
@@ -386,6 +416,22 @@ function tegnValg(skjema, t, pakke) {
   const eskeSteg = $('#eskevalg', skjema)?.closest('.steg')
   if (eskeSteg) eskeSteg.hidden = !pakke.modus.medEske
 
+  /*
+   * «Matpåfyll» er feil ord i et spor der vi ikke sender mat. Sporet kan
+   * overstyre både navn og beskrivelse på moduskortene, slik at kunden leser
+   * «Bare systemet» i stedet for å lure på hvilken mat påfyllet inneholder.
+   */
+  for (const m of MODUSER) {
+    const kort = $(`input[name="modus"][value="${m.id}"]`, skjema)?.closest('.option')
+    if (!kort) continue
+    const navn = pakke.matniva.modusNavn?.[m.id] ?? m.navn
+    const beskrivelse = pakke.matniva.modusBeskrivelse?.[m.id] ?? m.beskrivelse
+    const navnEl = $('.option__navn', kort)
+    if (navnEl && navnEl.textContent !== navn) navnEl.textContent = navn
+    const descEl = $('.option__desc', kort)
+    if (descEl && descEl.textContent !== beskrivelse) descEl.textContent = beskrivelse
+  }
+
   for (const type of ESKETYPER) {
     const merke = $(`[data-pris="${type.id}"]`, skjema)
     if (merke) merke.textContent = kr(velgEske(pakke.ctx.hoder + Math.ceil(pakke.ctx.dyr / 2), type.id).pris)
@@ -460,6 +506,34 @@ function tegnListe(listeRot, pakke) {
 
   const dyrefot = $('#dyrefotnote')
   if (dyrefot) dyrefot.hidden = pakke.ctx.dyr > 0
+}
+
+function tegnHandleliste(rot, pakke) {
+  const seksjon = $('#handleliste', rot)
+  if (!seksjon) return
+
+  seksjon.hidden = pakke.matniva.senderMat !== false
+  if (seksjon.hidden) return
+
+  const iListen = new Map(pakke.handleliste.map((l) => [l.sku, l]))
+  for (const rad of $$('.vare', $('#handleliste-rader', rot))) {
+    const l = iListen.get(rad.dataset.sku)
+    rad.hidden = !l
+    if (!l) continue
+    $('.vare__antall', rad).textContent = `${tall(l.antall)} ${l.enhet}`
+  }
+
+  const sum = $('[data-handleliste-sum]', rot)
+  if (sum) sum.textContent = `ca. ${kr(pakke.handlelisteSum)} i butikken`
+
+  const ingress = $('#handleliste-ingress', rot)
+  if (ingress) {
+    ingress.textContent =
+      `Mengdene er regnet ut for ${personord(pakke.valg.personer)} i ${KONFIG.dogn} døgn – ` +
+      `rundt ${tall(Math.round(pakke.handlelisteKcal))} kcal. Prisene er veiledende ` +
+      `butikkpriser vi har observert, ikke våre. Kjøp gjerne noe annet: det viktigste ` +
+      `er at det er mat dere spiser til vanlig.`
+  }
 }
 
 function tegnPris(rot, pakke) {

@@ -693,3 +693,6 @@
   font-size: var(--step--1);
   color: var(--text-muted);
 }
+
+/* Sporet uten utløpsdato: teksten står alene, uten stolpe over. */
+.holdbarhet__tekst--alene { margin-top: 0; }

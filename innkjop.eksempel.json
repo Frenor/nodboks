@@ -349,6 +349,16 @@
     "minsteordre": "",
     "notat": ""
   },
+  "lagerkort": {
+    "navn": "Rulleringssettet",
+    "utsalg": 249,
+    "innkjop": 22,
+    "kilde": "LaserTrykk kalkulator 24.09.2026: 2,85 + 12×0,98 + 7,53 = 22,14 kr per sett ved 500 opplag",
+    "leverandor": "LaserTrykk",
+    "kontakt": "",
+    "minsteordre": "",
+    "notat": "Kalkulatorpris, ikke tilbud. 6 000 kort ligger utenfor det kalkulatoren kunne teste. Må bekreftes."
+  },
   "eske-liten": {
     "navn": "Nødboks Liten – én kasse på 45 liter",
     "utsalg": 299,

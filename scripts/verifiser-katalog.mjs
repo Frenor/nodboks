@@ -92,7 +92,22 @@ for (const modus of MODUSER) {
             nei(`${merke}: energibehov ${pakke.kcalBehov.toFixed(1)} ≠ ${direkte.toFixed(1)}`)
           }
 
-          if (pakke.kcalDekning < 0.95) {
+          /*
+           * I eget-lager-sporet sender vi ingen mat, så pakkens egen dekning er
+           * null med vilje. Kravet flyttes dit maten faktisk er: handlelisten
+           * kunden får. Den skal dekke det samme behovet som en pakke vi
+           * hadde sendt selv – ellers er lista en anbefaling vi ikke står for.
+           */
+          if (niva.senderMat === false) {
+            const dekning = pakke.kcalBehov ? pakke.handlelisteKcal / pakke.kcalBehov : 0
+            if (dekning < 0.95) {
+              nei(`${merke}: handlelisten dekker ${Math.round(dekning * 100)} %`)
+            }
+            if (!pakke.handleliste.length) nei(`${merke}: tom handleliste`)
+            if (pakke.linjer.some((l) => l.kategori === 'Mat' && !l.erBeholder && l.kcal > 0)) {
+              nei(`${merke}: mat i pakken, men sporet sender ikke mat`)
+            }
+          } else if (pakke.kcalDekning < 0.95) {
             nei(`${merke}: energi dekker ${Math.round(pakke.kcalDekning * 100)} %`)
           }
           if (modus.medVann && pakke.liter < pakke.vannBehov) {

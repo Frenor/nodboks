@@ -288,13 +288,56 @@ export const finnEsketype = (id) => ESKETYPER.find((e) => e.id === id) ?? ESKETY
 // 25 årene som går igjen i markedet gjelder ReadyWise i en annen emballasje,
 // og skal ikke brukes om noe vi selger.
 
+/**
+ * De tre matsporene.
+ *
+ * Rekkefølgen er stigende etter hvor mye mat vi sender – ikke etter hva vi
+ * helst vil selge. Den er den eneste nøytrale ordningen vi fant: enhver annen
+ * rekkefølge er en rangering, og et «anbefalt»-merke ville avgjort valget for
+ * kunden i stedet for å opplyse det.
+ *
+ * Standardvalget er `torrmat`, midterst. Et standardvalg er uunngåelig når
+ * prisen skal stå fra første maling, og midtposisjonen signaliserer minst.
+ *
+ * `fordeler` og `ulemper` har fire punkter hver, i alle tre. Asymmetri her er
+ * ikke en detalj: ett ærlig ankepunkt mindre leses som en anbefaling.
+ */
 export const MATNIVAER = [
+  {
+    id: 'egetlager',
+    navn: 'Ditt eget lager',
+    kortnavn: 'Eget lager',
+    /** Sender vi mat? Styrer både innhold, varsler og handlelisten. */
+    senderMat: false,
+    beskrivelse:
+      'Vi sender esken, utstyret, vannet og et system for å holde orden på datoene. Maten handler dere selv – mer av det dere spiser til vanlig.',
+    holdbarhetAr: null,
+    /** Matpåfyll gir ikke mening når vi ikke sender mat. Da er det systemet. */
+    modusNavn: { matpafyll: 'Bare systemet' },
+    modusBeskrivelse: {
+      matpafyll:
+        'Skapplakaten, lagerkortene og handlelisten, uten eske og utstyr. Til dere som har det meste, men mangler oversikten.',
+    },
+    fordeler: [
+      'Dere spiser det dere liker, og det blir spist opp før det går ut.',
+      'Dette er DSBs eget råd: ha litt ekstra av den maten du spiser til vanlig.',
+      'Handlelisten er regnet ut for akkurat deres husstand, med mengder og kalorier.',
+      'Maten koster det samme i butikken som den ville kostet hos oss – dere betaler bare ikke frakt på den.',
+    ],
+    ulemper: [
+      'Krever at noen faktisk handler inn, og fyller på igjen etterpå.',
+      'Rulleringen er deres jobb. Vi kan minne, men ikke gjøre den.',
+      'Ingen fast leveringsdato å lene seg på – dere setter takten selv.',
+      'Den dagen det gjelder, er esken akkurat så full som dere gjorde den.',
+    ],
+  },
   {
     id: 'torrmat',
     navn: 'Vanlig butikkmat',
     kortnavn: 'Tørrmat',
+    senderMat: true,
     beskrivelse:
-      'Havregryn, knekkebrød, leverpostei og middagshermetikk – maten familien spiser fra før. Billigst, og den eneste som også smaker som en vanlig uke.',
+      'Havregryn, knekkebrød, leverpostei og middagshermetikk – maten familien spiser fra før. Vi handler den, pakker den og sender den ferdig.',
     holdbarhetAr: 1,
     fordeler: [
       'Barn spiser den frivillig, også på døgn fem.',
@@ -306,12 +349,14 @@ export const MATNIVAER = [
       'Må byttes omtrent hvert år – det er derfor påfyll finnes.',
       'Veier mest: rundt 36 kilo for fire personer.',
       'Grøt og suppe bruker av de 20 literne vann.',
+      'Tar mest plass. For åtte personer blir det to kasser.',
     ],
   },
   {
     id: 'langtidsmat',
     navn: 'Frysetørket langtidsmat',
     kortnavn: 'Langtidsmat',
+    senderMat: true,
     beskrivelse:
       'Norskprodusert REAL Field Meal fra Drytech i Tromsø til fire av sju middager. Frokosten er havregrøt, og resten er vanlig butikkmat.',
     holdbarhetAr: 5,
@@ -329,6 +374,15 @@ export const MATNIVAER = [
     ],
   },
 ]
+
+/**
+ * Sporet vi faller tilbake på.
+ *
+ * Eksplisitt, ikke `MATNIVAER[0]`: da ville rekkefølgen i listen bestemt hva
+ * en ukjent verdi blir til, og en ren omsortering ville flyttet standardvalget
+ * uten at noen mente å gjøre det.
+ */
+export const STANDARD_MATNIVA = 'torrmat'
 
 // -----------------------------------------------------------------------------
 // Moduser
@@ -875,6 +929,16 @@ export const VARER = [
     type: 'engang',
     moduser: ['komplett'],
     kunKjaeledyr: true,
+    /*
+     * Beholder, ikke mat.
+     *
+     * Kategorien er 'Mat' fordi den skal stå under DSBs overskrift «Mat og
+     * vann», der eieren leter etter den. Men den er utstyr: null kalorier,
+     * ordinær mva, og den sendes også i eget-lager-sporet der vi ellers ikke
+     * sender mat. Uten dette flagget havnet den på handlelisten, som om
+     * kunden skulle kjøpe en tom boks selv.
+     */
+    erBeholder: true,
     // Fôr til dyr har ordinær sats. Redusert mva gjelder næringsmidler til
     // mennesker, og boksen er uansett utstyr. Bekreftes av regnskapsfører.
     mva: 'standard',
@@ -1430,6 +1494,34 @@ export const VARER = [
     antall: (c) => Math.ceil(c.hoder / 8),
   },
   {
+    sku: 'lagerkort',
+    navn: 'Rulleringssettet',
+    beskrivelse:
+      'Skapplakat i A3 med par-nivåene for deres husstand, tolv lagerkort i A6 til hyllene, og et hefte på seksten sider om hvordan skapet settes opp og holdes ved like.',
+    hvorfor:
+      'Et rotasjonsstativ flytter boksene i riktig rekkefølge, men sier ingenting om når de går ut. Kortet gjør det.',
+    kategori: 'Verktøy og dokumenter',
+    type: 'engang',
+    // Bare i eget-lager-sporet, og i begge moduser: systemet kan kjøpes alene.
+    matnivaer: ['egetlager'],
+    enhet: 'sett',
+    pris: 249,
+    holdbarhetAr: null,
+    vektKg: 0.2,
+    dsb: 'Annet: oversikt over egen beredskap',
+    produkt: {
+      merke: 'Nødboks',
+      modell: 'Rulleringssettet, 1. utgave',
+      kilde:
+        'Egen trykksak. LaserTrykks kalkulator 24.09.2026: plakat A3 2,85 kr, ' +
+        'lagerkort A6 0,98 kr/stk, hefte A5 7,53 kr – 22 kr per sett ved 500 opplag. ' +
+        'Kalkulatorpris, ikke tilbud: 12 kort × 500 sett er 6 000 kort, utenfor ' +
+        'det kalkulatoren lot seg teste på. Må bekreftes før opplag bestilles.',
+      url: 'https://www.lasertrykk.no/',
+    },
+    antall: () => 1,
+  },
+  {
     sku: 'beredskapsperm',
     navn: 'Beredskapspermen',
     beskrivelse:
@@ -1455,5 +1547,6 @@ export const VARER = [
   },
 ]
 
-export const finnMatniva = (id) => MATNIVAER.find((m) => m.id === id) ?? MATNIVAER[0]
+export const finnMatniva = (id) =>
+  MATNIVAER.find((m) => m.id === id) ?? MATNIVAER.find((m) => m.id === STANDARD_MATNIVA)
 export const finnModus = (id) => MODUSER.find((m) => m.id === id) ?? MODUSER[0]
