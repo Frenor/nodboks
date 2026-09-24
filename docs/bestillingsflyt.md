@@ -74,7 +74,7 @@ disiplinen på justeringene.
 | Spøkelsesrad «+ Legg til …» for tillegg, plassert i riktig DSB-gruppe | listen | § 5.2.2 |
 | Kjæledyrrader som kun vises når telleren er over null, med fotnote ellers | listen | § 6.6 |
 | Lukket `<details>` der `<summary>` alltid viser gjeldende tilstand i klartekst | to-lag | § 5.2.3 |
-| Påfyllets selvavlysende tekst ved langtidsmat | to-lag | § 5.2.3 |
+| Påfyllstekst som sier hva påminnelsen faktisk gjelder ved langtidsmat | to-lag | § 5.2.3 |
 | Fravalg vist som egen minuslinje i prisoppsettet, ikke stille fjerning | to-lag | § 5.3 |
 | `prefers-reduced-motion` respektert i CSS *og* JS | to-lag | § 7 |
 | Ferdig anbefalt pakke, prisen synlig i heroen fra første sekund | direkte | § 5.1 |
@@ -173,9 +173,12 @@ Fullt `<fieldset>` med `<legend>`, to store valgkort (`.segment` / `.option` fra
 - Tittel + **prisen for akkurat denne husstanden**, ikke en generisk fra-pris
 - Kort beskrivelse
 - Holdbarhetslinjal: to barer på samme skala (1 år mot 5 år), med tekst i
-  tillegg til farge
+  tillegg til farge. Barene viser matnivåets tall, ikke pakkens: `byggPakke()`
+  rapporterer `holdbarhetAr: 1` for begge nivåene, fordi brød, pålegg og gryn
+  ligger i begge. Teksten må derfor si hva de fem årene gjelder – de fire
+  REAL-middagene, ikke hele esken
 - «Din jobb»-rad: «Bytte maten når vi sier fra – omtrent hvert år» mot
-  «Nesten ingenting. Sjekk datoen av og til.»
+  «De fire REAL-middagene står i fem år. Resten byttes som før.»
 
 Det tilgjengelige navnet på hver radio holdes til tittel + pris. Resten knyttes
 med `aria-describedby`, per `designvalg.md` § 6.2.
@@ -241,7 +244,7 @@ klartekst.** Ingen tom etikett med en pil. Ingenting må åpnes for å forstås.
 | --- | --- | --- |
 | Kassemateriale | «Utstyret ligger i plastkasser · kr 598» | Segmentert kontroll, plast/aluminium, med merket «Justering, ikke et hovedvalg» og prisen per kasse på hvert alternativ. Notis: «Mat og vann ligger i plast uansett.» |
 | Omfang | «Komplett pakke – mat, vann og utstyr» | To alternativer: komplett / bare matpåfyll. Ved matpåfyll skjules utstyrsgruppene i listen, med en «vis likevel»-lenke i stedet for tomme kategorier. |
-| Påfyll | «Vi minner dere før maten går ut · kr 0 i dag» | Avkrysning, **aldri forhåndsvalgt**. Når langtidsmat er valgt, forkorter teksten seg selv: «Gratis påminnelse · kr 0 i dag. Maten holder i fem år – et abonnement ville ikke gitt dere noe nytt.» Ellers: «Neste sending om omtrent ett år · anslagsvis kr X for maten alene · ingen bindingstid.» Aldri «kr 0 i dag» alene. |
+| Påfyll | «Vi minner dere før maten går ut · kr 0 i dag» | Avkrysning, **aldri forhåndsvalgt**. Når langtidsmat er valgt, sier teksten hva påminnelsen faktisk gjelder: «Gratis påminnelse · kr 0 i dag. De fire REAL-middagene holder i fem år, men brød, pålegg og gryn følger den vanlige byttesyklusen – det er dem vi sier fra om.» Ellers: «Neste sending om omtrent ett år · anslagsvis kr X for maten alene · ingen bindingstid.» Aldri «kr 0 i dag» alene. |
 
 Kassematerialet får aldri samme `.segmented`-styling som matnivået. Matnivået er
 to store kort; kassematerialet er en liten segmentert kontroll inni et lukket
@@ -364,9 +367,11 @@ Tallene 2 338 og 1 450 er våre egne, dokumentert i `pakkesammensetning.md`
 ### 6.2 Endringer i `katalog.js`
 
 Signaturen endres fra `antall(p)` til `antall(c)`, der `c` er konteksten over.
-**Faktorene endres ikke.** De er utledet per voksen per døgn, og `ve` måles i
-voksne. Diffen er derfor mekanisk, linje for linje lesbar, og hver eneste
-eksisterende kommentar i katalogen forblir sann.
+**Signaturskiftet endrer ingen faktorer.** De er utledet per voksen per døgn, og
+`ve` måles i voksne. Diffen er derfor mekanisk og linje for linje lesbar.
+Unntaket er `havregryn` og `middagshermetikk`, som har én faktor per matnivå
+fordi de har ulik rolle i de to pakkene. Begrunnelsen står i katalogen, ved
+varen.
 
 Regelen, som skrives inn øverst i varelisten:
 
@@ -387,10 +392,9 @@ Regelen, som skrives inn øverst i varelisten:
 | `rosiner` | `Math.ceil(p * 0.35)` | `Math.ceil(c.ve * 0.35)` | ve |
 | `oboy` | `Math.ceil(p * 0.25)` | `Math.ceil(c.ve * 0.25)` | ve |
 | `fruktcocktail` | `Math.ceil(p / 4)` | `Math.ceil(c.ve / 4)` | ve |
-| `havregryn` | `Math.ceil(p * 0.4)` | `Math.ceil(c.ve * 0.4)` | ve |
-| `middagshermetikk` | `Math.ceil(p * 3.75)` | `Math.ceil(c.ve * 3.75)` | ve |
-| `real-middag` | `p * KONFIG.dogn` | `Math.ceil(c.ve) * KONFIG.dogn` | ve |
-| `real-frokost` | `p * 3` | `Math.ceil(c.ve) * 3` | ve |
+| `havregryn` | `Math.ceil(p * 0.4)` | `Math.ceil(c.ve * (c.matniva === 'langtidsmat' ? 0.9 : 0.432))` | ve + matnivå |
+| `middagshermetikk` | `Math.ceil(p * 3.75)` | `Math.ceil(c.ve * (c.matniva === 'langtidsmat' ? 1.5 : 4.05))` | ve + matnivå |
+| `real-middag` | `p * KONFIG.dogn` | `Math.ceil(c.ve) * 4` | ve |
 | `vannkanne-10` | `p * 2` | `c.hoder * 2 + Math.ceil(c.dyr * 14 / 10)` | hoder + dyr, se § 6.5 |
 | `aquatabs` | `Math.ceil(p / 4)` | `Math.ceil(c.hoder / 4)` | hoder |
 | `vannfilter` | `Math.ceil(p / 6)` | `Math.ceil(c.hoder / 6)` | hoder |
@@ -409,16 +413,23 @@ Regelen, som skrives inn øverst i varelisten:
 | `multiverktoy` | `Math.ceil(p / 8)` | `Math.ceil(c.hoder / 8)` | hoder |
 | `fyrstikker`, `telys`, `nodradio`, `meshtastic`, `beredskapsperm` | `() => 1` | `() => 1` | – |
 
-Tre grensetilfeller som skal begrunnes i kommentar der de står, fordi de ikke
+Fire grensetilfeller som skal begrunnes i kommentar der de står, fordi de ikke
 er opplagte:
 
 - **`nodteppe` og `hygienepakke` teller hoder, ikke voksenekvivalenter.** Et
   barn trenger et helt nødteppe. Et halvt teppe varmer ingen.
 - **`co-varsler` teller hoder.** Varsleren dekker rom, og rom skalerer med hvor
   mange som er der, ikke med hvor mye de spiser.
-- **`real-middag` og `real-frokost` runder `ve` opp før multiplikasjon.** Man
-  kan ikke sende 0,62 av en frysetørket porsjon, og et barn som får 62 % av en
-  pose får i praksis en pose.
+- **`real-middag` runder `ve` opp før multiplikasjon.** Man kan ikke sende 0,62
+  av en frysetørket porsjon, og et barn som får 62 % av en pose får i praksis
+  en pose.
+- **`havregryn` og `middagshermetikk` leser `c.matniva`.** REAL dekker fire av
+  sju middager og ingen frokoster – ikke alle måltidene. Kalorien derfra koster
+  0,18 kr mot havregrynets 0,007, og det er grunnen: i langtidspakken er
+  havregrøt frokosten alle sju døgn, og hermetikken tar de tre middagene REAL
+  ikke dekker. I tørrmatpakken bærer de samme to varene andre måltider, og
+  faktoren må da være en annen. Én SKU med to faktorer, ikke to SKU-er for
+  samme boks – pris og innkjøp skal vedlikeholdes ett sted.
 
 I tillegg innføres to nye, valgfrie felt på varen:
 
@@ -439,7 +450,10 @@ byggPakke({ husstand: { voksne, barn, kjaeledyr }, matniva, modus, eskeType,
   fordi det er `voksne` som er det obligatoriske feltet.
 - `gjelder(vare, kontekst)` får ett nytt tilfelle først:
   `if (vare.kunKjaeledyr) return kontekst.dyr > 0`.
-- Løkken kaller `vare.antall(kontekst)` i stedet for `vare.antall(personer)`.
+- Løkken kaller `vare.antall(antallCtx)` i stedet for `vare.antall(personer)`,
+  der `antallCtx` er konteksten utvidet med `matniva` og `modus`. Det er det som
+  lar én vare ha ulik rolle i de to pakkene (§ 6.2). Tilleggslinjene regnes med
+  samme objekt.
 - `mvaSats(vare)` tar nå varen, ikke kategorien:
   `vare.mva === 'standard' ? MVA.standard : (vare.kategori === 'Mat' ? MVA.mat : MVA.standard)`.
 - `velgEske()` – se § 6.7.

@@ -155,7 +155,7 @@ avsnitt 3–4 for produkt, pris og skaleringsregel per vare.
 | Dokumentmappe (aLOKSAK) + nødkort + notatbok | engang | – | Fylles ut én gang av kunden. |
 | Boksåpner | engang/forbruk-følge | – | Selve verktøyet slites ikke, men vi sender den med i matpåfyllet fordi den er billig og lett å glemme å legge til side. |
 | Mat, tørrmat-nivå | forbruk | ca. 1 år | Butikkvarer med vanlig holdbarhet – dette er selve grunnen til at abonnementet finnes. |
-| Mat, langtidsnivå (REAL Field Meal) | forbruk | 5 år | Lengre syklus, men går likevel ut. |
+| Mat, langtidsnivå (REAL Field Meal) | forbruk | 5 år | Lengre syklus, men går likevel ut. Gjelder bare de fire frysetørkede middagene: frokost, lunsj, mellommåltid og de tre øvrige middagene i langtidspakken er de samme tørrvarene og den samme hermetikken som i raden over, med sin egen, kortere dato. Byttesyklusen for pakken styres derfor av den korteste datoen, ikke av REAL-posene. |
 | Batterier, litium AAA/AA | forbruk | 25 år | I praksis nesten aldri i en ti-årshorisont – men formelt en forbruksvare. |
 | Telys | forbruk | 10 år | Byttes sjeldnere enn maten, men er ikke evigvarende. |
 | Nødteppe | forbruk | 5 år | Folien sprekker i brettekantene over tid. |
@@ -314,7 +314,7 @@ er pynt, det er ansvaret som følger med det vi selger.
 
 | Vare | Produkt | Enhet | Mengde | Skaleringsregel | Holdbarhet | Hvorfor |
 | --- | --- | --- | --- | --- | --- | --- |
-| Boksåpner | Coline boksåpner i rustfritt stål, Clas Ohlson 44‑2732, 79,90 kr | stk | 2 (tørrmat), 1 (langtidsmat), uansett husstandsstørrelse | `matniva === 'torrmat' ? 2 : 1` | – | Tørrmat-menyen er bygget på hermetikk. Uten boksåpner er halve matlageret utilgjengelig – høyest konsekvens per krone i hele verktøygruppen. To stykker: én i bruk, én uåpnet reserve. |
+| Boksåpner | Coline boksåpner i rustfritt stål, Clas Ohlson 44‑2732, 79,90 kr | stk | 2 (tørrmat), 1 (langtidsmat), uansett husstandsstørrelse | `matniva === 'torrmat' ? 2 : 1` | – | Tørrmat-menyen er bygget på hermetikk, og etter at REAL ble kuttet til fire av sju middager inneholder også langtidsnivået hermetikk – bare mindre av den. Uten boksåpner er halve matlageret utilgjengelig – høyest konsekvens per krone i hele verktøygruppen. To stykker: én i bruk, én uåpnet reserve. |
 | Brannteppe | Housegard brannteppe 120×180 cm, Clas Ohlson 36‑9533, 349,90 kr | stk | 1 for 1–4 personer, 2 for 5–8 | `Math.ceil(personer / 4)` | – | Direkte konsekvens av at vi selger en gassprimus og 50 telys inn i et mørkt hjem. Skaleres på antall flammer/etasjer, ikke strengt på hoder. |
 | Reparasjon | tesa Extra Power gaffateip 50 mm × 50 m, avxperten.no, 192 kr | rull | 1 per husstand | `1` | – | Står eksplisitt på DSBs (nett)liste. Løser de faktiske småkatastrofene i et sju døgns strømbrudd: knust rute, sprukket vannkanne, en lekkasje. |
 | Multiverktøy | Multiverktøy 13‑i‑1, Clas Ohlson 31‑2191, 249,90 kr | stk | 1 per husstand | `1` | – | DSB skriver «multikniv». Realiteten i sju døgn hjemme er kutting av emballasje og stramming av en skrue, ikke felling av trær – én per husstand er riktig, ikke én per person. |
@@ -330,9 +330,14 @@ komplett-pakke eller fra andre steder.
 | Vare | Enhet | Mengde | Skaleringsregel | Holdbarhet |
 | --- | --- | --- | --- | --- |
 | Tørrmat, sju døgn (33 varelinjer, avsnitt 5) | sett | gram per person | se avsnitt 5 | ca. 1 år |
-| REAL Field Meal (kun langtidsmat-nivå) | porsjon | 7 × personer | `personer * 7` | 5 år |
+| REAL Field Meal (kun langtidsmat-nivå) | porsjon | 4 per voksenekvivalent (oppr.) | `Math.ceil(ve) * 4` | 5 år |
 | Aquatabs 50 stk | pakke | 1 per påbegynt 4 personer | `Math.ceil(personer / 4)` | 5 år |
 | Boksåpner (følger med kostnadsfritt) | stk | 1 | `1` | – |
+
+**Tørrmatlinjene er ikke helt like i de to nivåene.** To av dem har hver sin
+regel per matnivå: havregrynregelen er drøyt doblet i langtidsmat (havregrøt
+er frokosten alle sju døgn, ikke fire av dem), og middagshermetikken er kuttet
+til de tre middagene REAL ikke dekker. Resten av linjene er identiske.
 
 Dette er den varegruppen der vi ligger direkte an mot markedets eneste
 sammenlignbare tilbud: hjemmeberedt.no selger mat og vann for 999–4 299 kr
@@ -430,17 +435,25 @@ jevne priskurven i avsnitt 6 (kg mat per person, ikke pakker per person).
 Den er ikke direkte reprodusert for husstander på 1–3 personer i
 sourcingdataene – se forbeholdet i avsnitt 6.
 
-**Langtidsmat-nivået:** frokost, lunsj og mellommåltid hentes fra samme
-tørrmatmeny som over, uansett matnivå – det er der den brennstoffrie dagen
-hører hjemme. Middagen byttes til REAL Field Meal (håndplukket utvalg: Pasta
-Bolognese, Lapskaus, Kjøttgryte, Taco Bowl, Kremet pasta med laks), 702 kcal
-per pose, 7 poser per person for sju døgn. **Én ting bør vurderes videre før
-lansering:** sourcingregelen sier «7 × personer poser», altså også på dag 5.
-Det er verdt å diskutere om dag 5s middag bør holdes som den kalde
-tørrmat-boksretten selv i langtidsmat-modus, slik at husstanden fortsatt har
-minst én reelt brennstoffrie dag uansett matnivå – i dag krever REAL Field
-Meal 3,7 dl kokende vann og ca. to minutters koking, som ville gjøre nettopp
-den ene fuel-free-dagen avhengig av gass igjen.
+**Langtidsmat-nivået:** lunsj og mellommåltid hentes fra samme tørrmatmeny
+som over, uansett matnivå. Frokosten gjør det ikke lenger: på langtidsmat er
+den havregrøt alle sju døgn, ikke den vekslende frokosten i tabellen over, og
+havregrynregelen er drøyt doblet tilsvarende (×0,432 → ×0,9 per
+voksenekvivalent). Fire av de sju middagene byttes til REAL Field Meal
+(håndplukket utvalg: Pasta Bolognese, Lapskaus, Kjøttgryte, Taco Bowl,
+Kremet pasta med laks), 702 kcal per pose, 4 poser per voksenekvivalent for
+sju døgn. De tre øvrige middagene er den samme middagshermetikken som
+tørrmat-nivået bruker.
+
+**Den brennstoffrie dagen overlever byttet.** REAL Field Meal krever 3,7 dl
+kokende vann og ca. to minutters koking, så en regel på sju poser per
+voksenekvivalent – altså også på dag 5 – ville gjort nettopp den ene
+fuel-free-dagen avhengig av gass igjen. Det er grunnen til at REAL er satt
+til fire middager og ikke sju: de tre øvrige er hermetikk som kan spises kald
+rett fra boksen, og havregrynene kan bløtlegges kaldt over natten i stedet
+for å kokes. Med det regner konfiguratoren **6–7 døgn uten varme også på
+langtidsmat-nivået** – 7 for husstander opp til seks personer, 6 for sju og
+åtte – mot 7 gjennomgående på tørrmat-nivået.
 
 ---
 

@@ -1,10 +1,11 @@
 # Prisstrategi
 
-**Skrevet 20. september 2026, avstemt mot katalogen samme dag, på grunnlag av
-`docs/konkurrentanalyse.md`, `docs/innkjopsliste.md` og den katalogen som
-faktisk kjører i `assets/js/data/katalog.js` / `assets/js/konfigurator.js`.**
+**Skrevet 20. september 2026, avstemt mot katalogen på nytt 24. september 2026,
+på grunnlag av `docs/konkurrentanalyse.md`, `docs/innkjopsliste.md` og den
+katalogen som faktisk kjører i `assets/js/data/katalog.js` /
+`assets/js/konfigurator.js`.**
 
-Siden forrige versjon av dette dokumentet har katalogen endret seg på fire
+Siden forrige versjon av dette dokumentet har katalogen endret seg på sju
 punkter som gjør de gamle tallene her foreldede:
 
 1. **Premiumdreiningen.** Ni varegrupper er byttet til kvalitetsprodukter:
@@ -13,18 +14,31 @@ punkter som gjør de gamle tallene her foreldede:
    Cederroth blodstopper, Ledlenser ML4 lanterne, Anker PowerCore 20 000.
 2. **Prisregelen er lagt om** fra 85 % av butikkpris (et «du sparer»-argument
    som ga netto 0,68R og 12 % dekningsgrad når innkjøp lå på 0,6R) til hele
-   butikkpris (netto 0,80R, 22–23 % dekningsgrad).
+   butikkpris (netto 0,80R, 21–23 % dekningsgrad).
 3. **Kassen er et kundevalg** mellom plast (SmartStore Dry 45) og aluminium
    (Zarges Eurobox til utstyret; mat og vann ligger i plast uansett).
 4. **Utstyrstersklene er spredt** (`ceil(p/4)`, `ceil(p/5)`, `ceil(p/6)`,
    `ceil(p/8)`) i stedet for at alt hoppet samtidig ved femte person.
+5. **Husstanden er delt i voksne, barn og kjæledyr.** Maten skalerer nå på
+   voksenekvivalenter i stedet for hoder, og matfaktorene ble justert opp 8 %
+   i samme slengen. Alle prispunkter i dette dokumentet er regnet for voksne
+   uten barn eller dyr, slik at stigen kan leses som før.
+6. **Bøttetoalettet (399 kr) er kommet inn** i utstyret, med terskelen
+   `ceil(p/4)`.
+7. **Langtidsmaten er rebalansert bort fra REAL Turmat.** REAL-frokosten er
+   fjernet helt, REAL-middagen er nede fra sju døgn til fire, og havregrøt og
+   middagshermetikk – som til nå bare fantes i tørrmatpakken – dekker resten.
+   REAL kostet 0,18 kr per kalori mot havregrynenes 0,007, og bar derfor det
+   meste av matkostnaden uten å bære tilsvarende mye av energien.
 
-**Alle prispunkter under er hentet direkte fra `/tmp/nodboks/fasit.md` —
-en kjøring av `byggPakke()` mot dagens katalog, 20.09.2026 — ikke beregnet på
-nytt av meg.** Der jeg utleder noe fra de tallene (marginalpris mellom to
-husstandsstørrelser, blandet mva-sats, følsomhet på innkjøpsfaktoren), står
-utledningen i klartekst i avsnittet, slik at den kan etterprøves linje for
-linje. Der et tall er et anslag, står det at det er et anslag.
+**Alle prispunkter under er hentet fra en kjøring av `byggPakke()` mot dagens
+katalog, 24.09.2026 – `scripts/tall.mjs` for pris, energidekning, kalde døgn
+og varelinjer, og de samme kallene med `innkjop.local.json` påkoblet for
+innkjøpskost og dekningsgrad – ikke beregnet på nytt av meg.** Der jeg utleder
+noe fra de tallene (marginalpris mellom to husstandsstørrelser, blandet
+mva-sats, følsomhet på innkjøpsfaktoren), står utledningen i klartekst i
+avsnittet, slik at den kan etterprøves linje for linje. Der et tall er et
+anslag, står det at det er et anslag.
 
 **Tre ting denne runden fant løst, og som derfor ikke lenger diskuteres som
 åpne problemer:** kategorinøkkel-feilen i `ui/bygger.js` som lot all mat telle
@@ -39,12 +53,12 @@ selges nå kun med gassbrenner, og brennstoff følger uansett aldri med esken.
 ## Kort oppsummering
 
 - Med dagens katalog koster en komplett tørrmatboks til fire personer
-  **12 471 kr** i plastkasse. Det er **63 % over** markedets desidert
+  **13 124 kr** i plastkasse. Det er **72 % over** markedets desidert
   dyreste tilbud, beredskap24 (7 650 kr, frysetørket). Det er ikke lenger et
   spørsmål om hvor i feltet vi ligger – vi ligger langt utenfor feltet, på
   hver eneste husstandsstørrelse og på begge matnivåer. Se punkt 1 for et
   ærlig regnskap over om det er forsvarlig.
-- Dekningsgraden ligger på **22–23 % på komplett-pakken og 30–31 % på
+- Dekningsgraden ligger på **21–23 % på komplett-pakken og 30–31 % på
   matpåfyll**, praktisk talt likt uansett husstandsstørrelse (1–8 personer).
   Det er en konsekvens av at prisregelen nå er én flat regel – pris = full
   butikkpris, innkjøp = 0,6 × butikkpris – ikke lenger en bevisst
@@ -53,18 +67,20 @@ selges nå kun med gassbrenner, og brennstoff følger uansett aldri med esken.
   3 478 kr, på hver eneste husstandsstørrelse og begge matnivåer** – et
   rendyrket, valgfritt oppsalg kunden tar selv, ikke noe som endrer
   kjerneproduktet. Se eget avsnitt i punkt 3.
-- Enpersonspakken (9 315 kr) er strukturelt den vanskeligste å forsvare:
+- Enpersonspakken (9 753 kr) er strukturelt den vanskeligste å forsvare:
   beregnet direkte fra katalogens egne skaleringsregler utgjør utstyr som
   ikke blir billigere av å kjøpe for én person i stedet for fire, rundt
   77 % av prisen. Se eget avsnitt i punkt 1.
 - Treffer innkjøpsanslaget for høyt (0,6 i dag), er dekningsgraden fortsatt
   positiv ned mot verre anslag, men går innkjøpet ned mot 0,5–0,45 stiger
-  dekningsgraden til 35–41 %. Se følsomhetsanalysen i punkt 3, koblet til
+  dekningsgraden til 35–42 %. Se følsomhetsanalysen i punkt 3, koblet til
   `docs/innkjopsliste.md`.
 - Abonnement er fortsatt den riktige forretningsmodellen, men gevinsten er
-  mindre enn forrige versjon av dette dokumentet hevdet – fordi den forrige
-  refill-marginen var bevisst bygget opp som en buffer mot rabatten, og den
-  bufferen finnes ikke lenger under «alt til butikkpris»-regelen. Se punkt 5.
+  mindre enn de eldste versjonene av dette dokumentet hevdet – fordi den
+  gamle refill-marginen var bevisst bygget opp som en buffer mot rabatten, og
+  den bufferen finnes ikke lenger under «alt til butikkpris»-regelen. På
+  langtidsmat er gevinsten dessuten blitt mindre av rebalanseringen, siden
+  det er påfyllet som ble billigere. Se punkt 5.
 - Frakt er kjøpers, og vi bruker ikke gjennomstrekede førpriser. Begge deler
   står ved lag. Se punkt 7–8.
 
@@ -72,13 +88,15 @@ selges nå kun med gassbrenner, og brennstoff følger uansett aldri med esken.
 
 ## Metode: hvordan tallene er regnet
 
-`byggPakke({ personer, matniva, modus, eskeType })` i `konfigurator.js`
-bygger den faktiske varelinjen for en gitt konfigurasjon – nå med kassevalg
-som fjerde parameter – beregner mva per linje (mat til 15 %, alt annet,
-inkludert tomme vannkanner og esken, til 25 %) og gir `sum` (inkl. mva),
-`netto` (eks. mva) og `mva`. Innkjøpskost er summert per linje fra
-`vare.innkjop`, samme `gjelder()`-logikk som konfiguratoren selv bruker for
-modus, matnivå og eskeType.
+`byggPakke({ husstand, matniva, modus, eskeType })` i `konfigurator.js`
+bygger den faktiske varelinjen for en gitt konfigurasjon – med kassevalg som
+fjerde parameter, og med husstanden delt i voksne, barn og kjæledyr – beregner
+mva per linje (mat til 15 %, alt annet, inkludert tomme vannkanner og esken,
+til 25 %) og gir `sum` (inkl. mva), `netto` (eks. mva) og `mva`. Alle tall
+under er regnet for voksne alene. Innkjøpskost er summert per linje fra
+`innkjop.local.json` – filen kostnadene ble flyttet til da de gikk ut av det
+offentlige repoet – med samme `gjelder()`-logikk som konfiguratoren selv
+bruker for modus, matnivå og eskeType.
 
 **Dekningsgrad i dette dokumentet er alltid:**
 
@@ -118,14 +136,14 @@ hendelsene. Med dagens katalog:
 | krisesikker.no | 225 | nødrasjon |
 | beredskap1.no | 250 | nødrasjon |
 | beredskap24.org | 273 | frysetørket |
-| **Nødboks, komplett tørrmat, plast (4 pers.)** | **445** | vanlig butikkmat |
-| **Nødboks, komplett tørrmat, aluminium (4 pers.)** | **570** | vanlig butikkmat |
+| **Nødboks, komplett tørrmat, plast (4 pers.)** | **469** | vanlig butikkmat |
+| **Nødboks, komplett tørrmat, aluminium (4 pers.)** | **593** | vanlig butikkmat |
 
-(445 kr/person/døgn og 570 kr/person/døgn er lest direkte fra fasiten,
+(469 kr/person/døgn og 593 kr/person/døgn er lest direkte fra kjøringen,
 `komplett / torrmat / plast` og `.../alu`, 4 personer.)
 
-Det er ikke en marginal forskyvning. **445 kr er 63,0 % mer enn beredskap24s
-273 kr** (445 / 273 = 1,630) – markedets desidert dyreste tilbud, en
+Det er ikke en marginal forskyvning. **469 kr er 71,8 % mer enn beredskap24s
+273 kr** (469 / 273 = 1,718) – markedets desidert dyreste tilbud, en
 frysetørket premiumpakke vi tidligere brukte som eneste referanse for hvor
 høyt vi kunne gå. Vi krysser ikke lenger toppen av markedet; vi legger oss
 et sted markedet ikke dekker i det hele tatt. Og det gjelder selv på
@@ -169,18 +187,25 @@ sies like høyt:
 1. **Vi har null datapunkter i nærheten av vår egen pris.** Den gamle
    versjonen av dette dokumentet kunne i det minste vise til beredskap24 som
    et ekte markedspunkt nær vår foreslåtte pris. Det finnes ikke lenger noe
-   slikt ankerpunkt. 445 kr per person per døgn er ikke «nær toppen av
-   markedet» – det er 63 % over toppen, uten en eneste observert konkurrent
+   slikt ankerpunkt. 469 kr per person per døgn er ikke «nær toppen av
+   markedet» – det er 72 % over toppen, uten en eneste observert konkurrent
    som har validert at noen betaler noe i nærheten av det for en boks uten
    frysetørket mat. Det er en påstand om at doblet innhold rettferdiggjør
    mer enn doblet pris, og den påstanden er ikke testet mot en eneste
    kjøpsbeslutning ennå.
-2. **«Vanlig butikkmat» var vår billigste posisjon – den er det ikke lenger
-   i kroner.** At vi nå koster mer per person per døgn enn en frysetørket
-   premiumpakke, selv når vi selger den billigste matkategorien i markedet,
-   er et reelt spenn å forklare til en kunde som sammenligner. Argumentet må
-   bæres av utstyret og tjenesten, ikke av maten – og det er et tyngre
-   argument å holde oppe enn «vi er billigere per kalori».
+2. **«Vanlig butikkmat» var vår billigste posisjon – og etter rebalanseringen
+   av langtidsmaten er den knapt billigere enn vår egen frysetørkede.** For
+   fire personer koster langtidsmat nå 14 422 kr mot tørrmatens 13 124 – en
+   forskjell på 1 298 kr, eller 9,9 %, mot 16 447 kr og 25 % før REAL-andelen
+   ble skåret ned. At vi likevel koster mer per person per døgn enn en
+   frysetørket premiumpakke (469 kr på tørrmat, 515 kr på langtidsmat, mot
+   beredskap24s 273) er et reelt spenn å forklare til en kunde som
+   sammenligner. Men
+   rebalanseringen flytter hvor forklaringen må ligge: avstanden til markedet
+   er nå nesten utelukkende utstyr, ikke mat. Maten utgjør 18 % av
+   innkjøpskosten på tørrmat og 26 % på langtidsmat; resten er utstyr, vann
+   og eske. Argumentet må bæres av utstyret og tjenesten – og det er et
+   tyngre argument å holde oppe enn «vi er billigere per kalori».
 
 **Min vurdering:** avstanden er forsvarlig som posisjon – premiumutstyret og
 den ærlige prisregelen er reelle valg, ikke pyntetriks – men den er ikke
@@ -195,11 +220,11 @@ reversibel prisknapp; premiumsortimentet er ikke det.
 
 ### Enpersonspakken – det strukturelt vanskeligste punktet i hele stigen
 
-9 315 kr for én person (1 331 kr per person per døgn – tre ganger 4-persons
-raten på 445) er ikke bare «dyrt». Det er strukturelt vanskelig, og grunnen
-er tallfestbar: de fleste av premiumproduktene er priset for én husstand,
-ikke én person, og skaleringsregelen deres i `katalog.js` gir **nøyaktig
-samme antall ved én person som ved fire**:
+9 753 kr for én person (1 393 kr per person per døgn – nesten tre ganger
+4-personsraten på 469) er ikke bare «dyrt». Det er strukturelt vanskelig, og
+grunnen er tallfestbar: de fleste av premiumproduktene er priset for én
+husstand, ikke én person, og skaleringsregelen deres i `katalog.js` gir
+**nøyaktig samme antall ved én person som ved fire**:
 
 | Vare | Regel | Antall ved 1 og ved 4 personer | Retailverdi (inkl. mva) |
 | --- | --- | ---: | ---: |
@@ -209,18 +234,25 @@ samme antall ved én person som ved fire**:
 | Leatherman Rev multiverktøy | `ceil(p/8)` | 1 | 799 kr |
 | Lifesystems førstehjelp | `ceil(p/6)` | 1 | 749 kr |
 | Anker PowerCore | `ceil(p/5)` | 1 | 659 kr |
+| Ledlenser ML4 lanterne | `ceil(p/5)` | 1 | 474 kr |
+| Bøttetoalett | `ceil(p/4)` | 1 | 399 kr |
 | CO-varsler | `p ≤ 4 ? 1 : 2` | 1 | 349 kr |
 | Beredskapspermen | fast | 1 | 199 kr |
+| Cederroth blodstopper | `max(2, ceil(p/2))` | 2 | 198 kr |
+| Aquatabs | `ceil(p/4)` | 1 | 149 kr |
+| Hygienepakke | `ceil(p/5)` | 1 | 149 kr |
+| AAA-batterier | `ceil(p/6)` | 1 | 80 kr |
 | Telys | fast | 1 | 60 kr |
 | Fyrstikker | fast | 1 | 13 kr |
-| Petzl-hodelykt | `max(p, 2)` | 2 | 1 148 kr |
-| **Sum, fast uansett 1–4 personer** | | | **7 663 kr** |
+| **Sum, fast uansett 1–4 personer** | | | **7 964 kr** |
 
-(Utledet direkte fra `vare.antall(personer)`-reglene i `katalog.js` og
-enhetsprisene i fasitens varelinjer for 4-personerspakken – samme
-enhetspris gjelder uansett antall, så tallet over er ikke et anslag.)
+(Utledet direkte fra `vare.antall()`-reglene i `katalog.js` og enhetsprisene i
+varelinjene for 4-personerspakken – samme enhetspris gjelder uansett antall,
+så tallet over er ikke et anslag. Petzl-hodelykten sto i denne tabellen i
+forrige versjon og er tatt ut: `max(p, 2)` gir to ved én person og fire ved
+fire, så den er ikke fast.)
 
-`sumVarer` før pakkerabatt for 1-personerspakken er 9 315 / 0,94 ≈ 9 910 kr.
+`sumVarer` før pakkerabatt for 1-personerspakken er 9 753 / 0,94 ≈ 10 376 kr.
 **Rundt 77 % av det beløpet er altså utstyr en firepersonershusstand betaler
 nøyaktig det samme for.** Det er ikke en svikt i regnestykket – det er
 fysikken i et stormkjøkken og en radio: de blir ikke billigere av at færre
@@ -236,10 +268,12 @@ Liten, 299 kr, mot Nødboks Mellom, 598 kr) – ikke utstyret.
    Nå ligger nesten hele fastkost-tabellen over over 100 kr og kan krysses
    av. En kunde som allerede eier et Trangia-kjøkken, en Petzl-hodelykt og
    et multiverktøy – nøyaktig den profilen premiumsortimentet er valgt for
-   å treffe – kan i prinsippet fjerne opp mot 4 000–5 000 kr av den faste
-   utstyrsposten. Det er den mekanismen som faktisk løser problemet for den
-   kunden det gjelder mest: en friluftsperson som skal utstyre seg selv.
-2. **Matpåfyll (897 kr for én person, tørrmat) er det billige inngangsproduktet.** Det er billigere enn både Røde Kors' (1 999 kr) og
+   å treffe – fjerner 3 645 kr bare på de tre (Trangia 1 698, to Petzl-lykter
+   1 148, multiverktøy 799). Alt som kan krysses av i enpersonspakken summerer
+   seg til 7 834 kr fordelt på elleve linjer. Det er den mekanismen som
+   faktisk løser problemet for den kunden det gjelder mest: en friluftsperson
+   som skal utstyre seg selv.
+2. **Matpåfyll (964 kr for én person, tørrmat) er det billige inngangsproduktet.** Det er billigere enn både Røde Kors' (1 999 kr) og
    beredskapslager.nos (1 799 kr) komplette 1-personspakker, og det krever
    ingen investering i utstyr i det hele tatt.
 3. **Er det nok? Ikke alene.** Avhukingen løser problemet bare for kunder som
@@ -263,7 +297,7 @@ Liten, 299 kr, mot Nødboks Mellom, 598 kr) – ikke utstyret.
 ### Én faktor, ett unntak
 
 `INNKJOPSFAKTOR = 0.6` gjelder hele katalogen. Kontrollert mot varelinjene
-for komplett tørrmat, 4 personer, plast (fasitens detaljerte linjer):
+for komplett tørrmat, 4 personer, plast (de detaljerte linjene under):
 
 | Vare (utvalg) | Enhetspris | Innkjøp/enhet | Faktor |
 | --- | ---: | ---: | ---: |
@@ -285,19 +319,19 @@ gjør det.
 | Vare | Antall | Enhetspris | Sum | Innkjøp/enhet |
 | --- | ---: | ---: | ---: | ---: |
 | Nødboks Mellom – to kasser | 1 | 598 | 598 | 358,80 |
-| Wasa Husman knekkebrød, 520 g | 5 | 30 | 150 | 17,95 |
+| Wasa Husman knekkebrød, 520 g | 6 | 30 | 180 | 17,95 |
 | Stabburet Leverpostei Original, 200 g | 8 | 25 | 200 | 14,95 |
-| Mills Kaviar, 185 g | 3 | 37 | 111 | 22,30 |
+| Mills Kaviar, 185 g | 4 | 37 | 148 | 22,30 |
 | Stabburet Makrell i tomat, 170 g | 4 | 35 | 140 | 20,95 |
 | Nugatti Original, 350 g | 2 | 28 | 56 | 16,75 |
 | Freia Melkesjokolade, 200 g | 4 | 30 | 120 | 17,95 |
 | Sætre Mariekjeks, 350 g | 3 | 32 | 96 | 19,15 |
-| Peanøtter, 500 g | 2 | 40 | 80 | 24,20 |
+| Peanøtter, 500 g | 3 | 40 | 120 | 24,20 |
 | Rosiner, 500 g | 2 | 55 | 110 | 33,30 |
-| O'boy sjokoladedrikk, 450 g | 1 | 55 | 55 | 32,95 |
+| O'boy sjokoladedrikk, 450 g | 2 | 55 | 110 | 32,95 |
 | Fruktcocktail i sukkerlake, 820 g | 1 | 31 | 31 | 18,70 |
 | Axa Bjørn Lettkokte Havregryn, 1,1 kg | 2 | 27 | 54 | 16,15 |
-| Trondhjems middagshermetikk, fire sorter | 15 | 67 | 1 005 | 40,40 |
+| Trondhjems middagshermetikk, fire sorter | 17 | 67 | 1 139 | 40,40 |
 | Vanndunk 10 liter, gjennomsiktig | 8 | 60 | 480 | 35,95 |
 | Aquatabs vannrensetabletter, 50 stk | 1 | 149 | 149 | 89,40 |
 | Katadyn BeFree 1 liter vannfilter | 1 | 799 | 799 | 479,40 |
@@ -314,104 +348,145 @@ gjør det.
 | Lifesystems Waterproof førstehjelpssett | 1 | 749 | 749 | 449,40 |
 | Cederroth 4-in-1 blodstopper | 2 | 99 | 198 | 59,25 |
 | Hygienepakke | 1 | 149 | 149 | 89,40 |
+| Bøttetoalett 22 liter med sete og lokk | 1 | 399 | 399 | 239,40 |
 | Leatherman Rev multiverktøy | 1 | 799 | 799 | 479,40 |
 | Beredskapspermen | 1 | 199 | 199 | 49,00 |
 
-Sum varer før pakkerabatt: 13 267 kr. Etter 6 % pakkerabatt (`modus.rabatt`
-for komplett-modus): **12 471 kr** – som er nøyaktig fasitens tall. Netto
-eks. mva: 10 121 kr. Innkjøpskost: 7 891 kr. Dekningsgrad: **22 %.**
+Sum varer før pakkerabatt: 13 962 kr. Etter 6 % pakkerabatt (`modus.rabatt`
+for komplett-modus): **13 124 kr** – som er nøyaktig kjøringens tall. Netto
+eks. mva: 10 663 kr. Innkjøpskost: 8 309 kr. Dekningsgrad: **22,1 %.**
 
 Denne tabellen er selve grunnlaget for både momsoppdelingen i punkt 6 og
 følsomhetsanalysen i punkt 3 – begge er utledet fra den, ikke fra separate
 anslag.
 
+### Hva langtidsmat bytter ut
+
+Langtidspakken er nøyaktig den samme på alle utstyrs- og vannlinjer. Bare tre
+matlinjer skiller de to nivåene, og det er der hele prisforskjellen ligger
+(4 personer, plast):
+
+| Vare | Tørrmat | Langtidsmat | Enhetspris | Innkjøp/enhet |
+| --- | ---: | ---: | ---: | ---: |
+| Axa Bjørn Lettkokte Havregryn, 1,1 kg | 2 (54 kr) | 4 (108 kr) | 27 | 16,15 |
+| Trondhjems middagshermetikk, fire sorter | 17 (1 139 kr) | 6 (402 kr) | 67 | 40,40 |
+| REAL Field Meal, 700 kcal | 0 | 16 (2 064 kr) | 129 | 77,40 |
+
+Matlinjene går dermed fra 2 504 kr til 3 885 kr, og sum varer fra 13 962 kr
+til 15 343 kr. Rollefordelingen er ny: REAL dekker fire av sju middager, ikke
+alle måltidene, havregrøt er frokosten alle sju døgnene, og hermetikken tar de
+tre middagene REAL ikke tar.
+
+Det er den endringen som gjør de gamle langtidstallene i dette dokumentet
+foreldede, og den er verdt å tallfeste. Før rebalanseringen bar REAL 78 % av
+matkronene i firepersonspakken (72–80 % over hele stigen) mot 34 % av
+kaloriene; nå bærer den 53 % av kronene mot 14 % av kaloriene. Komplett
+langtidsmat i plast falt fra 16 447 til 14 422 kr for fire personer, fra
+10 524 til 10 050 for én og fra 30 336 til 26 286 for åtte. Samtidig steg
+energidekningen (111 → 122 % ved fire personer, 104–142 % → 116–156 % over
+hele stigen), og antall døgn maten rekker uten brennstoff gikk fra fire–fem
+til seks–sju for alle husstander på to og oppover, fordi havregryn og
+hermetikk kan spises kalde og REAL ikke kan. Kunden får altså mer mat og mer
+robust mat for færre kroner; det er marginen i prosent som holder seg, ikke
+kronebeløpet. Tørrmatnivået er bit for bit uendret.
+
 ---
 
 ## 3. Prispunkter
 
-Alle tabellene under er transkribert direkte fra `/tmp/nodboks/fasit.md`.
-Ingen av dem er beregnet på nytt.
+Alle tabellene under er transkribert direkte fra kjøringen av `byggPakke()`.
+Ingen av dem er beregnet på nytt. Dekningsgraden står med én desimal, fordi
+den ellers hopper mellom 22 og 23 % på ren avrunding og ser ut som en trapp
+den ikke er.
 
 ### Komplett pakke, tørrmat – plast
 
 | Personer | Pris inkl. mva | Netto eks. mva | Innkjøp eks. mva | Dekningsgrad | kr/person/døgn |
 | ---: | ---: | ---: | ---: | ---: | ---: |
-| 1 | 9 315 | 7 501 | 5 876 | 22 % | 1 331 |
-| 2 | 9 909 | 8 008 | 6 255 | 22 % | 708 |
-| 3 | 11 435 | 9 268 | 7 230 | 22 % | 545 |
-| 4 | 12 471 | 10 121 | 7 891 | 22 % | 445 |
-| 5 | 15 855 | 12 866 | 10 051 | 22 % | 453 |
-| 6 | 18 578 | 15 083 | 11 790 | 22 % | 442 |
-| 7 | 21 338 | 17 323 | 13 552 | 22 % | 435 |
-| 8 | 22 430 | 18 225 | 14 250 | 22 % | 401 |
+| 1 | 9 753 | 7 856 | 6 155 | 21,6 % | 1 393 |
+| 2 | 10 385 | 8 395 | 6 559 | 21,9 % | 742 |
+| 3 | 11 901 | 9 647 | 7 528 | 22,0 % | 567 |
+| 4 | 13 124 | 10 663 | 8 309 | 22,1 % | 469 |
+| 5 | 16 836 | 13 667 | 10 678 | 21,9 % | 481 |
+| 6 | 19 544 | 15 871 | 12 407 | 21,8 % | 465 |
+| 7 | 22 352 | 18 153 | 14 200 | 21,8 % | 456 |
+| 8 | 23 627 | 19 214 | 15 014 | 21,9 % | 422 |
 
 ### Komplett pakke, tørrmat – aluminium
 
 | Personer | Pris inkl. mva | Netto eks. mva | Innkjøp eks. mva | Dekningsgrad | kr/person/døgn |
 | ---: | ---: | ---: | ---: | ---: | ---: |
-| 1 | 12 793 | 10 283 | 8 096 | 21 % | 1 828 |
-| 2 | 13 387 | 10 790 | 8 475 | 21 % | 956 |
-| 3 | 14 913 | 12 050 | 9 450 | 22 % | 710 |
-| 4 | 15 949 | 12 904 | 10 111 | 22 % | 570 |
-| 5 | 19 333 | 15 649 | 12 272 | 22 % | 552 |
-| 6 | 22 056 | 17 866 | 14 010 | 22 % | 525 |
-| 7 | 24 816 | 20 106 | 15 772 | 22 % | 506 |
-| 8 | 25 908 | 21 008 | 16 470 | 22 % | 463 |
+| 1 | 13 231 | 10 638 | 8 375 | 21,3 % | 1 890 |
+| 2 | 13 863 | 11 178 | 8 779 | 21,5 % | 990 |
+| 3 | 15 379 | 12 429 | 9 748 | 21,6 % | 732 |
+| 4 | 16 602 | 13 445 | 10 529 | 21,7 % | 593 |
+| 5 | 20 314 | 16 450 | 12 898 | 21,6 % | 580 |
+| 6 | 23 022 | 18 654 | 14 627 | 21,6 % | 548 |
+| 7 | 25 830 | 20 935 | 16 420 | 21,6 % | 527 |
+| 8 | 27 105 | 21 997 | 17 234 | 21,7 % | 484 |
 
 ### Komplett pakke, langtidsmat – plast
 
 | Personer | Pris inkl. mva | Netto eks. mva | Innkjøp eks. mva | Dekningsgrad | kr/person/døgn |
 | ---: | ---: | ---: | ---: | ---: | ---: |
-| 1 | 10 149 | 8 226 | 6 407 | 22 % | 1 450 |
-| 2 | 11 602 | 9 480 | 7 334 | 23 % | 829 |
-| 3 | 13 962 | 11 465 | 8 840 | 23 % | 665 |
-| 4 | 15 920 | 13 120 | 10 089 | 23 % | 569 |
-| 5 | 20 163 | 16 612 | 12 796 | 23 % | 576 |
-| 6 | 23 720 | 19 555 | 15 066 | 23 % | 565 |
-| 7 | 27 339 | 22 541 | 17 375 | 23 % | 558 |
-| 8 | 29 328 | 24 224 | 18 644 | 23 % | 524 |
+| 1 | 10 050 | 8 114 | 6 344 | 21,8 % | 1 436 |
+| 2 | 11 003 | 8 933 | 6 952 | 22,2 % | 786 |
+| 3 | 12 878 | 10 496 | 8 149 | 22,4 % | 613 |
+| 4 | 14 422 | 11 792 | 9 135 | 22,5 % | 515 |
+| 5 | 18 494 | 15 109 | 11 733 | 22,3 % | 528 |
+| 6 | 21 522 | 17 591 | 13 667 | 22,3 % | 512 |
+| 7 | 24 690 | 20 186 | 15 688 | 22,3 % | 504 |
+| 8 | 26 286 | 21 526 | 16 708 | 22,4 % | 469 |
 
 ### Komplett pakke, langtidsmat – aluminium
 
 | Personer | Pris inkl. mva | Netto eks. mva | Innkjøp eks. mva | Dekningsgrad | kr/person/døgn |
 | ---: | ---: | ---: | ---: | ---: | ---: |
-| 1 | 13 627 | 11 009 | 8 627 | 22 % | 1 947 |
-| 2 | 15 080 | 12 262 | 9 554 | 22 % | 1 077 |
-| 3 | 17 440 | 14 247 | 11 060 | 22 % | 830 |
-| 4 | 19 398 | 15 903 | 12 309 | 23 % | 693 |
-| 5 | 23 641 | 19 395 | 15 016 | 23 % | 675 |
-| 6 | 27 198 | 22 337 | 17 286 | 23 % | 648 |
-| 7 | 30 817 | 25 324 | 19 595 | 23 % | 629 |
-| 8 | 32 806 | 27 006 | 20 864 | 23 % | 586 |
+| 1 | 13 528 | 10 896 | 8 564 | 21,4 % | 1 933 |
+| 2 | 14 481 | 11 715 | 9 172 | 21,7 % | 1 034 |
+| 3 | 16 356 | 13 279 | 10 369 | 21,9 % | 779 |
+| 4 | 17 900 | 14 574 | 11 355 | 22,1 % | 639 |
+| 5 | 21 972 | 17 891 | 13 953 | 22,0 % | 628 |
+| 6 | 25 000 | 20 374 | 15 887 | 22,0 % | 595 |
+| 7 | 28 168 | 22 968 | 17 908 | 22,0 % | 575 |
+| 8 | 29 764 | 24 309 | 18 927 | 22,1 % | 532 |
 
 ### Matpåfyll, tørrmat
 
 | Personer | Pris inkl. mva | Netto eks. mva | Innkjøp eks. mva | Dekningsgrad | kr/person/døgn |
 | ---: | ---: | ---: | ---: | ---: | ---: |
-| 1 | 897 | 770 | 539 | 30 % | 128 |
-| 2 | 1 379 | 1 189 | 829 | 30 % | 99 |
-| 3 | 1 979 | 1 711 | 1 190 | 30 % | 94 |
-| 4 | 2 357 | 2 039 | 1 417 | 30 % | 84 |
-| 5 | 3 087 | 2 664 | 1 856 | 30 % | 88 |
-| 6 | 3 679 | 3 178 | 2 212 | 30 % | 88 |
-| 7 | 4 164 | 3 600 | 2 504 | 30 % | 85 |
-| 8 | 4 602 | 3 981 | 2 767 | 30 % | 82 |
+| 1 | 964 | 828 | 580 | 30,0 % | 138 |
+| 2 | 1 486 | 1 282 | 894 | 30,3 % | 106 |
+| 3 | 2 076 | 1 795 | 1 248 | 30,5 % | 99 |
+| 4 | 2 653 | 2 297 | 1 595 | 30,5 % | 95 |
+| 5 | 3 333 | 2 878 | 2 004 | 30,4 % | 95 |
+| 6 | 3 908 | 3 378 | 2 350 | 30,4 % | 93 |
+| 7 | 4 445 | 3 844 | 2 673 | 30,5 % | 91 |
+| 8 | 5 077 | 4 394 | 3 053 | 30,5 % | 91 |
 
 ### Matpåfyll, langtidsmat
 
 | Personer | Pris inkl. mva | Netto eks. mva | Innkjøp eks. mva | Dekningsgrad | kr/person/døgn |
 | ---: | ---: | ---: | ---: | ---: | ---: |
-| 1 | 1 784 | 1 541 | 1 070 | 31 % | 255 |
-| 2 | 3 180 | 2 755 | 1 907 | 31 % | 227 |
-| 3 | 4 667 | 4 048 | 2 800 | 31 % | 222 |
-| 4 | 6 026 | 5 230 | 3 614 | 31 % | 215 |
-| 5 | 7 670 | 6 649 | 4 601 | 31 % | 219 |
-| 6 | 9 149 | 7 935 | 5 488 | 31 % | 218 |
-| 7 | 10 548 | 9 151 | 6 327 | 31 % | 215 |
-| 8 | 11 940 | 10 362 | 7 162 | 31 % | 213 |
+| 1 | 1 279 | 1 102 | 768 | 30,3 % | 183 |
+| 2 | 2 143 | 1 853 | 1 287 | 30,6 % | 153 |
+| 3 | 3 115 | 2 698 | 1 870 | 30,7 % | 148 |
+| 4 | 4 034 | 3 497 | 2 422 | 30,8 % | 144 |
+| 5 | 5 096 | 4 411 | 3 059 | 30,7 % | 146 |
+| 6 | 6 013 | 5 208 | 3 610 | 30,7 % | 143 |
+| 7 | 6 932 | 6 007 | 4 161 | 30,7 % | 141 |
+| 8 | 7 906 | 6 854 | 4 746 | 30,8 % | 141 |
 
 Matpåfyll har ingen kasse i det hele tatt (mat sendes i kartong, ikke
 Nødboks-kassene), så kassevalget gjelder bare komplett-pakken.
+
+**Det er langtidspåfyllet rebalanseringen treffer hardest.** For fire personer
+falt det fra 6 188 til 4 034 kr – 35 % bort – mens den komplette
+langtidspakken falt 12 %, fra 16 447 til 14 422 kr. Det er som forventet:
+påfyllet er ren mat, og det var i maten REAL utgjorde nesten fire femdeler av
+kostnaden. Dekningsgraden er upåvirket (den følger av 0,6-faktoren, ikke av
+utvalget), men kronebeløpet en langtidskunde legger igjen hvert femte år er
+nå vesentlig mindre. Se punkt 5.
 
 ### Kassevalget som prisinstrument
 
@@ -425,7 +500,7 @@ påfallende presis:
 | Eskepris (retail, inkl. mva) | 299–897 kr (1–8 pers.) | 3 999–4 597 kr | **eksakt 3 700 kr, ved hver husstandsstørrelse** |
 | Effekt på sluttpris (etter 6 % pakkerabatt) | – | – | **eksakt 3 478 kr, ved hver husstandsstørrelse og begge matnivåer** |
 
-(Verifisert linje for linje mot begge fasit-tabellene: differansen mellom
+(Verifisert linje for linje mot begge tabellene over: differansen mellom
 plast- og aluminiumsraden er 3 478 kr på alle 16 kombinasjoner av
 1–8 personer × tørrmat/langtidsmat. Den er konstant fordi Zarges-kassen
 alltid erstatter plastkassen(e) til utstyret med en fast prisdifferanse på
@@ -437,9 +512,9 @@ nøyaktig 3 478 kr mer for en kasse som tåler å stå ute, på et biltak eller 
 en båt, og som er noe man faktisk bruker – ikke for mer eller annet innhold.
 Det er også et oppsalg med tynnere prosentvis margin enn resten av
 sortimentet (samme 0,6-faktor på en dyrere kasse gir lavere dekningsgrad i
-prosent, selv om kronebeløpet er høyt – se DG-kolonnen, som er 1
-prosentpoeng lavere for aluminium ved 1–2 personer). Det er ikke et problem:
-det er en kunde som bevisst kjøper et bruksobjekt, ikke beredskap, og betaler
+prosent, selv om kronebeløpet er høyt – se DG-kolonnen, som ligger 0,2–0,5
+prosentpoeng lavere for aluminium på hver husstandsstørrelse). Det er ikke et
+problem: det er en kunde som bevisst kjøper et bruksobjekt, ikke beredskap, og betaler
 for det – nøyaktig den samme logikken som resten av premiumsortimentet, bare
 enda tydeligere fordi kunden selv trykker på knappen.
 
@@ -453,40 +528,40 @@ regnet om for lavere faktorer, ved å skalere alt annet enn beredskapspermen
 utledet fra firepersonspakkens egne tall i punkt 2 og 3, ikke fra en ny
 modellkjøring:
 
-**Komplett tørrmat, 4 personer, plast** (netto fast på 10 121 kr):
+**Komplett tørrmat, 4 personer, plast** (netto fast på 10 663 kr):
 
 | Innkjøpsfaktor | Innkjøpskost | Dekningsgrad |
 | --- | ---: | ---: |
-| 0,60 (dagens anslag) | 7 891 kr | 22,0 % |
-| 0,55 | 7 238 kr | 28,5 % |
-| 0,50 | 6 584 kr | 34,9 % |
-| 0,45 | 5 931 kr | 41,4 % |
+| 0,60 (dagens anslag) | 8 309 kr | 22,1 % |
+| 0,55 | 7 621 kr | 28,5 % |
+| 0,50 | 6 932 kr | 35,0 % |
+| 0,45 | 6 244 kr | 41,4 % |
 
-**Komplett langtidsmat, 4 personer, plast** (netto fast på 13 120 kr):
+**Komplett langtidsmat, 4 personer, plast** (netto fast på 11 792 kr):
 
 | Innkjøpsfaktor | Innkjøpskost | Dekningsgrad |
 | --- | ---: | ---: |
-| 0,60 (dagens anslag) | 10 089 kr | 23,1 % |
-| 0,55 | 9 253 kr | 29,5 % |
-| 0,50 | 8 416 kr | 35,9 % |
-| 0,45 | 7 579 kr | 42,2 % |
+| 0,60 (dagens anslag) | 9 135 kr | 22,5 % |
+| 0,55 | 8 378 kr | 29,0 % |
+| 0,50 | 7 621 kr | 35,4 % |
+| 0,45 | 6 864 kr | 41,8 % |
 
-**Matpåfyll, tørrmat, 4 personer** (netto fast på 2 039 kr, ingen fast
+**Matpåfyll, tørrmat, 4 personer** (netto fast på 2 297 kr, ingen fast
 realkost å holde utenfor – hele linjen er mat og aquatabs, ikke egne
 trykksaker):
 
 | Innkjøpsfaktor | Innkjøpskost | Dekningsgrad |
 | --- | ---: | ---: |
-| 0,60 (dagens anslag) | 1 417 kr | 30,5 % |
-| 0,55 | 1 299 kr | 36,3 % |
-| 0,50 | 1 181 kr | 42,1 % |
-| 0,45 | 1 063 kr | 47,9 % |
+| 0,60 (dagens anslag) | 1 595 kr | 30,5 % |
+| 0,55 | 1 462 kr | 36,3 % |
+| 0,50 | 1 329 kr | 42,1 % |
+| 0,45 | 1 197 kr | 47,9 % |
 
 Selv i et scenario der innkjøpsanslaget er for optimistisk (0,60 blir 0,70,
 altså verre enn i dag), holder komplett-pakken seg klart over den 12 %
 dekningsgraden konfiguratorens egen kildekommentar bruker som eksempel på
 «ikke en forretning»: ved 0,70 blir dekningsgraden på komplett tørrmat,
-4 personer, (10 121 − (7 842,3 × 0,70/0,6 + 49)) / 10 121 ≈ **9,1 %** – tynt,
+4 personer, (10 663 − (8 259,9 × 0,70/0,6 + 49)) / 10 663 ≈ **9,2 %** – tynt,
 men ikke i nærheten av den katastrofen `docs/innkjopsliste.md` sin egen,
 foreldede tabell viser (3 % ved 0,70, regnet på de gamle, lavere prisene).
 **`docs/innkjopsliste.md` sin egen følsomhetstabell er ikke oppdatert etter
@@ -507,9 +582,10 @@ ved 8, fordi vi «står mest alene i markedet» ved store husstander. Den
 trappen finnes ikke lenger. Under «alt til butikkpris»-regelen er
 dekningsgraden en ren konsekvens av at pris = 1 × butikkpris og innkjøp =
 0,6 × butikkpris for nesten hver eneste linje – og siden det forholdet er
-likt for alle husstandsstørrelser, blir dekningsgraden det også: **22 % ved
-både 1 og 8 personer på tørrmat, 22–23 % på langtidsmat**, se tabellene i
-punkt 3. Det er en forenkling, ikke en feil – men det betyr at vi ikke
+likt for alle husstandsstørrelser, blir dekningsgraden det også: **21,6 % ved
+1 person og 21,9 % ved 8 på tørrmat, og 21,8–22,5 % over hele stigen på
+langtidsmat**, se tabellene i punkt 3. Det er en forenkling, ikke en feil –
+men det betyr at vi ikke
 lenger bevisst henter mer margin der konkurransen er svakest (6–8 personer,
 der ingen konkurrent i det hele tatt dekker husstanden). Det er verdt å
 merke seg som en åpen strategisk avveining, ikke noe jeg endrer her: pengene
@@ -528,19 +604,19 @@ komplett tørrmat, plast:
 
 | Fra → til | Marginalpris | Hva som driver den |
 | --- | ---: | --- |
-| 1 → 2 | 594 kr | Kun mat, vann og prisforskjellen mellom lik eske. |
-| 2 → 3 | 1 526 kr | Eskebytte (Nødboks Liten → Mellom ved 3). |
-| 3 → 4 | 1 036 kr | Fortsatt innenfor samme utstyrssett. |
-| **4 → 5** | **3 384 kr** | **Kokeapparat, CO-varsler og aquatabs krysser alle `ceil(p/4)`-terskelen samtidig** – dette er den ene terskelen som ikke ble spredt, fordi de tre varene fortsatt deler samme divisor. |
-| 5 → 6 | 2 723 kr | Campinglykt (Ledlenser), powerbank og hygienepakke krysser `ceil(p/5)`. Eske til Nødboks Stor. |
-| 6 → 7 | 2 760 kr | Vannfilter (Katadyn), batterier og førstehjelp krysser `ceil(p/6)`. |
-| 7 → 8 | 1 092 kr | Ingen nye terskler krysses (multiverktøyets `ceil(p/8)` krysser først ved 9). |
+| 1 → 2 | 632 kr | Kun mat, vann og nødtepper – samme eske (Nødboks Liten) tar begge. |
+| 2 → 3 | 1 516 kr | Eskebytte (Nødboks Liten → Mellom ved 3), pluss hodelykt og nødteppe per hode. |
+| 3 → 4 | 1 223 kr | Fortsatt innenfor samme utstyrssett. |
+| **4 → 5** | **3 712 kr** | **Kokeapparat, CO-varsler, aquatabs og bøttetoalett krysser alle `ceil(p/4)`-terskelen samtidig** – dette er den ene terskelen som ikke ble spredt, fordi de fire varene fortsatt deler samme divisor. |
+| 5 → 6 | 2 708 kr | Campinglykt (Ledlenser), powerbank og hygienepakke krysser `ceil(p/5)`. Eske til Nødboks Stor. |
+| 6 → 7 | 2 808 kr | Vannfilter (Katadyn), batterier og førstehjelp krysser `ceil(p/6)`. |
+| 7 → 8 | 1 275 kr | Ingen nye terskler krysses (multiverktøyets `ceil(p/8)` krysser først ved 9). |
 
-Snittet over de sju trinnene er **1 874 kr** – fortsatt høyere enn
+Snittet over de sju trinnene er **1 982 kr** – fortsatt høyere enn
 Norberedts flate 1 000 kr, og fortsatt trappet, ikke flatt. Men i motsetning
 til før er ikke lenger ett eneste trinn (4 → 5) desidert størst: 5 → 6 og
-6 → 7 er nå nesten like store (2 723 og 2 760 kr), fordi kokeapparat,
-CO-varsler og aquatabs er de eneste varene som fortsatt deler
+6 → 7 er nå nesten like store (2 708 og 2 808 kr), fordi kokeapparat,
+CO-varsler, aquatabs og bøttetoalett er de eneste varene som fortsatt deler
 `ceil(p/4)`-terskelen, mens campinglykt/powerbank/hygienepakke (`ceil(p/5)`)
 og vannfilter/batterier/førstehjelp (`ceil(p/6)`) nå hopper hver for seg ved
 6 og 7. Det er spredningen oppdraget ba om, synlig direkte i tallene – ikke
@@ -548,10 +624,10 @@ bare i koden.
 
 ### Hvor grensen går
 
-Ved 8 personer er prisen 22 430 / 8 = **2 804 kr per person**, mot 9 315 kr
-ved 1 person – en nedgang på **69,9 %**. Innkjøpskosten per person faller
-nesten identisk: fra 5 876 kr (1 person) til 14 250 / 8 = 1 781 kr (8
-personer), en nedgang på **69,7 %**. De to prosentene ligger praktisk talt
+Ved 8 personer er prisen 23 627 / 8 = **2 953 kr per person**, mot 9 753 kr
+ved 1 person – en nedgang på **69,7 %**. Innkjøpskosten per person faller
+nesten identisk: fra 6 155 kr (1 person) til 15 014 / 8 = 1 877 kr (8
+personer), en nedgang på **69,5 %**. De to prosentene ligger praktisk talt
 oppå hverandre – det er selve konsekvensen av at dekningsgraden er flat
 (punkt 3) i stedet for stigende: vi gir i dag videre nesten hele
 stordriftsfordelen til kunden, i stedet for å beholde en økende andel av den
@@ -565,8 +641,9 @@ margin akkurat der vi står uten konkurranse.
 ## 5. Abonnementet
 
 Fortsatt forretningsmodellen, ikke en tilleggstjeneste – tolv av tolv
-konkurrenter mangler den. Men tallene under er lavere enn forrige versjon av
-dette dokumentet hevdet, og grunnen er verdt å forklare før tallene selv:
+konkurrenter mangler den. Men tallene under er lavere enn de eldste
+versjonene av dette dokumentet hevdet, og grunnen er verdt å forklare før
+tallene selv:
 **den forrige refill-marginen (30–38 %) var en bevisst konstruert buffer mot
 abonnementsrabatten**, satt høyere enn komplett-pakkens dekningsgrad med
 vilje. Under «alt til butikkpris»-regelen er ikke det lenger en bevisst
@@ -575,84 +652,104 @@ vareutvalget (nesten bare mat, lav mva-sats, se punkt 6), ikke et mål vi har
 satt for å tåle rabatten. Bufferen er dermed tynnere enn før den gang den var
 et bevisst designvalg.
 
-### Tre nivåer, samme jobb som før
+### To nivåer, og ett som ble tatt bort
 
-Katalogens tre `PAFYLL`-nivåer er uendret: gratis varsel (0 % rabatt, hver
-365. dag), årlig påfyll (10 %, hver 365. dag) og halvårlig påfyll (15 %,
-hver 182. dag). Rollene deres er også uendret – gratis varsel er
-tillitspunktet, årlig er hovedproduktet, halvårlig er et nisjeprodukt.
+Katalogen har nå to `PAFYLL`-nivåer: gratis varsel (0 % rabatt, hver 365. dag)
+og årlig påfyll (10 %, hver 365. dag). Rollene er uendret – gratis varsel er
+tillitspunktet, årlig er hovedproduktet. Det halvårlige nivået (15 %, hver
+182. dag) er fjernet fra katalogen: det sendte hele matpakken på nytt hver
+sjette måned til mat med ett års holdbarhet, og det er å selge folk mat de
+ikke trenger. Det legitime halvårsbehovet – meieri og annet med kort dato –
+hører hjemme som en egen liten ferskmodul, ikke som en dobbel forsendelse av
+alt. Se `docs/sortiment.md`.
 
 ### Regnestykket: hva rabatten faktisk koster oss i dag
 
-For en firepersoners tørrmat-påfyll (2 357 kr, 30 % dekningsgrad før
-rabatt, netto 2 039 kr, innkjøp 1 417 kr – alle fra fasiten):
+For en firepersoners tørrmat-påfyll (2 653 kr, 30,5 % dekningsgrad før
+rabatt, netto 2 297 kr, innkjøp 1 595 kr – alle fra kjøringen):
 
 | Abonnement | Rabatt | Kundepris | Vår netto etter rabatt | Innkjøp | Dekningsgrad etter rabatt |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| Ingen (engangskjøp) | 0 % | 2 357 kr | 2 039 kr | 1 417 kr | 30,5 % |
-| Årlig påfyll | 10 % | 2 121 kr | 1 803 kr | 1 417 kr | 21,4 % |
-| Halvårlig påfyll | 15 % | 2 003 kr | 1 685 kr | 1 417 kr | 15,9 % |
+| Ingen (engangskjøp) | 0 % | 2 653 kr | 2 297 kr | 1 595 kr | 30,5 % |
+| Årlig påfyll | 10 % | 2 388 kr | 2 067 kr | 1 595 kr | 22,8 % |
 
 (Rabatten trekkes fra etter at mva er beregnet på full pris, akkurat som
 før – den går fra vår netto margin, ikke fra avgiften.)
 
-**Det er en reell endring fra forrige versjon å merke seg:** årlig påfyll
-holder seg fortsatt over 20 % (21,4 %), men halvårlig faller nå til
-**15,9 %** – under den 20 %-grensa som tidligere var selve begrunnelsen for
-å prise matpåfyllet med en ekstra buffer. Halvårlig-nivået er fortsatt et
-lite volumprodukt (nisje for husstander med kortdatert meieri i samme
-forsendelse), så det haster ikke, men det er ikke lenger en marginmessig
-selvfølge slik det var da matpåfyllet bevisst var priset til 37,5 %. Verdt
-å ta opp igjen når volumet på halvårlig-nivået faktisk blir stort nok til å
-telle.
+**Bekymringen forrige versjon reiste er løst, men ikke av prisarbeid:** årlig
+påfyll holder seg godt over 20 % (22,8 %), og det halvårlige nivået, som falt
+til 15,9 % etter rabatt – under den 20 %-grensa som tidligere var selve
+begrunnelsen for å prise matpåfyllet med en ekstra buffer – finnes ikke lenger.
+Det ble fjernet fordi det solgte folk mat de ikke trengte; at marginproblemet
+forsvant i samme slengen er en bivirkning, ikke begrunnelsen. Kommer et
+halvårsprodukt tilbake som en egen ferskmodul, må marginen på den regnes for
+seg: den arver ikke matpåfyllets tall.
 
 ### Livstidsverdi – fortsatt argumentet for abonnement, men et mindre tall
 
 Regnet på en firepersoners tørrmatkunde: boksprofitt ved kjøp (netto minus
-innkjøp på komplett-pakken) er **10 121 − 7 891 = 2 230 kr**. Refillprofitt
-per syklus, årlig nivå: **1 803 − 1 417 = 386 kr**.
+innkjøp på komplett-pakken) er **10 663 − 8 309 = 2 354 kr**. Refillprofitt
+per syklus, årlig nivå: **2 067 − 1 595 = 472 kr**.
 
 | Kundetype | Profitt ved kjøp | Kumulativ profitt, etter 5 år | Kumulativ profitt, etter 10 år |
 | --- | ---: | ---: | ---: |
-| Engangskunde (kjøper boksen, kommer aldri tilbake) | 2 230 kr | 2 230 kr | 2 230 kr |
-| Årlig abonnent (boks + årlig påfyll, 5/10 sykluser) | 2 230 kr | 4 160 kr | 6 090 kr |
-| Annethvert år (boks + påfyll hvert annet år, se under) | 2 230 kr | 3 238 kr | 4 750 kr |
+| Engangskunde (kjøper boksen, kommer aldri tilbake) | 2 354 kr | 2 354 kr | 2 354 kr |
+| Årlig abonnent (boks + årlig påfyll, 5/10 sykluser) | 2 354 kr | 4 714 kr | 7 074 kr |
+| Annethvert år (boks + påfyll hvert annet år, 2/5 sykluser, se under) | 2 354 kr | 3 528 kr | 5 288 kr |
 
-En årlig abonnent er verdt **2,7 ganger** en engangskunde etter ti år
-(6 090 / 2 230) – ikke 4,6 ganger, som forrige versjon av dette dokumentet
-hevdet. Forskjellen er ikke en regnefeil noe sted; den er den direkte
-konsekvensen av at refillmarginen ikke lenger er kunstig oppblåst som en
-rabattbuffer. Konklusjonen står likevel: abonnenten er fortsatt verdt
-nesten tre ganger så mye, og differansen vokser hvert år etter det, siden
-engangskunden flater ut for alltid mens abonnenten legger til 386 kr netto
-per år.
+En årlig abonnent er verdt **3,0 ganger** en engangskunde etter ti år
+(7 074 / 2 354) – ikke 4,6 ganger, som den eldste versjonen av dette
+dokumentet hevdet, og litt bedre enn de 2,7 gangene forrige avstemming fant.
+Forskjellen er ikke en regnefeil noe sted; den følger av at matpåfyllet har
+vokst mer enn boksen etter at matmengdene ble justert opp, mens
+refillmarginen fortsatt ikke er kunstig oppblåst som en rabattbuffer.
+Konklusjonen står: abonnenten er verdt tre ganger så mye, og differansen
+vokser hvert år etter det, siden engangskunden flater ut for alltid mens
+abonnenten legger til 472 kr netto per år.
 
 **«Annethvert år»-nivået finnes fortsatt ikke i `PAFYLL`** – tallet over
 (5 % rabatt i stedet for 10 %, refill hvert annet år) er fortsatt et forslag,
 ikke et produkt, av samme grunn som før: en sjeldnere kunde er en mindre
-forpliktet kunde. **Anbefaling uendret:** legg til et fjerde `PAFYLL`-nivå.
-Selv ved halv frekvens og halv rabatt er kunden 2,1 ganger mer verdt enn en
+forpliktet kunde. **Anbefaling uendret:** legg til et tredje `PAFYLL`-nivå.
+Selv ved halv frekvens og halv rabatt er kunden 2,2 ganger mer verdt enn en
 engangskunde over ti år.
 
 ### Langtidsmat: fortsatt bare det gratis varselet, av samme grunn
 
-Langtidsmat har fem års holdbarhet mot tørrmatens ett år, og et abonnement
-som fornyer seg årlig ville betydd å kaste mat som ikke er i nærheten av å gå
-ut. Regnet med dagens tall: boksprofitt på komplett langtidsmat, 4 personer,
-plast, er **13 120 − 10 089 = 3 031 kr**. Refillprofitt uten rabatt (siden vi
-ikke selger et betalt abonnement på langtidsmat) er **5 230 − 3 614 =
-1 616 kr** per femårssyklus.
+Langtidsmat er merket med fem års holdbarhet mot tørrmatens ett år, og et
+abonnement som fornyer seg årlig ville betydd å kaste REAL-poser som ikke er
+i nærheten av å gå ut. Regnet med dagens tall: boksprofitt på komplett
+langtidsmat, 4 personer, plast, er **11 792 − 9 135 = 2 657 kr**. Refillprofitt uten rabatt (siden vi
+ikke selger et betalt abonnement på langtidsmat) er **3 497 − 2 422 =
+1 075 kr** per femårssyklus.
 
-Over 20 år (fire fornyelser ved 5, 10, 15 og 20 år): **3 031 + 4 × 1 616 =
-9 495 kr**, mot engangskundens flate 3 031 kr – **3,1 ganger**. Til
+Over 20 år (fire fornyelser ved 5, 10, 15 og 20 år): **2 657 + 4 × 1 075 =
+6 957 kr**, mot engangskundens flate 2 657 kr – **2,6 ganger**. Til
 sammenligning, en tørrmat-abonnent over samme 20-årsperiode (20 årlige
-sykluser): **2 230 + 20 × 386 = 9 950 kr**, mot engangskundens 2 230 kr –
-**4,5 ganger**. Tørrmat-abonnementet er fortsatt tydelig sterkere som
-*abonnement* enn langtidsmats femårssyklus (4,5× mot 3,1× over samme
-periode) – men gapet er langt mindre dramatisk enn forrige versjons
-«8,2 ganger mot 3,4 ganger». Konklusjonen står: **abonnement er tørrmatens
-forretning. Langtidsmat er et enkeltkjøp med en ærlig påminnelse fem år fram
-i tid** – bare med et mer realistisk tallgrunnlag bak den.
+sykluser): **2 354 + 20 × 472 = 11 794 kr**, mot engangskundens 2 354 kr –
+**5,0 ganger**. Tørrmat-abonnementet er tydelig sterkere som
+*abonnement* enn langtidsmats femårssyklus (5,0× mot 2,6× over samme
+periode) – og gapet har vokst med rebalanseringen, fordi det er
+langtidspåfyllet som ble billigere: refillprofitten per femårssyklus falt fra
+1 659 til 1 075 kr. Konklusjonen står, og står sterkere enn før:
+**abonnement er tørrmatens forretning. Langtidsmat er et enkeltkjøp med en
+ærlig påminnelse fem år fram i tid.** Det er verdt å merke seg som en
+bivirkning av en matfaglig riktig endring: billigere mat til kunden er
+mindre livstidsverdi til oss, og det er en byttehandel vi har gjort med
+åpne øyne.
+
+**Men premisset for «bare gratis varsel» er svekket, og det skal sies rett
+ut.** De fem årene gjelder REAL-posene, ikke pakken: `byggPakke()` rapporterer
+`holdbarhetAr: 1` på begge matnivåer, fordi knekkebrød, pålegg, gryn og
+sjokolade ruller i sin egen takt uansett hvilket nivå kunden velger. Før
+rebalanseringen var det en fotnote – 21,7 % av matkronene på langtidsnivået
+hadde under fem års holdbarhet. Nå er andelen 46,9 %, fordi havregrynene
+(ett år) og hermetikken (to år) står for 510 av 3 885 matkroner der de før
+sto for null. Det velter ikke slutningen over – et årlig abonnement på
+*hele* langtidspakken ville fortsatt vært å kaste REAL-poser med fire år
+igjen – men «ingenting å fylle på før om fem år» er ikke lenger sant for
+nesten halve matkurven. Et påfyll som bare dekker den korte maten er dermed
+et reelt produktspørsmål på langtidsnivået også, ikke bare på tørrmat.
 
 ---
 
@@ -678,21 +775,26 @@ Beregnet fra tabellene i punkt 3 (mva = pris inkl. mva − netto; blandet sats
 
 | Pakke | Mva-beløp | Netto | Blandet mva-sats | Hvorfor |
 | --- | ---: | ---: | ---: | --- |
-| Komplett tørrmat, plast | 2 350 kr | 10 121 kr | **23,2 %** | Stor andel utstyr (radio, kokeapparat, vannfilter, CO-varsler, lys, eske) til 25 %. |
-| Komplett langtidsmat, plast | 2 800 kr | 13 120 kr | **21,3 %** | Mer mat (REAL Field Meal) trekker snittet mot 15 %. |
-| Matpåfyll, tørrmat | 318 kr | 2 039 kr | **15,6 %** | Nesten bare mat; aquatabs (25 %) er eneste utstyrslinje. |
-| Matpåfyll, langtidsmat | 796 kr | 5 230 kr | **15,2 %** | Samme, med dyrere matlinjer som forsterker mat-andelen. |
+| Komplett tørrmat, plast | 2 461 kr | 10 663 kr | **23,1 %** | Stor andel utstyr (radio, kokeapparat, vannfilter, CO-varsler, lys, bøttetoalett, eske) til 25 %. |
+| Komplett langtidsmat, plast | 2 630 kr | 11 792 kr | **22,3 %** | Flere matkroner (REAL-middagene er halvparten av dem) trekker snittet mot 15 % – men mindre enn før, siden REAL nå dekker fire av sju middager i stedet for alle måltidene. |
+| Matpåfyll, tørrmat | 356 kr | 2 297 kr | **15,5 %** | Nesten bare mat; aquatabs (25 %) er eneste utstyrslinje. |
+| Matpåfyll, langtidsmat | 537 kr | 3 497 kr | **15,4 %** | Samme, med dyrere matlinjer som forsterker mat-andelen. |
+
+Avstanden mellom de to komplett-radene er blitt mindre av rebalanseringen: før
+lå langtidsmat på 21,4 % blandet sats, fordi REAL-måltidene alene utgjorde
+nesten fire femdeler av matkronene. Nå er den 22,3 %, bare 0,8 prosentpoeng
+under tørrmat.
 
 For komplett tørrmat er dette verifisert helt ned til varelinjenivå (se
-punkt 2): 2 208 kr av 13 267 kr i varesum (før pakkerabatt) er kategorien
-`'Mat'` og mva-belastes med 15 %; resten, 11 059 kr, mva-belastes med 25 %.
-Det gir et blandet mva-beløp på 2 500 kr før rabatt, som skaleres til 2 350
+punkt 2): 2 504 kr av 13 962 kr i varesum (før pakkerabatt) er kategorien
+`'Mat'` og mva-belastes med 15 %; resten, 11 458 kr, mva-belastes med 25 %.
+Det gir et blandet mva-beløp på 2 618 kr før rabatt, som skaleres til 2 461
 kr etter 6 % pakkerabatt – nøyaktig tallet i tabellen over.
 
 ### Hvorfor vi fortsatt viser oppdelingen åpent
 
 Uendret begrunnelse: det er den eneste måten å gjøre forskjellen i
-dekningsgrad mellom komplett-pakken (22–23 %) og matpåfyllet (30–31 %)
+dekningsgrad mellom komplett-pakken (21–23 %) og matpåfyllet (30–31 %)
 forklarlig for en kunde som spør hvorfor vi «tjener mer» på påfyllet – svaret
 er delvis avgiftsstruktur (matpåfyllet er nesten bare 15 %-varer), ikke bare
 prisvalg. Med bygger.js-feilen rettet, holder løftet om åpen momsvisning nå
@@ -712,7 +814,7 @@ Resten av avsnittet – at markedets «fri frakt» ofte ikke stemmer med
 vilkårene, anslagene på 250–1 800 kr per boks avhengig av antall kolli og
 landsdel, anbefalingen om å innhente reelle avtaler fra Bring og PostNord før
 lansering, og 30 dagers angrerett på uåpnet utstyr og eske – er uendret av de
-fire tingene som er beskrevet innledningsvis, og gjentas ikke her.
+sju tingene som er beskrevet innledningsvis, og gjentas ikke her.
 
 ---
 
@@ -720,7 +822,7 @@ fire tingene som er beskrevet innledningsvis, og gjentas ikke her.
 
 **Ingen gjennomstrekede førpriser. Ingen kunstige tilbud. Ingen nedtelling.**
 Uendret, og enda viktigere nå enn før: en kunde som skal akseptere en pris
-63 % over markedets dyreste konkurrent (punkt 1) må stole fullt ut på at
+72 % over markedets dyreste konkurrent (punkt 1) må stole fullt ut på at
 prisen som står, er prisen som gjelder – en falsk førpris ved siden av det
 regnestykket ville vært det motsatte av den ærligheten som er hele
 forsvaret for posisjonen.
@@ -728,7 +830,7 @@ forsvaret for posisjonen.
 De tre grunnene fra forrige versjon står ved lag uendret: det er ulovlig i
 praksis (markedsføringsloven), det motsier hele posisjonen, og det ødelegger
 abonnementet. På det siste punktet er tallet oppdatert: abonnementet er
-verdt **2,7 ganger** et engangskjøp over ti år (punkt 5), ikke 4,6 ganger –
+verdt **3,0 ganger** et engangskjøp over ti år (punkt 5), ikke 4,6 ganger –
 fortsatt et argument som forutsetter en kunde som stoler på oss over tid, og
 fortsatt et argument en falsk førpris ved førstegangskjøpet ville ødelagt.
 
@@ -736,28 +838,36 @@ fortsatt et argument en falsk førpris ved førstegangskjøpet ville ødelagt.
 
 ## Prioritert liste over det som må skje før disse tallene kan brukes i produksjon
 
-To punkter fra forrige versjon er løst og er fjernet fra listen:
-kategorinøkkel-feilen i `ui/bygger.js` er rettet, og utstyrstersklene er
-spredt (`ceil(p/4)`, `ceil(p/5)`, `ceil(p/6)`, `ceil(p/8)`). Gjenstående:
+Tre punkter fra forrige versjon er løst og er fjernet fra listen:
+kategorinøkkel-feilen i `ui/bygger.js` er rettet, utstyrstersklene er
+spredt (`ceil(p/4)`, `ceil(p/5)`, `ceil(p/6)`, `ceil(p/8)`), og halvårlig
+påfylls tynne margin etter rabatt er ikke lenger et punkt – nivået finnes ikke
+i katalogen. Gjenstående:
 
-1. **Reell B2B-pris fra Drytech/REAL Turmat**, ikke 0,6×-anslaget resten av
-   katalogen bruker. Følsomhetsanalysen i punkt 3 viser at dette fortsatt er
-   den enkeltendringen som betyr mest for dekningsgraden.
-2. **Reelle fraktpriser** fra Bring og/eller PostNord bedriftsavtale –
+1. **Reelle B2B-priser på premiumutstyret**, ikke 0,6×-anslaget. Trangia,
+   de fire Petzl-lyktene, Sangean, Katadyn, Leatherman og Lifesystems utgjør
+   alene 4 519 kr av firepersonspakkens 8 309 kr i anslått innkjøp – 54 %.
+   Følsomhetsanalysen i punkt 3 viser at dette er den enkeltendringen som
+   betyr mest for dekningsgraden, på begge matnivåer.
+2. **Reell B2B-pris fra Drytech/REAL Turmat** – fortsatt uavklart, men ikke
+   lenger øverst på listen. Etter rebalanseringen utgjør REAL-middagene
+   1 238 kr av langtidspakkens 9 135 kr i anslått innkjøp (13,6 %), og
+   ingenting i tørrmatpakken. Før rebalanseringen bar REAL nesten fire
+   femdeler av matkostnaden på langtidsnivået; nå bærer havregryn og
+   middagshermetikk størstedelen av måltidene, og de er begge varer vi
+   allerede kjøper til tørrmatpakken. Det gjør REAL-avtalen mindre kritisk
+   og volumet på hermetikken mer.
+3. **Reelle fraktpriser** fra Bring og/eller PostNord bedriftsavtale –
    punkt 7s tall er fortsatt anslag.
-3. **Legg til et «annethvert år»-nivå i `PAFYLL`** for tørrmatkunder med
+4. **Legg til et «annethvert år»-nivå i `PAFYLL`** for tørrmatkunder med
    lavere forpliktelsesvilje enn årlig (punkt 5) – uendret anbefaling.
-4. **Se på halvårlig påfylls dekningsgrad etter rabatt (15,9 %, punkt 5)**
-   når volumet på det nivået faktisk blir stort nok til å telle – ikke
-   akutt, men ikke lenger dekket av en bevisst marginbuffer slik det var
-   under den gamle prisregelen.
 5. **Vurder en lettere utstyrsprofil for 1–2 personer** (punkt 1) – rundt
    77 % av enpersonspakkens pris er i dag utstyr som ikke blir billigere av
    færre brukere. Avhukingen av eid utstyr og matpåfyllet som inngangsprodukt
    hjelper, men løser det ikke for en kunde uten utstyr fra før. Dette er et
    produktspørsmål for `katalog.js`, ikke noe jeg endrer i dette dokumentet.
 6. **Følg konverteringen på komplett-pakken tett etter lansering** (punkt 1)
-   – prisen er nå 63 % over markedets dyreste observerte konkurrent, uten et
+   – prisen er nå 72 % over markedets dyreste observerte konkurrent, uten et
    eneste nærliggende datapunkt som validerer at noen betaler det. Lav
    konvertering, særlig ved 3–5 personer, er første varsel om at avstanden
    er for stor i praksis, ikke bare i teorien.

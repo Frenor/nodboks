@@ -46,25 +46,26 @@ med topper i oktober, når Egenberedskapsuka går. Det er et argument for staffe
 
 Mengdene under er for **25 komplette pakker til fire personer**, som er en
 realistisk første serie. Kolonnen «per pakke» lar deg regne om til din egen serie.
+Der en vare inngår i begge matnivåer med ulikt antall, står tørrmat-tallet først
+og langtidsmat-tallet etter skråstreken.
 
 ### Mat
 
 | Vare | Produkt å be om pris på | Per pakke | For 25 pakker | Detaljpris | Anslått innkjøp |
 | --- | --- | ---: | ---: | ---: | ---: |
-| REAL Field Meal, 700 kcal · kun langtidsmat | REAL Turmat / Drytech AS, Tromsø REAL Field Meal Full Meal 700 kcal | 28 porsjon | 700 | 129 kr | 77 kr |
-| REAL Turmat frokost · kun langtidsmat | REAL Turmat / Drytech AS, Tromsø Frokostposer fra Preparedness Pack | 12 porsjon | 300 | 93 kr | 56 kr |
-| Trondhjems middagshermetikk, fire sorter · kun tørrmat | Trondhjems (Orkla Foods Norge) Spaghetti a la Capri 870 g / Maxboller 825 g /  | 15 stk | 375 | 67 kr | 40 kr |
+| REAL Field Meal, 700 kcal · kun langtidsmat | REAL Turmat / Drytech AS, Tromsø REAL Field Meal Full Meal 700 kcal | 16 porsjon | 400 | 129 kr | 77 kr |
+| Trondhjems middagshermetikk, fire sorter · begge matnivåer | Trondhjems (Orkla Foods Norge) Spaghetti a la Capri 870 g / Maxboller 825 g /  | 17 / 6 stk | 425 / 150 | 67 kr | 40 kr |
 | Stabburet Leverpostei Original, 200 g | Stabburet (Orkla Foods Norge) Leverpostei Original 200 g, GTIN 07039010132435 | 8 stk | 200 | 25 kr | 15 kr |
-| Wasa Husman knekkebrød, 520 g | Wasa (Barilla Norge) Husman 520 g, GTIN 7300400118408 | 5 pakke | 125 | 30 kr | 18 kr |
+| Wasa Husman knekkebrød, 520 g | Wasa (Barilla Norge) Husman 520 g, GTIN 7300400118408 | 6 pakke | 150 | 30 kr | 18 kr |
 | Stabburet Makrell i tomat, 170 g | Stabburet (Orkla Foods Norge) Makrell i tomat 170 g | 4 stk | 100 | 35 kr | 21 kr |
 | Freia Melkesjokolade, 200 g | Freia (Mondelez) Melkesjokolade 200 g | 4 stk | 100 | 30 kr | 18 kr |
-| Mills Kaviar, 185 g | Mills Kaviar original, tube | 3 stk | 75 | 37 kr | 22 kr |
+| Mills Kaviar, 185 g | Mills Kaviar original, tube | 4 stk | 100 | 37 kr | 22 kr |
 | Rosiner, 500 g | REMA 1000 / R Rosiner | 2 pakke | 50 | 55 kr | 33 kr |
 | Sætre Mariekjeks, 350 g | Sætre (Orkla) Mariekjeks | 3 pakke | 75 | 32 kr | 19 kr |
-| Peanøtter, 500 g | REMA 1000 / R Peanøtter salte | 2 pakke | 50 | 40 kr | 24 kr |
+| Peanøtter, 500 g | REMA 1000 / R Peanøtter salte | 3 pakke | 75 | 40 kr | 24 kr |
 | Nugatti Original, 350 g | Nugatti (Orkla) Nugatti Original | 2 stk | 50 | 28 kr | 17 kr |
-| O'boy sjokoladedrikk, 450 g | O'boy (Mondelez) O'boy Original | 1 stk | 25 | 55 kr | 33 kr |
-| Axa Bjørn Lettkokte Havregryn, 1,1 kg · kun tørrmat | Axa (Lantmännen Cerealia) Bjørn Lettkokte Havregryn 1,1 kg | 2 pakke | 50 | 27 kr | 16 kr |
+| O'boy sjokoladedrikk, 450 g | O'boy (Mondelez) O'boy Original | 2 stk | 50 | 55 kr | 33 kr |
+| Axa Bjørn Lettkokte Havregryn, 1,1 kg · begge matnivåer | Axa (Lantmännen Cerealia) Bjørn Lettkokte Havregryn 1,1 kg | 2 / 4 pakke | 50 / 100 | 27 kr | 16 kr |
 | Fruktcocktail i sukkerlake, 820 g | REMA 1000 / R Fruktcocktail i sukkerlake 820 g | 1 stk | 25 | 31 kr | 19 kr |
 
 ### Vann
@@ -117,7 +118,9 @@ realistisk første serie. Kolonnen «per pakke» lar deg regne om til din egen s
 | --- | --- | ---: | ---: | ---: | ---: |
 | Nødboks Mellom | **ikke sourcet** | 1 stk | 25 | 449 kr | 298 kr |
 
-**Anslått samlet varekost for 25 pakker: 170 425 kr eks. mva.**
+**Anslått samlet varekost for 25 pakker: 103 775 kr eks. mva. for tørrmat,
+124 375 kr for langtidsmat.** En serie er ett matnivå; de to summene skal ikke
+legges sammen.
 
 Det er kapitalbindingen du må ut med før første krone kommer inn. Den er også
 grunnen til å be om 30 dagers betalingsbetingelser.
@@ -235,6 +238,12 @@ oppgitt pris til oss.
   - Minste ordre: Ukjent
 
 ### mat-lang – REAL Field Meal 700 kcal (enkeltpose, håndplukket sortiment) — Drytech AS / REAL Turmat, T
+
+REAL dekker nå fire av sju middager. Før dekket posene alle sju middagene og tre
+av frokostene. Det er 16 poser i en firepersonspakke mot 40 før, og
+frokostposene er ute av sortimentet – be ikke om pris på dem. Posten er fortsatt
+den dyreste matvarelinjen i langtidsmatpakken, men staffelargumentet må bygge på
+antall pakker, ikke på poser per pakke.
 
 - **Drytech AS (merke REAL Turmat / realoutdoorfood.com)** (produsent, Norge (produksjon Tromsø))
   - Kontakt: Registrering som forhandler i Norge: https://realoutdoorfood.com/retailers/register-as-retailer-in-norway/ → fyll ut skjema → godkjenning → tilgang til shop.drytech.no. Alternativ: post@drytech.no, +4
@@ -375,9 +384,14 @@ vet ikke hva de koster.
   feil – tallet delt på 28 gir nøyaktig 451,0, som er middagssummen fra den
   lille pakken. Ikke gjenbruk uten skriftlig bekreftelse.
 - **Holdbarhet er dokumentert for kun to varer:** leverpostei (1 800 dager ved
-  2–25 °C, Matinfo) og REAL Turmat (fem år fra produksjon, Drytech). Alle andre
-  holdbarhetstall i katalogen er anslag basert på varetype. Be om skriftlig
-  holdbarhet på alt som skal trykkes.
+  2–25 °C, Matinfo) og REAL Turmat (fem år fra produksjon, Drytech). De to bærer
+  til sammen 18,5 % av kaloriene i langtidsmatpakken – den dokumenterte
+  femårsholdbarheten dekker altså langt mindre enn da REAL dekket alle sju
+  middagene og tre frokoster. Havregryn og middagshermetikk står nå for 26 % av
+  kaloriene i langtidsmatpakken og 31 % i tørrmatpakken, og for begge er
+  holdbarheten et anslag. Alle andre holdbarhetstall i katalogen er anslag
+  basert på varetype. Be om skriftlig holdbarhet på alt som skal trykkes, og
+  begynn med havregryn og hermetikk.
 
 ## Brennstoff er ute av esken
 

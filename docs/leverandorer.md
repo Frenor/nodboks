@@ -19,30 +19,30 @@ Biltema Bedrift. Samtlige `innkjop`-tall i katalogen er derfor **0,6 × billigst
 observerte detaljpris** — en arbeidshypotese pålagt av oppdraget, ikke et
 tilbud. Ett unntak: beredskapspermen, som er vår egen trykksak.
 
-**2. Dekningsgraden på 31 % er ikke 31 %. Den er 17 %.**
-`scripts/verifiser-katalog.mjs` regner dekningsgrad som `(sum − innkjøp) / sum`,
-der `sum` er inkl. mva og `innkjøp` er eks. mva. Det er to ulike enheter.
-Regner man riktig — nettoomsetning eks. mva mot vareforbruk eks. mva — ser det
-slik ut:
+**2. Dekningsgraden på den komplette pakken er 22 %.**
+`scripts/verifiser-katalog.mjs` regner den nå riktig — nettoomsetning eks. mva
+mot vareforbruk eks. mva, ikke kundepris inkl. mva mot innkjøp eks. mva — og
+advarer på hver eneste komplette pakke, i alle husstandsstørrelser. Til fire
+personer ser det slik ut:
 
-| Pakke (4 personer) | Kundepris inkl. mva | Netto eks. mva | Vareforbruk | **Ekte DG** | Skriptets DG |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| Komplett · tørrmat | 5 484 | 4 567 | 3 778 | **17 %** | 31 % |
-| Komplett · langtidsmat | 8 933 | 7 566 | 5 975 | **21 %** | 33 % |
-| Matpåfyll · tørrmat | 2 335 | 2 030 | 1 417 | **30 %** | 39 % |
-| Matpåfyll · langtidsmat | 6 004 | 5 221 | 3 614 | **31 %** | 40 % |
+| Pakke (4 personer) | Kundepris inkl. mva | Netto eks. mva | Vareforbruk | **Dekningsgrad** |
+| --- | ---: | ---: | ---: | ---: |
+| Komplett · tørrmat | 13 124 | 10 663 | 8 309 | **22 %** |
+| Komplett · langtidsmat | 14 422 | 11 792 | 9 135 | **23 %** |
+| Matpåfyll · tørrmat | 2 653 | 2 297 | 1 595 | **31 %** |
+| Matpåfyll · langtidsmat | 4 034 | 3 497 | 2 422 | **31 %** |
 
-Sytten prosent dekker ikke frakt, emballasje, svinn, retur og lønn. Det er ikke
+Tjueto prosent dekker ikke frakt, emballasje, svinn, retur og lønn. Det er ikke
 en levedyktig margin på den komplette pakken. Tre ting kan fikse det, i
 prioritert rekkefølge: (a) skaffe ekte innkjøpspriser — hvis 0,6-faktoren i
-virkeligheten er 0,5, går komplett tørrmat fra 17 % til 31 %; (b) heve prisen
-over 5 500, som bryter prisbåndet oppdraget satte; (c) ta ut utstyr. Vi anbefaler
-(a), og at ingenting trykkes eller lanseres før den er forsøkt.
+virkeligheten er 0,5, går komplett tørrmat fra 22 % til 35 %; (b) heve prisen,
+som bryter prisbåndet oppdraget satte; (c) ta ut utstyr. Vi anbefaler (a), og at
+ingenting trykkes eller lanseres før den er forsøkt.
 
-Legg samtidig merke til mønsteret i tabellen: **påfyllet tjener nesten dobbelt
-så godt som boksen.** Det er ikke et problem, det er forretningsmodellen. Boksen
-er kundeanskaffelsen; abonnementet er inntekten. Ingen av de tolv kartlagte
-konkurrentene tilbyr påfyll i det hele tatt.
+Legg samtidig merke til mønsteret i tabellen: **påfyllet tjener klart bedre enn
+boksen** — 31 % mot 22–23 %. Det er ikke et problem, det er forretningsmodellen.
+Boksen er kundeanskaffelsen; abonnementet er inntekten. Ingen av de tolv
+kartlagte konkurrentene tilbyr påfyll i det hele tatt.
 
 **3. Rødsprit kan ikke sendes i en vanlig pakke.**
 Kemetyl rødsprit er UN1170, klasse 3, og står på Postens liste over forbudt
@@ -74,23 +74,28 @@ Kolonnen «Detalj» er observert norsk butikkpris inkl. mva.
 | Rosiner 500 g | REMA 1000 | 55,50 ▲ | 55 | 33,30 | [Oda](https://oda.com/no/products/65770-r-rosiner/) |
 | O'boy 450 g | Mondelez | 54,90 ▲ | 55 | 32,95 | [Oda](https://oda.com/no/products/463-oboy-oboy-original/) |
 | Fruktcocktail 820 g | REMA 1000 | 31,20 | 31 | 18,70 | [Oda](https://oda.com/no/products/66103-r-fruktcocktail-i-sukkerlake/) |
+| Havregryn 1,1 kg | Axa Bjørn Lettkokte | 26,90 | 27 | 16,15 | [Oda](https://oda.com/no/products/1035-axa-bjorn-lettkokte-havregryn/) |
+| Middagshermetikk 800–870 g | Trondhjems, fire sorter | 62,40–73,70 (snitt 67,35) | 67 | 40,40 | [Oda](https://oda.com/no/products/13660-trondhjems-maxboller-i-tomatsaus/) |
 
 ▲ = pakkeprisen er **regnet ut** fra en observert porsjonspris, ikke lest av en
 produktside. Se § 5.
 
-### Mat — kun tørrmat
-
-| Vare | Merke / modell | Detalj | Vår pris | Innkjøp | Kilde |
-| --- | --- | ---: | ---: | ---: | --- |
-| Havregryn 1,1 kg | Axa Bjørn Lettkokte | 26,90 | 27 | 16,15 | [Oda](https://oda.com/no/products/1035-axa-bjorn-lettkokte-havregryn/) |
-| Middagshermetikk 800–870 g | Trondhjems, fire sorter | 62,40–73,70 (snitt 67,35) | 67 | 40,40 | [Oda](https://oda.com/no/products/13660-trondhjems-maxboller-i-tomatsaus/) |
+Havregryn og middagshermetikk ligger i begge matnivåer, men med ulik rolle og
+derfor ulikt antall. Til fire personer: to pakker havregryn og 17 bokser
+hermetikk i tørrmat, mot fire pakker havregryn og seks bokser i langtidsmat. I
+langtidsmat er havregrøt frokosten alle sju døgn, og hermetikken dekker de tre
+middagene REAL ikke tar.
 
 ### Mat — kun langtidsmat
 
 | Vare | Merke / modell | Detalj | Vår pris | Innkjøp | Kilde |
 | --- | --- | ---: | ---: | ---: | --- |
 | REAL Field Meal 700 kcal | Drytech AS, Tromsø | 129 | 129 | 77,40 | [Beredskapslager](https://www.beredskapslager.no/produkt/mat/turmat/real-field-meal-kylling-karri/) |
-| REAL Turmat frokost | Drytech AS, Tromsø | 92,80 | 93 | 55,70 | [Drytech](https://realoutdoorfood.com/products/preparedness-pack-big/) |
+
+Fire porsjoner per person, altså fire av sju middager. Til fire personer er det
+16 poser, 2 064 kr — 53 % av matkostnaden i langtidsmat og 14 % av kaloriene.
+Det er den dyreste kalorien i katalogen: 0,18 kr/kcal, mot 0,08 for
+middagshermetikk og 0,007 for havregryn.
 
 ### Vann
 
@@ -143,8 +148,9 @@ produktside. Se § 5.
 | Nødboks Stor | 3 × 50 l kasser | 8 pers. | 649 | 447 ✱ |
 
 Eskestørrelsene er drevet av vekt, ikke volum: sju døgns tørrmat til fire
-personer veier 36 kg, og en full 4-personers Nødboks veier 44 kg inklusive
-tomme vannkanner og utstyr.
+personer veier 29 kg, og en full 4-personers Nødboks veier 48 kg inklusive
+tomme vannkanner og utstyr. Langtidsmat-utgaven veier 44 kg: hermetikken og
+havregrynene tar igjen mye av det de frysetørkede posene sparer.
 
 ---
 
@@ -196,7 +202,7 @@ en gravid eller en eldre. Det er akkurat de som skal kunne hente sitt eget vann.
 
 | Vare | Produksjonssted | Hva det er verdt |
 | --- | --- | --- |
-| **REAL Field Meal** | Tromsø (Drytech AS) | Bærebjelken i langtidsmat-linjen. |
+| **REAL Field Meal** | Tromsø (Drytech AS) | De fire varme middagene i langtidsmat-linjen: 53 % av matkostnaden, 14 % av kaloriene. |
 | Leverpostei | Fredrikstad (Orkla Foods) | Norges mest spiste pålegg. |
 | Trondhjems middagshermetikk | Orkla Foods Norge | Navnet gjør jobben alene. |
 | Rødsprit | Kemetyl Norge AS, Oslo | Produksjonssted (Halden/Fredrikstad) er **ikke bekreftet** — ikke bruk i markedsføring uten kilde. |
@@ -250,10 +256,10 @@ gjenbruk tallet uten skriftlig bekreftelse.
 
 Dette er avsnittet oppdraget ba om å være ubehagelig tydelig på.
 
-**Observert direkte på en produktside, med pris og varenummer (17 varer).**
+**Observert direkte på en produktside, med pris og varenummer (18 varer).**
 Havregryn, knekkebrød, leverpostei, makrell i tomat, fruktcocktail,
-middagshermetikk, REAL Field Meal, REAL frokost, vanndunk 10 l, Aquatabs,
-Trangia 25-1 UL, rødsprit, fyrstikker, hodelykt, campinglykt, telys, nødteppe,
+middagshermetikk, REAL Field Meal, vanndunk 10 l, Aquatabs, Trangia 25-1 UL,
+rødsprit, fyrstikker, hodelykt, campinglykt, telys, nødteppe,
 nødradio, AAA-batterier. Disse er kontrollert mot kilden samme dag, og flere er
 kryssjekket mot en annen butikk.
 
@@ -272,8 +278,8 @@ de **1 042 kr av en 4-personers pakke på 5 484 kr — 19 % av varelinjen.**
 0,6 × detaljpris. Faktoren er pålagt av oppdraget og har ingen empirisk støtte i
 noen av kildene. Reell dagligvaremargin ligger ofte lavere for grossist enn
 0,6, og reell hardware-margin ofte høyere. Sensitiviteten er stor: endres
-faktoren til 0,5, går ekte DG på komplett tørrmat fra 17 % til 31 %; endres den
-til 0,7, faller den til 3 %.
+faktoren til 0,5, går dekningsgraden på komplett tørrmat fra 22 % til 35 %;
+endres den til 0,7, faller den til 9 %.
 
 **Holdbarhetstall.** Bare to er dokumenterte: leverpostei 1 800 dager ved 2–25 °C
 (Matinfo, GTIN 07039010132435) og Real Turmat fem år garantert fra produksjon
