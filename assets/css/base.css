@@ -30,6 +30,8 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   overflow-wrap: break-word;
+  /* Plass til den faste prislinjen, som ligger over alt innhold. */
+  padding-bottom: 7.5rem;
 }
 
 h1, h2, h3, h4 {
@@ -316,7 +318,6 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
 }
 
 /* Slider for husstandsstørrelse */
-.slider { width: 100%; }
 input[type="range"] {
   -webkit-appearance: none; appearance: none;
   width: 100%;

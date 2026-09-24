@@ -139,16 +139,6 @@
     "minsteordre": "",
     "notat": ""
   },
-  "real-frokost": {
-    "navn": "REAL Turmat frokost – müsli og havregrøt",
-    "utsalg": 93,
-    "innkjop": 55.7,
-    "kilde": "ANSLAG: 0,6 × observert butikkpris",
-    "leverandor": "",
-    "kontakt": "",
-    "minsteordre": "",
-    "notat": ""
-  },
   "vannkanne-10": {
     "navn": "Vanndunk 10 liter, gjennomsiktig",
     "utsalg": 60,

@@ -24,3 +24,6 @@ innkjop.local.json
 # hold ekte produksjonsnøkler utenfor repoet
 .env
 .env.*
+
+# Lokal utviklingsserver for Claude Code
+.claude/

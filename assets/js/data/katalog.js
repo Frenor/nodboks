@@ -313,18 +313,18 @@ export const MATNIVAER = [
     navn: 'Frysetørket langtidsmat',
     kortnavn: 'Langtidsmat',
     beskrivelse:
-      'Norskprodusert REAL Field Meal fra Drytech i Tromsø, én varm middag og frokost per person per døgn. Dyrere, men du slipper å tenke på den.',
+      'Norskprodusert REAL Field Meal fra Drytech i Tromsø til fire av sju middager. Frokosten er havregrøt, og resten er vanlig butikkmat.',
     holdbarhetAr: 5,
     fordeler: [
       'Fem års garantert kvalitet fra produksjon, oppgitt av produsenten selv.',
       'Norsk, laget i Tromsø av samme fabrikk som leverer til Forsvaret.',
-      'Veier en firedel av tørrmaten.',
+      'Fire ferdige varmretter du ikke trenger å tenke på.',
       'Vi håndplukker milde retter – ingen karri, ingen chili, ingen bacalao.',
     ],
     ulemper: [
-      'Rundt tre ganger prisen per måltid.',
-      'Hver porsjon krever 3,7 dl kokende vann – uten primus er den uspiselig.',
-      'Brød og pålegg følger fortsatt den vanlige byttesyklusen.',
+      'Rundt tre ganger prisen per måltid på de fire middagene.',
+      'Hver REAL-porsjon krever 3,7 dl kokende vann – uten primus er den uspiselig.',
+      'Brød, pålegg og gryn følger fortsatt den vanlige byttesyklusen.',
       'Ikke 25 år. Den påstanden gjelder et annet produkt i en annen emballasje.',
     ],
   },
@@ -685,7 +685,6 @@ export const VARER = [
       '150 kcal per krone, best i katalogen. Kan bløtlegges kaldt over natten.',
     kategori: 'Mat',
     type: 'forbruk',
-    matnivaer: ['torrmat'],
     enhet: 'pakke',
     pris: 27,
     holdbarhetAr: 1,
@@ -698,8 +697,11 @@ export const VARER = [
       kilde: 'Oda, observert 20.09.2026: 26,90 kr',
       url: 'https://oda.com/no/products/1035-axa-bjorn-lettkokte-havregryn/',
     },
-    // 80 g per voksendøgn, 50 g per barnedøgn, på fire av sju døgn.
-    antall: (c) => Math.ceil(c.ve * 0.432),
+    // Tørrmat: 80 g per voksendøgn på fire av sju døgn, ved siden av knekkebrød.
+    // Langtidsmat: havregrøt er frokosten alle sju døgn, i stedet for
+    // frysetørkede frokostposer til 93 kr. Grynene kan bløtlegges kaldt, så
+    // byttet gjør også pakken mindre avhengig av brennstoff.
+    antall: (c) => Math.ceil(c.ve * (c.matniva === 'langtidsmat' ? 0.9 : 0.432)),
   },
   {
     sku: 'middagshermetikk',
@@ -710,7 +712,6 @@ export const VARER = [
       'Den eneste middagen som kan spises kald rett fra boksen.',
     kategori: 'Mat',
     type: 'forbruk',
-    matnivaer: ['torrmat'],
     enhet: 'stk',
     pris: 67,
     holdbarhetAr: 2,
@@ -727,7 +728,9 @@ export const VARER = [
     // En åpnet boks kan ikke kjøles og må spises opp samme døgn. Regelen er
     // derfor drøyt en halv boks per person per døgn. Trondhjems Sodd er
     // bevisst holdt utenfor: 47 kcal per 100 g er kraft, ikke middag.
-    antall: (c) => Math.ceil(c.ve * 4.05),
+    // Tørrmat: hermetikken er middagen alle sju døgn. Langtidsmat: bare de tre
+    // døgnene REAL ikke dekker.
+    antall: (c) => Math.ceil(c.ve * (c.matniva === 'langtidsmat' ? 1.5 : 4.05)),
   },
 
   // ---------------------------------------------------------------------------
@@ -759,41 +762,13 @@ export const VARER = [
       kilde: 'Beredskapslager og Widforss, begge observert 20.09.2026: 129 kr',
       url: 'https://www.beredskapslager.no/produkt/mat/turmat/real-field-meal-kylling-karri/',
     },
-    // Én varm middag per person per døgn. Full frysetørket kost ville kostet
-    // rundt 10 800 kr for fire personer og spist 7,8 av de 20 literne vann
-    // per person. Resten av døgnet dekkes av tørrvarene over.
+    // Fire av sju middager, ikke sju. REAL er den dyreste kalorien i katalogen
+    // – 0,18 kr/kcal mot havregrynets 0,007 – og full frysetørket kost la 79 %
+    // av matbudsjettet i 36 % av kaloriene. De tre øvrige middagene kommer fra
+    // hermetikk, som i tillegg kan spises kald.
     // ve rundes opp før multiplikasjon: man kan ikke sende 0,62 av en
     // frysetørket porsjon, og et barn som får 62 % av en pose får i praksis en pose.
-    antall: (c) => Math.ceil(c.ve) * KONFIG.dogn,
-  },
-  {
-    sku: 'real-frokost',
-    navn: 'REAL Turmat frokost – müsli og havregrøt',
-    beskrivelse:
-      'Blåbær- og vaniljemüsli, crunchy granola, sjokolademüsli og havregrøt med eple og kanel. Kan lages på kaldt vann.',
-    hvorfor:
-      'Det eneste måltidet i langtidspakken som ikke krever kokeplate.',
-    kategori: 'Mat',
-    type: 'forbruk',
-    matnivaer: ['langtidsmat'],
-    enhet: 'porsjon',
-    pris: 93,
-    holdbarhetAr: 5,
-    kcal: 450,
-    vektKg: 0.1,
-    // Krever 3,7 dl kokende vann per pose. Uten brennstoff er den uspiselig,
-    // og derfor teller den ikke med i «døgn uten varme» i konfiguratoren.
-    kreverVarme: true,
-    dsb: 'Mat: frysetørket mat',
-    produkt: {
-      merke: 'REAL Turmat / Drytech AS, Tromsø',
-      modell: 'Frokostposer fra Preparedness Pack',
-      kilde: 'Drytech egen nettbutikk, observert 20.09.2026: 92,80 kr per måltid',
-      url: 'https://realoutdoorfood.com/products/preparedness-pack-big/',
-    },
-    // Tre av sju frokoster. De øvrige dekkes av knekkebrød med pålegg –
-    // både fordi det er billigere og fordi ingen orker müsli sju dager.
-    antall: (c) => Math.ceil(c.ve) * 3,
+    antall: (c) => Math.ceil(c.ve) * 4,
   },
 
   // ---------------------------------------------------------------------------

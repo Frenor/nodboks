@@ -208,9 +208,9 @@
   <section class="section" id="bygg">
     <div class="wrap">
       <p class="eyebrow">Pakkebyggeren</p>
-      <h2>Sju valg, så er esken deres.</h2>
+      <h2>Fem valg, så er esken deres.</h2>
       <p class="lead">
-        Fortell oss hvor mange dere er hjemme. Vi regner ut mengdene, viser hele
+        Fortell oss hvem som bor hjemme. Vi regner ut mengdene, viser hele
         innholdslisten og prisen mens du velger. Ingenting skjules til kassen.
       </p>
 
@@ -218,111 +218,89 @@
 
         <form class="kontroll" id="bygger">
 
-          <!-- Steg 1 -->
-          <div class="steg">
+          <!--
+            Stegene er `role="group"` og `role="radiogroup"` med aria-labelledby,
+            ikke fieldset/legend. En <legend> teller bare som gruppetittel når den
+            er første barn av sin <fieldset>, og her ligger tittelen inne i et
+            hode sammen med stegnummeret.
+          -->
+
+          <!-- Steg 1: husstanden -->
+          <div class="steg" role="group" aria-labelledby="t-husstand" aria-describedby="h-husstand">
             <div class="steg__hode">
               <span class="steg__nr" aria-hidden="true">1</span>
               <div>
-                <h3 class="steg__tittel"><label for="husstand">Hvor mange bor hjemme?</label></h3>
-                <p class="steg__hjelp">Både voksne og barn. Antallet styrer mengdene og hvilken eske dere får.</p>
+                <h3 class="steg__tittel" id="t-husstand">Hvem bor hjemme hos dere?</h3>
+                <p class="steg__hjelp" id="h-husstand">
+                  Barn spiser mindre enn voksne, og kjæledyr trenger sitt eget vann.
+                  Derfor spør vi om alle tre hver for seg.
+                </p>
               </div>
             </div>
 
-            <p class="husstand__verdi">
-              <span class="husstand__tall" id="husstand-tall">4</span>
-              <span class="muted" id="husstand-etikett">personer</span>
+            <div class="steppere" data-steppere></div>
+
+            <p class="steg__merknad" data-tak hidden>
+              Åtte personer er det mest vi pakker i én eske. Er dere flere,
+              <a href="#faq">si fra</a> – da deler vi det på to.
             </p>
 
-            <div class="husstand__rad">
-              <button type="button" class="husstand__knapp" data-husstand-steg="-1" aria-label="Én person færre">−</button>
-              <input class="slider" type="range" id="husstand" name="husstand"
-                     min="1" max="8" step="1" value="4"
-                     aria-describedby="svar">
-              <button type="button" class="husstand__knapp" data-husstand-steg="1" aria-label="Én person til">+</button>
-            </div>
-            <p class="husstand__hakk" aria-hidden="true"><span>1</span><span>8</span></p>
+            <p class="steg__merknad" data-gjenopprettet hidden>
+              Vi husker hva dere valgte sist.
+              <button type="button" class="lenkeknapp" data-nullstill>Start på nytt</button>
+            </p>
 
             <div class="svar" id="svar"></div>
           </div>
 
-          <!-- Steg 2 -->
-          <fieldset class="steg segment">
+          <!-- Steg 2: matnivå -->
+          <div class="steg segment" role="radiogroup" aria-labelledby="t-mat" aria-describedby="h-mat">
             <div class="steg__hode">
               <span class="steg__nr" aria-hidden="true">2</span>
               <div>
-                <legend class="steg__tittel">Hva slags mat?</legend>
-                <p class="steg__hjelp">
+                <h3 class="steg__tittel" id="t-mat">Hva slags mat?</h3>
+                <p class="steg__hjelp" id="h-mat">
                   Det viktigste valget. Se
                   <a href="#matnivaa">hele sammenligningen</a> hvis du er i tvil.
                 </p>
               </div>
             </div>
             <div class="segment__options" id="matnivaer"></div>
-          </fieldset>
+          </div>
 
-          <!-- Steg 3 -->
-          <fieldset class="steg segment">
+          <!-- Steg 3: modus -->
+          <div class="steg segment" role="radiogroup" aria-labelledby="t-modus" aria-describedby="h-modus">
             <div class="steg__hode">
               <span class="steg__nr" aria-hidden="true">3</span>
               <div>
-                <legend class="steg__tittel">Hva trenger dere?</legend>
-                <p class="steg__hjelp">Har dere primus, lykter og radio fra før, kjøper dere bare maten.</p>
+                <h3 class="steg__tittel" id="t-modus">Hva trenger dere?</h3>
+                <p class="steg__hjelp" id="h-modus">Har dere primus, lykter og radio fra før, kjøper dere bare maten.</p>
               </div>
             </div>
             <div class="segment__options" id="moduser"></div>
-          </fieldset>
+          </div>
 
           <!-- Steg 4: kassemateriale -->
-          <fieldset class="steg segment">
+          <div class="steg segment" role="radiogroup" aria-labelledby="t-eske" aria-describedby="h-eske">
             <div class="steg__hode">
               <span class="steg__nr" aria-hidden="true">4</span>
               <div>
-                <legend class="steg__tittel">Hva skal det ligge i?</legend>
-                <p class="steg__hjelp">
+                <h3 class="steg__tittel" id="t-eske">Hva skal det ligge i?</h3>
+                <p class="steg__hjelp" id="h-eske">
                   Mat og vann ligger i plast uansett. Valget gjelder utstyrskassen.
                 </p>
               </div>
             </div>
             <div class="segment__options" id="eskevalg"></div>
-          </fieldset>
+          </div>
 
-          <!-- Steg 5: utstyr kunden allerede eier -->
-          <fieldset class="steg">
+          <!-- Steg 5: påfyll -->
+          <div class="steg segment" role="group" aria-labelledby="t-pafyll" aria-describedby="h-pafyll">
             <div class="steg__hode">
-              <span class="steg__nr" aria-hidden="true">4</span>
+              <span class="steg__nr" aria-hidden="true">5</span>
               <div>
-                <legend class="steg__tittel">Har du noe av dette fra før?</legend>
-                <p class="steg__hjelp">
-                  Kryss av, så tar vi det ut. Vi vil heller at du bruker lykten du
-                  allerede kjenner, enn at du kjøper en til.
-                </p>
-              </div>
-            </div>
-            <div id="harfraFor"></div>
-            <p class="svar" id="harfraFor-sum" style="margin-top:var(--sp-3)"></p>
-          </fieldset>
-
-          <!-- Steg 6: tillegg -->
-          <fieldset class="steg segment">
-            <div class="steg__hode">
-              <span class="steg__nr" aria-hidden="true">6</span>
-              <div>
-                <legend class="steg__tittel">Vil dere ha noe i tillegg?</legend>
-                <p class="steg__hjelp">
-                  Ikke med som standard. Velg til det dere faktisk vil ha.
-                </p>
-              </div>
-            </div>
-            <div class="segment__options" id="tillegg"></div>
-          </fieldset>
-
-          <!-- Steg 7 -->
-          <fieldset class="steg segment">
-            <div class="steg__hode">
-              <span class="steg__nr" aria-hidden="true">7</span>
-              <div>
-                <legend class="steg__tittel">Skal vi minne dere på påfyll?</legend>
-                <p class="steg__hjelp">
+                <h3 class="steg__tittel" id="t-pafyll">Skal vi minne dere på påfyll?</h3>
+                <p class="steg__hjelp" id="h-pafyll">
                   Maten har en utløpsdato. Vi varsler før den kommer, og sender nytt
                   hvis dere vil. Du kan si nei hver gang, og avslutte når du vil.
                 </p>
@@ -335,49 +313,36 @@
               </label>
             </p>
             <div class="segment__options" id="pafyllsvalg" style="margin-top:var(--sp-4)"></div>
-          </fieldset>
+          </div>
         </form>
 
-        <!-- Prispanel -->
-        <aside class="prispanel" aria-labelledby="pris-tittel">
-          <h3 class="visually-hidden" id="pris-tittel">Pris</h3>
-          <p class="prispanel__sum" id="pris-sum">–</p>
-          <p class="prispanel__enhet" id="pris-enhet"></p>
+        <!--
+          Innholdslisten.
 
-          <div class="prispanel__linjer" id="pris-linjer"></div>
-          <p class="prispanel__mva" id="pris-mva"></p>
-
-          <p style="margin-top:var(--sp-4)">
-            <button type="button" class="btn btn--primary btn--block btn--lg" id="legg-i-kurv">
-              Legg i kurven
-            </button>
-          </p>
-
-          <p class="prispanel__fot" id="pris-egenkjop"></p>
-          <p class="prispanel__fot">Frakt kommer i tillegg og beregnes i kassen.</p>
-          <p class="prispanel__fot" id="pris-neste"></p>
-          <p class="prispanel__fot" id="kasse-notis" hidden>
-            Vi tar imot bestillingen på e-post og svarer med betalingsinformasjon
-            samme dag. Betalingsløsning kommer.
-          </p>
-
-          <p class="visually-hidden" role="status" aria-live="polite" id="pris-status"></p>
-        </aside>
-
-        <!-- Innholdsliste -->
+          Dette er den ENESTE listen over varene. Tidligere hadde siden tre:
+          innholdslisten, en avkrysningsliste for «har fra før» og en for tillegg
+          – tre lister over de samme varene, som kunden måtte holde mot hverandre.
+          Nå skjer fravalg og tillegg inne i varelinjen, der varen hører hjemme.
+        -->
         <div class="innholdsliste" id="innhold">
           <div class="innholdsliste__hode">
             <h3 style="margin:0">Dette ligger i esken</h3>
             <span class="badge" id="innhold-teller"></span>
           </div>
 
+          <p class="muted innholdsliste__ingress">
+            Har dere noe fra før, ta det ut i listen – da slipper dere å kjøpe det
+            to ganger. Kategoriene følger DSBs egen sjekkliste, så du kan holde
+            listen vår mot den offisielle linje for linje.
+          </p>
+
           <div class="stack" id="varsler" style="margin-bottom:var(--sp-5)"></div>
 
           <div id="innholdsliste"></div>
 
-          <p class="muted" style="font-size:var(--step--1); margin-top:var(--sp-5)">
-            Kategoriene følger DSBs egen sjekkliste, så du kan holde listen vår mot
-            den offisielle linje for linje.
+          <p class="muted" id="dyrefotnote" style="font-size:var(--step--1); margin-top:var(--sp-5)">
+            Har dere hund eller katt, legger vi inn fôr og eget vann til dem når
+            du teller dem opp over.
           </p>
         </div>
 
@@ -421,7 +386,7 @@
           <tr>
             <td data-kolonne="Hva det er"><strong>Hva det er</strong></td>
             <td data-kolonne="Vanlig mat">Havregryn, hermetikk, knekkebrød, tørket frukt. Mat dere kjenner igjen.</td>
-            <td data-kolonne="Langtidsmat">Frysetørkede måltider. Vann og varme kokes i posen.</td>
+            <td data-kolonne="Langtidsmat">Fire frysetørkede middager. Frokost er havregrøt, resten er den samme butikkmaten.</td>
           </tr>
           <tr>
             <td data-kolonne="Spiser barna det?"><strong>Spiser barna det?</strong></td>
@@ -441,12 +406,12 @@
           <tr>
             <td data-kolonne="Krever"><strong>Krever</strong></td>
             <td data-kolonne="Vanlig mat">Lite. Mye kan spises kaldt rett fra boksen.</td>
-            <td data-kolonne="Langtidsmat">Vann og varme. Hver pose trenger 3,7 dl kokende vann.</td>
+            <td data-kolonne="Langtidsmat">Kokende vann til de fire middagene – 3,7 dl per pose. Resten klarer seg uten.</td>
           </tr>
           <tr>
             <td data-kolonne="Uten brennstoff"><strong>Uten brennstoff</strong></td>
             <td data-kolonne="Vanlig mat">Rekker seks til sju døgn. Nesten alt kan spises kaldt.</td>
-            <td data-kolonne="Langtidsmat">Rekker fire døgn på den kalde maten som ligger ved siden av. Byggeren viser tallet for din husstand.</td>
+            <td data-kolonne="Langtidsmat">Rekker seks til sju døgn. Bare de fire middagene krever koking. Byggeren viser tallet for din husstand.</td>
           </tr>
         </tbody>
       </table>
@@ -707,5 +672,49 @@
 </footer>
 
 <script type="module" src="assets/js/main.js"></script>
+  <!--
+    Den faste prislinjen.
+
+    `position: fixed` mot bunnen, på alle bredder, fra første maling. Ingen
+    scroll-lyttere, ingen observere, ingen betinget synlighet: prisen er det
+    kunden lurer mest på, og en linje som dukker opp og forsvinner er en linje
+    man slutter å stole på. <body> har tilsvarende padding-bottom.
+  -->
+  <div class="prisbar">
+    <div class="wrap prisbar__inner">
+      <!--
+        Prisen ER knappen som åpner regnestykket. En egen «Se regnestykket»-knapp
+        ved siden av gjorde linjen 158 px høy på telefon – en femtedel av skjermen,
+        permanent. Å trykke på tallet for å se hva tallet består av, er dessuten
+        det folk prøver først.
+      -->
+      <button type="button" class="prisbar__pris" data-apne-pris aria-haspopup="dialog">
+        <span class="prisbar__sum tnum" data-sum>–</span>
+        <span class="prisbar__enhet" data-pris-enhet></span>
+        <span class="prisbar__hint">Se regnestykket</span>
+      </button>
+      <button type="button" class="btn btn--primary" id="legg-i-kurv">Legg i kurven</button>
+    </div>
+    <p class="visually-hidden" role="status" aria-live="polite" id="pris-status"></p>
+  </div>
+
+  <dialog class="prisdialog" id="prisdialog" aria-labelledby="prisdialog-tittel">
+    <div class="prisdialog__hode">
+      <h2 id="prisdialog-tittel">Regnestykket</h2>
+      <button type="button" class="prisdialog__lukk" data-lukk-pris aria-label="Lukk">×</button>
+    </div>
+
+    <div class="prispanel__linjer" id="pris-linjer"></div>
+    <p class="prispanel__mva" id="pris-mva"></p>
+
+    <p class="prispanel__fot">Frakt kommer i tillegg og beregnes i kassen.</p>
+    <p class="prispanel__fot" id="pris-neste"></p>
+    <p class="prispanel__fot" id="kasse-notis" hidden>
+      Vi tar imot bestillingen på e-post og svarer med betalingsinformasjon
+      samme dag. Betalingsløsning kommer.
+    </p>
+  </dialog>
+
 </body>
+
 </html>

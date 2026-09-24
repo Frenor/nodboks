@@ -75,7 +75,7 @@ export const DSB_GRUPPER = {
   'Esken': 'Esken',
 }
 
-const GRUPPEREKKEFOLGE = [
+export const GRUPPEREKKEFOLGE = [
   'Mat og vann',
   'Varme og lys',
   'Informasjon',
@@ -179,10 +179,20 @@ export function byggPakke(valg) {
 
   const utvalg = { modus: modus.id, matniva: matniva.id, tillegg, ctx }
 
+  /*
+   * Konteksten antall-funksjonene regner ut fra.
+   *
+   * Matnivået er med fordi enkelte varer har ulik rolle i de to pakkene: i
+   * tørrmatpakken bærer middagshermetikken alle middagene, i langtidspakken
+   * bare de døgnene REAL ikke dekker. Alternativet var to SKU-er for samme
+   * boks, og da ville prisen og innkjøpet måttet vedlikeholdes to steder.
+   */
+  const antallCtx = { ...ctx, matniva: matniva.id, modus: modus.id }
+
   let linjer = []
   for (const vare of VARER) {
     if (!gjelder(vare, utvalg)) continue
-    const antall = Math.max(0, Math.ceil(vare.antall(ctx)))
+    const antall = Math.max(0, Math.ceil(vare.antall(antallCtx)))
     if (antall === 0) continue
     linjer.push({
       sku: vare.sku,
@@ -249,7 +259,9 @@ export function byggPakke(valg) {
   linjer = linjer.filter((l) => !utelatt.has(l.sku))
 
   const tilleggsvalg = VARER.filter((v) => v.tillegg).map((v) => {
-    const antall = Math.max(1, Math.ceil(v.antall(personer)))
+    // ctx, ikke personer: antall-funksjonene leser c.hoder/c.ve/c.dyr, og et tall
+    // ga NaN i prislappen på tillegg som ikke var valgt ennå.
+    const antall = Math.max(1, Math.ceil(v.antall(antallCtx)))
     return {
       sku: v.sku,
       navn: v.navn,
@@ -364,7 +376,7 @@ export function byggPakke(valg) {
     vanndekning: vannBehov ? liter / vannBehov : 0,
     vekt: Math.round(vekt * 10) / 10,
     holdbarhetAr: korteste(linjer),
-    varsler: varsler({ personer, matniva, modus, kcal, kcalBehov, liter, vannBehov, dognUtenVarme }),
+    varsler: varsler({ personer, ctx, matniva, modus, kcal, kcalBehov, liter, vannBehov, dognUtenVarme, fravalgt }),
   }
 }
 
@@ -394,7 +406,7 @@ function korteste(linjer) {
   return år.length ? Math.min(...år) : null
 }
 
-function varsler({ personer, matniva, modus, kcal, kcalBehov, liter, vannBehov, dognUtenVarme }) {
+function varsler({ personer, ctx, matniva, modus, kcal, kcalBehov, liter, vannBehov, dognUtenVarme, fravalgt }) {
   const ut = []
   if (modus.id === 'matpafyll') {
     ut.push({
@@ -412,11 +424,30 @@ function varsler({ personer, matniva, modus, kcal, kcalBehov, liter, vannBehov, 
     })
   }
   if (vannBehov && liter / vannBehov < 0.999) {
+    /*
+     * To ulike situasjoner, som fortjener to ulike setninger.
+     *
+     * Har kunden tatt ut kannene selv, er det ikke vi som underleverer – da er
+     * poenget å minne om hvor mye de må ha stående selv. Sier vi «fyll dem før
+     * du trenger dem» om kanner vi ikke sender, gir vi et råd som ikke går an
+     * å følge.
+     *
+     * Dyrenes vann skilles ut i teksten. 108 liter «for fire personer» er feil
+     * når 28 av dem er hundens.
+     */
+    const tokKannerUt = (fravalgt ?? []).some((l) => l.kategori === 'Vann')
+    const folk = `${personer} ${personer === 1 ? 'person' : 'personer'}`
+    const dyra = ctx?.dyr
+      ? ` og ${ctx.dyr} ${ctx.dyr === 1 ? 'kjæledyr' : 'kjæledyr'}`
+      : ''
+
     ut.push({
       type: 'warn',
-      tekst:
-        `Kannene rommer ${liter} liter. DSB anbefaler ${vannBehov} liter for ` +
-        `${personer} ${personer === 1 ? 'person' : 'personer'} – fyll dem før du trenger dem.`,
+      tekst: tokKannerUt
+        ? `Dere har tatt ut kannene, så vi sender ${liter} liter. DSB anbefaler ` +
+          `${vannBehov} liter for ${folk}${dyra} – sørg for at dere har resten stående selv.`
+        : `Kannene rommer ${liter} liter. DSB anbefaler ${vannBehov} liter for ` +
+          `${folk}${dyra} – fyll dem før du trenger dem.`,
     })
   }
   if (dognUtenVarme < KONFIG.dogn) {

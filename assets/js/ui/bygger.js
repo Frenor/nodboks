@@ -1,41 +1,57 @@
 /**
- * Pakkebyggeren – rendring.
+ * Bestillingsflyten – rendring.
  *
- * All regning skjer i konfigurator.js. Denne filen gjør tre ting: leser valgene
- * ut av skjemaet, ber om en ferdig regnet pakke, og tegner den. Prisen som
- * vises er derfor alltid den samme prisen som legges i kurven.
+ * ## Renderingskontrakten
+ *
+ * Strukturen bygges ÉN gang ved oppstart. Etterpå endrer `tegn()` bare
+ * tekstnoder, `checked`, `aria-pressed`, `hidden`, `disabled` og
+ * data-attributter. Ingen `innerHTML` på noe som kan inneholde det fokuserte
+ * elementet.
+ *
+ * Dette er ikke stilpreferanse. Den forrige versjonen bygde markup på nytt ved
+ * hver tilstandsendring, og dermed falt fokus til <body> hver gang kunden
+ * trykket mellomrom eller skrev et tall. Kontrakten fjerner hele feilklassen
+ * framfor å lappe på den med fokus-gjenoppretting.
+ *
+ * Varelinjer for ALLE varer bygges ved oppstart og skjules med `hidden` når de
+ * ikke gjelder. Da finnes noden allerede når den skal vises, og ingenting
+ * settes inn eller rives ut mens kunden bruker siden.
  */
 
 import {
-  byggPakke,
-  velgEske,
-  MATGRUPPER,
-  FRAVALG_TERSKEL,
-  referanse,
-  tilKurvpost,
-  klem,
-  MATNIVAER,
-  MODUSER,
-  PAFYLL,
-  ESKETYPER,
-  KONFIG,
+  byggPakke, referanse, tilKurvpost, velgEske, dsbGruppe,
+  GRUPPEREKKEFOLGE, MATNIVAER, MODUSER, ESKETYPER, PAFYLL, KONFIG,
 } from '../konfigurator.js'
+import { VARER, ESKER } from '../data/katalog.js'
+
+/*
+ * Esker er ikke varer i katalogen, men de blir varelinjer i pakken. Uten dem her
+ * hadde raden for esken aldri eksistert, og den dyreste enkeltposten i pakken
+ * ville vært usynlig i innholdslisten.
+ */
+const ALLE_VARER = [
+  ...ESKER.map((e) => ({ ...e, kategori: 'Esken', type: 'engang', enhet: 'stk' })),
+  ...VARER,
+]
+const finnVare = (sku) => ALLE_VARER.find((v) => v.sku === sku)
 import { kr, tall } from '../config.js'
 import { kurv } from '../kurv.js'
 import { kasseStatus } from '../checkout/index.js'
+import { tilstand } from '../tilstand.js'
 
 const $ = (sel, rot = document) => rot.querySelector(sel)
 const $$ = (sel, rot = document) => [...rot.querySelectorAll(sel)]
+const lagEl = (tag, klasse, tekst) => {
+  const el = document.createElement(tag)
+  if (klasse) el.className = klasse
+  if (tekst != null) el.textContent = tekst
+  return el
+}
 
-/** Norsk flertall uten å skrive «1 personer». */
-const personer = (n) => `${n} ${n === 1 ? 'person' : 'personer'}`
+const personord = (n) => `${n} ${n === 1 ? 'person' : 'personer'}`
+const rolig = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-/**
- * Holdbarhet som noe man kan lese.
- *
- * Katalogen lagrer år som desimaltall fordi mengdene regnes ut av dem. «1,2 år»
- * er presist og ubrukelig; under to år er måneder det folk faktisk tenker i.
- */
+/** Holdbarhet som noe man kan lese. Under to år tenker folk i måneder. */
 function holdbarhet(ar) {
   if (!ar) return null
   if (ar < 2) {
@@ -45,275 +61,473 @@ function holdbarhet(ar) {
   return `${tall(Math.round(ar))} år`
 }
 
-const ikon = {
-  ok: '<svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8.5 6.5 12 13 4.5"/></svg>',
-  warn: '<svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2.5 15 14H1z"/><path d="M8 6.5v3.2"/><path d="M8 11.8v.6"/></svg>',
-  info: '<svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="6.5"/><path d="M8 7.2v4"/><path d="M8 4.6v.6"/></svg>',
+const STEPPERE = [
+  { felt: 'voksne', etikett: 'Voksne', min: 1, maks: KONFIG.personerMaks },
+  { felt: 'barn', etikett: 'Barn', min: 0, maks: 6 },
+  { felt: 'kjaeledyr', etikett: 'Kjæledyr', min: 0, maks: 4 },
+]
+
+const GLYFER = {
+  voksne: '<circle cx="12" cy="6.5" r="3.2"/><path d="M5.5 21v-4a6.5 6.5 0 0 1 13 0v4"/>',
+  barn: '<circle cx="12" cy="8" r="2.6"/><path d="M7.5 21v-3.5a4.5 4.5 0 0 1 9 0V21"/>',
+  kjaeledyr:
+    '<ellipse cx="12" cy="15.5" rx="4.2" ry="3.4"/><circle cx="6.5" cy="10" r="1.9"/><circle cx="10.2" cy="7" r="1.9"/><circle cx="13.8" cy="7" r="1.9"/><circle cx="17.5" cy="10" r="1.9"/>',
 }
+
+/* ------------------------------------------------------------------ bygging */
+
+function byggStepper(felt, etikett, min, maks) {
+  const boks = lagEl('div', 'stepper')
+  boks.dataset.felt = felt
+  boks.innerHTML = `
+    <svg class="stepper__glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${GLYFER[felt]}</svg>
+    <label class="stepper__etikett" for="felt-${felt}">${etikett}</label>
+    <div class="stepper__rad">
+      <button type="button" class="stepper__knapp" data-steg="-1"
+              aria-label="Én ${etikett.toLowerCase()} færre">−</button>
+      <input class="stepper__tall" id="felt-${felt}" type="number" inputmode="numeric"
+             min="${min}" max="${maks}" step="1" value="${min}">
+      <button type="button" class="stepper__knapp" data-steg="1"
+              aria-label="Én ${etikett.toLowerCase()} til">+</button>
+    </div>`
+  return boks
+}
+
+function byggVarelinje(vare) {
+  const rad = lagEl('div', 'vare')
+  rad.dataset.sku = vare.sku
+  rad.hidden = true
+  rad.append(
+    lagEl('span', 'vare__navn', vare.navn),
+    lagEl('span', 'vare__antall'),
+    lagEl('p', 'vare__hvorfor', vare.hvorfor ?? '')
+  )
+  const merker = lagEl('div', 'vare__merker')
+  rad.append(merker)
+
+  if (vare.bruksanvisning) {
+    const lenke = lagEl('a', 'vare__lenke', 'Bruksanvisning')
+    lenke.href = vare.bruksanvisning
+    rad.append(lenke)
+  }
+
+  /*
+   * Kurateringen ligger i varelinjen, ikke i en egen avkrysningsliste.
+   * Prototypen hadde tre lister over de samme varene; dette er den ene.
+   * En aria-pressed-knapp, ikke en avkrysningsboks: dette er «skru av», ikke
+   * «velg ett», og forskjellen skal være hørbar og ikke bare synlig.
+   */
+  if (vare.tillegg) {
+    const knapp = lagEl('button', 'vare__handling')
+    knapp.type = 'button'
+    knapp.dataset.handling = 'tillegg'
+    knapp.setAttribute('aria-pressed', 'false')
+    rad.append(knapp)
+  } else if (vare.type === 'engang' && vare.kategori !== 'Esken') {
+    const knapp = lagEl('button', 'vare__handling')
+    knapp.type = 'button'
+    knapp.dataset.handling = 'utelatt'
+    knapp.setAttribute('aria-pressed', 'false')
+    knapp.textContent = 'Har dere den fra før?'
+    rad.append(knapp)
+  }
+  return rad
+}
+
+function byggValgkort(navn, id, tittel, beskrivelse, bilde) {
+  const label = lagEl('label', 'option' + (bilde ? ' option--bilde' : ''))
+  const inp = document.createElement('input')
+  inp.type = 'radio'
+  inp.name = navn
+  inp.value = id
+  inp.setAttribute('aria-describedby', `${navn}-${id}-desc`)
+  const kropp = lagEl('span', 'option__body')
+  const tit = lagEl('span', 'option__title')
+  tit.append(document.createTextNode(tittel + ' '))
+  const pris = lagEl('span', 'tnum')
+  pris.dataset.pris = id
+  tit.append(pris)
+  const desc = lagEl('p', 'option__desc', beskrivelse)
+  desc.id = `${navn}-${id}-desc`
+  kropp.append(tit, desc)
+  label.append(inp, kropp)
+  return label
+}
+
+/* ------------------------------------------------------------------- start */
 
 export function startBygger(rot = document) {
   const skjema = $('#bygger', rot)
   if (!skjema) return
 
-  byggValg(skjema)
+  /* --- struktur, én gang --- */
 
-  const slider = $('#husstand', skjema)
-  const status = $('#pris-status', rot)
-  let sistePakke = null
-
-  function lesValg() {
-    return {
-      personer: klem(Number(slider.value)),
-      matniva: $('input[name="matniva"]:checked', skjema)?.value,
-      modus: $('input[name="modus"]:checked', skjema)?.value,
-      eskeType: $('input[name="eskeType"]:checked', skjema)?.value,
-      utelatt: $$('input[name="harfraFor"]:checked', skjema).map((i) => i.value),
-      tillegg: $$('input[name="tillegg"]:checked', skjema).map((i) => i.value),
-      abonnement: $('#abonnement', skjema)?.checked
-        ? $('input[name="pafyll"]:checked', skjema)?.value ?? PAFYLL[0]?.id
-        : null,
-    }
+  for (const vert of $$('[data-steppere]', rot)) {
+    for (const s of STEPPERE) vert.append(byggStepper(s.felt, s.etikett, s.min, s.maks))
   }
 
-  function tegn() {
-    const pakke = byggPakke(lesValg())
-    sistePakke = pakke
-    tegnHusstand(rot, pakke)
-    tegnSvar(rot, pakke)
-    tegnMatnivaer(rot, pakke)
-    tegnEskevalg(rot, pakke)
-  tegnHarFraFor(rot, pakke)
-    tegnTillegg(rot, pakke)
-    tegnPris(rot, pakke)
-    tegnListe(rot, pakke)
-    tegnVarsler(rot, pakke)
-    oppdaterSlider(slider)
-    // Skjermlesere får én samlet melding, ikke én per tastetrykk.
-    if (status) {
-      clearTimeout(status._t)
-      status._t = setTimeout(() => {
-        status.textContent =
-          `${referanse(pakke)}. ${kr(pakke.abonnement ? pakke.sumMedAbonnement : pakke.sum)}.`
-      }, 400)
-    }
-  }
-
-  skjema.addEventListener('input', tegn)
-  skjema.addEventListener('change', tegn)
-
-  $$('[data-husstand-steg]', skjema).forEach((knapp) => {
-    knapp.addEventListener('click', () => {
-      slider.value = String(klem(Number(slider.value) + Number(knapp.dataset.husstandSteg)))
-      tegn()
-    })
-  })
-
-  const kjop = $('#legg-i-kurv', rot)
-  if (kjop) {
-    kjop.addEventListener('click', () => {
-      if (!sistePakke) return
-      kurv.leggTil(tilKurvpost(sistePakke))
-      kjop.textContent = 'Lagt i kurven'
-      setTimeout(() => { kjop.textContent = kjop.dataset.tekst }, 2000)
-    })
-    kjop.dataset.tekst = kjop.textContent
-  }
-
-  const kasse = kasseStatus()
-  const kasseNotis = $('#kasse-notis', rot)
-  if (kasseNotis && kasse.erFallback) {
-    kasseNotis.hidden = false
-  }
-
-  tegn()
-  return () => sistePakke
-}
-
-/** Bygger valgkortene fra katalogen, slik at HTML-en ikke dupliserer data. */
-function byggValg(skjema) {
   const matRot = $('#matnivaer', skjema)
   if (matRot && !matRot.children.length) {
-    matRot.innerHTML = MATNIVAER.map(
-      (m, i) => `
-      <label class="option">
-        <input type="radio" name="matniva" value="${m.id}" ${i === 0 ? 'checked' : ''}
-               aria-describedby="matniva-${m.id}-desc">
-        <span class="option__body">
-          <span class="option__title">${m.navn}</span>
-          <p class="option__desc" id="matniva-${m.id}-desc">${m.beskrivelse}</p>
-          <div class="holdbarhet" data-holdbarhet="${m.id}">
-            <div class="holdbarhet__spor"><div class="holdbarhet__fyll"></div></div>
-            <div class="holdbarhet__tekst">
-              <span>Holdbarhet</span><span>${m.holdbarhetAr} år</span>
-            </div>
-          </div>
-        </span>
-      </label>`
-    ).join('')
+    for (const m of MATNIVAER) {
+      const kort = byggValgkort('matniva', m.id, m.navn, m.beskrivelse)
+      const linjal = lagEl('div', 'holdbarhet')
+      linjal.innerHTML = `<div class="holdbarhet__spor"><div class="holdbarhet__fyll"></div></div>
+        <div class="holdbarhet__tekst"><span>Holdbarhet</span><span>${holdbarhet(m.holdbarhetAr)}</span></div>`
+      linjal.dataset.holdbarhet = m.id
+      $('.option__body', kort).append(linjal)
+      matRot.append(kort)
+    }
   }
 
   const modusRot = $('#moduser', skjema)
   if (modusRot && !modusRot.children.length) {
-    modusRot.innerHTML = MODUSER.map(
-      (m, i) => `
-      <label class="option">
-        <input type="radio" name="modus" value="${m.id}" ${i === 0 ? 'checked' : ''}
-               aria-describedby="modus-${m.id}-desc">
-        <span class="option__body">
-          <span class="option__title">${m.navn}</span>
-          <p class="option__desc" id="modus-${m.id}-desc">${m.beskrivelse}</p>
-        </span>
-      </label>`
-    ).join('')
+    for (const m of MODUSER) modusRot.append(byggValgkort('modus', m.id, m.navn, m.beskrivelse))
   }
 
   const eskeRot = $('#eskevalg', skjema)
   if (eskeRot && !eskeRot.children.length) {
-    eskeRot.innerHTML = ESKETYPER.map(
-      (e, i) => `
-      <label class="option option--bilde">
-        <input type="radio" name="eskeType" value="${e.id}" ${i === 0 ? 'checked' : ''}
-               aria-describedby="eske-${e.id}-desc">
-        <span class="option__body">
-
-          <span class="option__title">${e.navn} <span class="tnum" id="eske-${e.id}-pris"></span></span>
-          <p class="option__desc" id="eske-${e.id}-desc">${e.beskrivelse}</p>
-        </span>
-      </label>`
-    ).join('')
+    for (const e of ESKETYPER) eskeRot.append(byggValgkort('eskeType', e.id, e.navn, e.beskrivelse, e.bilde))
     visKassebilder(eskeRot)
   }
 
   const pafyllRot = $('#pafyllsvalg', skjema)
-  if (pafyllRot && !pafyllRot.children.length && PAFYLL.length) {
-    pafyllRot.innerHTML = PAFYLL.map(
-      (p, i) => `
-      <label class="option">
-        <input type="radio" name="pafyll" value="${p.id}" ${i === 0 ? 'checked' : ''}>
-        <span class="option__body">
-          <span class="option__title">${p.navn}</span>
-          <p class="option__desc">${p.beskrivelse}</p>
-        </span>
-      </label>`
-    ).join('')
+  if (pafyllRot && !pafyllRot.children.length) {
+    for (const p of PAFYLL) pafyllRot.append(byggValgkort('pafyll', p.id, p.navn, p.beskrivelse))
   }
+
+  // Alle varelinjer, for alle varer, én gang. Skjules når de ikke gjelder.
+  const listeRot = $('#innholdsliste', rot)
+  if (listeRot && !listeRot.children.length) {
+    // Gruppene i DSBs faste rekkefølge – ikke rekkefølgen i den første pakken,
+    // som mangler alle grupper kunden ennå ikke har varer i.
+    for (const navn of GRUPPEREKKEFOLGE) {
+      const seksjon = lagEl('section', 'gruppe')
+      seksjon.dataset.gruppe = navn
+      seksjon.hidden = true
+      seksjon.append(lagEl('h3', 'gruppe__navn', navn))
+      listeRot.append(seksjon)
+    }
+    for (const vare of ALLE_VARER) {
+      $(`[data-gruppe="${dsbGruppe(vare.kategori)}"]`, listeRot).append(byggVarelinje(vare))
+    }
+  }
+
+  /* --- hendelser --- */
+
+  rot.addEventListener('click', (e) => {
+    const steg = e.target.closest('.stepper__knapp')
+    if (steg) {
+      const felt = steg.closest('.stepper').dataset.felt
+      const spec = STEPPERE.find((s) => s.felt === felt)
+      const verdi = tilstand.les()[felt] + Number(steg.dataset.steg)
+      tilstand.sett({ [felt]: Math.min(spec.maks, Math.max(spec.min, verdi)) })
+      return
+    }
+    const handling = e.target.closest('[data-handling]')
+    if (handling) {
+      tilstand.veksle(handling.dataset.handling, handling.closest('.vare').dataset.sku)
+      return
+    }
+    if (e.target.closest('[data-nullstill]')) tilstand.nullstill()
+  })
+
+  rot.addEventListener('input', (e) => {
+    const inp = e.target.closest('.stepper__tall')
+    if (!inp) return
+    const felt = inp.closest('.stepper').dataset.felt
+    const spec = STEPPERE.find((s) => s.felt === felt)
+    const n = Number(inp.value)
+    if (!Number.isFinite(n)) return
+    tilstand.sett({ [felt]: Math.min(spec.maks, Math.max(spec.min, Math.round(n))) })
+  })
+
+  skjema.addEventListener('change', (e) => {
+    const inp = e.target
+    if (inp.name === 'matniva') tilstand.sett({ matniva: inp.value })
+    else if (inp.name === 'modus') tilstand.sett({ modus: inp.value })
+    else if (inp.name === 'eskeType') tilstand.sett({ eskeType: inp.value })
+    else if (inp.name === 'pafyll') tilstand.sett({ abonnement: inp.value })
+    else if (inp.id === 'abonnement') {
+      tilstand.sett({ abonnement: inp.checked ? ($('input[name="pafyll"]:checked', skjema)?.value ?? PAFYLL[0].id) : null })
+    }
+  })
+
+  const dialog = $('#prisdialog', rot)
+  $('[data-apne-pris]', rot)?.addEventListener('click', () => dialog?.showModal())
+  $('[data-lukk-pris]', rot)?.addEventListener('click', () => dialog?.close())
+
+  for (const lenke of $$('[data-flytt-fokus]', rot)) {
+    lenke.addEventListener('click', (e) => {
+      const mal = $(lenke.getAttribute('href'), rot)
+      if (!mal) return
+      e.preventDefault()
+      mal.setAttribute('tabindex', '-1')
+      mal.scrollIntoView({ behavior: rolig() ? 'auto' : 'smooth', block: 'start' })
+      mal.focus({ preventScroll: true })
+    })
+  }
+
+  const kjop = $('#legg-i-kurv', rot)
+  if (kjop) {
+    kjop.dataset.tekst = kjop.textContent
+    kjop.addEventListener('click', () => {
+      kurv.leggTil(tilKurvpost(byggPakke(tilstand.tilValg())))
+      kjop.textContent = 'Lagt i kurven'
+      setTimeout(() => (kjop.textContent = kjop.dataset.tekst), 2000)
+    })
+  }
+
+  if (kasseStatus().erFallback) {
+    const notis = $('#kasse-notis', rot)
+    if (notis) notis.hidden = false
+  }
+
+  /* --- tegning --- */
+
+  let annonserTimer = null
+  const status = $('#pris-status', rot)
+
+  function tegn() {
+    const t = tilstand.les()
+    const pakke = byggPakke(tilstand.tilValg())
+
+    tegnSteppere(rot, t)
+    tegnSvar(rot, pakke)
+    tegnValg(skjema, t, pakke)
+    tegnListe(listeRot, pakke)
+    tegnPris(rot, pakke)
+    tegnGjenopprettet(rot)
+
+    // Én samlet melding per rolige tilstand, ikke én per tastetrykk.
+    if (status) {
+      clearTimeout(annonserTimer)
+      annonserTimer = setTimeout(() => {
+        status.textContent = `${referanse(pakke)}. ${kr(pakke.abonnement ? pakke.sumMedAbonnement : pakke.sum)}.`
+      }, 700)
+    }
+  }
+
+  tilstand.lytt(tegn)
+  tegn()
+  return () => byggPakke(tilstand.tilValg())
 }
 
-/** Fyller sliderens spor fram til håndtaket. */
-function oppdaterSlider(slider) {
-  const min = Number(slider.min || 1)
-  const maks = Number(slider.max || 8)
-  const andel = ((Number(slider.value) - min) / (maks - min)) * 100
-  slider.style.setProperty('--fill', `${andel}%`)
-}
+/* ------------------------------------------------------------------ tegning */
 
-function tegnHusstand(rot, pakke) {
-  const el = $('#husstand-tall', rot)
-  if (el) el.textContent = String(pakke.valg.personer)
-  const etikett = $('#husstand-etikett', rot)
-  if (etikett) etikett.textContent = pakke.valg.personer === 1 ? 'person' : 'personer'
+function tegnSteppere(rot, t) {
+  for (const boks of $$('.stepper', rot)) {
+    const felt = boks.dataset.felt
+    const spec = STEPPERE.find((s) => s.felt === felt)
+    const inp = $('.stepper__tall', boks)
+    if (document.activeElement !== inp) inp.value = String(t[felt])
+    const takNadd = t.voksne + t.barn >= KONFIG.personerMaks
+    for (const knapp of $$('.stepper__knapp', boks)) {
+      const steg = Number(knapp.dataset.steg)
+      const ny = t[felt] + steg
+      const overTak = steg > 0 && felt !== 'kjaeledyr' && takNadd
+      knapp.disabled = ny < spec.min || ny > spec.maks || overTak
+    }
+  }
+  const tak = $('[data-tak]', rot)
+  if (tak) tak.hidden = t.voksne + t.barn < KONFIG.personerMaks
 }
 
 function tegnSvar(rot, pakke) {
   const el = $('#svar', rot)
   if (!el) return
-  const deler = []
-  const mat = pakke.linjer.filter((l) => l.kcal > 0).reduce((n, l) => n + l.antall, 0)
-  if (mat) deler.push(`<b>${tall(mat)}</b> matvarer`)
-  if (pakke.liter) deler.push(`<b>${tall(pakke.liter)} liter</b> vannkapasitet`)
-  if (pakke.eske) deler.push(`${pakke.eske.navn.toLowerCase().startsWith('nødboks') ? pakke.eske.navn.split('–')[1]?.trim() ?? 'esken' : 'esken'} på til sammen <b>${tall(pakke.vekt, 0)} kg</b>`)
+  const { voksne, barn, kjaeledyr } = pakke.valg.husstand
+  const hvem = [
+    `${voksne} ${voksne === 1 ? 'voksen' : 'voksne'}`,
+    barn ? `${barn} ${barn === 1 ? 'barn' : 'barn'}` : null,
+    kjaeledyr ? `${kjaeledyr} ${kjaeledyr === 1 ? 'kjæledyr' : 'kjæledyr'}` : null,
+  ].filter(Boolean)
+
   const kaldt =
     pakke.dognUtenVarme >= KONFIG.dogn
-      ? `Hele uka kan spises kald hvis brennstoffet tar slutt.`
-      : `Uten brennstoff rekker maten <b>${pakke.dognUtenVarme} døgn</b> – resten krever kokende vann.`
-  el.innerHTML = `<p>Det gir ${deler.join(', ')} – nok til ${personer(pakke.valg.personer)}
-    i ${KONFIG.dogn} døgn.</p><p style="margin-top:var(--sp-2)">${kaldt}</p>`
+      ? 'Hele uka kan spises kald hvis brennstoffet tar slutt.'
+      : `Uten brennstoff rekker maten ${pakke.dognUtenVarme} døgn.`
+
+  el.textContent =
+    `${hvem.join(', ')}: ${tall(Math.round(pakke.kcal))} kcal, ${tall(pakke.liter)} liter vann, ` +
+    `og ${pakke.eske ? pakke.eske.navn.split('–')[1]?.trim() ?? 'esken' : 'et påfyll'} ` +
+    `på rundt ${tall(Math.round(pakke.vekt))} kg. ${kaldt}`
 }
 
-/** Holdbarhetslinjalen skalerer mot det lengstholdbare nivået i katalogen. */
-function tegnMatnivaer(rot, pakke) {
+function tegnValg(skjema, t, pakke) {
+  for (const [navn, verdi] of [
+    ['matniva', t.matniva],
+    ['modus', t.modus],
+    ['eskeType', t.eskeType],
+    ['pafyll', t.abonnement ?? PAFYLL[0].id],
+  ]) {
+    for (const inp of $$(`input[name="${navn}"]`, skjema)) inp.checked = inp.value === verdi
+  }
+
+  const abo = $('#abonnement', skjema)
+  if (abo) abo.checked = Boolean(t.abonnement)
+
+  const eskeSteg = $('#eskevalg', skjema)?.closest('.steg')
+  if (eskeSteg) eskeSteg.hidden = !pakke.modus.medEske
+
+  for (const type of ESKETYPER) {
+    const merke = $(`[data-pris="${type.id}"]`, skjema)
+    if (merke) merke.textContent = kr(velgEske(pakke.ctx.hoder + Math.ceil(pakke.ctx.dyr / 2), type.id).pris)
+  }
+
   const maks = Math.max(...MATNIVAER.map((m) => m.holdbarhetAr))
   for (const m of MATNIVAER) {
-    const fyll = $(`[data-holdbarhet="${m.id}"] .holdbarhet__fyll`, rot)
+    const fyll = $(`[data-holdbarhet="${m.id}"] .holdbarhet__fyll`, skjema)
     if (fyll) fyll.style.width = `${Math.max(4, (m.holdbarhetAr / maks) * 100)}%`
   }
 }
 
-/**
- * Tillegg kunden velger til.
- *
- * Forbeholdene står i selve valgkortet, ikke bak en lenke. En vare som krever
- * at kunden vet tre ting før den er nyttig, skal si de tre tingene der valget
- * tas – ellers selger vi en skuffelse med to års forsinkelse.
- */
-function tegnTillegg(rot, pakke) {
-  const el = $('#tillegg', rot)
-  if (!el) return
-  const valgt = new Set(pakke.valg.tillegg)
-  const signatur = pakke.tilleggsvalg.map((t) => `${t.sku}:${t.sum}`).join('|')
-  if (el.dataset.signatur !== signatur) {
-    el.dataset.signatur = signatur
-    el.innerHTML = pakke.tilleggsvalg
-      .map(
-        (t) => `
-        <label class="option">
-          <input type="checkbox" name="tillegg" value="${t.sku}" ${valgt.has(t.sku) ? 'checked' : ''}>
-          <span class="option__body">
-            <span class="option__title">${t.navn} <span class="tnum">${kr(t.sum)}</span></span>
-            <p class="option__desc">${t.beskrivelse}</p>
-            ${
-              t.forbehold.length
-                ? `<details class="forbehold">
-                     <summary>Tre ting du bør vite først</summary>
-                     <ul>${t.forbehold.map((f) => `<li>${f}</li>`).join('')}</ul>
-                     ${
-                       t.bruksanvisning
-                         ? `<p style="margin-top:var(--sp-3)"><a href="${t.bruksanvisning}">Les bruksanvisningen</a></p>`
-                         : ''
-                     }
-                   </details>`
-                : ''
-            }
-          </span>
-        </label>`
-      )
-      .join('')
-  } else {
-    for (const boks of $$('input[name="tillegg"]', el)) boks.checked = valgt.has(boks.value)
+function tegnListe(listeRot, pakke) {
+  if (!listeRot) return
+
+  const iPakken = new Map(pakke.linjer.map((l) => [l.sku, l]))
+  const kanBort = new Map(pakke.utstyrsvalg.map((u) => [u.sku, u]))
+  const tillegg = new Map(pakke.tilleggsvalg.map((t) => [t.sku, t]))
+
+  for (const rad of $$('.vare', listeRot)) {
+    const sku = rad.dataset.sku
+    const linje = iPakken.get(sku)
+    const bort = kanBort.get(sku)
+    const till = tillegg.get(sku)
+
+    // Fravalgte varer blir stående. En vare som forsvinner i det du klikker på
+    // den, kan ikke angres – og da er «har dere den fra før?» en felle.
+    rad.hidden = !linje && !bort && !till
+    if (rad.hidden) continue
+
+    const vare = finnVare(sku)
+    const antall = linje?.antall ?? bort?.antall ?? till?.antall ?? 1
+    $('.vare__antall', rad).textContent = linje ? `${tall(antall)} ${linje.enhet ?? vare.enhet ?? 'stk'}` : ''
+
+    const merker = $('.vare__merker', rad)
+    const merkenokkel = linje ? String(linje.holdbarhetAr) + linje.type : 'av'
+    if (merker.dataset.for !== merkenokkel) {
+      merker.dataset.for = merkenokkel
+      merker.textContent = ''
+      if (linje) {
+        const h = holdbarhet(linje.holdbarhetAr)
+        if (h) merker.append(lagEl('span', 'badge', `Holdbar ${h}`))
+        merker.append(lagEl('span', 'badge', linje.type === 'engang' ? 'Varer i mange år' : 'Går ut på dato'))
+      }
+    }
+
+    const knapp = $('[data-handling]', rad)
+    if (!knapp) continue
+    if (knapp.dataset.handling === 'utelatt') {
+      // Bare varer over fravalgsterskelen kan tas ut. Knappen finnes ikke på de
+      // andre, framfor å finnes og ikke virke.
+      knapp.hidden = !bort
+      if (!bort) { rad.classList.remove('vare--utelatt'); continue }
+      const spart = Math.round(bort.sum * (1 - (pakke.modus.rabatt ?? 0)))
+      knapp.setAttribute('aria-pressed', String(bort.valgtBort))
+      knapp.textContent = bort.valgtBort ? `Tatt ut – dere sparer ${kr(spart)}` : 'Har dere den fra før?'
+      rad.classList.toggle('vare--utelatt', bort.valgtBort)
+    } else {
+      knapp.hidden = false
+      knapp.setAttribute('aria-pressed', String(Boolean(till?.valgt)))
+      knapp.textContent = till?.valgt ? 'Fjern fra pakken' : `Legg til – ${kr(till?.sum ?? 0)}`
+      rad.classList.toggle('vare--tillegg', !till?.valgt)
+    }
+  }
+
+  for (const seksjon of $$('.gruppe', listeRot)) {
+    seksjon.hidden = !$$('.vare:not([hidden])', seksjon).length
+  }
+
+  const teller = $('#innhold-teller')
+  if (teller) teller.textContent = `${tall(pakke.linjer.reduce((n, l) => n + l.antall, 0))} varer`
+
+  const dyrefot = $('#dyrefotnote')
+  if (dyrefot) dyrefot.hidden = pakke.ctx.dyr > 0
+}
+
+function tegnPris(rot, pakke) {
+  const abo = Boolean(pakke.abonnement)
+  const sum = abo ? pakke.sumMedAbonnement : pakke.sum
+
+  for (const el of $$('[data-sum]', rot)) el.textContent = kr(sum)
+  const enhet = $('[data-pris-enhet]', rot)
+  if (enhet) {
+    enhet.textContent = `${kr(pakke.prisPerPersonPerDogn)} per person per døgn · ${personord(pakke.valg.personer)} · ${KONFIG.dogn} døgn`
+  }
+
+  const linjer = $('#pris-linjer', rot)
+  if (linjer) {
+    const mat = pakke.linjer.filter((l) => ['Mat', 'Vann'].includes(l.kategori)).reduce((n, l) => n + l.sum, 0)
+    const utstyr = pakke.sumVarer - mat + pakke.spart
+    const rader = []
+    if (mat) rader.push(['Mat og vann', mat])
+    if (utstyr) rader.push([pakke.eske ? 'Utstyr og eske' : 'Utstyr', utstyr])
+    for (const l of pakke.fravalgt) rader.push([`Uten ${l.navn.toLowerCase()}`, -l.sum])
+    if (pakke.pakkerabatt) rader.push(['Pakkerabatt', -pakke.pakkerabatt])
+    if (pakke.abonnementsrabatt) rader.push(['Påfyllsrabatt', -pakke.abonnementsrabatt])
+
+    linjer.textContent = ''
+    for (const [navn, verdi] of rader) {
+      const rad = lagEl('div', 'prispanel__linje')
+      rad.append(lagEl('span', null, navn), lagEl('span', null, kr(verdi)))
+      linjer.append(rad)
+    }
+    const sumrad = lagEl('div', 'prispanel__linje prispanel__linje--sum')
+    sumrad.append(lagEl('span', null, 'Å betale'), lagEl('span', null, kr(sum)))
+    linjer.append(sumrad)
+  }
+
+  const mva = $('#pris-mva', rot)
+  if (mva) mva.textContent = `Herav mva. ${kr(pakke.mva)} – 15 % på mat, 25 % på utstyr.`
+
+  const neste = $('#pris-neste', rot)
+  if (neste) neste.textContent = pakke.holdbarhetAr ? `Neste påfyll om rundt ${holdbarhet(pakke.holdbarhetAr)}.` : ''
+
+  const varsler = $('#varsler', rot)
+  if (varsler) {
+    const nøkkel = pakke.varsler.map((v) => v.tekst).join('|')
+    if (varsler.dataset.for !== nøkkel) {
+      varsler.dataset.for = nøkkel
+      varsler.textContent = ''
+      for (const v of pakke.varsler) {
+        const boks = lagEl('div', `varsel varsel--${v.type === 'warn' ? 'warn' : 'info'}`)
+        boks.append(lagEl('p', null, v.tekst))
+        varsler.append(boks)
+      }
+    }
   }
 }
 
+function tegnGjenopprettet(rot) {
+  const el = $('[data-gjenopprettet]', rot)
+  if (el) el.hidden = !tilstand.bleGjenopprettet()
+}
+
 /**
- * Legger inn bildene av kassene – men bare hvis ALLE finnes.
+ * Bildene av kassene settes bare inn hvis ALLE finnes.
  *
- * Et valgkort med foto ved siden av et uten er ikke et nøytralt valg. Bildet
- * selger for seg selv, og kunden velger det de får se. Siden hele poenget er at
- * aluminium koster tre og et halvt tusen mer og den forskjellen er visuell,
- * ville en ensidig illustrasjon vært en tommel på vekten.
- *
- * Derfor lastes bildene før de settes inn, og det holder ikke at feltet er
- * fylt ut i katalogen – filen må faktisk svare.
+ * Et valgkort med foto ved siden av et uten er ikke et nøytralt valg: bildet
+ * selger for seg selv. Siden aluminium koster flere tusen mer og forskjellen
+ * er visuell, ville en ensidig illustrasjon vært en tommel på vekten.
  */
 async function visKassebilder(rot) {
   const typer = ESKETYPER.filter((e) => e.bilde)
   if (typer.length !== ESKETYPER.length) return
-
   const lastet = await Promise.all(
     typer.map(
       (e) =>
         new Promise((ok) => {
-          const bilde = new Image()
-          bilde.onload = () => ok(true)
-          bilde.onerror = () => ok(false)
-          bilde.src = `${e.bilde}-600.webp`
+          const b = new Image()
+          b.onload = () => ok(true)
+          b.onerror = () => ok(false)
+          b.src = `${e.bilde}-600.webp`
         })
     )
   )
   if (!lastet.every(Boolean)) return
-
   for (const type of typer) {
-    const felt = rot.querySelector(`input[value="${type.id}"]`)?.closest('.option')
-    const kropp = felt?.querySelector('.option__body')
+    const kropp = rot.querySelector(`input[value="${type.id}"]`)?.closest('.option')?.querySelector('.option__body')
     if (!kropp || kropp.querySelector('.option__foto')) continue
     const el = document.createElement('img')
     el.className = 'option__foto'
@@ -322,170 +536,9 @@ async function visKassebilder(rot) {
     el.sizes = '(min-width: 60rem) 22rem, 45vw'
     el.width = 900
     el.height = 675
-    // Bildene er tomme for informasjon ut over det teksten allerede sier, så
-    // de er dekorative. En skjermleser skal ikke lese «bilde av kasse» to
-    // ganger etter hverandre.
     el.alt = ''
     el.loading = 'lazy'
     el.decoding = 'async'
     kropp.prepend(el)
   }
-}
-
-/** Viser hva hvert kassemateriale koster for den valgte husstanden. */
-function tegnEskevalg(rot, pakke) {
-  const steg = $('#eskevalg', rot)?.closest('.steg')
-  if (steg) steg.hidden = !pakke.modus.medEske
-  for (const type of ESKETYPER) {
-    const merke = $(`#eske-${type.id}-pris`, rot)
-    if (!merke) continue
-    const eske = velgEske(pakke.valg.personer, type.id)
-    merke.textContent = kr(eske.pris)
-  }
-}
-
-/**
- * Utstyret kunden kan ha fra før.
- *
- * Listen bygges på nytt hver gang, fordi hvilket utstyr som er med avhenger av
- * modus og husstandsstørrelse. Avkrysningene holdes ved like over rendring, så
- * et hakk ikke forsvinner når kunden drar i slideren.
- */
-function tegnHarFraFor(rot, pakke) {
-  const el = $('#harfraFor', rot)
-  if (!el) return
-  const steg = el.closest('.steg')
-  if (steg) steg.hidden = pakke.utstyrsvalg.length === 0
-
-  const avkrysset = new Set(pakke.valg.utelatt)
-  const signatur = pakke.utstyrsvalg.map((u) => `${u.sku}:${u.antall}:${u.sum}`).join('|')
-  if (el.dataset.signatur !== signatur) {
-    el.dataset.signatur = signatur
-    el.innerHTML = pakke.utstyrsvalg
-      .map(
-        (u) => `
-        <label class="harfor">
-          <input type="checkbox" name="harfraFor" value="${u.sku}" ${avkrysset.has(u.sku) ? 'checked' : ''}>
-          <span class="harfor__navn">${u.navn}</span>
-          <span class="harfor__sum tnum">− ${kr(u.sum)}</span>
-        </label>`
-      )
-      .join('')
-  } else {
-    for (const boks of $$('input[name="harfraFor"]', el)) {
-      boks.checked = avkrysset.has(boks.value)
-    }
-  }
-
-  const oppsummering = $('#harfraFor-sum', rot)
-  if (oppsummering) {
-    oppsummering.textContent = pakke.spartNetto
-      ? `Du sparer ${kr(pakke.spartNetto)} på å ikke kjøpe det du allerede har.`
-      : ''
-  }
-}
-
-function tegnPris(rot, pakke) {
-  const abo = Boolean(pakke.abonnement)
-  const sum = abo ? pakke.sumMedAbonnement : pakke.sum
-
-  const el = $('#pris-sum', rot)
-  if (el) el.textContent = kr(sum)
-
-  const enhet = $('#pris-enhet', rot)
-  if (enhet) {
-    enhet.textContent =
-      `${kr(pakke.prisPerPersonPerDogn)} per person per døgn · ${personer(pakke.valg.personer)} · ${KONFIG.dogn} døgn`
-  }
-
-  const linjer = $('#pris-linjer', rot)
-  if (linjer) {
-    // Utstyret vises til full pris med fradraget som egen linje, ikke som et
-    // lavere tall uten forklaring. Kunden skal se hva settet koster og hva de
-    // slipper å betale for.
-    const mat = pakke.linjer.filter((l) => MATGRUPPER.includes(l.kategori)).reduce((n, l) => n + l.sum, 0)
-    const utstyr = pakke.sumVarer - mat + pakke.spart
-    const rader = []
-    if (mat) rader.push(['Mat og vann', mat])
-    if (utstyr) rader.push([pakke.eske ? 'Utstyr og eske' : 'Utstyr', utstyr])
-    if (pakke.spart) rader.push(['Utstyr du har fra før', -pakke.spart])
-    if (pakke.pakkerabatt) rader.push(['Pakkerabatt', -pakke.pakkerabatt])
-    if (pakke.abonnementsrabatt) rader.push([`Påfyllsrabatt`, -pakke.abonnementsrabatt])
-    linjer.innerHTML =
-      rader
-        .map(([n, v]) => `<div class="prispanel__linje"><span>${n}</span><span>${kr(v)}</span></div>`)
-        .join('') +
-      `<div class="prispanel__linje prispanel__linje--sum"><span>Å betale</span><span>${kr(sum)}</span></div>`
-  }
-
-  // Momsoppdelingen står synlig. Mat har redusert sats, utstyr ordinær, og en
-  // kunde som sammenligner to tilbud har krav på å se hvorfor de er ulike.
-  // Beløpet kommer fra konfiguratoren, ikke fra en egen utregning her.
-  const mva = $('#pris-mva', rot)
-  if (mva) {
-    mva.textContent = `Herav mva. ${kr(pakke.mva)} – 15 % på mat, 25 % på utstyr.`
-  }
-
-  /*
-   * Vi lover ikke at det er billigere. Varene er priset til butikkpris, og det
-   * står her framfor å bli antydet – en kunde som sjekker én pris og finner den
-   * lik, skal finne at vi allerede har sagt det.
-   */
-  const egenkjop = $('#pris-egenkjop', rot)
-  if (egenkjop) {
-    egenkjop.textContent = pakke.modus.medEske
-      ? 'Varene koster det samme som i butikk. Det du betaler for, er utvalget, riktige mengder og at noen holder styr på datoene.'
-      : ''
-  }
-
-  const neste = $('#pris-neste', rot)
-  if (neste) {
-    neste.textContent = pakke.holdbarhetAr
-      ? `Neste påfyll om rundt ${holdbarhet(pakke.holdbarhetAr)}.`
-      : ''
-  }
-}
-
-function tegnListe(rot, pakke) {
-  const el = $('#innholdsliste', rot)
-  if (!el) return
-  const antall = pakke.linjer.reduce((n, l) => n + l.antall, 0)
-
-  const teller = $('#innhold-teller', rot)
-  if (teller) teller.textContent = `${tall(antall)} varer`
-
-  el.innerHTML = pakke.grupper
-    .map(
-      (g) => `
-      <section class="gruppe">
-        <h3 class="gruppe__navn">${g.navn}</h3>
-        ${g.varer
-          .map(
-            (v) => `
-          <div class="vare">
-            <span class="vare__navn">${v.navn}</span>
-            <span class="vare__antall">${tall(v.antall)} ${v.enhet}</span>
-            ${v.hvorfor ? `<p class="vare__hvorfor">${v.hvorfor}</p>` : ''}
-            ${v.bruksanvisning ? `<p class="vare__hvorfor"><a href="${v.bruksanvisning}">Bruksanvisning</a></p>` : ''}
-            <div class="vare__merker">
-              ${holdbarhet(v.holdbarhetAr) ? `<span class="badge">Holdbar ${holdbarhet(v.holdbarhetAr)}</span>` : ''}
-              <span class="badge">${v.type === 'engang' ? 'Varer i mange år' : 'Går ut på dato'}</span>
-            </div>
-          </div>`
-          )
-          .join('')}
-      </section>`
-    )
-    .join('')
-}
-
-function tegnVarsler(rot, pakke) {
-  const el = $('#varsler', rot)
-  if (!el) return
-  el.innerHTML = pakke.varsler
-    .map(
-      (v) => `<div class="varsel varsel--${v.type === 'warn' ? 'warn' : 'info'}">
-        ${ikon[v.type === 'warn' ? 'warn' : 'info']}<p>${v.tekst}</p></div>`
-    )
-    .join('')
 }

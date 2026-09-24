@@ -103,17 +103,12 @@
 @media (min-width: 60rem) {
   .bygger {
     grid-template-columns: minmax(22.5rem, 25.25rem) minmax(0, 1fr);
-    grid-template-areas:
-      "kontroll liste"
-      "pris     liste";
+    grid-template-areas: "kontroll liste";
     align-items: start;
     column-gap: var(--sp-7);
   }
   .kontroll      { grid-area: kontroll; }
-  .prispanel     { grid-area: pris; }
   .innholdsliste { grid-area: liste; }
-  /* Plass så prispanelet ikke dekker siste steg når det stopper i sticky. */
-  .kontroll { padding-bottom: var(--sp-5); }
 }
 
 .steg { border-top: 1px solid var(--border); padding-block: var(--sp-5); }
@@ -136,37 +131,113 @@
 .steg__tittel { margin: 0; font-size: var(--step-1); }
 .steg__hjelp { margin: var(--sp-1) 0 0; font-size: var(--step--1); color: var(--text-muted); max-width: none; }
 
-/* Husstandsslider */
-.husstand__verdi {
-  display: flex; align-items: baseline; gap: var(--sp-2);
-  margin-bottom: var(--sp-3);
+/*
+ * Stepperne.
+ *
+ * Tallet er et ekte, synlig <input type="number">, ikke en <span> med knapper
+ * rundt. Kunden skal kunne skrive «6» i stedet for å trykke fire ganger, og
+ * tastaturbrukere skal få pil opp/ned gratis.
+ */
+/*
+ * Stepperne.
+ *
+ * På telefon er hver stepper en rad: ikon og etikett til venstre, [− n +] til
+ * høyre. Tre kolonner ble prøvd først, men tre 44 px-knapper får ikke plass i
+ * 106 px, og å krympe dem til 32 px for å tvinge fram et rutenett er å gjøre
+ * selve inntastingen verre for å vinne en layout.
+ *
+ * Fra 34rem er det plass til rutenettet, og da leses husstanden som én enhet.
+ */
+.steppere { display: grid; gap: var(--sp-3); }
+
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
 }
-.husstand__tall {
-  font-size: var(--step-4);
-  font-weight: 650;
-  line-height: 1;
-  letter-spacing: -0.03em;
-  font-variant-numeric: tabular-nums;
+.stepper__glyph { flex: none; width: 1.75rem; height: 1.75rem; color: var(--text-muted); }
+.stepper__etikett {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--step--1);
+  color: var(--text-muted);
+  font-weight: 550;
 }
-.husstand__rad { display: flex; align-items: center; gap: var(--sp-3); }
-.husstand__knapp {
+.stepper__rad { display: flex; align-items: center; gap: var(--sp-2); flex: none; }
+.stepper__knapp {
   flex: none;
   width: 2.75rem; height: 2.75rem;
+  padding: 0;
   display: grid; place-items: center;
   font-size: var(--step-1);
+  line-height: 1;
   background: var(--surface);
   border: 1px solid var(--border-strong);
   border-radius: var(--radius);
   color: var(--text);
   cursor: pointer;
 }
-.husstand__knapp:hover { background: var(--surface-2); }
-.husstand__hakk {
-  display: flex; justify-content: space-between;
-  margin-top: var(--sp-2);
-  font-size: var(--step--1);
-  color: var(--text-faint);
+.stepper__knapp:hover:not(:disabled) { background: var(--surface-2); }
+.stepper__knapp:disabled { opacity: 0.35; cursor: default; }
+
+/*
+ * Tallet er et ekte, synlig <input type="number">, ikke en <span> med knapper
+ * rundt. Kunden skal kunne skrive «6» i stedet for å trykke fire ganger, og
+ * tastaturbrukere får pil opp/ned gratis.
+ */
+.stepper__tall {
+  width: 2.75rem;
+  min-width: 0;
+  padding: var(--sp-2) 0;
+  text-align: center;
+  font-size: var(--step-2);
+  font-weight: 650;
   font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--text);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  -moz-appearance: textfield;
+}
+.stepper__tall::-webkit-outer-spin-button,
+.stepper__tall::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.stepper__tall:hover { border-color: var(--border); }
+
+@media (min-width: 34rem) {
+  .steppere {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--sp-4);
+  }
+  .stepper {
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--sp-2);
+    padding: var(--sp-4) var(--sp-2);
+  }
+  .stepper__etikett { flex: none; }
+}
+
+.steg__merknad {
+  margin-top: var(--sp-4);
+  font-size: var(--step--1);
+  color: var(--text-muted);
+}
+
+/* En knapp som ser ut som en lenke – for handlinger inne i en setning. */
+.lenkeknapp {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
 }
 
 /* Svaret som kommer umiddelbart, så konsekvensen er synlig uten å scrolle */
@@ -208,26 +279,8 @@
 .option__spec dt { color: var(--text-muted); }
 .option__spec dd { margin: 0; text-align: right; }
 
-/* --- Prispanelet --------------------------------------------------------- */
+/* --- Prislinjen og regnestykket --------------------------------------------------------- */
 
-.prispanel {
-  position: sticky;
-  bottom: 0;
-  z-index: 20;
-  background: var(--surface);
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-lg);
-  padding: var(--sp-5);
-  box-shadow: var(--shadow-md);
-}
-.prispanel__sum {
-  font-size: var(--step-5);
-  font-weight: 650;
-  line-height: 1;
-  letter-spacing: -0.035em;
-  font-variant-numeric: tabular-nums;
-}
-.prispanel__enhet { font-size: var(--step--1); color: var(--text-muted); margin: var(--sp-2) 0 var(--sp-4); }
 .prispanel__linjer { margin-block: var(--sp-4); }
 .prispanel__linje {
   display: flex; justify-content: space-between; gap: var(--sp-4);
@@ -441,3 +494,168 @@
   background: #DAE2DC;
 }
 .option--bilde .option__body { display: flex; flex-direction: column; }
+
+
+/* --- Den faste prislinjen ------------------------------------------------ */
+
+/*
+ * Alltid der, på alle bredder, fra første maling. Ingen scroll-lyttere og
+ * ingen betinget synlighet: en pris som dukker opp og forsvinner er en pris
+ * man slutter å stole på. <body> får tilsvarende padding-bottom.
+ */
+.prisbar {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 60;
+  background: var(--surface);
+  border-top: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-md);
+  padding-block: var(--sp-3);
+  padding-bottom: max(var(--sp-3), env(safe-area-inset-bottom));
+}
+.prisbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+}
+.prisbar__pris {
+  display: grid;
+  justify-items: start;
+  gap: 0.15rem;
+  min-width: 0;
+  padding: var(--sp-2) var(--sp-3);
+  margin-left: calc(-1 * var(--sp-3));
+  font: inherit;
+  text-align: left;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  color: var(--text);
+  cursor: pointer;
+}
+.prisbar__pris:hover { background: var(--surface-2); }
+.prisbar__sum {
+  font-size: var(--step-3);
+  font-weight: 650;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.prisbar__enhet {
+  font-size: var(--step--1);
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+.prisbar__hint {
+  font-size: var(--step--1);
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.prisbar .btn { flex: none; }
+
+/* På telefon er det ikke plass til både enheten og hintet. Hintet vinner:
+   det forteller at tallet kan trykkes på. */
+@media (max-width: 34rem) {
+  .prisbar__enhet { display: none; }
+}
+
+/*
+ * Fra 34rem ligger sum, enhet og hint på én grunnlinje. Stablet ble linjen
+ * 127 px høy – høyere enn på telefon, og mer enn klaringen under <body>.
+ */
+@media (min-width: 34rem) {
+  .prisbar__pris {
+    display: flex;
+    align-items: baseline;
+    gap: var(--sp-3);
+  }
+  .prisbar__enhet { flex: 0 1 auto; }
+  .prisbar__hint { flex: none; }
+}
+
+/* --- Regnestykket i dialog ----------------------------------------------- */
+
+.prisdialog {
+  width: min(32rem, calc(100vw - 2 * var(--sp-4)));
+  padding: var(--sp-5);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-lg, var(--shadow-md));
+}
+.prisdialog::backdrop { background: rgb(0 0 0 / 0.5); }
+.prisdialog__hode {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-4);
+}
+.prisdialog__hode h2 { margin: 0; font-size: var(--step-2); }
+.prisdialog__lukk {
+  flex: none;
+  width: 2.25rem; height: 2.25rem;
+  display: grid; place-items: center;
+  font-size: var(--step-2);
+  line-height: 1;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.prisdialog__lukk:hover { background: var(--surface-2); color: var(--text); }
+
+/* --- Kuratering inne i varelinjen ---------------------------------------- */
+
+/*
+ * Fravalg og tillegg skjer her, i varelinjen, ikke i egne lister. Knappen er
+ * aria-pressed og ikke en avkrysningsboks: dette er «skru av», ikke «velg ett».
+ */
+.vare__handling {
+  grid-column: 1 / -1;
+  justify-self: start;
+  margin-top: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  font: inherit;
+  font-size: var(--step--1);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.vare__handling:hover { border-color: var(--border-strong); color: var(--text); }
+.vare__handling[aria-pressed="true"] {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--text);
+}
+/* Egen linje, ikke inne i en setning – derfor gjelder 24 px-kravet her. */
+.vare__lenke {
+  grid-column: 1 / -1;
+  justify-self: start;
+  font-size: var(--step--1);
+  padding-block: 0.2rem;
+  min-height: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+.vare--utelatt .vare__navn,
+.vare--utelatt .vare__antall { text-decoration: line-through; color: var(--text-faint); }
+.vare--utelatt .vare__hvorfor,
+.vare--utelatt .vare__merker { display: none; }
+
+/* Et tillegg som ikke er valgt ennå er et tilbud, ikke en del av pakken. */
+.vare--tillegg { opacity: 0.85; }
+.vare--tillegg .vare__navn { font-weight: 450; }
+
+.innholdsliste__ingress {
+  font-size: var(--step--1);
+  margin: calc(-1 * var(--sp-2)) 0 var(--sp-5);
+  max-width: 62ch;
+}
